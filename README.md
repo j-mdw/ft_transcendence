@@ -12,6 +12,8 @@
 
 ## :books: Resources :books:
 
+https://www.bezkoder.com/react-node-express-postgresql/
+
 ## :warning: Disclaimer :warning:
 *  This is educational project for students of school 42
 *  Other students should not copy sections of the code or the entire project
