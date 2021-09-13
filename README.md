@@ -12,9 +12,9 @@
 
 ## :books: Resources :books:
 
-back + database
-https://docs.nestjs.com/techniques/database
-https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho
+back + database <\br>
+https://docs.nestjs.com/techniques/database <\br>
+https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho <\br>
 
 ## :warning: Disclaimer :warning:
 *  This is educational project for students of school 42
