@@ -3,7 +3,7 @@
 * The project is not complete while the repository name is suffixed with "wip" (=work in progress)
 
 # :space_invader: Team members :space_invader:
-* florianne1212
+* [florianne1212](https://github.com/florianne1212)
 * j-mdw
 * Laurent
 
