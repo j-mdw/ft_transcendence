@@ -4,7 +4,7 @@
 
 # :space_invader: Team members :space_invader:
 * [florianne1212](https://github.com/florianne1212)
-* j-mdw
+* [j-mdw](https://github.com/j-mdw)
 * Laurent
 
 ## Desciption
