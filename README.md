@@ -12,7 +12,9 @@
 
 ## :books: Resources :books:
 
-https://www.bezkoder.com/react-node-express-postgresql/
+back + database
+https://docs.nestjs.com/techniques/database
+https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho
 
 ## :warning: Disclaimer :warning:
 *  This is educational project for students of school 42
