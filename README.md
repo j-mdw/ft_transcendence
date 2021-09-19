@@ -11,6 +11,10 @@
 (comming soon)
 
 ## :books: Resources :books:
+JavaScript and Typescript </br>
+* [javascript and javascript engine](https://medium.com/jspoint/how-javascript-works-in-browser-and-node-ab7d0d09ac2f)
+* [typescript doc: getting started](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html)
+
 
 back + database </br>
 https://docs.nestjs.com/techniques/database </br>
