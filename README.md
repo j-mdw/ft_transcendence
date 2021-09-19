@@ -12,7 +12,7 @@
 
 ## :books: Resources :books:
 JavaScript and Typescript </br>
-* [javascript and javascript engine](https://medium.com/jspoint/how-javascript-works-in-browser-and-node-ab7d0d09ac2f)
+* [javascript-engine](https://medium.com/jspoint/how-javascript-works-in-browser-and-node-ab7d0d09ac2f)
 * [typescript doc: getting started](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html)
 
 
