@@ -19,6 +19,8 @@ JavaScript and Typescript </br>
 back + database </br>
 https://docs.nestjs.com/techniques/database </br>
 https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho </br>
+https://wanago.io/2020/05/11/nestjs-api-controllers-routing-module/</br>
+
 
 ## :warning: Disclaimer :warning:
 *  This is educational project for students of school 42
