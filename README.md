@@ -22,7 +22,7 @@ https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho </br>
 https://wanago.io/2020/05/11/nestjs-api-controllers-routing-module/</br>
 
 authentification </br>
-* [jwt] https://jwt.io/introduction
+* [jwt](https://jwt.io/introduction)
 
 
 ## :warning: Disclaimer :warning:
