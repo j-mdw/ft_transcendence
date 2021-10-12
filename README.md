@@ -17,8 +17,9 @@ JavaScript and Typescript </br>
 
 
 back + database </br>
-https://docs.nestjs.com/techniques/database </br>
-https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho </br>
+* [introduction to nest + api](https://www.youtube.com/watch?v=F_oOtaxb0L8&ab_channel=Academind) </br>
+* [nest connection to database](https://docs.nestjs.com/techniques/database) </br>
+* [CRUD with Postgres](https://dev.to/rohanfaiyazkhan/nestjs-crud-with-postgres-cho) </br>
 https://wanago.io/2020/05/11/nestjs-api-controllers-routing-module/</br>
 
 authentification </br>
