@@ -24,6 +24,8 @@ https://wanago.io/2020/05/11/nestjs-api-controllers-routing-module/</br>
 
 authentification </br>
 * [jwt](https://jwt.io/introduction)
+* [google authentification tutorial](https://dev.to/imichaelowolabi/how-to-implement-login-with-google-in-nest-js-2aoa)
+* [google authentification tutorial video](https://www.youtube.com/watch?v=q8tZQxT4YPU&ab_channel=MariusEspejo)
 
 
 ## :warning: Disclaimer :warning:
