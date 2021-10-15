@@ -15,6 +15,8 @@ JavaScript and Typescript </br>
 * [javascript-engine](https://medium.com/jspoint/how-javascript-works-in-browser-and-node-ab7d0d09ac2f)
 * [typescript doc: getting started](https://www.typescriptlang.org/docs/handbook/typescript-from-scratch.html)
 
+combining nuxt.js + nest.js
+* [javascript-engine](https://davidjamesherzog.github.io/2021/03/28/nuxtjs-nestjs-integration/)
 
 back + database </br>
 * [introduction to nest + api](https://www.youtube.com/watch?v=F_oOtaxb0L8&ab_channel=Academind) </br>
