@@ -1,0 +1,23 @@
+version: "3.7"
+
+services:
+    mysql:
+        image: mysql:8.0.26
+        container_name: tscd_mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: user42
+        ports:
+            - "3306:3306"
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin:5.1.1
+        container_name: tscd_phpmyadmin
+        restart: always
+        links:
+            - mysql
+        environment:
+            PMA_HOST: mysql
+            PMA_PORT: 3306
+        ports:
+            - "8080:80"
