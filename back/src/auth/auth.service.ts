@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Post } from '@nestjs/common';
 import {UsersService} from '../user/user.service'
 
 @Injectable()
@@ -16,14 +16,15 @@ export class AuthService {
   }
 
   school42Login(req) {
-    if (!req.user) {
-      return 'No user from google'
-    }
+    // if (!req.user) {
+    //   return 'No user from 42'
+    // }
 
-    return {
-      message: 'User information from google',
-      user: req.user
-    }
+    // return {
+    //   message: 'User information from google',
+    //   user: req.user
+    // }
+    return '42'
   }
 
   async addingUser(req)
@@ -49,4 +50,5 @@ export class AuthService {
       }
     }
   }
+
 }

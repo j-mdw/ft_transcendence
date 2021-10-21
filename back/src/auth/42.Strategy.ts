@@ -2,7 +2,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import { config } from 'dotenv';
 
-import { Injectable } from '@nestjs/common';
+import { HttpService, Injectable } from '@nestjs/common';
 
 config();
 
@@ -21,31 +21,31 @@ const callbackURL = 'http://localhost:3000/auth/42';
 @Injectable()
 export class school42Strategy extends PassportStrategy(Strategy, '42') {
 
-  constructor() {
+  constructor(
+		private http: HttpService,
+	) {
+
     super({
         authorizationURL: `https://api.intra.42.fr/oauth/authorize?{stringify({
 				client_id    : clientID,
 				redirect_uri : callbackURL,
 				response_type: 'code',
-				scope        : 'identify',
+				scope        : 'public',
 			}) }`,
 			tokenURL        : 'https://discordapp.com/api/oauth2/token',
-			scope           : 'identify',
+			scope           : 'public',
 			clientID,
 			clientSecret,
 			callbackURL,
     });
   }
 
-  async validate (accessToken: string, refreshToken: string, profile: any, done: VerifyCallback): Promise<any> {
-    const { name, emails, photos } = profile
-    const user = {
-      firstName: name.givenName,
-      lastName: name.familyName,
-      email: emails[0].value,
-      // picture: photos[0].value,
-      // accessToken
-    }
-    done(null, user);
+  async validate (accessToken: string): Promise<any> {
+    const { data } = await this.http.get('https://api.intra.42.fr/v2/me', {
+				headers: { Authorization: `Bearer ${ accessToken }` },
+			})
+			.toPromise();
+
+    // done(null, user);
   }
 }
