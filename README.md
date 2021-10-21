@@ -7,6 +7,16 @@
 * [j-mdw](https://github.com/j-mdw)
 * [stelon77](https://github.com/stelon77)
 
+## How to use ?
+go in the docker folder :</br>
+run "docker-compose up" </br> </br>
+go in the front folder : </br>
+run "npm install" </br>
+run "npm run dev" </br> </br>
+go in the back folder :</br>
+run "npm install" </br>
+run "npm run dev" </br>
+
 ## Desciption
 (comming soon)
 
