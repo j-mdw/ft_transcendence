@@ -40,6 +40,7 @@ authentification </br>
 * [jwt](https://jwt.io/introduction)
 * [google authentification tutorial](https://dev.to/imichaelowolabi/how-to-implement-login-with-google-in-nest-js-2aoa)
 * [google authentification tutorial video](https://www.youtube.com/watch?v=q8tZQxT4YPU&ab_channel=MariusEspejo)
+* [google authentification + jwt](https://medium.com/@nielsmeima/auth-in-nest-js-and-angular-463525b6e071)
 
 42 ressources </br>
 * [42 API](https://api.intra.42.fr/apidoc)
