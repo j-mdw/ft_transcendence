@@ -31,6 +31,7 @@
     "class-validator": "^0.13.1",
     "dotenv": "^10.0.0",
     "express-session": "^1.17.2",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.2",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",

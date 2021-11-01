@@ -1,4 +1,4 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 
@@ -12,9 +12,14 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req) {
+  async googleAuthRedirect(@Req() req, @Res() res) {
     //const data = this.appService.googleLogin(req)
     const data = await this.appService.addingUser(req)
+    // const jwt: string = req.user.jwt;
+    // if (jwt)
+    //   res.redirect('http://localhost:4200/login/succes/' + jwt);
+    // else 
+    //   res.redirect('http://localhost:4200/login/failure');
     return {data}
   }
 
