@@ -1,6 +1,7 @@
-import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Redirect, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { RelationId } from 'typeorm';
 
 @Controller()
 export class AuthController {
@@ -15,12 +16,8 @@ export class AuthController {
   async googleAuthRedirect(@Req() req, @Res() res) {
     //const data = this.appService.googleLogin(req)
     const data = await this.appService.addingUser(req)
-    // const jwt: string = req.user.jwt;
-    // if (jwt)
-    //   res.redirect('http://localhost:4200/login/succes/' + jwt);
-    // else 
-    //   res.redirect('http://localhost:4200/login/failure');
     return {data}
+
   }
 
   @Get('42')

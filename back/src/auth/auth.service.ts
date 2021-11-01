@@ -2,10 +2,10 @@ import { Injectable, Post, InternalServerErrorException } from '@nestjs/common';
 import {UsersService} from '../user/user.service';
 import { sign } from 'jsonwebtoken';
 
-enum Provider
-{
-    GOOGLE = 'google'
-}
+// enum Provider
+// {
+//     GOOGLE = 'google'
+// }
 
 @Injectable()
 export class AuthService {
@@ -60,29 +60,29 @@ export class AuthService {
     }
   }
 
-  async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string>
-    {
-        try 
-        {
-            // You can add some registration logic here, 
-            // to register the user using their thirdPartyId (in this case their googleId)
-            // let user: IUser = await this.usersService.findOneByThirdPartyId(thirdPartyId, provider);
+  // async validateOAuthLogin(thirdPartyId: string, provider: Provider): Promise<string>
+  //   {
+  //       try 
+  //       {
+  //           // You can add some registration logic here, 
+  //           // to register the user using their thirdPartyId (in this case their googleId)
+  //           // let user: IUser = await this.usersService.findOneByThirdPartyId(thirdPartyId, provider);
             
-            // if (!user)
-                // user = await this.usersService.registerOAuthUser(thirdPartyId, provider);
+  //           // if (!user)
+  //               // user = await this.usersService.registerOAuthUser(thirdPartyId, provider);
                 
-            const payload = {
-                thirdPartyId,
-                provider
-            }
+  //           const payload = {
+  //               thirdPartyId,
+  //               provider
+  //           }
 
-            const jwt: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
-            return jwt;
-        }
-        catch (err)
-        {
-            throw new InternalServerErrorException('validateOAuthLogin', err.message);
-        }
-    }
+  //           const jwt: string = sign(payload, this.JWT_SECRET_KEY, { expiresIn: 3600 });
+  //           return jwt;
+  //       }
+  //       catch (err)
+  //       {
+  //           throw new InternalServerErrorException('validateOAuthLogin', err.message);
+  //       }
+  //   }
 
 }

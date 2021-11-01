@@ -2,7 +2,7 @@
   <v-container fill-height>
     <v-row justify="center" align="center">     
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <h1>Not what I want !</h1>
+          <h1>I am happy</h1>
         
           
       </div>

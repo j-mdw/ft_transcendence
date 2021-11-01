@@ -37,7 +37,6 @@
 </template>
 
 <script>
-
 export default {
   layout: "empty",
   data() {
@@ -47,9 +46,12 @@ export default {
   },
   async mounted() {
     if ('code' in this.$route.query) {
-      this.user = await this.$axios.$get("/google/redirect", {
+      this.$store.commit('setLogin');
+        this.user = await this.$axios.$get("/google/redirect", {
         params: this.$route.query
       })
+      
+      // redirect(302, '/login')
     }
 
     // if ('code' in this.$route.query) {
