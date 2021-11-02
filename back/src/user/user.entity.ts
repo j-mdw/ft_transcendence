@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import * as crypto from 'crypto';
+import { Exclude } from 'class-transformer';
+
 @Entity('users')
 export class UsersEntity {
       @PrimaryGeneratedColumn()
@@ -13,4 +15,7 @@ export class UsersEntity {
 
       @Column()
       email: string;
+
+      @Exclude()
+      public currentHashedRefreshToken?: string;
 }
