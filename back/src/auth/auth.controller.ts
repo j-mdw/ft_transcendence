@@ -31,4 +31,11 @@ export class AuthController {
     //const data = await this.appService.addingUser(req)
     return {data}
   }
+
+  @Get('protected')
+  @UseGuards(AuthGuard('jwt'))
+  protectedResource()
+  {
+    return 'JWT is working!';
+  }
 }
