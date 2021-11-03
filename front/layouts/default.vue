@@ -1,20 +1,21 @@
 <template>
   <v-app>
       <v-navigation-drawer :value="true">
-        <v-btn @click="$store.commit('removeLogin');">
+        <!-- <v-btn @click="$store.commit('removeLogin');">
           logout
           {{ $store.state.isLogin }}
-        </v-btn>
+        </v-btn> -->
       </v-navigation-drawer>
     <v-main>
       <nuxt />
     </v-main>
   </v-app>
 </template>
-<script>
-export default {
-  middleware: 'auth'
-}
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  //middleware: 'auth'
+})
 </script>
 <style scoped>
 .v-application {

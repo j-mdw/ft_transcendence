@@ -5,9 +5,11 @@
     </v-main>
   </v-app>
 </template>
-<script>
-export default {
-}
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  //middleware: 'auth'
+})
 </script>
 <style scoped>
 .v-application {

@@ -6,8 +6,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - front',
-    title: 'front',
+    titleTemplate: '%s - new_front_bis',
+    title: 'new_front_bis',
     htmlAttrs: {
       lang: 'en'
     },
@@ -18,17 +18,12 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      {
+      { 
         href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css', 
-        rel: 'stylesheet'
+        rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
       }
     ]
   },
-
-  // router: {
-  //   middleware: ['auth']
-  // },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -43,6 +38,8 @@ export default {
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
+    // https://go.nuxtjs.dev/typescript
+    '@nuxt/typescript-build',
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
   ],
@@ -56,6 +53,7 @@ export default {
     // extra config e.g
       baseURL: 'http://localhost:4000'
   },
+
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
     customVariables: ['~/assets/variables.scss'],

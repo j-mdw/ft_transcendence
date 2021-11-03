@@ -1,3 +1,4 @@
+
 <template>
   <v-container fill-height>
     <v-row justify="center" align="center">
@@ -5,7 +6,7 @@
 
 
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <h1>Welcome to ft_transcendence !</h1>
+          <h1>Welcome to ft_transcendence ! </h1>
           <div id="component-logo" class="d-flex justify-space-around mb-6 ">
             <v-btn
               class="mx-8"
@@ -23,10 +24,11 @@
             >
               <i class="fab fa-google mx-2"></i>
             </v-btn>
-          </div>
-          
 
-          <p v-if="user">
+          
+          </div> 
+
+           <p v-if="user">
             welcome {{ user }}
           </p>
           
@@ -36,9 +38,10 @@
 </v-container>
 </template>
 
-<script>
-export default {
-  layout: "empty",
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+layout: "empty",
   data() {
     return {
       user: null
@@ -47,28 +50,12 @@ export default {
   async mounted() {
     if ('code' in this.$route.query) {
       this.$store.commit('setLogin');
-        this.user = await this.$axios.$get("/google/redirect", {
+        this.user = await (this as any).$axios.$get("/google/redirect", {
         params: this.$route.query
       })
-      
-      // redirect(302, '/login')
     }
-
-    // if ('code' in this.$route.query) {
-    //   this.user = await this.$axios.$get("/42/redirect", {
-    //     params: this.$route.query
-    //   })
-    // }
-  
-  // if(user)
-  //   {
-  //     $store.commit('setLogin')
-  //   }
   }
-
-      
-  
-}
+    })
 </script>
 
 <style scoped lang="scss">
