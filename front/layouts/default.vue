@@ -13,10 +13,15 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+
+ middleware: 'auth'
 export default Vue.extend({
-  //middleware: 'auth'
+  
 })
 </script>
+
+
+
 <style scoped>
 .v-application {
   background-color: #F7EDE2;

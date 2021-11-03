@@ -7,9 +7,16 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
-export default Vue.extend({
-  //middleware: 'auth'
+ import { Component } from 'nuxt-property-decorator'
+
+// @Component({
+  middleware: 'auth'
+// })
+@Component({
+  middleware: 'auth',
 })
+export default class Index extends Vue {
+}
 </script>
 <style scoped>
 .v-application {

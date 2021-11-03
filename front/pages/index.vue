@@ -11,11 +11,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-  layout: "empty"
-  
+import { Component, Vue } from 'nuxt-property-decorator'
+
+@Component({
+  layout: 'empty',
 })
+export default class Index extends Vue {
+}
 </script>
 
 <style scoped lang="scss">
