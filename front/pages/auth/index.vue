@@ -44,14 +44,16 @@ import { authenticationStore }  from '~/store'
 @Component({layout: "empty",})
 export default class test extends Vue {
   user= null
+  tokens= null
 
   async mounted() {
     if ('code' in this.$route.query) {
-        authenticationStore.signIn();
-        // this.$store.commit('setLogin');
-      //   this.user = await (this as any).$axios.$get("/google/redirect", {
-      //   params: this.$route.query
-      // })
+       // authenticationStore.signIn();
+       // this.$store.commit('setLogin');
+        (this as any).$router.push('/login');
+        this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query})
+        console.log(this.user);
+        
     }
   }
 }
