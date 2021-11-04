@@ -1,16 +1,15 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
  
 @Module({
+  name: 'AuthenticationModule',
   stateFactory: true,
   namespaced: true,
-  name: 'authModule',
 })
-export default class AuthModule extends VuexModule {
+class AuthenticationModule extends VuexModule {
   count = 0
   isLogin = false
   
   get isLogged(): boolean {
-    console.log("hello")
     //console.log(this.isLogin)
     return this.isLogin
   }
@@ -22,6 +21,7 @@ export default class AuthModule extends VuexModule {
     //console.log(this.isLogin);
     (this as any).$router.push('/login')
   }
+  
   @Mutation
   removeLogin(){
     this.isLogin = false
@@ -46,4 +46,14 @@ export default class AuthModule extends VuexModule {
   decr() {
     return 5
   }
+
+  @Action
+  signIn() {
+    console.log("Called！");
+    this.setLogin
+  }
+
+
 }
+
+export default AuthenticationModule

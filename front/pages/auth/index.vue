@@ -38,23 +38,44 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
-layout: "empty",
-  data() {
-    return {
-      user: null
-    }
-  },
+import { Vue, Component} from 'nuxt-property-decorator';
+import { authenticationStore }  from '~/store'
+
+@Component({layout: "empty",})
+export default class test extends Vue {
+  user= null
+
   async mounted() {
     if ('code' in this.$route.query) {
-      this.$store.commit('setLogin');
-        this.user = await (this as any).$axios.$get("/google/redirect", {
-        params: this.$route.query
-      })
+        authenticationStore.signIn();
+        // this.$store.commit('setLogin');
+      //   this.user = await (this as any).$axios.$get("/google/redirect", {
+      //   params: this.$route.query
+      // })
     }
   }
-    })
+}
+// @Component({
+//   layout: "empty",
+// })
+// export default Vue.extend({
+  
+//     data() {
+//       return {
+//         user: null
+//       }
+//     },
+//     async mounted() {
+      
+//       if ('code' in this.$route.query) {
+//         moduleStore.dec();
+//         // this.$store.commit('setLogin');
+//           this.user = await (this as any).$axios.$get("/google/redirect", {
+//           params: this.$route.query
+//         })
+//       }
+//     }
+// })
 </script>
 
 <style scoped lang="scss">
