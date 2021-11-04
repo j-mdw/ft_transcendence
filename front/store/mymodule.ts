@@ -9,17 +9,17 @@ export default class AuthModule extends VuexModule {
   count = 0
   isLogin = false
   
-  get isLogged() {
-    console.log("coucou")
-    console.log(this.isLogin)
+  get isLogged(): boolean {
+    console.log("hello")
+    //console.log(this.isLogin)
     return this.isLogin
   }
 
   @Mutation
   setLogin() {
-    console.log(this.isLogin);
-    this.isLogin = true
-    console.log(this.isLogin);
+    //console.log(this.isLogin);
+    this.isLogin = true;
+    //console.log(this.isLogin);
     (this as any).$router.push('/login')
   }
   @Mutation

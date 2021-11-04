@@ -8,4 +8,4 @@ function initialiseStores(store: Store<any>): void {
     moduleStore = getModule(AuthModule, store)
 }
 // , authStore
-export { initialiseStores }
+export { initialiseStores, moduleStore }

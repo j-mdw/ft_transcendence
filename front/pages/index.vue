@@ -14,7 +14,7 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'empty',
+  layout: 'default',
 })
 export default class Index extends Vue {
 }

@@ -13,11 +13,16 @@
 </template>
 <script lang="ts">
 import Vue from 'vue'
+ import { Component } from 'nuxt-property-decorator'
 
- middleware: 'auth'
-export default Vue.extend({
-  
+// @Component({
+  middleware: 'auth'
+// })
+@Component({
+  middleware: 'auth',
 })
+export default class Index extends Vue {
+}
 </script>
 
 
