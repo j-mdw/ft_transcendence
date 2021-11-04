@@ -1,7 +1,7 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
  
 @Module({
-  name: 'AuthenticationModule',
+  name: 'auth',
   stateFactory: true,
   namespaced: true,
 })
