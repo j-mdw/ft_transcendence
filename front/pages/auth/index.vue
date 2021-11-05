@@ -48,12 +48,14 @@ export default class test extends Vue {
 
   async mounted() {
     if ('code' in this.$route.query) {
-       // authenticationStore.signIn();
+       authenticationStore.signIn();
        // this.$store.commit('setLogin');
+        console.log("TADA");
+        
         (this as any).$router.push('/login');
         this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query})
         console.log(this.user);
-        
+        console.log("T00");
     }
   }
 }
