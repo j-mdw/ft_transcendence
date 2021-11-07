@@ -1,5 +1,6 @@
-import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from "@nestjs/websockets";
+import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, MessageBody } from "@nestjs/websockets";
 import { Socket } from "dgram";
+import { on } from "events";
 import { Server } from "http";
 
 @WebSocketGateway(4001, {
@@ -7,24 +8,32 @@ import { Server } from "http";
         origin: "http://localhost:3000"
     }
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway implements OnGatewayConnection {
 
-    @WebSocketServer() server: Server;
-    users: number = 0;
 
-    async handleConnection(): Promise<void> {
-        this.users++;
-        this.server.emit('users', this.users);
-        console.log('New user');
+    @SubscribeMessage('events')
+    handleEvent(@MessageBody() data: string): string {
+        console.log('Message recieved: ' + data);
+        return data;
     }
 
-    async handleDisconnect(): Promise<void> {
-        this.users--;
-        this.server.emit('users', this.users);
+    // @WebSocketServer() server: Server;
+    // users: number = 0;
+
+    // @W
+    async handleConnection() : Promise<void> {
+        // this.users++;
+        // this.server.emit('users', this.users);
+        console.log('New user connected');
     }
 
-    @SubscribeMessage('chat')
-    async onChat(client, message: string): Promise<void> {
-        client.boreadcast.emit('chat', message);
-    }
+    // async handleDisconnect(): Promise<void> {
+    //     this.users--;
+    //     this.server.emit('users', this.users);
+    // }
+
+    // @SubscribeMessage('chat')
+    // async onChat(client, message: string): Promise<void> {
+    //     client.boreadcast.emit('chat', message);
+    // }
 }
