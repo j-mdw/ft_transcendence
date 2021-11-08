@@ -8,29 +8,36 @@ import { Server } from "http";
         origin: "http://localhost:3000"
     }
 })
-export class ChatGateway implements OnGatewayConnection {
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
+    @WebSocketServer() server: Server;
+    users: number = 0;
 
-    @SubscribeMessage('events')
-    handleEvent(@MessageBody() data: string): string {
+    @SubscribeMessage('chat-message')
+    handleEvent(@MessageBody() data: string) {
         console.log('Message recieved: ' + data);
-        return data;
+        // return data;
+        this.server.emit('chat-message', data);
     }
 
-    // @WebSocketServer() server: Server;
-    // users: number = 0;
-
-    // @W
-    async handleConnection() : Promise<void> {
-        // this.users++;
-        // this.server.emit('users', this.users);
-        console.log('New user connected');
-    }
-
-    // async handleDisconnect(): Promise<void> {
-    //     this.users--;
-    //     this.server.emit('users', this.users);
+    // @SubscribeMessage('chat-message')
+    // handleEvent(@MessageBody() data: string) {
+    //     console.log('Message recieved: ' + data);
+    //     // return data;
+    //     this.server.emit('chat-message', data);
     // }
+
+    async handleConnection() : Promise<void> {
+        this.users++;
+        // this.server.emit('users', this.users);
+        console.log('New user connected, user count: ' + this.users);
+    }
+
+    async handleDisconnect(): Promise<void> {
+        this.users--;
+        console.log('User disconnected, user count: ' + this.users);
+        // this.server.emit('users', this.users);
+    }
 
     // @SubscribeMessage('chat')
     // async onChat(client, message: string): Promise<void> {

@@ -24,6 +24,8 @@ declare module 'vue/types/vue' {
 const socket: Socket = io("http://localhost:4001");
 socket.on('connect', () => console.log("connected to the server!!"));
 
+socket.on('chat-message', (msg) => console.log(msg))
+
 Vue.prototype.$socket = socket;
 
 
