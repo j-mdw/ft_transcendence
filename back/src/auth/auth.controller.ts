@@ -1,11 +1,14 @@
-import { Controller, Get, Redirect, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, HttpException, Redirect, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RelationId } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { Response } from 'express';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly appService: AuthService) {}
+  constructor(private readonly appService: AuthService,
+    private jwtService: JwtService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -32,10 +35,33 @@ export class AuthController {
     return {data}
   }
 
-  @Get('protected')
-  @UseGuards(AuthGuard('jwt'))
-  protectedResource()
-  {
-    return 'JWT is working!';
+  @Get('test')
+  test() {
+    return 'Hello World!';
   }
+
+  @Post('login')
+  login(@Res() response: Response) {
+    // Do username+password check here.
+
+    const userId = 'dummy';
+
+    const payload = { userId: userId };
+    const token = this.jwtService.sign(payload);
+
+    response
+      .cookie('access_token', token, {
+        httpOnly: true,
+        domain: 'localhost', // your domain here!
+        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
+      })
+      .send({ success: true });
+  }
+
+  @Post('hello')
+  @UseGuards(AuthGuard('jwt'))
+  devices(): string {
+    return 'Hello World';
+  }
+
 }

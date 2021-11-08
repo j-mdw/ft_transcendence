@@ -1,39 +1,21 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-
-var Strategy = require('passport-jwt').Strategy,
-    ExtractJwt = require('passport-jwt').ExtractJwt;
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'jwt')
-{
-    
-    constructor(/*private readonly authService: AuthService*/) 
-    {
-        super({
-            jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-            secretOrKey: process.env.JWT_ACCESS_TOKEN_SECRET,
-        });
-    }
+export class JwtStrategy extends PassportStrategy(Strategy) {
+  constructor() {
+    super({
+      jwtFromRequest: (req) => {
+        if (!req || !req.cookies) return null;
+        return req.cookies['access_token'];
+      },
+      ignoreExpiration: false,
+      secretOrKey: process.env.JWT_SECRET,
+    });
+  }
 
-    async validate(payload, done: Function)
-    {
-        try
-        {
-            // You could add a function to the authService to verify the claims of the token:
-            // i.e. does the user still have the roles that are claimed by the token
-            //const validClaims = await this.authService.verifyTokenClaims(payload);
-            
-            //if (!validClaims)
-            //    return done(new UnauthorizedException('invalid token claims'), false);
-    
-            done(null, payload);
-        }
-        catch (err)
-        {
-            throw new UnauthorizedException('unauthorized', err.message);
-        }
-    }
-
+  async validate(data: any): Promise<any> {
+    return true;
+  }
 }
