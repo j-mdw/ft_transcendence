@@ -54,7 +54,8 @@ export default class test extends Vue {
         
         (this as any).$router.push('/login');
         //this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query})
-        this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query})
+       /// this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query})
+       await (this as any).$axios.$get("test", {withCredentials: true})
         console.log(this.user);
         console.log("T00");
     }

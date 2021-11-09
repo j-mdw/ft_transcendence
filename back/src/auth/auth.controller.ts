@@ -53,8 +53,13 @@ export class AuthController {
   }
 
   @Get('test')
-  test() {
-    return 'Hello World!';
+  test(@Res({passthrough: true}) res: Response) {
+    const payload = { userId: 1};
+    const token = this.jwtService.sign(payload);
+    console.log("TOKEN");
+    res.cookie('access_tken', token, {
+        httpOnly: true
+      })
   }
 
   @Post('login')
