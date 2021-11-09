@@ -43,9 +43,8 @@ export class AuthController {
 
     const payload = { userId: 1};
     const token = this.jwtService.sign(payload);
-
-    response
-      .cookie('access_token', token, {
+    console.log("TOKEN");
+    response.cookie('access_token', token, {
         httpOnly: true
       })
 
@@ -80,7 +79,7 @@ export class AuthController {
       .send({ success: true });
   }
 
-  @Post('hello')
+  @Get('hello')
   @UseGuards(AuthGuard('jwt'))
   devices(): string {
     return 'Hello World';
