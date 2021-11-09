@@ -12,8 +12,9 @@ config();
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   constructor(
-    private readonly authService: AuthService
-  ) {
+
+  ) 
+  {
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_SECRET,

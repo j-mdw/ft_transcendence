@@ -16,9 +16,18 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req, @Res() res) {
+  async googleAuthRedirect(@Req() req, @Res({passthrough: true}) response: Response) {
     ///const data = this.appService.googleLogin(req)
     const data = await this.appService.addingUser(req)
+
+    const payload = { userId: data.user.id};
+    const token = this.jwtService.sign(payload);
+
+    response
+      .cookie('access_token', token, {
+        httpOnly: true
+      })
+
     return {data}
 
   }
@@ -27,11 +36,19 @@ export class AuthController {
   @UseGuards(AuthGuard('42'))
   async school42Auth(@Req() req) {}
 
-  @Get('redirect')
-  @UseGuards(AuthGuard('42/redirect'))
-  async school42AuthRedirect(@Req() req) {
-    const data = this.appService.school42Login(req)
-    //const data = await this.appService.addingUser(req)
+  @Get('42/redirect')
+  @UseGuards(AuthGuard('42'))
+  async school42AuthRedirect(@Req() req, @Res({passthrough: true}) response: Response) {
+    const data = await this.appService.addingUser(req)
+
+    const payload = { userId: 1};
+    const token = this.jwtService.sign(payload);
+
+    response
+      .cookie('access_token', token, {
+        httpOnly: true
+      })
+
     return {data}
   }
 

@@ -43,9 +43,9 @@ export class AuthService {
   async addingUser(req)
   {
 
-    if (!req.user) {
-      return 'No user from google'
-    }
+    // if (!req.user) {
+    //   return 'No user from google'
+    // }
 
     if(await this.usersService.findEmail(req.user.email))
     {
