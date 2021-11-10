@@ -5,18 +5,10 @@
         <NuxtLogo />
         <VuetifyLogo />
       </v-card>
-      <v-card>
         <v-card-title class="headline">
           Welcome to the Vuetify + Nuxt.js template
         </v-card-title>
-        <v-card-text>
-
-          <v-btn
-            color="primary"
-            nuxt
-            to="/inspire"
-          >
-            Continue
-          </v-btn>
+    </v-col>
+  </v-row>
 
 </template>

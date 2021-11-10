@@ -1,20 +1,27 @@
 <template>
 	<div id="chat">
 		<h1>Welcome to The CHAT</h1>
-		<p>
-			{{ message }}
-		</p>
+		<ul id="chat">
+			<li v-for="msg in messages" :key="messages[msg]">
+				{{ msg }}
+			</li>
+		</ul>
+		<v-virtual-scroll
+		height="100"
+		item-height="20"
+		:items="messages"
+		>
+		</v-virtual-scroll>
 		<form action="">
-			<!-- <input type="text"> -->
-			<v-text-field label="message" v-model="message"></v-text-field>
-			<v-btn id="chat send" elevation="2" @click="sendMessage()">
+			<v-text-field label="message" v-model="current_message"></v-text-field>
+			<v-btn id="chat send" elevation="2"
+			@click="sendMessage()"
+			v-if="current_message.length > 0"
+			>
 				Send
 			</v-btn>
+			<v-btn v-else disabled>Send</v-btn>
 		</form>
-		<v-btn elevation="2" @click="pingServer()">
-			Ping server
-		</v-btn>
-		<!-- <button @click="pingServer()">Ping server</button> -->
 	</div>
 </template>
 
@@ -24,21 +31,30 @@ export default Vue.extend({
 	name: "chat",
 	data() {
 		return {
-			message: ''
+			messages: Array<string>(),
+			current_message: '',
+		}
+	},
+	sockets: {
+		connect() {
+			console.log("we\'re in!!");
+		},
+		disconnect() {
+			this.$socket.$unsubscribe('chat-message')
 		}
 	},
 	methods: {
-		pingServer(): void {
-			console.log("trying to ping server");
-			this.$socket.emit('ping message', 'ping ping');
-		},
 		sendMessage(): void {
-			this.$socket.emit('chat-message', this.message);
+			this.$socket.client.emit('chat-message', this.current_message);
+			this.current_message = '';
 		},
-		// reveiveMessage() {
-		// 	this.$socket.on('chat-message', (msg) => this.message = msg);
-		// }
 	},
+	mounted() { 
+		this.$socket.$subscribe('chat-message', (payload: string) => {
+			console.log(payload)
+			this.messages.push(payload);
+		});
+	}
 })
 </script>
 
