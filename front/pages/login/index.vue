@@ -6,6 +6,9 @@
         
           
       </div>
+        <p v-if="user">
+            welcome {{ user }}
+        </p>
     </v-row>
 </v-container>
 </template>
@@ -16,7 +19,14 @@ import { Component, Vue } from 'nuxt-property-decorator'
 @Component({
   layout: 'default',
 })
-export default class Index extends Vue {
+export default class Login extends Vue {
+  user= null
+  async mounted() {
+      this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+       //await (this as any).$axios.$get("test", {withCredentials: true})
+        console.log(this.user);
+        console.log("T00");
+  }
 }
 </script>
 
