@@ -1,11 +1,21 @@
 <template>
   <v-app>
-      <v-navigation-drawer :value="true">
-        <!-- <v-btn @click="$store.commit('removeLogin');">
-          logout
-          {{ $store.state.isLogin }}
-        </v-btn> -->
-      </v-navigation-drawer>
+    <v-app-bar
+      elevation="0" 
+      color=#f7ede2
+      dense
+      app
+    >
+      <template v-slot:extension>
+        <v-tabs
+          color=#395c6b
+        >
+          <v-tab>Home </v-tab>
+          <v-tab>message </v-tab>
+          <v-tab>Game </v-tab>
+        </v-tabs>
+      </template>
+    </v-app-bar>
     <v-main>
       <nuxt />
     </v-main>
@@ -32,4 +42,9 @@ export default class Index extends Vue {
   background-color: #F7EDE2;
   color: #395C6B;
 }
+
+.v-tabs-bar{
+  float: right !important;
+}
+
 </style>
