@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { RelationId } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
+import { read } from 'fs';
 
 @Controller()
 export class AuthController {
@@ -86,11 +87,12 @@ export class AuthController {
     return 'Hello World';
   }
 
-  @Get('hello')
+  @Get('me')
   @UseGuards(AuthGuard('jwt'))
   tests(@Req() req,): string {
     // req.
-    return 'Hello World';
+    console.log();
+    return req.user
   }
 
 
