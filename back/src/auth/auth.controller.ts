@@ -41,7 +41,7 @@ export class AuthController {
   async school42AuthRedirect(@Req() req, @Res({passthrough: true}) response: Response) {
     const data = await this.appService.addingUser(req)
 
-    const payload = { userId: 1};
+    const payload = { userId: data.user.id};
     const token = this.jwtService.sign(payload);
     console.log("TOKEN");
     response.cookie('access_token', token, {
@@ -56,7 +56,7 @@ export class AuthController {
     const payload = { userId: 1};
     const token = this.jwtService.sign(payload);
     console.log("TOKEN");
-    res.cookie('access_tken', token, {
+    res.cookie('access_token', token, {
         httpOnly: true
       })
   }
@@ -79,10 +79,20 @@ export class AuthController {
       .send({ success: true });
   }
 
-  @Get('hello')
+  @Post('hello')
   @UseGuards(AuthGuard('jwt'))
-  devices(): string {
+  devices(@Req() req,): string {
+    // req.
     return 'Hello World';
   }
+
+  @Get('hello')
+  @UseGuards(AuthGuard('jwt'))
+  tests(@Req() req,): string {
+    // req.
+    return 'Hello World';
+  }
+
+
 
 }
