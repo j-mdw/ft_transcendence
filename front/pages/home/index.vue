@@ -19,9 +19,11 @@ import { Component, Vue } from 'nuxt-property-decorator'
 @Component({
   layout: 'default',
 })
-
-export default class Pseudo extends Vue {
-    
+export default class Login extends Vue {
+  user= null
+  async mounted() {
+      this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+  }
 }
 </script>
 

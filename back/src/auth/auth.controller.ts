@@ -80,7 +80,7 @@ export class AuthController {
       .send({ success: true });
   }
 
-  @Post('hello')
+  @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
   devices(@Req() req,): string {
     // req.

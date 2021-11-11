@@ -1,15 +1,36 @@
 <template>
-  <v-container fill-height>
-    <v-row justify="center" align="center">     
-      <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <!-- <h1>LOGGED</h1> -->
-        
-          
-      </div>
+  <v-container class="flex-container" fill-height> 
+   
+     <v-row justify="center">
         <h1 v-if="user">
-           <br>welcome {{ user.firstName }}
+           Welcome {{ user.firstName }}, to continue you will need to set a pseudo :<br>
         </h1>
-    </v-row>
+      </v-row>
+      
+      <v-row >
+
+          <v-text-field
+              label="Pseudo"
+              v-model="pseudo"
+          ></v-text-field>
+      <!-- <v-form @submit="submitPseudo"> -->
+        <v-btn 
+          text
+          
+          color=#395c6b
+          type="submit"
+          @click="submitPseudo"
+          
+        >
+          <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" />
+        </v-btn>
+      <!-- </v-form> -->
+      
+      </v-row>
+      
+
+
+
 </v-container>
 </template>
 
@@ -17,24 +38,38 @@
 import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'default',
+  layout: 'empty',
 })
 export default class Login extends Vue {
   user= null
+  pseudo: string = ''
+  title= null
+
   async mounted() {
       this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-       //await (this as any).$axios.$get("test", {withCredentials: true})
-        console.log(this.user);
-        console.log("T00");
   }
+  
+  async submitPseudo() {
+      console.log(this.pseudo);
+  }
+
+
 }
+
+
 </script>
 
 <style scoped lang="scss">
-#component-logo {
-  margin-top: 25px;
-  i{
-    font-size: 32px;
-  }
+.flex-container{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: cente;
+  align-content: center;
+  row-gap: 30px;
 }
+
+.v-text-field{
+      width: 40px;
+}
+
 </style>

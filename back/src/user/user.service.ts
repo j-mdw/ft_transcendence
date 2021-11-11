@@ -42,14 +42,8 @@ export class UsersService {
     await this.usersRepository.delete(id);
  }
 
-  // async editUser(id: number, note: User): Promise<User> {
-  //   const editedNote = await this.usersRepository.findOne(id);
-  //   if (!editedNote) {
-  //     throw new NotFoundException('Note is not found');
-  //   }
-  //   editedUser.description = note.description;
-  //   editedNote.title = note.title;
-  //   await editedNote.save();
-  //   return editedNote;
-  // }
+  async update(id: string, data: Partial<UsersDTO>) {
+    await this.usersRepository.update({ id }, data);
+    return await this.usersRepository.findOne({ id });
+  }
 }

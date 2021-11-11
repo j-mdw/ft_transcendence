@@ -6,6 +6,7 @@ import {
     Param,
     Patch,
     Post,
+    HttpStatus,
   } from '@nestjs/common';
   import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
   import { UsersService } from './user.service';
@@ -23,6 +24,15 @@ import {
     @Get(':id')
     findOne(@Param('id', ParseIntPipe) id) {
       return this.usersService.findOne(id);
+    }
+
+    @Patch(':id')
+      async uppdateUser(@Param('id') id: string, @Body() data: Partial<UsersDTO>) {
+        await this.usersService.update(id, data);
+        return {
+          statusCode: HttpStatus.OK,
+          message: 'User updated successfully',
+        };
     }
   
 

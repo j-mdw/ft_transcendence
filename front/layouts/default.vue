@@ -1,20 +1,29 @@
 <template>
   <v-app>
+
     <v-app-bar
       elevation="0" 
+      background-color=#395C6B
       color=#f7ede2
       dense
       app
     >
-      <template v-slot:extension>
         <v-tabs
           color=#395c6b
+          centered
+          icons-and-text
         >
-          <v-tab>Home </v-tab>
+          <v-tab>profile </v-tab>
+          <v-tab>home </v-tab>
           <v-tab>message </v-tab>
           <v-tab>Game </v-tab>
         </v-tabs>
-      </template>
+      <v-btn 
+        text
+        color=#395c6b
+      >
+        logout
+      </v-btn>
     </v-app-bar>
     <v-main>
       <nuxt />

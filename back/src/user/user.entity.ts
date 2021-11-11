@@ -16,6 +16,9 @@ export class UsersEntity {
       @Column()
       email: string;
 
+      @Column()
+      pseudo: string;
+
       @Exclude()
       public currentHashedRefreshToken?: string;
 }
