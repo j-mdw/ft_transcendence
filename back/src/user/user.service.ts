@@ -42,8 +42,15 @@ export class UsersService {
     await this.usersRepository.delete(id);
  }
 
-  async update(id: string, data: Partial<UsersDTO>) {
-    await this.usersRepository.update({ id }, data);
-    return await this.usersRepository.findOne({ id });
+  async update_pseudo(id: string, pseudo: string) {
+    const editedUser = await this.usersRepository.findOne(id);
+    console.log(editedUser);
+    if (!editedUser) {
+      throw new NotFoundException('User is not found');
+    }
+    editedUser.pseudo = pseudo;
+    await this.usersRepository.save(editedUser);
+    console.log(editedUser);
+    return editedUser;
   }
 }

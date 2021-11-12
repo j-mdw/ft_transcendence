@@ -27,8 +27,8 @@ import {
     }
 
     @Patch(':id')
-      async uppdateUser(@Param('id') id: string, @Body() data: Partial<UsersDTO>) {
-        await this.usersService.update(id, data);
+      async uppdateUser(@Param('id') id: string, @Body() data: string) {
+        await this.usersService.update_pseudo(id, data);
         return {
           statusCode: HttpStatus.OK,
           message: 'User updated successfully',
@@ -36,8 +36,8 @@ import {
     }
   
 
-    @Post() create(@Body() data: UsersDTO) {
-      return this.usersService.createUser(data);
+    @Post() create(@Body() data: UsersDTO) {             
+      return this.usersService.createUser(data);         
     }
   
     // @Patch(':id')
