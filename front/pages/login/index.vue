@@ -56,6 +56,9 @@ export default Vue.extend({
       submitPseudo() {
           console.log(this.pseudo);
           (this as any).$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+          .catch((error)=>{
+            console.log(error);
+          });
 
       }
   }
