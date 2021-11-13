@@ -35,29 +35,35 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
+export default Vue.extend({
+    layout: 'empty',
+    data() {
+    return {
+        user: null,
+        pseudo :null,
+        title: null,
+      }
+    },
+    
+    async mounted() {
+        this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+    },
 
-@Component({
-  layout: 'empty',
-})
-export default class Login extends Vue {
-  user= null
-  pseudo: string = ''
-  title= null
-
-  async mounted() {
-      this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-  }
   
-  async submitPseudo() {
-      console.log(this.pseudo);
+    methods: {
+      
+      submitPseudo() {
+          console.log(this.pseudo);
+          (this as any).$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+
+      }
   }
-
-
-}
-
+})
 
 </script>
+
+
 
 <style scoped lang="scss">
 .flex-container{
