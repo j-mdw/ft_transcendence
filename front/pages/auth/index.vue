@@ -12,6 +12,7 @@
               fab
               color="#F6BD60"
               href="http://localhost:4000/42"
+              @click="school42redirect"
             >
               <img style="height:36px" src="../../assets/logo/42_white.svg" />
             </v-btn>
@@ -20,6 +21,7 @@
               fab
               color="#F6BD60"
               href="http://localhost:4000/google"
+              @click="googleredirect"
             >
               <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
@@ -45,21 +47,43 @@ import { authenticationStore }  from '~/store'
 export default class test extends Vue {
   user= null
   tokens= null
+  redirect42: boolean = false
+  redirectgoogle: boolean = false
 
   async mounted() {
+    console.log(this.$route)
     if ('code' in this.$route.query) {
        authenticationStore.signIn();
        // this.$store.commit('setLogin');
-        console.log("TADA");
+        console.log(this.redirect42);
         
-        (this as any).$router.push('/login');
+        if(this.redirect42)
+        {
+          this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query, withCredentials: true})
+        }
+        else if(this.redirectgoogle)
+        {
+          this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query, withCredentials: true})
+        }
         //this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query})
       // this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query}, {withCredentials: true})
-      this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query, withCredentials: true})
+      
        //await (this as any).$axios.$get("test", {withCredentials: true})
+        (this as any).$router.push('/login');
+        
         console.log(this.user);
         console.log("T00");
     }
+
+    
+  }
+  school42redirect() {
+    this.redirect42 = true
+    console.log(this.redirect42);
+  }
+
+  googleredirect() {
+    this.redirectgoogle = true
   }
 }
 // @Component({
