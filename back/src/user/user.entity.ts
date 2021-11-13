@@ -16,7 +16,7 @@ export class UsersEntity {
       @Column()
       email: string;
 
-      @Column()
+      @Column({ nullable: true, default: null })
       pseudo: string;
 
       @Exclude()

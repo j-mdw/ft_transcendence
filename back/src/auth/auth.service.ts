@@ -1,4 +1,4 @@
-import { Injectable, Post, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, Post, InternalServerErrorException, HttpException } from '@nestjs/common';
 import {UsersService} from '../user/user.service';
 import { sign } from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
@@ -64,11 +64,5 @@ export class AuthService {
     }
   }
 
-
-
-  async add_pseudo(req)
-  {
-
-  }
 
 }

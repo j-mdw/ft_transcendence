@@ -1,15 +1,17 @@
-import { Controller, Get, Post, HttpException, Redirect, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, HttpException, Redirect, Res, Req, Body, Param, HttpStatus, UseGuards, Patch } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { RelationId } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { read } from 'fs';
+import { UsersService } from 'src/user/user.service';
 
 @Controller()
 export class AuthController {
   constructor(private readonly appService: AuthService,
-    private jwtService: JwtService) {}
+    private jwtService: JwtService,
+    private usersService: UsersService) {}
 
   @Get('google')
   @UseGuards(AuthGuard('google'))
@@ -82,10 +84,13 @@ export class AuthController {
 
   @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
-  devices(@Req() req,): string {
-    // req.
-    return 'Hello World';
-  }
+  async uppdateUser(@Param('id') id: string, @Req() req) {
+    await this.usersService.update_pseudo(id, req.body.pseudo);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'User updated successfully',
+    };
+}
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
