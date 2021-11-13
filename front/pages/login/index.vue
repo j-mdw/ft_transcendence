@@ -36,6 +36,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { authenticationStore } from '~/store';
 export default Vue.extend({
     layout: 'empty',
     data() {
@@ -56,9 +57,14 @@ export default Vue.extend({
       submitPseudo() {
           console.log(this.pseudo);
           (this as any).$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
-          .catch((error)=>{
+          .catch((error: any)=>{
             console.log(error);
           });
+          authenticationStore.setLogin;
+          (this as any).$router.push('/home');
+          
+          
+
 
       }
   }
