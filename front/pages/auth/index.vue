@@ -21,7 +21,7 @@
               color="#F6BD60"
               href="http://localhost:4000/google"
             >
-              <i class="fab fa-google mx-2"></i>
+              <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
 
           
