@@ -77,5 +77,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-  }
+  },
+
+  production_mode: false, //Added for use of random users in development mode
 }

@@ -23,6 +23,15 @@
             >
               <i class="fab fa-google mx-2"></i>
             </v-btn>
+            <!-- <v-btn
+              v-if="$production_mode == false"
+              class="mx-8"
+              fab
+              color="#F6BD60"
+              @click="createRandomUser"
+              >
+              Anonymous Entry
+            </v-btn> -->
           </div>
           
 
@@ -36,10 +45,10 @@
 </v-container>
 </template>
 
-<script>
-
-export default {
-  layout: "empty",
+<script lang="ts">
+import Vue from 'vue'
+export default Vue.extend({
+  // layout: "empty",
   data() {
     return {
       user: null
@@ -51,22 +60,16 @@ export default {
         params: this.$route.query
       })
     }
-
-    // if ('code' in this.$route.query) {
-    //   this.user = await this.$axios.$get("/42/redirect", {
-    //     params: this.$route.query
-    //   })
-    // }
-  
-  // if(user)
-  //   {
-  //     $store.commit('setLogin')
-  //   }
-  }
+  },
+  methods: {
+    async createRandomUser() {
+      this.user = await this.$axios.$get("randomUser")
+    },
+  },
 
       
   
-}
+})
 </script>
 
 <style scoped lang="scss">

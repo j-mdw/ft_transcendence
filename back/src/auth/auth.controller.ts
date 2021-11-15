@@ -29,4 +29,11 @@ export class AuthController {
     //const data = await this.appService.addingUser(req)
     return {data}
   }
+
+  @Get('randomUser')
+  async addRandomUser() {
+    const data = this.appService.createRandomUser()
+
+    return {data}
+  }
 }
