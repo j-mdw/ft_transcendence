@@ -8,17 +8,29 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 export default class AuthenticationModule extends VuexModule {
   count = 0
   isLogin = false
-  
+  is42 = false
+
   get isLogged(): boolean {
     //console.log(this.isLogin)
     return this.isLogin
   }
 
+  get isit42(): boolean {
+    //console.log(this.isLogin)
+    return this.is42
+  }
+
+
   @Mutation
   setLogin() {
-    console.log("HEY !");
     this.isLogin = true;
-    console.log(this.isLogin);
+  }
+
+  @Mutation
+  set42() {
+    console.log("H0 !");
+    this.is42 = true;
+    console.log(this.is42);
   }
 
   @Mutation
@@ -45,9 +57,14 @@ export default class AuthenticationModule extends VuexModule {
 
   @Action({rawError: true})
   signIn() {
-    console.log("Called！");
     this.context.commit("setLogin");
   //  console.log("Cal");
+  }
+
+  @Action({rawError: true})
+  sign42() {
+    this.context.commit("set42");
+    console.log("Commit");
   }
 
 

@@ -11,7 +11,7 @@
               class="mx-8"
               fab
               color="#F6BD60"
-              href="http://localhost:4000/42"
+        
               @click="school42redirect"
             >
               <img style="height:36px" src="../../assets/logo/42_white.svg" />
@@ -21,7 +21,6 @@
               fab
               color="#F6BD60"
               href="http://localhost:4000/google"
-              @click="googleredirect"
             >
               <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
@@ -40,28 +39,32 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component} from 'nuxt-property-decorator';
+import Vue from 'vue'
 import { authenticationStore }  from '~/store'
 
-@Component({layout: "empty",})
-export default class test extends Vue {
-  user= null
-  tokens= null
-  redirect42: boolean = false
-  redirectgoogle: boolean = false
+export default Vue.extend({
+	layout: 'empty',
+	data() {
+		return {
+        redirect42: false,
+        redirectgoogle: false,
+        user: null
+        
+		}
+	},
 
-  async mounted() {
+	async mounted() { 
     console.log(this.$route)
     if ('code' in this.$route.query) {
        authenticationStore.signIn();
-       // this.$store.commit('setLogin');
-        console.log(this.redirect42);
+       // this.$store.commit('setLogin');console.log("is it 42")
+      console.log(authenticationStore.isit42)
         
-        if(this.redirect42)
+        if(authenticationStore.isit42)
         {
           this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query, withCredentials: true})
         }
-        else if(this.redirectgoogle)
+        else
         {
           this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query, withCredentials: true})
         }
@@ -74,40 +77,20 @@ export default class test extends Vue {
         console.log(this.user);
         console.log("T00");
     }
+	},
 
-    
-  }
-  school42redirect() {
-    this.redirect42 = true
-    console.log(this.redirect42);
-  }
-
-  googleredirect() {
-    this.redirectgoogle = true
-  }
-}
-// @Component({
-//   layout: "empty",
-// })
-// export default Vue.extend({
-  
-//     data() {
-//       return {
-//         user: null
-//       }
-//     },
-//     async mounted() {
+  methods: {
+    school42redirect() {
+      console.log("is it 42")
+      authenticationStore.sign42()
       
-//       if ('code' in this.$route.query) {
-//         moduleStore.dec();
-//         // this.$store.commit('setLogin');
-//           this.user = await (this as any).$axios.$get("/google/redirect", {
-//           params: this.$route.query
-//         })
-//       }
-//     }
-// })
+      console.log(authenticationStore.isit42)
+    },
+	},
+
+})
 </script>
+
 
 <style scoped lang="scss">
 #component-logo {
