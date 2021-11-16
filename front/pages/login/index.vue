@@ -8,23 +8,14 @@
       </v-row>
       
       <v-row >
-
-          <v-text-field
-              label="Pseudo"
-              v-model="pseudo"
-          ></v-text-field>
-      <!-- <v-form @submit="submitPseudo"> -->
-        <v-btn 
-          text
-          
-          color=#395c6b
-          type="submit"
-          @click="submitPseudo"
-          
-        >
-          <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" />
-        </v-btn>
-      <!-- </v-form> -->
+      <form>
+        <v-text-field
+          label="Pseudo"
+          v-model="pseudo"
+          @keydown.enter="submitPseudo"
+        ></v-text-field>  
+        <v-btn @click="submitPseudo"><img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" /></v-btn> # HERE IT WORKS
+      </form> 
       
       </v-row>
       
@@ -81,7 +72,7 @@ export default Vue.extend({
 }
 
 .v-text-field{
-      width: 40px;
+      width: 800px;
 }
 
 </style>
