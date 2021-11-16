@@ -40,12 +40,12 @@ export class AuthService {
 
   async createRandomUser()
   {
-    var usr: UsersDTO;
-      usr.firstName = this.randString(8),
-      usr.lastName = this.randString(10),
-      usr.email = this.randString(6) + '@' + this.randString(5) + ".lala"
-
-    console.log(usr);
+    var usr: UsersDTO = {
+      id: undefined,
+      firstName: String(this.randString(8)),
+      lastName: String(this.randString(10)),
+      email: String(this.randString(6) + '@' + this.randString(5) + ".lala")
+    }
     if (await this.usersService.findEmail(usr.email)) {
       return {
         message: 'the user exists in the database',
@@ -54,6 +54,8 @@ export class AuthService {
     }
     else {
       this.usersService.createUser(usr);
+      console.log(await this.usersService.findOne(usr.id));
+
       return {
         message: 'the user was created in the database',
         user: await this.usersService.findEmail(usr.email)

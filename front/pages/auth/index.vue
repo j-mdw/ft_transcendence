@@ -63,7 +63,7 @@ export default Vue.extend({
   methods: {
     async createRandomUser() {
       console.log('randomeeee')
-      // this.user = await this.$axios.$get("randomUser")
+      this.user = await this.$axios.$get("randomUser")
     },
   },
 

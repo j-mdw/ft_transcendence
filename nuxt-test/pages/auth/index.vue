@@ -37,6 +37,11 @@
           <p v-if="user">
             welcome {{ user }}
           </p>
+          <p>
+            All Users:
+            {{ users }}
+          </p>
+
           
           
       </div>
@@ -50,7 +55,8 @@ export default Vue.extend({
   // layout: "empty",
   data() {
     return {
-      user: 'jean'
+      user: 'jean',
+      users: [],
     }
   },
   // async mounted() {
@@ -64,6 +70,10 @@ export default Vue.extend({
     async createRandomUser() {
       console.log('randomeeee')
       this.user = await this.$axios.$get("randomUser")
+      this.getAllUsers()
+    },
+    async getAllUsers() {
+      this.users = await this.$axios.$get("users")
     },
   },
 
