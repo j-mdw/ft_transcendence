@@ -19,6 +19,9 @@ export class UsersEntity {
       @Column({ nullable: true, default: null })
       pseudo: string;
 
+      @Column()
+      picture_path: string;
+
       @Exclude()
       public currentHashedRefreshToken?: string;
 }

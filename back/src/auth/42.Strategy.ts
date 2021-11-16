@@ -31,8 +31,9 @@ export class school42Strategy extends PassportStrategy(Strategy, '42') {
 		super({
 			clientID: process.env.SCHOOL_CLIENT_ID,
 			clientSecret: process.env.SCHOOL_SECRET,
-			callbackURL: 'http://localhost:3000/auth',
+			callbackURL: 'http://localhost:3000/auth/callback/42',
 			scope: ['public'],
+			provider: '42/redirect',
 		  });
 		
 	}

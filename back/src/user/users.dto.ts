@@ -4,4 +4,5 @@ export interface UsersDTO {
     lastName: string;
     email: string;
     pseudo: string;
+    picture_path: string;
 }

@@ -11,8 +11,7 @@
               class="mx-8"
               fab
               color="#F6BD60"
-        
-              @click="school42redirect"
+              href="http://localhost:4000/42"
             >
               <img style="height:36px" src="../../assets/logo/42_white.svg" />
             </v-btn>
@@ -46,47 +45,25 @@ export default Vue.extend({
 	layout: 'empty',
 	data() {
 		return {
-        redirect42: false,
-        redirectgoogle: false,
         user: null
-        
 		}
 	},
+  computed: {
+    provider() {
+        console.log(this.$route.query.params)
+        return this.$route.params.provider;
+      } 
+  },
+
 
 	async mounted() { 
     console.log(this.$route)
     if ('code' in this.$route.query) {
-       authenticationStore.signIn();
-       // this.$store.commit('setLogin');console.log("is it 42")
-      console.log(authenticationStore.isit42)
-        
-        if(authenticationStore.isit42)
-        {
-          this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query, withCredentials: true})
-        }
-        else
-        {
-          this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query, withCredentials: true})
-        }
-        //this.user = await (this as any).$axios.$get("/google/redirect", {params: this.$route.query})
-      // this.user = await (this as any).$axios.$get("/42/redirect", {params: this.$route.query}, {withCredentials: true})
+      console.log(`logging with ${this.provider}`)
       
-       //await (this as any).$axios.$get("test", {withCredentials: true})
-        (this as any).$router.push('/login');
-        
-        console.log(this.user);
-        console.log("T00");
     }
 	},
 
-  methods: {
-    school42redirect() {
-      console.log("is it 42")
-      authenticationStore.sign42()
-      
-      console.log(authenticationStore.isit42)
-    },
-	},
 
 })
 </script>

@@ -1,9 +1,10 @@
 {
   "type": "mysql",
   "host": "localhost",
+  "port": "3306",
   "username": "root",
-  "password": "florianne",
+  "password": "user42",
   "database": "transcendence",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
-  }
+}

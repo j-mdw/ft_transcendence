@@ -15,22 +15,9 @@ export default class AuthenticationModule extends VuexModule {
     return this.isLogin
   }
 
-  get isit42(): boolean {
-    //console.log(this.isLogin)
-    return this.is42
-  }
-
-
   @Mutation
   setLogin() {
     this.isLogin = true;
-  }
-
-  @Mutation
-  set42() {
-    console.log("H0 !");
-    this.is42 = true;
-    console.log(this.is42);
   }
 
   @Mutation
@@ -60,12 +47,5 @@ export default class AuthenticationModule extends VuexModule {
     this.context.commit("setLogin");
   //  console.log("Cal");
   }
-
-  @Action({rawError: true})
-  sign42() {
-    this.context.commit("set42");
-    console.log("Commit");
-  }
-
 
 }
