@@ -50,7 +50,7 @@ export default Vue.extend({
   // layout: "empty",
   data() {
     return {
-      user: null
+      user: 'jean'
     }
   },
   // async mounted() {
@@ -63,7 +63,7 @@ export default Vue.extend({
   methods: {
     async createRandomUser() {
       console.log('randomeeee')
-      // this.user = await this.$axios.$get("randomUser")
+      this.user = await this.$axios.$get("randomUser")
     },
   },
 

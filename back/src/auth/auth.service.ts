@@ -28,10 +28,10 @@ export class AuthService {
     return '42'
   }
 
-  randString(length: number) {
-    var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
+  randString(length: number) : string {
+    var result: string = '';
+    var characters: string = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength: number = characters.length;
     for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
    }
@@ -40,16 +40,15 @@ export class AuthService {
 
   async createRandomUser()
   {
-    var usr: UsersDTO = {
-      id: this.randString(12),
-      firstName: this.randString(8),
-      lastName: this.randString(10),
-      email: this.randString(6) + '@' + this.randString(5) + ".lala"
-    }
-  
+    var usr: UsersDTO;
+      usr.firstName = this.randString(8),
+      usr.lastName = this.randString(10),
+      usr.email = this.randString(6) + '@' + this.randString(5) + ".lala"
+
+    console.log(usr);
     if (await this.usersService.findEmail(usr.email)) {
       return {
-        message: 'the user exist in the database',
+        message: 'the user exists in the database',
         user: await this.usersService.findEmail(usr.email)
       }
     }

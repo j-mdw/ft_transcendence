@@ -12,9 +12,9 @@
 
 <script>
 
-export default {
-  auth: true
-}
+// export default {
+//   auth: true
+// }
 </script>
 
 <style scoped lang="scss">
