@@ -9,12 +9,12 @@ export class UsersService {
   constructor(
     @InjectRepository(UsersEntity) private usersRepository: Repository<UsersEntity>,
   ) {}
-  
+
   async getUsers(): Promise<UsersEntity[]> {
     return await this.usersRepository.find();
   }
 
- async findOne(id: string): Promise<UsersDTO>  {
+  async findOne(id: string): Promise<UsersDTO> {
     return await this.usersRepository.findOne({
       where: {
         id: id,
@@ -30,17 +30,15 @@ export class UsersService {
     });
   }
 
-
-
   async createUser(data: UsersDTO) {
     const user = this.usersRepository.create(data);
     await this.usersRepository.save(data);
     return user;
   }
 
- async remove(id: string): Promise<void> {
+  async remove(id: string): Promise<void> {
     await this.usersRepository.delete(id);
- }
+  }
 
   async update_pseudo(id: string, pseudo: string) {
     const editedUser = await this.usersRepository.findOne(id);

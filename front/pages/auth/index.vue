@@ -1,9 +1,6 @@
 <template>
   <v-container fill-height>
     <v-row justify="center" align="center">
-      {{ $route.query }}
-
-
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
           <h1>Welcome to ft_transcendence ! </h1>
           <div id="component-logo" class="d-flex justify-space-around mb-6 ">
@@ -24,7 +21,6 @@
               <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
 
-          
           </div> 
 
            <p v-if="user">

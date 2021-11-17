@@ -8,15 +8,19 @@
       </v-row>
       
       <v-row >
-      <form>
-        <v-text-field
-          label="Pseudo"
-          v-model="pseudo"
-          @keydown.enter="submitPseudo"
-        ></v-text-field>  
-        <v-btn @click="submitPseudo"><img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" /></v-btn> # HERE IT WORKS
-      </form> 
-      
+          <v-text-field
+            label="Pseudo"
+            v-model="pseudo"
+            @keydown.enter="submitPseudo"
+          ></v-text-field>  
+          <v-btn 
+            text
+            color=#395c6b
+            type="submit"
+            @click="submitPseudo"
+          >
+            <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" />
+          </v-btn>
       </v-row>
       
 
@@ -40,22 +44,16 @@ export default Vue.extend({
     
     async mounted() {
         this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-        this.pseudo = await (this as any).$axios.$get("/me", {withCredentials: true})
-        if (this.pseudo != null) {
-            console.log(this.pseudo),
-          (this as any).$router.push('/home'); 
-        }
     },
 
   
     methods: {
       
-      submitPseudo() {
+      async submitPseudo() {
           authenticationStore.signIn();
           console.log(this.pseudo);
-          (this as any).$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
-          authenticationStore.setLogin;
-          (this as any).$router.push('/home');
+          await this.$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+          this.$router.push('/home');
           
           
 
@@ -78,7 +76,7 @@ export default Vue.extend({
 }
 
 .v-text-field{
-      width: 800px;
+      width: 50rem;
 }
 
 </style>
