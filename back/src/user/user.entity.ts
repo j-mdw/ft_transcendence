@@ -19,7 +19,7 @@ export class UsersEntity {
       @Column({ nullable: true, default: null })
       pseudo: string;
 
-      @Column()
+      @Column({ nullable: true, default: null })
       picture_path: string;
 
       @Exclude()

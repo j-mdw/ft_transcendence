@@ -100,6 +100,14 @@ export class AuthController {
     return req.user
   }
 
+  @Get('me/psuedo')
+  @UseGuards(AuthGuard('jwt'))
+  pseudo(@Req() req,): string {
+    // req.
+    console.log(req.user.pseudo);
+    return req.user.pseudo
+  }
+
 
 
 }

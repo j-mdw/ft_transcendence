@@ -40,12 +40,18 @@ export default Vue.extend({
     
     async mounted() {
         this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+        this.pseudo = await (this as any).$axios.$get("/me", {withCredentials: true})
+        if (this.pseudo != null) {
+            console.log(this.pseudo),
+          (this as any).$router.push('/home'); 
+        }
     },
 
   
     methods: {
       
       submitPseudo() {
+          authenticationStore.signIn();
           console.log(this.pseudo);
           (this as any).$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
           authenticationStore.setLogin;
