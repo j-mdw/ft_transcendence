@@ -40,7 +40,7 @@ export default Vue.extend({
 				{
 					console.log("tooo")
 					this.$router.push({
-						path: '/login'
+						path: '/pseudo'
 					});
 					console.log("iiii")
 				}

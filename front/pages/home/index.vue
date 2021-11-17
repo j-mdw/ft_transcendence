@@ -7,7 +7,7 @@
           
       </div>
         <h1 v-if="user">
-           <br>welcome {{ user.firstName }}
+           <br>welcome {{ user.pseudo }}
         </h1>
     </v-row>
 </v-container>

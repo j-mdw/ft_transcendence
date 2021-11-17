@@ -6,12 +6,9 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
   namespaced: true,
 })
 export default class AuthenticationModule extends VuexModule {
-  count = 0
   isLogin = false
-  is42 = false
 
   get isLogged(): boolean {
-    //console.log(this.isLogin)
     return this.isLogin
   }
 
@@ -21,31 +18,13 @@ export default class AuthenticationModule extends VuexModule {
   }
 
   @Mutation
-  setToken(accesstoken: string, refreshtoken: string) {
-    localStorage.setItem("ACCESS_TOKEN", accesstoken)
-    localStorage.setItem("REFRESH_TOKEN", refreshtoken)
-  }
-  
-  @Mutation
   removeLogin(){
     this.isLogin = false
-  }
-
-  @Mutation
-  decrement(delta: number) {
-    this.count -= delta
-  }
- 
-  // action 'decr' commits mutation 'decrement' when done with return value as payload
-  @Action({ commit: 'decrement' })
-  decr() {
-    return 5
   }
 
   @Action({rawError: true})
   signIn() {
     this.context.commit("setLogin");
-  //  console.log("Cal");
   }
 
 }
