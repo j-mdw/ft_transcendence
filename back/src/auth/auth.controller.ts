@@ -14,8 +14,8 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(@Req() req) {
     //const data = this.appService.googleLogin(req)
-    const data = await this.appService.addingUser(req)
-    return {data}
+    const data = await this.appService.addingUser(req);
+    return { data };
   }
 
   @Get('42')
@@ -25,15 +25,14 @@ export class AuthController {
   @Get('redirect')
   @UseGuards(AuthGuard('42/redirect'))
   async school42AuthRedirect(@Req() req) {
-    const data = this.appService.school42Login(req)
+    const data = this.appService.school42Login(req);
     //const data = await this.appService.addingUser(req)
-    return {data}
+    return { data };
   }
 
   @Get('randomUser')
   async addRandomUser() {
-    const data = this.appService.createRandomUser()
-
-    return {data}
+    const data = await this.appService.createRandomUser();
+    return { data };
   }
 }

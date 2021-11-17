@@ -14,7 +14,7 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
- async findOne(id: string): Promise<UsersDTO>  {
+ async findUser(id: string): Promise<UsersDTO>  {
     return await this.usersRepository.findOne({
       where: {
         id: id,
@@ -29,8 +29,6 @@ export class UsersService {
       },
     });
   }
-
-
 
   async createUser(data: UsersDTO) {
     const user = this.usersRepository.create(data);

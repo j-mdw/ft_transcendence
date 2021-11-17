@@ -21,8 +21,8 @@ import {
     }
   
     @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id) {
-      return this.usersService.findOne(id);
+    findOneUser(@Param('id', ParseIntPipe) id) {
+      return this.usersService.findUser(id);
     }
   
 

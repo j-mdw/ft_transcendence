@@ -8,12 +8,12 @@ import VueSocketIOExt from 'vue-socket.io-extended';
 // 	console.log(`Connected with id: , ${socket.id}`);
 // })
 
-// const socket: Socket = io("http://localhost:4001");
+const socket: Socket = io("http://localhost:4000");
 
 
-// export default () => {
-//   Vue.use(VueSocketIOExt, socket)
-// };
+export default () => {
+  Vue.use(VueSocketIOExt, socket)
+};
 
 // socket.on('connect', () => console.log("connected to the server!!"));
 

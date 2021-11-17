@@ -55,7 +55,7 @@ export default Vue.extend({
   // layout: "empty",
   data() {
     return {
-      user: 'jean',
+      user: undefined,
       users: [],
     }
   },
@@ -70,7 +70,7 @@ export default Vue.extend({
     async createRandomUser() {
       console.log('randomeeee')
       this.user = await this.$axios.$get("randomUser")
-      this.getAllUsers()
+      await this.getAllUsers()
     },
     async getAllUsers() {
       this.users = await this.$axios.$get("users")

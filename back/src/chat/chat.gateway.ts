@@ -1,6 +1,5 @@
 import { OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer, MessageBody } from "@nestjs/websockets";
 import { Socket } from "dgram";
-import { on } from "events";
 import { Server } from "http";
 
 @WebSocketGateway({

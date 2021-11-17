@@ -42,9 +42,9 @@ export class AuthService {
   {
     var usr: UsersDTO = {
       id: undefined,
-      firstName: String(this.randString(8)),
-      lastName: String(this.randString(10)),
-      email: String(this.randString(6) + '@' + this.randString(5) + ".lala")
+      firstName: this.randString(8),
+      lastName: this.randString(10),
+      email: this.randString(6) + '@' + this.randString(5) + ".lala"
     }
     if (await this.usersService.findEmail(usr.email)) {
       return {
@@ -53,13 +53,20 @@ export class AuthService {
       }
     }
     else {
-      this.usersService.createUser(usr);
-      console.log(await this.usersService.findOne(usr.id));
-
+      await this.usersService.createUser(usr)
+      console.log(await this.usersService.findEmail(usr.email))
       return {
-        message: 'the user was created in the database',
-        user: await this.usersService.findEmail(usr.email)
-      }
+          message: 'the user was created in the database',
+          user: await this.usersService.findEmail(usr.email)
+        }
+      // console.log(usr.email);
+      // console.log(await this.usersService.findEmail(usr.email));
+      // console.log(await this.usersService.findUser('1'));
+
+      // return {
+      //   message: 'the user was created in the database',
+      //   user: await this.usersService.findEmail(usr.email)
+      // }
     }
   }
 
