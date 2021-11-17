@@ -6,7 +6,7 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
   namespaced: true,
 })
 export default class AuthenticationModule extends VuexModule {
-  isLogin = false
+  isLogin = localStorage.getItem("IS_LOGIN") === "true"
 
   get isLogged(): boolean {
     return this.isLogin
@@ -15,16 +15,23 @@ export default class AuthenticationModule extends VuexModule {
   @Mutation
   setLogin() {
     this.isLogin = true;
+    localStorage.setItem("IS_LOGIN", "true")
   }
 
   @Mutation
   removeLogin(){
     this.isLogin = false
+    localStorage.setItem("IS_LOGIN", "false")
   }
 
   @Action({rawError: true})
   signIn() {
     this.context.commit("setLogin");
+  }
+
+  @Action({rawError: true})
+  signOut() {
+    this.context.commit("removeLogin");
   }
 
 }

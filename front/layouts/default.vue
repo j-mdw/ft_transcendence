@@ -30,13 +30,14 @@
           centered
           icons-and-text
         >
-          <v-tab>home </v-tab>
+          <v-tab href="http://localhost:3000/profile" >home </v-tab>
           <v-tab>message </v-tab>
           <v-tab>Game </v-tab>
         </v-tabs>
       <v-btn 
         text
         color=#395c6b
+        @click="logout"
       >
         logout
       </v-btn>
@@ -47,16 +48,23 @@
   </v-app>
 </template>
 <script lang="ts">
+
 import Vue from 'vue'
-import { Component } from 'nuxt-property-decorator'
+import { authenticationStore }  from '~/store'
 
-
-@Component({
+export default Vue.extend({
   middleware: 'auth',
+
+  methods: {
+      
+      logout() {
+        console.log("LLOGOUT")
+        authenticationStore.signOut();
+        this.$router.push('/auth');
+      }
+  }
+
 })
-export default
-     class Index extends Vue {
-}
 </script>
 
 
