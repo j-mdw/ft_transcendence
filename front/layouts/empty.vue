@@ -5,9 +5,8 @@
     </v-main>
   </v-app>
 </template>
-<script>
-export default {
-}
+<script lang="ts">
+
 </script>
 <style scoped>
 .v-application {

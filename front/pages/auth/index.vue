@@ -1,11 +1,8 @@
 <template>
   <v-container fill-height>
     <v-row justify="center" align="center">
-      <!-- {{ $route.query }} -->
-
-
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <h1>Welcome to ft_transcendence !</h1>
+          <h1>Welcome to ft_transcendence ! </h1>
           <div id="component-logo" class="d-flex justify-space-around mb-6 ">
             <!-- <v-btn
               class="mx-8"
@@ -30,11 +27,12 @@
               @click="createRandomUser"
               >
               Anonymous Entry
+              <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
-          </div>
-          
 
-          <p v-if="user">
+          </div> 
+
+           <p v-if="user">
             welcome {{ user }}
           </p>
           
@@ -46,31 +44,39 @@
 
 <script lang="ts">
 import Vue from 'vue'
+// import { authenticationStore }  from '@store/index'
 export default Vue.extend({
-  // layout: "empty",
-  data() {
-    return {
-      user: null
-    }
+	layout: 'empty',
+	data() {
+		return {
+        user: null
+		}
+	},
+  computed: {
+    provider() {
+        console.log(this.$route.query.params)
+        return this.$route.params.provider;
+      } 
   },
-  // async mounted() {
-  //   if ('code' in this.$route.query) {
-  //     this.user = await this.$axios.$get("/google/redirect", {
-  //       params: this.$route.query
-  //     })
-  //   }
-  // },
   methods: {
     async createRandomUser() {
       console.log('randomeeee')
       this.user = await this.$axios.$get("randomUser")
-    },
   },
 
+
+	async mounted() { 
+    console.log(this.$route)
+    if ('code' in this.$route.query) {
+      console.log(`logging with ${this.provider}`)
       
-  
+    }
+	},
+
+
 })
 </script>
+
 
 <style scoped lang="scss">
 #component-logo {

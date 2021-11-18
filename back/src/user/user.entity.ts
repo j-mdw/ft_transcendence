@@ -1,16 +1,10 @@
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  BeforeInsert,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
-import { Channel, ChannelUsers } from '../channel/channel.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Channel, ChannelUser } from 'src/channel/channel.entity';
+import { Relationship } from 'src/relationship/relationship.entity';
 
 @Entity('users')
-export class UsersEntity {
-  @PrimaryGeneratedColumn()
+export class User {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Column()
@@ -22,15 +16,24 @@ export class UsersEntity {
   @Column()
   email: string;
 
-  @OneToMany(() => BlockedUsers, (blocked) => blocked.id)
-  blocked: BlockedUsers[];
-}
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  pseudo: string;
 
-@Entity('block')
-export class BlockedUsers {
-  @Column()
-  id: string;
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  picture_path: string;
 
-  @ManyToOne(() => UsersEntity, (user) => user.blocked)
-  user: UsersEntity;
+  @OneToMany(() => Channel, (channelOwned) => channelOwned.id)
+  channelsOwned: Channel[];
+
+  @OneToMany(() => ChannelUser, (channelParticipant) => channelParticipant.user)
+  channelsParticipant: ChannelUser[];
+
+  @OneToMany(() => Relationship, (relation) => relation.user)
+  peers: Relationship[];
 }

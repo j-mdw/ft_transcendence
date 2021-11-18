@@ -5,7 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { UsersEntity } from '../user/user.entity';
+import { User } from '../user/user.entity';
 
 @Entity('channel')
 export class Channel {
@@ -18,18 +18,20 @@ export class Channel {
   @Column()
   type: string;
 
-  @OneToMany(() => ChannelUsers, (channel_user) => channel_user.user)
-  users: UsersEntity[];
+  @Column({
+    nullable: true,
+  })
+  password: string;
+
+  @ManyToOne(() => User, (channelOwner) => channelOwner.id)
+  owner: User;
+
+  @OneToMany(() => ChannelUser, (channelUser) => channelUser.user)
+  users: User[];
 }
 
-@Entity('channel_users')
-export class ChannelUsers {
-  @ManyToOne(() => UsersEntity, (user) => user.id)
-  user: UsersEntity;
-
-  @ManyToOne(() => Channel, (channel) => channel.id)
-  channel: Channel;
-
+@Entity('channelUsers')
+export class ChannelUser {
   @Column()
   role: string; //"owner" | "admin" | "normal"
 
@@ -39,5 +41,11 @@ export class ChannelUsers {
   @Column({
     nullable: true,
   })
-  status_end: Date;
+  statusEnd: Date;
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
+
+  @ManyToOne(() => Channel, (channel) => channel.id)
+  channel: Channel;
 }

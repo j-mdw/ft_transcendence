@@ -2,7 +2,7 @@
   <v-container fill-height>
     <v-row justify="center" align="center">     
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <h1>Not what I want !</h1>
+          <h1>INDEX !!!</h1>
         
           
       </div>
@@ -10,11 +10,14 @@
 </v-container>
 </template>
 
-<script>
+<script lang="ts">
+import { Component, Vue } from 'nuxt-property-decorator'
 
-// export default {
-//   auth: true
-// }
+@Component({
+  layout: 'default',
+})
+export default class Index extends Vue {
+}
 </script>
 
 <style scoped lang="scss">
