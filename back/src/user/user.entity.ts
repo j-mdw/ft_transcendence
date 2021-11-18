@@ -1,16 +1,36 @@
-import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
-import * as crypto from 'crypto';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  BeforeInsert,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
+import { Channel, ChannelUsers } from '../channel/channel.entity';
+
 @Entity('users')
 export class UsersEntity {
-      @PrimaryGeneratedColumn()
-      id: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 
-      @Column()
-      firstName: string;
+  @Column()
+  firstName: string;
 
-      @Column()
-      lastName: string;
+  @Column()
+  lastName: string;
 
-      @Column()
-      email: string;
+  @Column()
+  email: string;
+
+  @OneToMany(() => BlockedUsers, (blocked) => blocked.id)
+  blocked: BlockedUsers[];
+}
+
+@Entity('block')
+export class BlockedUsers {
+  @Column()
+  id: string;
+
+  @ManyToOne(() => UsersEntity, (user) => user.blocked)
+  user: UsersEntity;
 }
