@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { Exclude } from 'class-transformer';
 
 @Entity('users')
-export class UsersEntity {
+export class User {
   @PrimaryGeneratedColumn()
   id: string;
 

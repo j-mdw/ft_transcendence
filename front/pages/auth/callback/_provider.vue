@@ -33,7 +33,7 @@ export default Vue.extend({
             console.log(this.pseudo),
           this.$router.push({
 						path: '/home'
-					}); 
+					});
 					console.log("tada")
         }
 				else
