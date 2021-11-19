@@ -5,9 +5,15 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { User } from '../user/user.entity';
+import { User } from 'src/user/user.entity';
 
-@Entity('channel')
+export enum channelType {
+  public,
+  private,
+  password,
+}
+
+@Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
   id: number;
@@ -16,32 +22,43 @@ export class Channel {
   name: string;
 
   @Column()
-  type: string;
+  type: channelType;
 
   @Column({
     nullable: true,
+    default: null,
   })
   password: string;
 
-  @ManyToOne(() => User, (channelOwner) => channelOwner.id)
+  @ManyToOne(() => User, (owner) => owner.id)
   owner: User;
 
-  @OneToMany(() => ChannelUser, (channelUser) => channelUser.user)
-  users: User[];
+  @OneToMany(() => ChannelParticipant, (participant) => participant.user)
+  participants: ChannelParticipant[];
 }
 
-@Entity('channelUsers')
-export class ChannelUser {
-  @Column()
-  role: string; //"owner" | "admin" | "normal"
+@Entity('channelsParticipants')
+export class ChannelParticipant {
+  @Column({
+    default: false,
+  })
+  admin: boolean;
 
-  @Column()
-  status: string; //"banned" | "muted" | "normal" --> Where shoul I define theses type?
+  @Column({
+    default: false,
+  })
+  banned: boolean;
+
+  @Column({
+    default: false,
+  })
+  muted: boolean;
 
   @Column({
     nullable: true,
+    default: null,
   })
-  statusEnd: Date;
+  muteEnd: Date;
 
   @ManyToOne(() => User, (user) => user.id)
   user: User;

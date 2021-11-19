@@ -6,12 +6,16 @@ export class Relationship {
   @Column()
   peer: string;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   friend: boolean;
 
-  @Column()
+  @Column({
+    default: false,
+  })
   blocked: boolean;
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.relationships)
   user: User;
 }

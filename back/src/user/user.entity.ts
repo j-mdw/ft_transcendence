@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Channel, ChannelUser } from 'src/channel/channel.entity';
+import { Channel, ChannelParticipant } from 'src/channel/channel.entity';
 import { Relationship } from 'src/relationship/relationship.entity';
 
 @Entity('users')
@@ -28,12 +28,12 @@ export class User {
   })
   picture_path: string;
 
-  @OneToMany(() => Channel, (channelOwned) => channelOwned.id)
-  channelsOwned: Channel[];
+  @OneToMany(() => Channel, (channel) => channel.owner)
+  channels: Channel[];
 
-  @OneToMany(() => ChannelUser, (channelParticipant) => channelParticipant.user)
-  channelsParticipant: ChannelUser[];
+  @OneToMany(() => ChannelParticipant, (participant) => participant.user)
+  channelsParticipants: ChannelParticipant[];
 
   @OneToMany(() => Relationship, (relation) => relation.user)
-  peers: Relationship[];
+  relationships: Relationship[];
 }
