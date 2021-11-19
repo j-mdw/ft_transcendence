@@ -6,8 +6,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
-export enum channelType {
+export enum ChannelType {
   public,
   private,
   password,
@@ -16,13 +17,13 @@ export enum channelType {
 @Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @Column()
   name: string;
 
   @Column()
-  type: channelType;
+  type: ChannelType;
 
   @Column({
     nullable: true,
@@ -30,39 +31,15 @@ export class Channel {
   })
   password: string;
 
+  @Column()
+  createdAt: Date;
+
+  @Column()
+  updatedAt: Date;
+
   @ManyToOne(() => User, (owner) => owner.id)
   owner: User;
 
   @OneToMany(() => ChannelParticipant, (participant) => participant.user)
   participants: ChannelParticipant[];
-}
-
-@Entity('channelsParticipants')
-export class ChannelParticipant {
-  @Column({
-    default: false,
-  })
-  admin: boolean;
-
-  @Column({
-    default: false,
-  })
-  banned: boolean;
-
-  @Column({
-    default: false,
-  })
-  muted: boolean;
-
-  @Column({
-    nullable: true,
-    default: null,
-  })
-  muteEnd: Date;
-
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
-
-  @ManyToOne(() => Channel, (channel) => channel.id)
-  channel: Channel;
 }

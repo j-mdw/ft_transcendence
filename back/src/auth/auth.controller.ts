@@ -38,6 +38,7 @@ export class AuthController {
     response.cookie('access_token', token, {
       httpOnly: true,
     });
+    // console.log(this.jwtService.decode(token)['userId']);
 
     return { data };
   }
@@ -78,7 +79,6 @@ export class AuthController {
     // Do username+password check here.
 
     const userId = 'dummy';
-
     const payload = { userId: userId };
     const token = this.jwtService.sign(payload);
 
@@ -94,7 +94,7 @@ export class AuthController {
   @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
   async uppdatePseudo(@Param('id') id: string, @Req() req) {
-    await this.usersService.update_pseudo(id, req.body.pseudo);
+    await this.usersService.updatePseudo(id, req.body.pseudo);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

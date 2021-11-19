@@ -1,6 +1,7 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { Channel, ChannelParticipant } from 'src/channel/channel.entity';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity } from 'typeorm';
+import { Channel } from 'src/channel/channel.entity';
 import { Relationship } from 'src/relationship/relationship.entity';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 @Entity('users')
 export class User {
@@ -26,7 +27,13 @@ export class User {
     nullable: true,
     default: null,
   })
-  picture_path: string;
+  picturePath: string;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
+  updatedAt: Date;
 
   @OneToMany(() => Channel, (channel) => channel.owner)
   channels: Channel[];
