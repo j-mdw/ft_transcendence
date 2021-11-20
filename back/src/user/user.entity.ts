@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, BaseEntity } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Channel } from 'src/channel/channel.entity';
 import { Relationship } from 'src/relationship/relationship.entity';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
@@ -6,15 +6,21 @@ import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.en
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  readonly id: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   firstName: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   lastName: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   email: string;
 
   @Column({
@@ -29,10 +35,14 @@ export class User {
   })
   picturePath: string;
 
-  @Column()
-  createdAt: Date;
+  @Column({
+    nullable: false,
+  })
+  readonly createdAt: Date;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   updatedAt: Date;
 
   @OneToMany(() => Channel, (channel) => channel.owner)

@@ -1,8 +1,4 @@
-import {
-  Entity,
-  Column,
-  ManyToOne,
-} from 'typeorm';
+import { Entity, Column, ManyToOne } from 'typeorm';
 import { User } from 'src/user/user.entity';
 import { Channel } from 'src/channel/channel.entity';
 
@@ -30,8 +26,8 @@ export class ChannelParticipant {
   muteEnd: Date;
 
   @ManyToOne(() => User, (user) => user.id)
-  user: User;
+  readonly user: User;
 
   @ManyToOne(() => Channel, (channel) => channel.id)
-  channel: Channel;
+  readonly channel: Channel;
 }

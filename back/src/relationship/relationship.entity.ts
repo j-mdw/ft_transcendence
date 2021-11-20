@@ -4,7 +4,7 @@ import { User } from 'src/user/user.entity';
 @Entity('relationships')
 export class Relationship {
   @Column()
-  peer: string;
+  readonly peer: string;
 
   @Column({
     default: false,
@@ -14,8 +14,13 @@ export class Relationship {
   @Column({
     default: false,
   })
+  pendingFriendRequest: boolean;
+
+  @Column({
+    default: false,
+  })
   blocked: boolean;
 
   @ManyToOne(() => User, (user) => user.relationships)
-  user: User;
+  readonly user: User;
 }

@@ -56,7 +56,7 @@ export class AuthService {
   //   }
   // }
 
-  async addingUser(req) {
+  async addUser(req) {
     if (await this.usersService.findEmail(req.user.email)) {
       return {
         message: 'the user exist in the database',

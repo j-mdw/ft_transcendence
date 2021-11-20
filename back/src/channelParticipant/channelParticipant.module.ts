@@ -6,4 +6,4 @@ import { ChannelParticipant } from './channelParticipant.entity';
   imports: [TypeOrmModule.forFeature([ChannelParticipant])],
   controllers: [],
 })
-export class ChannelModule {}
+export class ChannelParticipantModule {}

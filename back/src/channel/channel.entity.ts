@@ -17,12 +17,16 @@ export enum ChannelType {
 @Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  readonly id: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   name: string;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   type: ChannelType;
 
   @Column({
@@ -31,14 +35,18 @@ export class Channel {
   })
   password: string;
 
-  @Column()
-  createdAt: Date;
+  @Column({
+    nullable: false,
+  })
+  readonly createdAt: Date;
 
-  @Column()
+  @Column({
+    nullable: false,
+  })
   updatedAt: Date;
 
   @ManyToOne(() => User, (owner) => owner.id)
-  owner: User;
+  readonly owner: User;
 
   @OneToMany(() => ChannelParticipant, (participant) => participant.user)
   participants: ChannelParticipant[];

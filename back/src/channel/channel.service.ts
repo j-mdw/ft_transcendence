@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
 import { ChannelDTO } from './channel.dto';
 import { UsersService } from 'src/user/user.service';
+import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
+import { channelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
 export class ChannelService {
@@ -12,6 +14,8 @@ export class ChannelService {
     private channelRepository: Repository<Channel>,
     @Inject()
     private userService: UsersService,
+    @Inject()
+    private participantService: channelParticipantService,
   ) {}
 
   //How is Channel ID generated automatically if I use DTO?
@@ -24,18 +28,26 @@ export class ChannelService {
     return await this.channelRepository.findOne(id);
   }
 
-  async create(data: ChannelDTO) {
-    const channel = this.channelRepository.create(data);
+  //Potential error if findOne fails
+  async create(data: ChannelDTO, userId: string) {
     const date = new Date();
-    channel.createdAt = date;
-    channel.updatedAt = date;
-
-    channel.owner = await this.userService.findOne('1');
-    //channel.id = getUserId(); Need to implement way to get the User ID from the request
-    this.channelRepository.save(channel);
+    const channel = this.channelRepository.create({
+      ...data,
+      createdAt: date,
+      updatedAt: date,
+      owner: await this.userService.findOne(userId),
+    });
+    await this.channelRepository.save(channel);
+    const participant = new ChannelParticipantDTO();
+    participant.admin = true;
+    await this.participantService.create(participant, userId, channel.id);
   }
 
-  async update(id: string, date: ChannelDTO){}
+  //For now, Multiple channels with same name is allowed
+  async update(id: string, date: ChannelDTO) {
+    const channel = await this.findOne(id);
+
+  }
 
   async delete(id: string): Promise<void> {
     await this.channelRepository.delete(id);

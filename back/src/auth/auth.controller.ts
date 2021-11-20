@@ -17,7 +17,7 @@ import { UsersService } from 'src/user/user.service';
 @Controller()
 export class AuthController {
   constructor(
-    private readonly appService: AuthService,
+    private readonly authService: AuthService,
     private jwtService: JwtService,
     private usersService: UsersService,
   ) {}
@@ -32,7 +32,7 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.appService.addingUser(req);
+    const data = await this.authService.addUser(req);
     const payload = { userId: data.user.id };
     const token = this.jwtService.sign(payload);
     response.cookie('access_token', token, {
@@ -53,7 +53,7 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.appService.addingUser(req);
+    const data = await this.authService.addUser(req);
 
     const payload = { userId: data.user.id };
     const token = this.jwtService.sign(payload);
@@ -94,7 +94,7 @@ export class AuthController {
   @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
   async uppdatePseudo(@Param('id') id: string, @Req() req) {
-    await this.usersService.updatePseudo(id, req.body.pseudo);
+    await this.usersService.update(id, req.body.pseudo);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',
@@ -114,11 +114,11 @@ export class AuthController {
     console.log(req.user.pseudo);
     return req.user.pseudo;
   }
-  
+
   //DELETE randomUser method
-  @Get('randomUser')
-  async addRandomUser() {
-    const data = await this.appService.createRandomUser();
-    return { data };
-  }
+  // @Get('randomUser')
+  // async addRandomUser() {
+  //   const data = await this.appService.createRandomUser();
+  //   return { data };
+  // }
 }
