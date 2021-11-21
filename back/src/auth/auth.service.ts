@@ -1,12 +1,12 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { UsersService } from 'src/user/user.service';
+import { UserService } from 'src/user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { UserDTO } from 'src/user/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private userService: UserService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -57,16 +57,17 @@ export class AuthService {
   // }
 
   async addUser(req) {
-    if (await this.usersService.findEmail(req.user.email)) {
+    const user = await this.userService.findEmail(req.user.email);
+    if (user) {
       return {
         message: 'the user exist in the database',
-        user: await this.usersService.findEmail(req.user.email),
+        user: user,
       };
     } else {
-      await this.usersService.create(req.user);
+      await this.userService.create(req.user);
       return {
         message: 'the user was created in the database',
-        user: await this.usersService.findEmail(req.user.email),
+        user: await this.userService.findEmail(req.user.email),
       };
     }
   }

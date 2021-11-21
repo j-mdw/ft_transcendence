@@ -12,14 +12,14 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { UsersService } from 'src/user/user.service';
+import { UserService } from 'src/user/user.service';
 
 @Controller()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private jwtService: JwtService,
-    private usersService: UsersService,
+    private userService: UserService,
   ) {}
 
   @Get('google')
@@ -94,7 +94,7 @@ export class AuthController {
   @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
   async uppdatePseudo(@Param('id') id: string, @Req() req) {
-    await this.usersService.update(id, req.body.pseudo);
+    await this.userService.update(id, req.body.pseudo);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

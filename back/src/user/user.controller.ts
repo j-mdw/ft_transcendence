@@ -6,35 +6,33 @@ import {
   Patch,
   Post,
   HttpStatus,
+  ParseUUIDPipe,
 } from '@nestjs/common';
-import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
-import { UsersService } from './user.service';
-import { UserDTO } from './user.dto';
+import { UserService } from './user.service';
+import { UserDTO, UpdateUserDTO } from './user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private usersService: UsersService) { }
+  constructor(private usersService: UserService) {}
   @Get()
-  async findAll() {
+  async findAll(): Promise<UserDTO[]> {
     return await this.usersService.getUsers();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
     return await this.usersService.findOne(id);
   }
 
   @Patch(':id')
-  async updateUser(@Param('id') id: string, @Body() data: UserDTO) {
+  async updateUser(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() data: UpdateUserDTO,
+  ) {
     await this.usersService.update(id, data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',
     };
   }
-  //Don't think we'll be using this as user creation is done through auth
-  // @Post()
-  // async create(@Body() data: UserDTO) {
-  //   return await this.usersService.create(data);
-  // }
 }

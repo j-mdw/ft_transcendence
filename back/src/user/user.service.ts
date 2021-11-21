@@ -1,13 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO } from './user.dto';
+import { UserDTO, UpdateUserDTO } from './user.dto';
+import { ChannelService } from 'src/channel/channel.service';
+import { channelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    @Inject()
+    private channelService: ChannelService,
+    @Inject()
+    private participantService: channelParticipantService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -26,42 +33,16 @@ export class UsersService {
     });
   }
 
-  async create(data: UserDTO) {
+  async create(data: UserDTO): Promise<User> {
     const now = new Date();
-    const user = this.usersRepository.create({
+    return await this.usersRepository.save({
       ...data,
       createdAt: now,
       updatedAt: now,
-    }); //Not sure if I need to save after a create --> Need to test that
-    await this.usersRepository.save(data);
-    return user;
+    });
   }
 
-  async delete(id: string) {
-    const user = this.usersRepository.findOne(id);
-    if ((await user).channels.length > 0)
-    {
-      //delete channels (which in turns deletes corresponding channel participants)
-      // --> user needs to Cascade into Channels which needs to Cascade into ChannelParticipants
-      // So when we delete a user, the channels it owns are delete
-
-      /*
-        2 Solutions:
-        a. User cascades in channelParticipant: when a user is deleted, we delete its channelParticipant entries
-          -> Before deleting a channel participant entry, we check if the user is the owner of the channel, in which case we delete the channel
-            -> Channel Cascades into channelParticipant, so when a channel is deleted, all its participants are deleted as well
-        b. User Cascade into Channels which Cascade into ChannelParticipants
-          -> When deleting a user we check the channels it owns and we delete them
-            -> Upon deletion, channels delete all channel Participants
-          -> We then delete all participations from user on other channels (the ones it's not the owner of)
-          => User cascade Channel cascade ChannelParticipant
-          => User cascade ChannelParticipant 
-      */
-    }
-    await this.usersRepository.delete(id);
-  }
-
-  async update(id: string, data: UserDTO) {
+  async update(id: string, data: UpdateUserDTO): Promise<User> {
     const editedUser = await this.usersRepository.findOne(id);
     if (!editedUser) {
       throw new NotFoundException('User is not found');
@@ -73,7 +54,7 @@ export class UsersService {
         },
       });
       if (userPseudo) {
-        throw new NotFoundException('Pseudo already in use!!'); //Need to use an appropriate exception
+        throw new NotFoundException('Pseudo already in use!!'); //Need to use an appropriate exception ; assumes data passed as agrument is only the data that needs to be updated
       }
     }
     for (const prop in data) {
@@ -82,6 +63,20 @@ export class UsersService {
       }
     }
     editedUser.updatedAt = new Date();
-    await this.usersRepository.save(editedUser);
+    return await this.usersRepository.save(editedUser);
+  }
+
+  /*
+  -> When deleting a user we check the channels it owns and we delete them
+    -> When deleted, channels delete all channel Participants
+  -> We then delete all participations from user on other channels (the ones it's not the owner of)
+  */
+  async delete(id: string) {
+    const user = await this.usersRepository.findOne(id);
+    await this.channelService.deleteChannels(user.channels);
+    await this.participantService.deleteChannelParticipants(
+      user.channelsParticipants,
+    );
+    await this.usersRepository.delete(id);
   }
 }
