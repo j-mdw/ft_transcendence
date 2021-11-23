@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { ConfigService } from '@nestjs/config';
 import { UserDTO } from 'src/user/user.dto';
@@ -6,8 +6,9 @@ import { UserDTO } from 'src/user/user.dto';
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject()
     private userService: UserService,
-    private readonly configService: ConfigService,
+    // private readonly configService: ConfigService,
   ) {}
 
   googleLogin(req) {

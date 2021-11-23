@@ -1,8 +1,11 @@
-import { Entity, Column, ManyToOne } from 'typeorm';
+import { Entity, Column, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from 'src/user/user.entity';
 
 @Entity('relationships')
 export class Relationship {
+  @PrimaryGeneratedColumn() //Useless but cannot create the table without a primaryColumn (there might be a better solution)
+  id: number;
+
   @Column()
   readonly peer: string;
 

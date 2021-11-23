@@ -1,7 +1,10 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { config } from 'dotenv';
 import { Injectable } from '@nestjs/common';
+/* eslint-disable */
+// @ts-ignore
 import { Strategy, VerifyCallback } from 'passport-42';
+
 
 config();
 

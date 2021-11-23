@@ -1,11 +1,11 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, ForbiddenException, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
 import { ChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
 import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
-import { channelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 
 @Injectable()
@@ -13,10 +13,10 @@ export class ChannelService {
   constructor(
     @InjectRepository(Channel)
     private channelRepository: Repository<Channel>,
-    @Inject()
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
-    @Inject()
-    private participantService: channelParticipantService,
+    @Inject(forwardRef(() => ChannelParticipantService))
+    private participantService: ChannelParticipantService,
   ) {}
 
   async findAll(): Promise<Channel[]> {

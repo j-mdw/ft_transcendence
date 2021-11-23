@@ -8,4 +8,4 @@ import { Relationship } from './relationship.entity';
   controllers: [],
   exports: [],
 })
-export class UsersModule {}
+export class RelationshipModule {}

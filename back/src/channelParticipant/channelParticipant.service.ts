@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelService } from 'src/channel/channel.service';
 import { UserService } from 'src/user/user.service';
@@ -10,13 +10,13 @@ import {
 import { ChannelParticipant } from './channelParticipant.entity';
 
 @Injectable()
-export class channelParticipantService {
+export class ChannelParticipantService {
   constructor(
     @InjectRepository(ChannelParticipant)
     private participantRepository: Repository<ChannelParticipant>,
-    @Inject()
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
-    @Inject()
+    @Inject(forwardRef(() => ChannelService))
     private channelService: ChannelService,
   ) {}
 

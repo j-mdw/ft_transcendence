@@ -1,20 +1,20 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserDTO, UpdateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
-import { channelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-    @Inject()
+    @Inject(forwardRef(() => ChannelService))
     private channelService: ChannelService,
-    @Inject()
-    private participantService: channelParticipantService,
+    @Inject(forwardRef(() => ChannelParticipantService))
+    private participantService: ChannelParticipantService,
   ) {}
 
   async getUsers(): Promise<User[]> {

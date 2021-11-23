@@ -13,6 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { UserService } from 'src/user/user.service';
+import { UserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {
@@ -50,7 +51,7 @@ export class AuthController {
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
   async school42AuthRedirect(
-    @Req() req,
+    @Req() req: UserDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
     const data = await this.authService.addUser(req);
