@@ -8,6 +8,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.Strategy';
 
 @Module({
+  controllers: [AuthController],
+  providers: [AuthService, GoogleStrategy, school42Strategy, JwtStrategy],
   imports: [
     JwtModule.register({
       secret: process.env.JWT_SECRET,
@@ -17,7 +19,5 @@ import { JwtStrategy } from './jwt.Strategy';
     }),
     UserModule,
   ],
-  controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, school42Strategy, JwtStrategy],
 })
 export class AuthModule {}

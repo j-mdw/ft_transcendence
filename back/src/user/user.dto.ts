@@ -1,5 +1,5 @@
 import { IsEmail, IsString } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
+import { PartialType, PickType } from '@nestjs/swagger';
 
 export class UserDTO {
   @IsString()
@@ -15,4 +15,6 @@ export class UserDTO {
   pseudo: string;
 }
 
-export class UpdateUserDTO extends PartialType(UserDTO) {}
+// export class UpdateUserDTO extends PartialType(UserDTO) {}
+
+export class UpdateUserDTO extends PickType(UserDTO, ['pseudo']) {}

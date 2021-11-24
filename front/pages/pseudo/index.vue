@@ -52,7 +52,9 @@ export default Vue.extend({
       async submitPseudo() {
           authenticationStore.signIn();
           console.log(this.pseudo);
-          await this.$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+          await this.$axios.$patch('/user', {pseudo: this.pseudo}, {withCredentials: true});
+          // await this.$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+          console.log('User updated successfully')
           this.$router.push('/home');
           
           

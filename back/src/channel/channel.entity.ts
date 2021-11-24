@@ -6,7 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
-import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
+// import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 export enum ChannelType {
   public,
@@ -48,6 +48,6 @@ export class Channel {
   @ManyToOne(() => User, (owner) => owner.id)
   readonly owner: User;
 
-  @OneToMany(() => ChannelParticipant, (participant) => participant.user)
-  participants: ChannelParticipant[];
+  // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
+  // participants: ChannelParticipant[];
 }

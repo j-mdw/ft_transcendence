@@ -1,10 +1,15 @@
-import { forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserDTO, UpdateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
-import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+// import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
 export class UserService {
@@ -13,8 +18,8 @@ export class UserService {
     private usersRepository: Repository<User>,
     @Inject(forwardRef(() => ChannelService))
     private channelService: ChannelService,
-    @Inject(forwardRef(() => ChannelParticipantService))
-    private participantService: ChannelParticipantService,
+    // @Inject(forwardRef(() => ChannelParticipantService))
+    // private participantService: ChannelParticipantService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -43,9 +48,10 @@ export class UserService {
   }
 
   async update(id: string, data: UpdateUserDTO): Promise<User> {
+    console.log('update user called: ', data);
     const editedUser = await this.usersRepository.findOne(id);
     if (!editedUser) {
-      throw new NotFoundException('User is not found');
+      throw new NotFoundException('Invalid user ID');
     }
     if (data.pseudo) {
       const userPseudo = await this.usersRepository.findOne({
@@ -61,6 +67,7 @@ export class UserService {
       if (data[prop]) {
         editedUser[prop] = data[prop];
       }
+      console.log('updated info: ', editedUser);
     }
     editedUser.updatedAt = new Date();
     return await this.usersRepository.save(editedUser);
@@ -72,11 +79,11 @@ export class UserService {
   -> We then delete all participations from user on other channels (the ones it's not the owner of)
   */
   async delete(id: string) {
-    const user = await this.usersRepository.findOne(id);
-    await this.channelService.deleteChannels(user.channels);
-    await this.participantService.deleteChannelParticipants(
-      user.channelsParticipants,
-    );
+    // const user = await this.usersRepository.findOne(id);
+    // await this.channelService.deleteChannels(user.channels);
+    // await this.participantService.deleteChannelParticipants(
+    //   user.channelsParticipants,
+    // );
     await this.usersRepository.delete(id);
   }
 }

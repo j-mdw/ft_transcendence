@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { UserService } from 'src/user/user.service';
-import { UserDTO } from 'src/user/user.dto';
+import { UpdateUserDTO, UserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {
@@ -94,8 +94,8 @@ export class AuthController {
 
   @Post('pseudo')
   @UseGuards(AuthGuard('jwt'))
-  async uppdatePseudo(@Param('id') id: string, @Req() req) {
-    await this.userService.update(id, req.body.pseudo);
+  async updatePseudo(@Param('id') id: string, @Req() data: UpdateUserDTO) {
+    await this.userService.update(id, data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

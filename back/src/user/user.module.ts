@@ -4,12 +4,20 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { ChannelModule } from 'src/channel/channel.module';
-import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
+import { JwtModule } from '@nestjs/jwt';
+// import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
     forwardRef(() => ChannelModule),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: '24h',
+      },
+    }),
+    // forwardRef(() => ChannelParticipantModule),
   ],
   providers: [UserService],
   controllers: [UserController],

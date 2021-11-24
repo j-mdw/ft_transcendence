@@ -7,11 +7,17 @@ import {
   Post,
   HttpStatus,
   ParseUUIDPipe,
+  Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO, UpdateUserDTO } from './user.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Response } from 'express';
+import { JwtGuard } from 'src/auth/auth.guard';
 
-@Controller('users')
+@Controller('user')
+@UseGuards(JwtGuard)
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
@@ -24,12 +30,9 @@ export class UserController {
     return await this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  async updateUser(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() data: UpdateUserDTO,
-  ) {
-    await this.userService.update(id, data);
+  @Patch()
+  async updateUser(@Res() response: Response, @Body() data: UpdateUserDTO) {
+    await this.userService.update(response.locals.id, data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

@@ -2,10 +2,10 @@ import { forwardRef, ForbiddenException, Inject, Injectable } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
-import { ChannelDTO, UpdateChannelDTO } from './channel.dto';
+import { CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
-import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
-import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
+// import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 
 @Injectable()
@@ -15,8 +15,8 @@ export class ChannelService {
     private channelRepository: Repository<Channel>,
     @Inject(forwardRef(() => UserService))
     private userService: UserService,
-    @Inject(forwardRef(() => ChannelParticipantService))
-    private participantService: ChannelParticipantService,
+    // @Inject(forwardRef(() => ChannelParticipantService))
+    // private participantService: ChannelParticipantService,
   ) {}
 
   async findAll(): Promise<Channel[]> {
@@ -28,23 +28,24 @@ export class ChannelService {
   }
 
   //Potential error if findOne fails
-  async create(data: ChannelDTO, userId: string) {
+  async create(data: CreateChannelDTO, userId: string) {
     if (data.type == ChannelType.password && data.password == null) {
       throw new ForbiddenException(
         'channel of type password must have a password',
       );
     }
     const date = new Date();
-    const channel = this.channelRepository.save({
+    // const channel = 
+    this.channelRepository.save({
       ...data,
       createdAt: date,
       updatedAt: date,
       owner: await this.userService.findOne(userId),
     });
-    const participant = new ChannelParticipantDTO();
-    participant.admin = true;
-    const channelId = (await channel).id;
-    await this.participantService.create(participant, userId, channelId);
+    // const participant = new ChannelParticipantDTO();
+    // participant.admin = true;
+    // const channelId = (await channel).id;
+    // await this.participantService.create(participant, userId, channelId);
   }
 
   /*
@@ -69,9 +70,9 @@ export class ChannelService {
   }
 
   async delete(id: string): Promise<void> {
-    const channel = await this.findOne(id);
-    const participants = channel.participants;
-    this.participantService.deleteChannelParticipants(participants);
+    // const channel = await this.findOne(id);
+    // const participants = channel.participants;
+    // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(id);
   }
 

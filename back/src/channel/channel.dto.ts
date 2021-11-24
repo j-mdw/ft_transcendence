@@ -8,12 +8,20 @@ export class ChannelDTO {
 
   @IsEnum(ChannelType)
   type: ChannelType;
-
-  @IsBase64() //Could have issues when there is no password
-  password: string;
 }
 
-export class UpdateChannelDTO extends PartialType(ChannelDTO) {}
+export class CreateChannelDTO {
+  @IsString()
+  name!: string;
+
+  @IsEnum(ChannelType)
+  type!: ChannelType;
+
+  @IsBase64() //Could have issues when there is no password
+  password!: string;
+}
+
+export class UpdateChannelDTO extends PartialType(CreateChannelDTO) {}
 
 // post /channels
 // post /channels/1
