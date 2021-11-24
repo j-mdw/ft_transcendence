@@ -46,7 +46,7 @@ export class AuthController {
 
   @Get('42')
   @UseGuards(AuthGuard('42'))
-  async school42Auth(@Req() req) {}
+  school42Auth() {}
 
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
