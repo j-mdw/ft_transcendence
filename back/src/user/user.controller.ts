@@ -6,10 +6,14 @@ import {
   Patch,
   Post,
   HttpStatus,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
 import { UsersService } from './user.service';
 import { UserDTO } from './users.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 
 @Controller('users')
 export class UsersController {
@@ -36,5 +40,30 @@ export class UsersController {
   @Post()
   async create(@Body() data: UserDTO) {
     return await this.usersService.createUser(data);
+  }
+
+  @Post('upload/avatar')
+  @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './avatars',
+        filename: function (req, file, cb) {
+          // const filename: string = path.parse(file.originalname).name;
+          // const extension: string = path.parse(file.originalname).ext;
+          // const filename: string = "test";
+          // const extension: string =".jpg";
+
+          cb(null, 'test.jpeg');
+        },
+      }),
+    }),
+  )
+  async uploadFile(
+    @Param('id') id: string,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    console.log(file.path);
+    await this.usersService.update_avatar(id, file.path);
   }
 }

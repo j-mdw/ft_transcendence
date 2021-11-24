@@ -19,7 +19,7 @@ export class User {
   pseudo: string;
 
   @Column({ nullable: true, default: null })
-  picture_path: string;
+  avatar_path: string;
 
   @Exclude()
   public currentHashedRefreshToken?: string;

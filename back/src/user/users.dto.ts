@@ -4,5 +4,5 @@ export interface UserDTO {
   lastName: string;
   email: string;
   pseudo: string;
-  picture_path: string;
+  avatar_path: string;
 }

@@ -51,4 +51,16 @@ export class UsersService {
     console.log(editedUser);
     return editedUser;
   }
+
+  async update_avatar(id: string, path: string) {
+    const editedUser = await this.usersRepository.findOne(id);
+    console.log(editedUser);
+    if (!editedUser) {
+      throw new NotFoundException('User is not found');
+    }
+    editedUser.avatar_path = path;
+    await this.usersRepository.save(editedUser);
+    console.log(editedUser);
+    return editedUser;
+  }
 }
