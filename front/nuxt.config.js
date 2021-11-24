@@ -23,11 +23,12 @@ export default {
         href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css', 
         rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
       }
-    ]
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    'font-awesome/css/font-awesome.min.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -72,7 +73,9 @@ export default {
           success: '#f28482'
         }
       }
-    }
+    },icons: {
+      iconfont: 'fa4', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+    },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
