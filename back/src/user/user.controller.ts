@@ -12,9 +12,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO, UpdateUserDTO } from './user.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { Response } from 'express';
-import { JwtGuard } from 'src/auth/auth.guard';
+import { JwtGuard } from 'src/auth/jwt.guard';
 
 @Controller('user')
 @UseGuards(JwtGuard)
@@ -31,8 +30,9 @@ export class UserController {
   }
 
   @Patch()
-  async updateUser(@Res() response: Response, @Body() data: UpdateUserDTO) {
+  async updateUser(@Res({ passthrough: true }) response: Response, @Body() data: UpdateUserDTO) {
     await this.userService.update(response.locals.id, data);
+    console.log('Patch update about to return');
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

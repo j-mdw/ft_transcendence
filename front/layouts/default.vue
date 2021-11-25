@@ -25,6 +25,7 @@
             </v-avatar>
             my profile
       </v-btn>
+            <NuxtLink to="/channels">Channels</NuxtLink>
         <v-tabs
           color=#395c6b
           centered

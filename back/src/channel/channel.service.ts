@@ -28,8 +28,8 @@ export class ChannelService {
   }
 
   //Potential error if findOne fails
-  async create(data: CreateChannelDTO, userId: string) {
-    if (data.type == ChannelType.password && data.password == null) {
+  async create(userId: string, data: CreateChannelDTO) {
+    if (data.type == ChannelType.protected && data.password == null) {
       throw new ForbiddenException(
         'channel of type password must have a password',
       );
@@ -50,16 +50,20 @@ export class ChannelService {
 
   /*
   For now, Multiple channels with same name is allowed
+  Channel can only be updated by the owner
   Check if the type of the channel is 'password', and if so, if the password is null, throw an exception
   */
-  async update(id: string, data: UpdateChannelDTO) {
-    const channel = await this.findOne(id);
+  async update(userId: string, channelId: string, data: UpdateChannelDTO) {
+    const channel = await this.findOne(channelId);
+    if (!(channel.owner.id == userId)) {
+      throw new ForbiddenException();
+    }
     for (const prop in data) {
       if (data[prop]) {
         channel[prop] = data[prop];
       }
     }
-    if (channel.type != ChannelType.password) {
+    if (channel.type != ChannelType.protected) {
       channel.password = null;
     } else if (channel.password == null) {
       throw new ForbiddenException(
@@ -69,16 +73,19 @@ export class ChannelService {
     await this.channelRepository.save(channel);
   }
 
-  async delete(id: string): Promise<void> {
-    // const channel = await this.findOne(id);
+  async delete(userId: string, channelId: string): Promise<void> {
+    const channel = await this.findOne(channelId);
+    if (!(channel.owner.id == userId)) {
+      throw new ForbiddenException();
+    }
     // const participants = channel.participants;
     // this.participantService.deleteChannelParticipants(participants);
-    await this.channelRepository.delete(id);
+    await this.channelRepository.delete(channelId);
   }
 
-  async deleteChannels(channels: Channel[]) {
+  async deleteChannels(userId: string, channels: Channel[]) {
     for (const channel of channels) {
-      await this.delete(channel.id); //Could optimise by passing channel instead of id to avoid additional lookup
+      await this.delete(userId, channel.id); //Could optimise by passing channel instead of id to avoid additional lookup
     }
   }
 }

@@ -11,7 +11,7 @@ import { User } from 'src/user/user.entity';
 export enum ChannelType {
   public,
   private,
-  password,
+  protected,
 }
 
 @Entity('channels')
