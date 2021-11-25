@@ -6,6 +6,8 @@ import { UsersModule } from '../user/user.module';
 import { school42Strategy } from './42.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './jwt.Strategy';
+import { TwoFactorAuthenticationService } from './twoFactor/twoFactorAuthentication.service';
+import { TwoFactorAuthenticationController } from './twoFactor/twoFactorAuthentication.controller';
 
 @Module({
   imports: [
@@ -17,7 +19,13 @@ import { JwtStrategy } from './jwt.Strategy';
       },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, GoogleStrategy, school42Strategy, JwtStrategy],
+  controllers: [AuthController, TwoFactorAuthenticationController],
+  providers: [
+    AuthService,
+    GoogleStrategy,
+    school42Strategy,
+    JwtStrategy,
+    TwoFactorAuthenticationService,
+  ],
 })
 export class AuthModule {}

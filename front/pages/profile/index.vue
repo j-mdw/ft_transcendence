@@ -35,6 +35,12 @@
       </div>
     </v-row >
     <v-row justify="center">
+        <v-switch
+          color="#f28482"
+          v-model="switch1"
+          inset
+          
+        ></v-switch>
         <h1 v-if="user">
            <br>welcome to your profile {{ user.pseudo }}
         </h1>

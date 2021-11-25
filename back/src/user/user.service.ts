@@ -40,6 +40,12 @@ export class UsersService {
     await this.usersRepository.delete(id);
   }
 
+  async setTwoFactorAuthenticationSecret(secret: string, userId: string) {
+    return this.usersRepository.update(userId, {
+      twoFactorAuthenticationSecret: secret,
+    });
+  }
+
   async update_pseudo(id: string, pseudo: string) {
     const editedUser = await this.usersRepository.findOne(id);
     console.log(editedUser);
@@ -62,5 +68,11 @@ export class UsersService {
     await this.usersRepository.save(editedUser);
     console.log(editedUser);
     return editedUser;
+  }
+
+  async turnOnTwoFactorAuthentication(userId: number) {
+    return this.usersRepository.update(userId, {
+      isTwoFactorAuthenticationEnabled: true,
+    });
   }
 }

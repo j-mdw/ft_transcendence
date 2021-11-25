@@ -114,4 +114,11 @@ export class AuthController {
     console.log(req.user.pseudo);
     return req.user.pseudo;
   }
+
+  @Get('me/2fa')
+  @UseGuards(AuthGuard('jwt'))
+  get2fa(@Req() req): string {
+    console.log(req);
+    return req.user.pseudo;
+  }
 }
