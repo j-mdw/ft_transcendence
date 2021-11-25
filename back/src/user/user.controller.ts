@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Res,
   HttpStatus,
   UploadedFile,
   UseInterceptors,
@@ -43,7 +44,6 @@ export class UsersController {
   }
 
   @Post('upload/avatar')
-  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -65,5 +65,10 @@ export class UsersController {
   ) {
     console.log(file.path);
     await this.usersService.update_avatar(id, file.path);
+  }
+
+  @Get('me/avatar')
+  seeUploadedFile(@Res() res) {
+    return res.sendFile('test.jpeg', { root: './avatars' });
   }
 }

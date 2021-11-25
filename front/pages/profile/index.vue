@@ -9,7 +9,7 @@
           class="mr-4 ml-n2"
         >
           <img
-            src="../../assets/img/sample.jpg"
+            src="http://localhost:4000/users/me/avatar"
           >
         </v-avatar>
         <v-dialog
@@ -56,11 +56,14 @@ export default Vue.extend({
 
 	data() {
 		return {
-        user: null
+        user: null,
+        avatar: null
 		}
 	},
 	async mounted() {
       this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+      this.avatar = await (this as any).$axios.$get("users/me/avatar", {withCredentials: true})
+      console.log(this.avatar)
   }
 
 })
