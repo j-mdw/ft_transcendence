@@ -9,6 +9,7 @@ import {
   ParseUUIDPipe,
   Res,
   UseGuards,
+  Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO, UpdateUserDTO } from './user.dto';
@@ -30,7 +31,10 @@ export class UserController {
   }
 
   @Patch()
-  async updateUser(@Res({ passthrough: true }) response: Response, @Body() data: UpdateUserDTO) {
+  async updateUser(
+    @Res({ passthrough: true }) response: Response,
+    @Body() data: UpdateUserDTO,
+  ) {
     await this.userService.update(response.locals.id, data);
     console.log('Patch update about to return');
     return {

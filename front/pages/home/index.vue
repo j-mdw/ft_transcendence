@@ -16,15 +16,17 @@
 <script lang="ts">
 import { Component, Vue } from 'nuxt-property-decorator'
 import { authenticationStore }  from '~/store'
+import { User } from '~/models/user'
 
 @Component({
   layout: 'default',
 })
 export default class Login extends Vue {
   
-  user= null
+  user: User = Object();
   async mounted() {
-      this.user = await this.$axios.$get("/me", {withCredentials: true})
+      this.user = await this.$axios.get('/user')
+      // this.user = await this.$axios.$get("/me", {withCredentials: true})
   }
 }
 </script>

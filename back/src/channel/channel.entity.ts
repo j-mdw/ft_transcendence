@@ -17,7 +17,7 @@ export enum ChannelType {
 @Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
-  readonly id: string;
+  id: string;
 
   @Column({
     nullable: false,

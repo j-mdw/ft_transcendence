@@ -4,15 +4,11 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(
-    // @Inject()
-    private jwtService: JwtService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    // if (request.cookies && request.cookies['auth_token']) {
     try {
       this.jwtService.verify(request.cookies['access_token']);
       return true;
@@ -21,6 +17,4 @@ export class JwtGuard implements CanActivate {
       return false;
     }
   }
-  // return false;
 }
-// }

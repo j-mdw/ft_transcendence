@@ -7,8 +7,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO, UpdateUserDTO } from './user.dto';
+import { UserDTO, UpdateUserDTO, CreateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
+import { CreateChannelDTO } from 'src/channel/channel.dto';
 // import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
@@ -17,37 +18,54 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     @Inject(forwardRef(() => ChannelService))
-    private channelService: ChannelService,
-    // @Inject(forwardRef(() => ChannelParticipantService))
-    // private participantService: ChannelParticipantService,
+    private channelService: ChannelService, // @Inject(forwardRef(() => ChannelParticipantService)) // private participantService: ChannelParticipantService,
   ) {}
 
-  async getUsers(): Promise<User[]> {
-    return await this.usersRepository.find();
+  async getUsers(): Promise<UserDTO[]> {
+    return (await this.usersRepository.find()).map((user) => new UserDTO(user));
   }
 
-  async findOne(id: string): Promise<User> {
-    return await this.usersRepository.findOne(id);
+  async findOne(id: string): Promise<UserDTO> {
+    return new UserDTO(await this.usersRepository.findOne(id));
   }
 
-  async findEmail(email: string): Promise<User> {
-    return await this.usersRepository.findOne({
-      where: {
-        email: email,
-      },
-    });
+  async isRegistered(email: string): Promise<any> {
+    if (
+      await this.usersRepository.find({
+        where: {
+          email: email,
+        },
+      })
+    )
+      return true;
+    return false;
   }
 
-  async create(data: UserDTO): Promise<User> {
+  async findEmail(email: string): Promise<UserDTO> {
+    return new UserDTO(
+      await this.usersRepository.findOne({
+        where: {
+          email: email,
+        },
+      }),
+    );
+  }
+  /*
+  Create the user and doesn't return anything
+*/
+  async create(data: CreateUserDTO): Promise<any> {
     const now = new Date();
-    return await this.usersRepository.save({
+    await this.usersRepository.save({
       ...data,
       createdAt: now,
       updatedAt: now,
     });
   }
 
-  async update(id: string, data: UpdateUserDTO): Promise<User> {
+  /*
+  Update the user and doesn't return anything
+*/
+  async update(id: string, data: UpdateUserDTO): Promise<any> {
     console.log('update user called: ', data);
     const editedUser = await this.usersRepository.findOne(id);
     if (!editedUser) {
@@ -70,7 +88,7 @@ export class UserService {
       console.log('updated info: ', editedUser);
     }
     editedUser.updatedAt = new Date();
-    return await this.usersRepository.save(editedUser);
+    await this.usersRepository.save(editedUser);
   }
 
   /*
@@ -78,12 +96,12 @@ export class UserService {
     -> When deleted, channels delete all channel Participants
   -> We then delete all participations from user on other channels (the ones it's not the owner of)
   */
-  async delete(id: string) {
-    // const user = await this.usersRepository.findOne(id);
-    // await this.channelService.deleteChannels(user.channels);
-    // await this.participantService.deleteChannelParticipants(
-    //   user.channelsParticipants,
-    // );
-    await this.usersRepository.delete(id);
-  }
+  // async delete(id: string) {
+  //   const user = await this.usersRepository.findOne(id);
+  //   await this.channelService.deleteChannels(id, user.);
+  // await this.participantService.deleteChannelParticipants(
+  //   user.channelsParticipants,
+  // );
+  // await this.usersRepository.delete(id);
+  // }
 }

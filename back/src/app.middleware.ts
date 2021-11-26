@@ -13,10 +13,7 @@ Throw:
 */
 @Injectable()
 export class AppMiddleware implements NestMiddleware {
-  constructor(
-    // @Inject()
-    private jwtService: JwtService,
-  ) {}
+  constructor(private jwtService: JwtService) {}
   use(req: Request, res: Response, next: NextFunction) {
     console.log('Entering middleware');
     if (req.cookies && req.cookies['access_token']) {
@@ -24,8 +21,7 @@ export class AppMiddleware implements NestMiddleware {
         const decoded = this.jwtService.decode(req.cookies['access_token']);
         if (decoded['userId']) {
           res.locals.id = decoded['userId'];
-        }
-        else {
+        } else {
           console.log('jwt decoded successfully but no userId found');
         }
       } catch {

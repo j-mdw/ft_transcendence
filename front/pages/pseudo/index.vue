@@ -3,7 +3,7 @@
    
      <v-row justify="center">
         <h1 v-if="user">
-           Welcome {{ user.firstName }}, to continue you will need to set a pseudo :<br>
+           Welcome to Transcendence, to continue you will need to set a pseudo :<br>
         </h1>
       </v-row>
       
@@ -28,19 +28,21 @@
 <script lang="ts">
 import Vue from 'vue'
 import { authenticationStore } from '~/store';
+// import { User } from '~/models/user'
+
 export default Vue.extend({
     layout: 'empty',
     data() {
     return {
-        user: null,
-        pseudo :null,
+        user: Object(),
+        pseudo: null,
         title: null,
       }
     },
     
-    async mounted() {
-        this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-    },
+    // async mounted() {
+    //     this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
+    // },
 
   
     methods: {

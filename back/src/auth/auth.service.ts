@@ -24,6 +24,15 @@ export class AuthService {
     };
   }
 
+  async addUser(req) {
+    if (await this.userService.isRegistered(req.user.email)) {
+      return await this.userService.findEmail(req.user.email);
+    } else {
+      await this.userService.create(req.user);
+      return await this.userService.findEmail(req.user.email);
+    }
+  }
+
   // randString(length: number): string {
   //   let result = '';
   //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -56,20 +65,4 @@ export class AuthService {
   //     };
   //   }
   // }
-
-  async addUser(req) {
-    const user = await this.userService.findEmail(req.user.email);
-    if (user) {
-      return {
-        message: 'the user exist in the database',
-        user: user,
-      };
-    } else {
-      await this.userService.create(req.user);
-      return {
-        message: 'the user was created in the database',
-        user: await this.userService.findEmail(req.user.email),
-      };
-    }
-  }
 }

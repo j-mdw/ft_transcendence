@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { UserService } from 'src/user/user.service';
-import { UpdateUserDTO, UserDTO } from 'src/user/user.dto';
+import { UpdateUserDTO, CreateUserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {
@@ -30,18 +30,17 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(
-    @Req() req,
+    @Req() req: CreateUserDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.authService.addUser(req);
-    const payload = { userId: data.user.id };
-    const token = this.jwtService.sign(payload);
+    const user = await this.authService.addUser(req);
+    const token = this.jwtService.sign({ userId: user.id });
     response.cookie('access_token', token, {
       httpOnly: true,
     });
     // console.log(this.jwtService.decode(token)['userId']);
 
-    return { data };
+    return { user }; //TBU we should probably not return anything here (and it seems the front is not using iit anyways)
   }
 
   @Get('42')
@@ -51,18 +50,16 @@ export class AuthController {
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
   async school42AuthRedirect(
-    @Req() req: UserDTO,
+    @Req() req: CreateUserDTO,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.authService.addUser(req);
-
-    const payload = { userId: data.user.id };
-    const token = this.jwtService.sign(payload);
+    const user = await this.authService.addUser(req);
+    const token = this.jwtService.sign({ userId: user.id });
     console.log('TOKEN');
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-    return { data };
+    return { user };
   }
 
   @Get('test')

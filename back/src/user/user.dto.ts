@@ -1,7 +1,8 @@
-import { IsEmail, IsString } from 'class-validator';
+import { IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
 import { PartialType, PickType } from '@nestjs/swagger';
+import { User, UserStatus } from './user.entity';
 
-export class UserDTO {
+export class CreateUserDTO {
   @IsString()
   firstName: string;
 
@@ -10,11 +11,29 @@ export class UserDTO {
 
   @IsEmail()
   email: string;
+}
+
+export class UserDTO {
+  @IsString()
+  id: string;
 
   @IsString()
   pseudo: string;
+
+  @IsString()
+  avatarPath: string;
+
+  @IsEnum(UserStatus)
+  status: UserStatus;
+
+  constructor(user: User) {
+    this.id = user.id;
+    this.pseudo = user.pseudo;
+    this.avatarPath = user.avatarPath;
+    this.status = user.status;
+  }
 }
 
-// export class UpdateUserDTO extends PartialType(UserDTO) {}
+export class UpdateUserDTO extends PartialType(UserDTO) {}
 
-export class UpdateUserDTO extends PickType(UserDTO, ['pseudo']) {}
+// export class UpdateUserDTO extends PickType(UserDTO, ['pseudo']) {}

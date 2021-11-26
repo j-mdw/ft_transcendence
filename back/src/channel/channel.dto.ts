@@ -8,6 +8,11 @@ export class ChannelDTO {
 
   @IsEnum(ChannelType)
   type: ChannelType;
+
+  constructor(chanName: string, chanType: ChannelType) {
+    this.name = chanName;
+    this.type = chanType;
+  }
 }
 
 export class CreateChannelDTO {

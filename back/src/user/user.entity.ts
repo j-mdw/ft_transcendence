@@ -3,6 +3,12 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 // import { Relationship } from 'src/relationship/relationship.entity';
 // import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
+export enum UserStatus {
+  online,
+  offline,
+  playing,
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -33,7 +39,13 @@ export class User {
     nullable: true,
     default: null,
   })
-  picturePath: string;
+  avatarPath: string;
+
+  @Column({
+    nullable: false,
+    default: UserStatus.offline,
+  })
+  status: UserStatus;
 
   @Column({
     nullable: false,
