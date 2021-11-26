@@ -36,4 +36,8 @@ export class AuthService {
       };
     }
   }
+
+  async generateAvatar(id: string) {
+    this.usersService.update_avatar(id, this.usersService.find_avatar());
+  }
 }

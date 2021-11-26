@@ -1,51 +1,61 @@
 <template>
-  <v-container fill-height>
-    <v-row justify="center" align="center">     
-      <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <!-- <h1>LOGGED</h1> -->
-        <!-- <FileUpload /> -->
+  <v-container fill-height >
+    <!-- <v-row no-gutters> -->
+      <v-col
+        sm="4"
+        align="center"
+        justify="center"
+      >
         <v-avatar
           size="250px"
-          class="mr-4 ml-n2"
         >
           <img
             src="http://localhost:4000/users/me/avatar"
           >
         </v-avatar>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          max-width="600"
-        > 
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="#f5cac3"
-              v-bind="attrs"
-              v-on="on"
-            >
-              change my picture
-              <!-- <v-icon color="#395c6b">fa fa-cog</v-icon> -->
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-text>
-            <FileUpload/>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-      </div>
-    </v-row >
-    <v-row justify="center">
-        <v-switch
-          color="#f28482"
-          v-model="switch1"
-          inset
-          
-        ></v-switch>
         <h1 v-if="user">
-           <br>welcome to your profile {{ user.pseudo }}
-        </h1>
-    </v-row>
-</v-container>
+           <br>welcome {{ user.pseudo }}</h1>
+      </v-col>
+      <v-col
+        sm="8"
+        align="center"
+        justify="center"
+      >
+        <v-card
+          class="pa-2 mb-7 mt-7"
+          color="#f6bd60"
+          outlined
+          align="center"
+          max-width="500px"
+        >
+           <div> victories
+           <br> 0 </div>
+        </v-card>
+        <v-card
+          class="pa-2 mb-7 mt-7"
+          color="#f6bd60"
+          outlined
+          align="center"
+          max-width="500px"
+        >
+          <div> losses
+          <br> 0 </div> 
+        </v-card>
+        <v-card
+          class="pa-2 mb-7 mt-7"
+          color="#f6bd60"
+          outlined
+          height="200px"
+          align="center"
+          max-width="500px"
+        >
+        MATCHES
+        </v-card>
+
+       
+      </v-col>
+    <!-- </v-row> -->
+  </v-container>
 </template>
 
 

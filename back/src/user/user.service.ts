@@ -75,4 +75,18 @@ export class UsersService {
       isTwoFactorAuthenticationEnabled: true,
     });
   }
+
+  find_avatar() {
+    const avatars: Array<string> = [
+      './avatars/ours/pepin.jpg',
+      './avatars/ours/pepin1.jpg',
+      './avatars/ours/pepin2.jpg',
+      './avatars/ours/pepin3.jpg',
+      './avatars/ours/pepin4.jpg',
+    ];
+
+    const my_avatar = avatars[Math.floor(Math.random() * avatars.length)];
+    console.log(my_avatar);
+    return my_avatar;
+  }
 }

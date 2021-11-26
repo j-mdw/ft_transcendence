@@ -33,6 +33,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const data = await this.appService.addingUser(req);
+    this.appService.generateAvatar(data.user.id);
     const payload = { userId: data.user.id };
     const token = this.jwtService.sign(payload);
     response.cookie('access_token', token, {
@@ -53,6 +54,7 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const data = await this.appService.addingUser(req);
+    this.appService.generateAvatar(data.user.id);
 
     const payload = { userId: data.user.id };
     const token = this.jwtService.sign(payload);
