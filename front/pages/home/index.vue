@@ -25,7 +25,7 @@ export default class Login extends Vue {
   
   user: User = Object();
   async mounted() {
-      this.user = await this.$axios.get('/user')
+      this.user = (await this.$axios.get('/user', {withCredentials: true})).data[0];
       // this.user = await this.$axios.$get("/me", {withCredentials: true})
   }
 }

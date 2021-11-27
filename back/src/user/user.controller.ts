@@ -12,7 +12,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDTO, UpdateUserDTO } from './user.dto';
+import { UserDTO } from './user.dto';
 import { Response } from 'express';
 import { JwtGuard } from 'src/auth/jwt.guard';
 
@@ -22,20 +22,20 @@ export class UserController {
   constructor(private userService: UserService) {}
   @Get()
   async findAll(): Promise<UserDTO[]> {
-    return await this.userService.getUsers();
+    return this.userService.getUsers();
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
-    return await this.userService.findOne(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
+    return this.userService.findOne(id);
   }
 
   @Patch()
-  async updateUser(
+  updateUser(
     @Res({ passthrough: true }) response: Response,
-    @Body() data: UpdateUserDTO,
+    @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
-    await this.userService.update(response.locals.id, data);
+    this.userService.update(response.locals.id, data);
     console.log('Patch update about to return');
     return {
       statusCode: HttpStatus.OK,

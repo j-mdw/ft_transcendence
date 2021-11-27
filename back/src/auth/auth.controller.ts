@@ -13,7 +13,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { UserService } from 'src/user/user.service';
-import { UpdateUserDTO, CreateUserDTO } from 'src/user/user.dto';
+import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {
@@ -30,7 +30,7 @@ export class AuthController {
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
   async googleAuthRedirect(
-    @Req() req: CreateUserDTO,
+    @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
     const user = await this.authService.addUser(req);
@@ -50,10 +50,10 @@ export class AuthController {
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
   async school42AuthRedirect(
-    @Req() req: CreateUserDTO,
+    @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const user = await this.authService.addUser(req);
+    const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
     console.log('TOKEN');
     response.cookie('access_token', token, {
@@ -87,16 +87,6 @@ export class AuthController {
         expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
       })
       .send({ success: true });
-  }
-
-  @Post('pseudo')
-  @UseGuards(AuthGuard('jwt'))
-  async updatePseudo(@Param('id') id: string, @Req() data: UpdateUserDTO) {
-    await this.userService.update(id, data);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'User updated successfully',
-    };
   }
 
   @Get('me')

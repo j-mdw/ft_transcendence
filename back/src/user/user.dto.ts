@@ -14,7 +14,7 @@ export class CreateUserDTO {
 }
 
 export class UserDTO {
-  @IsString()
+  @IsUUID()
   id: string;
 
   @IsString()
@@ -33,7 +33,3 @@ export class UserDTO {
     this.status = user.status;
   }
 }
-
-export class UpdateUserDTO extends PartialType(UserDTO) {}
-
-// export class UpdateUserDTO extends PickType(UserDTO, ['pseudo']) {}

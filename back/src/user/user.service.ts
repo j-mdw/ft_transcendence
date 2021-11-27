@@ -1,4 +1,6 @@
 import {
+  ConflictException,
+  ForbiddenException,
   forwardRef,
   Inject,
   Injectable,
@@ -7,7 +9,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO, UpdateUserDTO, CreateUserDTO } from './user.dto';
+import { UserDTO, CreateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
 import { CreateChannelDTO } from 'src/channel/channel.dto';
 // import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
@@ -22,14 +24,18 @@ export class UserService {
   ) {}
 
   async getUsers(): Promise<UserDTO[]> {
-    return (await this.usersRepository.find()).map((user) => new UserDTO(user));
+    return await this.usersRepository
+      .find()
+      .then((users) => users.map((user) => new UserDTO(user)));
   }
 
   async findOne(id: string): Promise<UserDTO> {
-    return new UserDTO(await this.usersRepository.findOne(id));
+    return await this.usersRepository
+      .findOne(id)
+      .then((user) => new UserDTO(user));
   }
 
-  async isRegistered(email: string): Promise<any> {
+  async isRegistered(email: string): Promise<boolean> {
     if (
       await this.usersRepository.find({
         where: {
@@ -42,44 +48,60 @@ export class UserService {
   }
 
   async findEmail(email: string): Promise<UserDTO> {
-    return new UserDTO(
-      await this.usersRepository.findOne({
+    return await this.usersRepository
+      .findOne({
         where: {
           email: email,
         },
-      }),
-    );
+      })
+      .then((user) => {
+        console.log(user);
+        if (user) {
+          return new UserDTO(user);
+        }
+        throw new NotFoundException('user not found');
+      });
+    // const user = await this.usersRepository.findOneOrFail({
+    //   where: {
+    //     email: email,
+    //   },
+    // });
+    // console.log('find email return: ', user);
+    // return new UserDTO(user);
   }
   /*
   Create the user and doesn't return anything
 */
-  async create(data: CreateUserDTO): Promise<any> {
+  async create(data: CreateUserDTO): Promise<void> {
     const now = new Date();
     await this.usersRepository.save({
       ...data,
       createdAt: now,
       updatedAt: now,
     });
+    console.log('user created: ', data);
   }
 
   /*
   Update the user and doesn't return anything
 */
-  async update(id: string, data: UpdateUserDTO): Promise<any> {
+  async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
     console.log('update user called: ', data);
-    const editedUser = await this.usersRepository.findOne(id);
-    if (!editedUser) {
-      throw new NotFoundException('Invalid user ID');
-    }
+
+    const editedUser = await this.usersRepository.findOne(id).catch(() => {
+      throw new ForbiddenException('Invalid user ID');
+    });
+
     if (data.pseudo) {
-      const userPseudo = await this.usersRepository.findOne({
-        where: {
-          pseudo: data.pseudo,
-        },
-      });
-      if (userPseudo) {
-        throw new NotFoundException('Pseudo already in use!!'); //Need to use an appropriate exception ; assumes data passed as agrument is only the data that needs to be updated
-      }
+      await this.usersRepository
+        .findOne({
+          where: {
+            pseudo: data.pseudo,
+          },
+        })
+        .catch(() => {
+          throw new ConflictException('Pseudo already in use!!'); //Need to use an appropriate exception ; assumes data passed as agrument is only the data that needs to be updated
+        });
     }
     for (const prop in data) {
       if (data[prop]) {

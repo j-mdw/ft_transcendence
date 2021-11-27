@@ -4,9 +4,9 @@ export enum UserStatus {
     playing,
 }
 
-export interface User {
-    id: string;
-    pseudo: string;
-    avatarPath: string;
-    status: UserStatus;
+export class User {
+    id: string = '';
+    pseudo: string = '';
+    avatarPath: string = '';
+    status: UserStatus = 0;
 }

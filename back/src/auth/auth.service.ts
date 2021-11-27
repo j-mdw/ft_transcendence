@@ -1,14 +1,13 @@
 import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import { ConfigService } from '@nestjs/config';
-import { UserDTO } from 'src/user/user.dto';
+import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     // @Inject()
-    private userService: UserService,
-    // private readonly configService: ConfigService,
+    private userService: UserService, // private readonly configService: ConfigService,
   ) {}
 
   googleLogin(req) {
@@ -24,12 +23,16 @@ export class AuthService {
     };
   }
 
-  async addUser(req) {
-    if (await this.userService.isRegistered(req.user.email)) {
-      return await this.userService.findEmail(req.user.email);
-    } else {
-      await this.userService.create(req.user);
-      return await this.userService.findEmail(req.user.email);
+  async addUser(user: CreateUserDTO): Promise<UserDTO> {
+    console.log('user from addUser: ', user);
+    console.log('email: ', user.email);
+    try {
+      await this.userService.findEmail(user.email);
+    } catch(error) {
+      console.log(error);
+      this.userService.create(user);
+    } finally {
+      return await this.userService.findEmail(user.email);
     }
   }
 
