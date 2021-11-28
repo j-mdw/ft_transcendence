@@ -2,11 +2,12 @@ import { forwardRef, ForbiddenException, Inject, Injectable } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
-import { CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
+import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
 // import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
 // import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
+import { User } from 'src/user/user.entity';
 
 @Injectable()
 export class ChannelService {
@@ -19,24 +20,29 @@ export class ChannelService {
     // private participantService: ChannelParticipantService,
   ) {}
 
-  async findAll(): Promise<Channel[]> {
-    return await this.channelRepository.find();
+  async findAll(): Promise<ChannelDTO[]> {
+    return await (this.channelRepository
+    .find()
+    .then((channels) => channels.map((channel) => new ChannelDTO(channel)))
+    );
   }
 
-  async findOne(id: string): Promise<Channel> {
-    return await this.channelRepository.findOne(id);
+  async findOne(id: string): Promise<ChannelDTO> {
+    return await (this.channelRepository
+      .findOne(id)
+      .then((channel) => new ChannelDTO(channel))
+    );
   }
 
   //Potential error if findOne fails
   async create(userId: string, data: CreateChannelDTO) {
-    if (data.type == ChannelType.protected && data.password == null) {
+    if (data.type == ChannelType.protected && !data.password) {
       throw new ForbiddenException(
         'channel of type password must have a password',
       );
     }
     const date = new Date();
-    // const channel = 
-    this.channelRepository.save({
+    await this.channelRepository.save({
       ...data,
       createdAt: date,
       updatedAt: date,
@@ -53,10 +59,10 @@ export class ChannelService {
   Channel can only be updated by the owner
   Check if the type of the channel is 'password', and if so, if the password is null, throw an exception
   */
-  async update(userId: string, channelId: string, data: UpdateChannelDTO) {
-    const channel = await this.findOne(channelId);
-    if (!(channel.owner.id == userId)) {
-      throw new ForbiddenException();
+  async update(userId: string, channelId: string, data: UpdateChannelDTO): Promise<void> {
+    const channel = await this.channelRepository.findOneOrFail(channelId);
+    if (channel.owner.id != userId) {
+      throw new ForbiddenException('Only channel owner can update');
     }
     for (const prop in data) {
       if (data[prop]) {
@@ -67,25 +73,19 @@ export class ChannelService {
       channel.password = null;
     } else if (channel.password == null) {
       throw new ForbiddenException(
-        'channel of type password must have a password',
+        'channel of type protected must have a password',
       );
     }
     await this.channelRepository.save(channel);
   }
 
   async delete(userId: string, channelId: string): Promise<void> {
-    const channel = await this.findOne(channelId);
-    if (!(channel.owner.id == userId)) {
-      throw new ForbiddenException();
+    const currentChannel = await this.channelRepository.findOneOrFail(channelId);
+    if (currentChannel.owner.id != userId) {
+      throw new ForbiddenException('Only channel owner can delete channel');
     }
     // const participants = channel.participants;
     // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(channelId);
-  }
-
-  async deleteChannels(userId: string, channels: Channel[]) {
-    for (const channel of channels) {
-      await this.delete(userId, channel.id); //Could optimise by passing channel instead of id to avoid additional lookup
-    }
   }
 }

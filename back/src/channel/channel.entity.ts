@@ -2,6 +2,7 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  JoinColumn,
   ManyToOne,
   OneToMany,
 } from 'typeorm';
@@ -17,7 +18,7 @@ export enum ChannelType {
 @Entity('channels')
 export class Channel {
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  readonly id: string;
 
   @Column({
     nullable: false,
@@ -46,8 +47,11 @@ export class Channel {
   updatedAt: Date;
 
   @ManyToOne(() => User, (owner) => owner.id)
+  // @JoinColumn({ name: 'ownerId' })
   readonly owner: User;
 
+  // @Column()
+  // readonly ownerId: string;
   // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
   // participants: ChannelParticipant[];
 }

@@ -9,6 +9,11 @@
       <v-list-item-content>
         <v-list-item-title> {{ channel.name }} </v-list-item-title>
         <v-list-item-subtitle> {{ channel.type }} </v-list-item-subtitle>
+        <v-btn
+        @click="deleteChannel(channel.id)"
+        >
+          Delete Channel
+        </v-btn>
       </v-list-item-content>
     </v-list-item>
   </v-card>
@@ -18,39 +23,23 @@
 
 <script lang="ts">
 
-export enum ChannelType {
-  public,
-  private,
-  password,
-}
-
-export interface IChannelDTO {
-  name: string;
-  type: ChannelType;
-}
-
-export interface ICreateChannelDTO {
-  name: string;
-  type: ChannelType;
-  password?: string;
-}
-
-export interface IDeleteChannelDTO {
-  name: string;
-}
+import { ChannelDTO } from '~/models/channel'
 
 import Vue from 'vue'
 export default Vue.extend({
 	data() {
 		return {
-			channels: Array<IChannelDTO>(),
+			channels: Array<ChannelDTO>(),
 		}
 	},
   methods: {
     async createChannel() {
 
     },
-    async deleteChannel() {},
+    async deleteChannel(id: string) {
+      await this.$axios.$delete('/channel', {params: {'id': id}, withCredentials: true});
+      this.channels = await this.$axios.$get('/channel', {withCredentials: true}) 
+    },
     async updateChannel() {},
   },
   async mounted() {

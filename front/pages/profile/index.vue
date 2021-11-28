@@ -6,25 +6,83 @@
         
           
       </div>
-        <h1 v-if="user">
+        <!-- <h1 v-if="user"> -->
            <br>welcome to your profile
-        </h1>
+        <!-- </h1> -->
     </v-row>
+
+<v-form
+    ref="form"
+    lazy-validation
+    title="Update profile"
+  >
+    <v-text-field
+      v-model="pseudo"
+      :counter="20"
+      label="pseudo"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      v-model="avatar"
+      :counter="20"
+      label="avatar"
+      required
+    ></v-text-field>
+
+    <v-btn
+      color="success"
+      class="mr-4"
+      @click="updateUser"
+    >
+      Update
+    </v-btn>
+  </v-form>
+      <v-btn
+      color="success"
+      class="mr-4"
+      @click="deleteAccount"
+    >
+      Delete account
+    </v-btn>
 </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
 
-@Component({
-  layout: 'default',
+import Vue from 'vue'
+import { User } from '~/models/user'
+import { authenticationStore }  from '~/store'
+
+export default Vue.extend({
+    layout: 'default',
+    data: () => ({
+      pseudo: '',
+      avatar: '',
+    }),
+
+    methods: {
+      async updateUser() {
+        const resp = await this.$axios.$patch('user', {
+          'pseudo': this.pseudo,
+          'avatarPath': this.avatar,
+        }, {withCredentials: true});
+        console.log(resp);
+      },
+      async deleteAccount() {
+        const resp = await this.$axios.$delete('user', {withCredentials: true});
+        console.log(resp);
+        authenticationStore.signOut();
+        this.$router.push('/auth');
+
+      }
+    },
+    async mounted() {
+      const user: User = await this.$axios.$get("user/me", {withCredentials: true});
+      this.pseudo = user.pseudo;
+      this.avatar = user.avatarPath;
+    },
 })
-export default class Login extends Vue {
-  user= null
-  async mounted() {
-      this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-  }
-}
 </script>
 
 <style scoped lang="scss">

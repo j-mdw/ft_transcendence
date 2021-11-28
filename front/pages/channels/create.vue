@@ -1,7 +1,6 @@
 <template>
   <v-form
     ref="form"
-    v-model="valid"
     lazy-validation
     title="Create a channel"
   >
@@ -27,7 +26,6 @@
     ></v-text-field>
 
     <v-btn
-      :disabled="!valid"
       color="success"
       class="mr-4"
       @click="createChannel"
@@ -39,18 +37,8 @@
 
 <script lang="ts">
 
-export enum ChannelType {
-  public,
-  private,
-  password,
-}
 
-export interface ICreateChannelDTO {
-  name: string;
-  type: ChannelType;
-  password?: string;
-}
-
+import { ChannelDTO } from '~/models/channel'
 import Vue from 'vue'
 export default Vue.extend({
     data: () => ({
@@ -62,7 +50,7 @@ export default Vue.extend({
 
     methods: {
       async createChannel() {
-        const input: ICreateChannelDTO = {
+        const input: ChannelDTO = {
           name: this.name,
           type: this.items.indexOf(this.select),
           password: this.password,

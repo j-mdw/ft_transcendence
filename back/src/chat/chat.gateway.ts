@@ -21,16 +21,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('chat-message')
   handleEvent(@MessageBody() data: string) {
     console.log('Message recieved: ' + data);
-    // return data;
     this.server.emit('chat-message', data);
   }
-
-  // @SubscribeMessage('chat-message')
-  // handleEvent(@MessageBody() data: string) {
-  //     console.log('Message recieved: ' + data);
-  //     // return data;
-  //     this.server.emit('chat-message', data);
-  // }
 
   async handleConnection(): Promise<void> {
     this.users++;
@@ -43,8 +35,4 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     console.log('User disconnected, user count: ' + this.users);
     // this.server.emit('users', this.users);
   }
-  // @SubscribeMessage('chat')
-  // async onChat(client, message: string): Promise<void> {
-  //     client.boreadcast.emit('chat', message);
-  // }
 }

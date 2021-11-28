@@ -13,7 +13,7 @@ export class JwtGuard implements CanActivate {
       this.jwtService.verify(request.cookies['access_token']);
       return true;
     } catch {
-      console.log('Jwt Guard: ', request.cookies);
+      console.log('Jwt Guard: verification failed');
       return false;
     }
   }

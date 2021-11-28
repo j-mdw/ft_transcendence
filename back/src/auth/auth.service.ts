@@ -24,8 +24,6 @@ export class AuthService {
   }
 
   async addUser(user: CreateUserDTO): Promise<UserDTO> {
-    console.log('user from addUser: ', user);
-    console.log('email: ', user.email);
     try {
       await this.userService.findEmail(user.email);
     } catch(error) {
@@ -35,37 +33,4 @@ export class AuthService {
       return await this.userService.findEmail(user.email);
     }
   }
-
-  // randString(length: number): string {
-  //   let result = '';
-  //   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  //   const charactersLength = characters.length;
-  //   for (let i = 0; i < length; i++) {
-  //     result += characters.charAt(Math.floor(Math.random() * charactersLength));
-  //   }
-  //   return result;
-  // }
-
-  // async createRandomUser() {
-  //   const usr: UserDTO = {
-  //     firstName: this.randString(8),
-  //     lastName: this.randString(10),
-  //     email: this.randString(6) + '@' + this.randString(5) + '.lala',
-  //     pseudo: this.randString(5),
-  //     picturePath: undefined,
-  //   };
-  //   if (await this.usersService.findEmail(usr.email)) {
-  //     return {
-  //       message: 'the user exists in the database',
-  //       user: await this.usersService.findEmail(usr.email),
-  //     };
-  //   } else {
-  //     await this.usersService.create(usr);
-  //     console.log(await this.usersService.findEmail(usr.email));
-  //     return {
-  //       message: 'the user was created in the database',
-  //       user: await this.usersService.findEmail(usr.email),
-  //     };
-  //   }
-  // }
 }

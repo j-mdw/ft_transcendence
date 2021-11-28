@@ -9,6 +9,7 @@ import {
   UseGuards,
   Res,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { ChannelService } from './channel.service';
@@ -20,8 +21,8 @@ import { Response } from 'express';
 export class ChannelController {
   constructor(private channelService: ChannelService) {}
   @Get()
-  async allChannels(): Promise<ChannelDTO[]> {
-    return await this.channelService.findAll();
+  allChannels(): Promise<ChannelDTO[]> {
+    return this.channelService.findAll();
   }
 
   @Put()
@@ -32,7 +33,7 @@ export class ChannelController {
     await this.channelService.create(response.locals.id, data);
   }
 
-  @Patch()
+  @Patch(':id')
   async updateChannel(
     @Param('id', ParseUUIDPipe) channelId: string,
     @Res({ passthrough: true }) response: Response,
@@ -43,9 +44,10 @@ export class ChannelController {
 
   @Delete()
   async deleteChannel(
-    @Param('id', ParseUUIDPipe) channelId: string,
+    @Query('id', ParseUUIDPipe) channelId: string,
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.channelService.delete(response.locals.id, channelId);
+    
   }
 }

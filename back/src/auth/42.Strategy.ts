@@ -1,6 +1,7 @@
 import { PassportStrategy } from '@nestjs/passport';
 import { config } from 'dotenv';
 import { Injectable } from '@nestjs/common';
+//The purpose of the 2 lines below are to avoid compilation errors due to npm not finding passport-42 types
 /* eslint-disable */
 // @ts-ignore
 import { Strategy, VerifyCallback } from 'passport-42';

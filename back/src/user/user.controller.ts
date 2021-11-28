@@ -10,6 +10,7 @@ import {
   Res,
   UseGuards,
   Put,
+  Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './user.dto';
@@ -21,8 +22,13 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  async findAll(): Promise<UserDTO[]> {
+  findAll(): Promise<UserDTO[]> {
     return this.userService.getUsers();
+  }
+
+  @Get('me')
+  findMe(@Res({ passthrough: true }) response: Response): Promise<UserDTO> {
+    return this.userService.findOne(response.locals.id);
   }
 
   @Get(':id')
@@ -36,10 +42,14 @@ export class UserController {
     @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
     this.userService.update(response.locals.id, data);
-    console.log('Patch update about to return');
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',
     };
+  }
+
+  @Delete()
+  deleteAccount(@Res({ passthrough: true }) response: Response) {
+    return this.userService.delete(response.locals.id);
   }
 }

@@ -20,7 +20,6 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private jwtService: JwtService,
-    private userService: UserService,
   ) {}
 
   @Get('google')
@@ -38,9 +37,7 @@ export class AuthController {
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-    // console.log(this.jwtService.decode(token)['userId']);
-
-    return { user }; //TBU we should probably not return anything here (and it seems the front is not using iit anyways)
+    return { user }; //Do we need to return smth here?
   }
 
   @Get('42')
@@ -55,13 +52,14 @@ export class AuthController {
   ) {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
-    console.log('TOKEN');
+    console.log('Token signed');
     response.cookie('access_token', token, {
       httpOnly: true,
     });
     return { user };
   }
 
+  // ok to delete?
   @Get('test')
   test(@Res({ passthrough: true }) res: Response) {
     const payload = { userId: 1 };
@@ -72,6 +70,7 @@ export class AuthController {
     });
   }
 
+  //ok to delete?
   @Post('login')
   login(@Res() response: Response) {
     // Do username+password check here.
@@ -88,25 +87,4 @@ export class AuthController {
       })
       .send({ success: true });
   }
-
-  @Get('me')
-  @UseGuards(AuthGuard('jwt'))
-  getMe(@Req() req): string {
-    console.log();
-    return req.user;
-  }
-
-  @Get('me/pseudo')
-  @UseGuards(AuthGuard('jwt'))
-  getPseudo(@Req() req): string {
-    console.log(req.user.pseudo);
-    return req.user.pseudo;
-  }
-
-  //DELETE randomUser method
-  // @Get('randomUser')
-  // async addRandomUser() {
-  //   const data = await this.appService.createRandomUser();
-  //   return { data };
-  // }
 }
