@@ -48,26 +48,29 @@ export class UserService {
   }
 
   async findEmail(email: string): Promise<UserDTO> {
-    return await this.usersRepository
-      .findOne({
-        where: {
-          email: email,
-        },
-      })
-      .then((user) => {
-        console.log(user);
-        if (user) {
-          return new UserDTO(user);
-        }
-        throw new NotFoundException('user not found');
-      });
-    // const user = await this.usersRepository.findOneOrFail({
-    //   where: {
-    //     email: email,
-    //   },
-    // });
-    // console.log('find email return: ', user);
-    // return new UserDTO(user);
+    // return await (this.usersRepository
+    //   .findOne({
+    //     where: {
+    //       email: email,
+    //     },
+    //   })
+    //   .then((user) => {
+    //     console.log(user);
+    //     if (user) {
+    //       return new UserDTO(user);
+    //     }
+    //     throw new NotFoundException('user not found');
+    //   }));
+    const user = await this.usersRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (user) {
+      return new UserDTO(user);
+    } else {
+      throw new NotFoundException('user not found');
+    }
   }
   /*
   Create the user and doesn't return anything

@@ -29,8 +29,8 @@ export class AuthService {
     try {
       await this.userService.findEmail(user.email);
     } catch(error) {
-      console.log(error);
-      this.userService.create(user);
+      console.log('User not found in the database: ', user.email);
+      await this.userService.create(user);
     } finally {
       return await this.userService.findEmail(user.email);
     }
