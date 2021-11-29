@@ -81,6 +81,6 @@ export class UserController {
 
   @Get('me/avatar')
   seeUploadedFile(@Res() res) {
-    return res.sendFile('test.jpeg', { root: './avatars' });
+    return res.sendFile(res.locals.id + '.' + 'jpeg', { root: './avatars' });
   }
 }
