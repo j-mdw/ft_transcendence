@@ -2,12 +2,9 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  JoinColumn,
   ManyToOne,
-  OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
-// import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 export enum ChannelType {
   public,
@@ -47,11 +44,5 @@ export class Channel {
   updatedAt: Date;
 
   @ManyToOne(() => User, (owner) => owner.id)
-  // @JoinColumn({ name: 'ownerId' })
   owner: User;
-
-  // @Column()
-  // ownerId: string;
-  // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
-  // participants: ChannelParticipant[];
 }

@@ -11,7 +11,6 @@ import { DeleteResult, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { UserDTO, CreateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
-// import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 
 @Injectable()
 export class UserService {
@@ -19,7 +18,7 @@ export class UserService {
     @InjectRepository(User)
     private usersRepository: Repository<User>,
     @Inject(forwardRef(() => ChannelService))
-    private channelService: ChannelService, // @Inject(forwardRef(() => ChannelParticipantService)) // private participantService: ChannelParticipantService,
+    private channelService: ChannelService,
   ) {}
 
   async getUsers(): Promise<UserDTO[]> {

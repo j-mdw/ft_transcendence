@@ -1,7 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Channel } from 'src/channel/channel.entity';
-// import { Relationship } from 'src/relationship/relationship.entity';
-// import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 export enum UserStatus {
   online,
@@ -59,10 +57,4 @@ export class User {
 
   @OneToMany(() => Channel, (channel) => channel.owner)
   channels: Channel[];
-
-  // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
-  // channelsParticipants: ChannelParticipant[];
-
-  // @OneToMany(() => Relationship, (relation) => relation.user)
-  // relationships: Relationship[];
 }

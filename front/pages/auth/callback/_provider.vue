@@ -21,18 +21,6 @@ export default Vue.extend({
 	async mounted() {
 		console.log(`logging with ${this.provider}`)
 		authenticationStore.signIn();
-
-		// const user: User = (await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true})).user;
-		// console.log('user: ', user);
-    // if (user.pseudo) {
-    //     console.log(user.pseudo),
-		// 		this.$router.push('/home');
-    //   console.log("tada")
-    // } else {
-    //   console.log("about to push /pseudo")
-    //   this.$router.push('/pseudo');
-    //   console.log("/pseudo pushed")
-    // }
 		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
 			if (res.user.pseudo) {
 				this.$router.push('/home');

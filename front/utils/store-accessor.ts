@@ -7,5 +7,4 @@ import AuthenticationModule from '~/store/auth'
 function initialiseStores(store: Store<any>): void {
     authenticationStore = getModule(AuthenticationModule, store)
 }
-// , authStore
 export { initialiseStores, authenticationStore, }

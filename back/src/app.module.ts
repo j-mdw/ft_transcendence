@@ -5,11 +5,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { ChatModule } from './chat/chat.module';
 import { UserModule } from './user/user.module';
-// import { ChannelModule } from './channel/channel.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppMiddleware } from './app.middleware';
 import { JwtModule } from '@nestjs/jwt';
-// import { ChannelParticipantModule } from './channelParticipant/channelParticipant.module';
 
 @Module({
   imports: [
@@ -23,8 +21,6 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     ChatModule,
-    // ChannelModule,
-    // ChannelParticipantModule,
     AuthModule,
   ],
   controllers: [AppController],

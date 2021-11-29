@@ -4,16 +4,13 @@ import {
   Post,
   Res,
   Req,
-  Param,
-  HttpStatus,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { UserService } from 'src/user/user.service';
-import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
+import { UserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {

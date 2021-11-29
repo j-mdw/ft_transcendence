@@ -6,8 +6,7 @@ import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 @Injectable()
 export class AuthService {
   constructor(
-    // @Inject()
-    private userService: UserService, // private readonly configService: ConfigService,
+    private userService: UserService,
   ) {}
 
   googleLogin(req) {

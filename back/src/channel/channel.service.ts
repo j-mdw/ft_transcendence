@@ -9,8 +9,6 @@ import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
 import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
-// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
-// import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 import { User } from 'src/user/user.entity';
 
@@ -21,8 +19,7 @@ export class ChannelService {
     private channelRepository: Repository<Channel>,
     @Inject(forwardRef(() => UserService))
     private userService: UserService,
-  ) // @Inject(forwardRef(() => ChannelParticipantService))
-  // private participantService: ChannelParticipantService,
+  )
   {}
 
   async findAll(): Promise<ChannelDTO[]> {
@@ -51,15 +48,11 @@ export class ChannelService {
       updatedAt: date,
       owner: await this.channelRepository.findOne(userId),
     });
-    // const participant = new ChannelParticipantDTO();
-    // participant.admin = true;
-    // const channelId = (await channel).id;
-    // await this.participantService.create(participant, userId, channelId);
   }
 
   /*
   For now, Multiple channels with same name is allowed
-  Channel can only be updated by the owner
+  Channel can only be updated by the owner (not functional yet)
   Check if the type of the channel is 'password', and if so, if the password is null, throw an exception
   */
   async update(
@@ -91,12 +84,6 @@ export class ChannelService {
     const currentChannel = await this.channelRepository.findOneOrFail(
       channelId,
     );
-    // console.log('owner: ', currentChannel.owner);
-    // if (currentChannel.owner.id != userId) {
-    //   throw new ForbiddenException('Only channel owner can delete channel');
-    // }
-    // const participants = channel.participants;
-    // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(channelId);
   }
 }

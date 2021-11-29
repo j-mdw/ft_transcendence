@@ -28,7 +28,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { authenticationStore } from '~/store';
-// import { User } from '~/models/user'
 
 export default Vue.extend({
     layout: 'empty',
@@ -39,12 +38,6 @@ export default Vue.extend({
         title: null,
       }
     },
-    
-    // async mounted() {
-    //     this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-    // },
-
-  
     methods: {
       async submitPseudo() {
           authenticationStore.signIn(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)

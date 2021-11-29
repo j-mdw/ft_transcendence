@@ -29,6 +29,5 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     console.log('VALIDATE');
     console.log(user);
     return user;
-    // return await this.userService.findOne(payload.userId);
   }
 }

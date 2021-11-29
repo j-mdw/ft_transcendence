@@ -1,6 +1,5 @@
 import { IsBase64, IsEnum, IsString, IsUUID } from 'class-validator';
 import { ChannelType } from './channel.entity';
-import { PartialType } from '@nestjs/swagger';
 import { Channel } from './channel.entity';
 import { UserDTO } from 'src/user/user.dto';
 
@@ -46,7 +45,3 @@ export class UpdateChannelDTO {
   @IsBase64() //Could have issues when there is no password
   password?: string;
 }
-
-
-// post /channels
-// post /channels/1
