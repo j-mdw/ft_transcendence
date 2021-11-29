@@ -63,22 +63,20 @@ export class UserController {
       storage: diskStorage({
         destination: './avatars',
         filename: function (req, file, cb) {
-          // const filename: string = path.parse(file.originalname).name;
-          // const extension: string = path.parse(file.originalname).ext;
-          // const filename: string = "test";
-          // const extension: string =".jpg";
-
-          cb(null, 'test.jpeg');
+          const new_name = req.res.locals.id;
+          const extArray = file.mimetype.split('/');
+          const extension = extArray[extArray.length - 1];
+          cb(null, new_name + '.' + extension);
         },
       }),
     }),
   )
   async uploadFile(
-    @Param('id') id: string,
+    @Res({ passthrough: true }) response: Response,
     @UploadedFile() file: Express.Multer.File,
   ) {
     console.log(file.path);
-    await this.userService.update_avatar(id, file.path);
+    await this.userService.update_avatar(response.locals.id, file.path);
   }
 
   @Get('me/avatar')

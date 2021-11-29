@@ -1,8 +1,7 @@
 <template>
   <div class="file-upload">
     <input type="file" @change="onFileChange" />
-    <button @click="onUploadFile" class="upload-button"
-    :disabled="!this.selectedFile">Upload file</button>
+    <button @click="onUploadFile" class="upload-button">Upload file</button>
   </div>
 </template>
 
@@ -13,6 +12,7 @@ export default {
   data() {
     return {
       selectedFile: "",
+      // user: Object(),
     };
   },
   methods: {
@@ -20,13 +20,15 @@ export default {
       const selectedFile = e.target.files[0]; // accessing file
       this.selectedFile = selectedFile;
     },
-    onUploadFile() {
+    async onUploadFile() {
       const formData = new FormData();
       formData.append("file", this.selectedFile);  // appending file
-
+      // this.user = await this.$axios.$get("user/me", {withCredentials: true});
+      // console.log("ID =");
+      // console.log(this.user.id);
      // sending file to the backend
-      axios
-        .post("http://localhost:4000/user/upload/avatar", formData)
+     await axios
+        .post("http://localhost:4000/user/upload/avatar", formData, { withCredentials: true})
         .then(res => {
           console.log(res);
         })
@@ -34,6 +36,7 @@ export default {
           console.log(err);
         });
     }
-  }
+  },
+
 };
 </script>

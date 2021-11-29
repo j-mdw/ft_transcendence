@@ -33,7 +33,6 @@ export class User {
   })
   pseudo: string;
 
-
   // @Exclude()
   // public currentHashedRefreshToken?: string;
 

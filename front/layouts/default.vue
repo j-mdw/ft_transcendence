@@ -22,6 +22,8 @@
         </v-avatar>
         my profile
       </v-btn>
+      <NuxtLink to="/channels">Channels</NuxtLink>
+            <NuxtLink to="/chat">Lonly chat</NuxtLink>
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
         to="/profile"
@@ -31,7 +33,10 @@
         >
           home {{activeTab}}
         </v-tab>
-        <v-tab>message </v-tab>
+        <v-tab
+          to="/channels"
+        >
+        message </v-tab>
         <v-tab>Game </v-tab>
       </v-tabs>
       <v-btn text color="#395c6b" @click="logout"> logout </v-btn>

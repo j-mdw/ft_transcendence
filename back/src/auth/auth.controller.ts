@@ -1,11 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Res,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
@@ -84,7 +77,6 @@ export class AuthController {
       })
       .send({ success: true });
   }
-
 
   @Get('me/2fa')
   @UseGuards(AuthGuard('jwt'))
