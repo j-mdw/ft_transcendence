@@ -12,8 +12,9 @@
         text
         color="#395c6b"
         class="py-2"
-        href="http://localhost:3000/profile"
+        to="/profile"
       >
+        
         <v-avatar size="30px" class="mr-4 ml-n2">
           <img src="../assets/img/sample.jpg" />
         </v-avatar>
@@ -21,6 +22,7 @@
       </v-btn>
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
+        to="/profile"
           :class="{
             'red--text': activeTab == 1,
           }"
