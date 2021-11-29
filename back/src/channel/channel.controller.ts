@@ -48,6 +48,5 @@ export class ChannelController {
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.channelService.delete(response.locals.id, channelId);
-    
   }
 }

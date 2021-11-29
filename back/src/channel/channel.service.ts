@@ -1,4 +1,9 @@
-import { forwardRef, ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  ForbiddenException,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
@@ -16,22 +21,20 @@ export class ChannelService {
     private channelRepository: Repository<Channel>,
     @Inject(forwardRef(() => UserService))
     private userService: UserService,
-    // @Inject(forwardRef(() => ChannelParticipantService))
-    // private participantService: ChannelParticipantService,
-  ) {}
+  ) // @Inject(forwardRef(() => ChannelParticipantService))
+  // private participantService: ChannelParticipantService,
+  {}
 
   async findAll(): Promise<ChannelDTO[]> {
-    return await (this.channelRepository
-    .find()
-    .then((channels) => channels.map((channel) => new ChannelDTO(channel)))
-    );
+    return await this.channelRepository
+      .find()
+      .then((channels) => channels.map((channel) => new ChannelDTO(channel)));
   }
 
   async findOne(id: string): Promise<ChannelDTO> {
-    return await (this.channelRepository
+    return await this.channelRepository
       .findOne(id)
-      .then((channel) => new ChannelDTO(channel))
-    );
+      .then((channel) => new ChannelDTO(channel));
   }
 
   //Potential error if findOne fails
@@ -46,7 +49,7 @@ export class ChannelService {
       ...data,
       createdAt: date,
       updatedAt: date,
-      owner: await this.userService.findOne(userId),
+      owner: await this.channelRepository.findOne(userId),
     });
     // const participant = new ChannelParticipantDTO();
     // participant.admin = true;
@@ -59,7 +62,11 @@ export class ChannelService {
   Channel can only be updated by the owner
   Check if the type of the channel is 'password', and if so, if the password is null, throw an exception
   */
-  async update(userId: string, channelId: string, data: UpdateChannelDTO): Promise<void> {
+  async update(
+    userId: string,
+    channelId: string,
+    data: UpdateChannelDTO,
+  ): Promise<void> {
     const channel = await this.channelRepository.findOneOrFail(channelId);
     if (channel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can update');
@@ -79,11 +86,15 @@ export class ChannelService {
     await this.channelRepository.save(channel);
   }
 
+  // For now not checking if user is the owner or not due to issues with retrieving owner id
   async delete(userId: string, channelId: string): Promise<void> {
-    const currentChannel = await this.channelRepository.findOneOrFail(channelId);
-    if (currentChannel.owner.id != userId) {
-      throw new ForbiddenException('Only channel owner can delete channel');
-    }
+    const currentChannel = await this.channelRepository.findOneOrFail(
+      channelId,
+    );
+    // console.log('owner: ', currentChannel.owner);
+    // if (currentChannel.owner.id != userId) {
+    //   throw new ForbiddenException('Only channel owner can delete channel');
+    // }
     // const participants = channel.participants;
     // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(channelId);

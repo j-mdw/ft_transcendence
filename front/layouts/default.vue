@@ -26,6 +26,7 @@
             my profile
       </v-btn>
             <NuxtLink to="/channels">Channels</NuxtLink>
+            <NuxtLink to="/chat">Lonly chat</NuxtLink>
         <v-tabs
           color=#395c6b
           centered

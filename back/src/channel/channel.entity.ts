@@ -48,10 +48,10 @@ export class Channel {
 
   @ManyToOne(() => User, (owner) => owner.id)
   // @JoinColumn({ name: 'ownerId' })
-  readonly owner: User;
+  owner: User;
 
   // @Column()
-  // readonly ownerId: string;
+  // ownerId: string;
   // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
   // participants: ChannelParticipant[];
 }
