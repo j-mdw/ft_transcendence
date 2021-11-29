@@ -36,6 +36,10 @@ export class UserService {
     );
   }
 
+  async getEntity(id: string): Promise<User> {
+    return await this.usersRepository.findOne(id);
+  }
+
   async isRegistered(email: string): Promise<boolean> {
     if (
       await this.usersRepository.find({

@@ -46,12 +46,9 @@ export class Channel {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (owner) => owner.id)
-  // @JoinColumn({ name: 'ownerId' })
+  @ManyToOne(() => User, (owner) => owner.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   owner: User;
-
-  // @Column()
-  // ownerId: string;
-  // @OneToMany(() => ChannelParticipant, (participant) => participant.user)
-  // participants: ChannelParticipant[];
 }

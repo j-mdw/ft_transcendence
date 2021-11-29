@@ -49,7 +49,7 @@ export class ChannelService {
       ...data,
       createdAt: date,
       updatedAt: date,
-      owner: await this.channelRepository.findOne(userId),
+      owner: await this.userService.getEntity(userId),
     });
     // const participant = new ChannelParticipantDTO();
     // participant.admin = true;
@@ -91,10 +91,9 @@ export class ChannelService {
     const currentChannel = await this.channelRepository.findOneOrFail(
       channelId,
     );
-    // console.log('owner: ', currentChannel.owner);
-    // if (currentChannel.owner.id != userId) {
-    //   throw new ForbiddenException('Only channel owner can delete channel');
-    // }
+    if (currentChannel.owner.id != userId) {
+      throw new ForbiddenException('Only channel owner can delete channel');
+    }
     // const participants = channel.participants;
     // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(channelId);
