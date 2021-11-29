@@ -7,17 +7,12 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { User } from '~/models/user';
 import { authenticationStore }  from '~/store'
 
 export default Vue.extend({
 	layout: 'empty',
 
-	data() {
-		return {
-			user: null,
-			pseudo: ''
-		}
-	},
 	computed: {
 		provider() {
 			return this.$route.params.provider;
@@ -26,27 +21,14 @@ export default Vue.extend({
 	async mounted() {
 		console.log(`logging with ${this.provider}`)
 		authenticationStore.signIn();
-
-		this.user = await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true})
-		this.pseudo = await this.$axios.$get("/me/pseudo", {withCredentials: true})
-        if (this.pseudo.length != 0) {
-            console.log(this.pseudo),
-          this.$router.push({
-						path: '/home'
-					});
-					console.log("tada")
-        }
-				else
-				{
-					console.log("tooo")
-					this.$router.push({
-						path: '/pseudo'
-					});
-					console.log("iiii")
-				}
+		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
+			if (res.user.pseudo) {
+				this.$router.push('/home');
+			} else {
+				this.$router.push('/pseudo');
+			}
+		});
 	}
-
-
 })
 </script>
 

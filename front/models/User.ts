@@ -1,8 +1,12 @@
-export interface User {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    pseudo: string;
-    picture_path: string;
+export enum UserStatus {
+    online,
+    offline,
+    playing,
+}
+
+export class User {
+    id: string = '';
+    pseudo: string = '';
+    avatarPath: string = '';
+    status: UserStatus = 0;
 }

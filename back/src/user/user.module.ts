@@ -1,13 +1,26 @@
-import { Module } from '@nestjs/common';
-import { UsersService } from './user.service';
-import { UsersController } from './user.controller';
+import { Module, forwardRef } from '@nestjs/common';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { ChannelModule } from 'src/channel/channel.module';
+import { JwtModule } from '@nestjs/jwt';
+// import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
-  providers: [UsersService],
-  controllers: [UsersController],
-  exports: [UsersService],
+  imports: [
+    TypeOrmModule.forFeature([User]),
+    forwardRef(() => ChannelModule),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: '24h',
+      },
+    }),
+    // forwardRef(() => ChannelParticipantModule),
+  ],
+  providers: [UserService],
+  controllers: [UserController],
+  exports: [UserService],
 })
-export class UsersModule {}
+export class UserModule {}

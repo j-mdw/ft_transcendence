@@ -10,7 +10,7 @@
           size="250px"
         >
           <img
-            src="http://localhost:4000/users/me/avatar"
+            src="http://localhost:4000/user/me/avatar"
           >
         </v-avatar>
         <h1 v-if="user">
@@ -55,14 +55,60 @@
        
       </v-col>
     <!-- </v-row> -->
-  </v-container>
+    <v-row justify="center" align="center">     
+      <div id="component-auth" class="d-flex flex-column justify-center align-center">
+          <!-- <h1>LOGGED</h1> -->
+        
+          
+      </div>
+        <!-- <h1 v-if="user"> -->
+           <br>welcome to your profile
+        <!-- </h1> -->
+    </v-row>
+
+<v-form
+    ref="form"
+    lazy-validation
+    title="Update profile"
+  >
+    <v-text-field
+      v-model="user.pseudo"
+      :counter="20"
+      label="pseudo"
+      required
+    ></v-text-field>
+
+    <v-text-field
+      v-model="user.avatarPath"
+      :counter="20"
+      label="avatar"
+      required
+    ></v-text-field>
+
+    <v-btn
+      color="success"
+      class="mr-4"
+      @click="updateUser"
+    >
+      Update
+    </v-btn>
+  </v-form>
+      <v-btn
+      color="success"
+      class="mr-4"
+      @click="deleteAccount"
+    >
+      Delete account
+    </v-btn>
+</v-container>
 </template>
 
 
 <script lang="ts">
 import Vue from 'vue'
 import { authenticationStore }  from '~/store'
-import FileUpload from "../../components/FileUpload.vue";
+import FileUpload from "~/components/FileUpload.vue";
+import { User } from '~/models/user'
 
 export default Vue.extend({
 	layout: 'default',
@@ -72,17 +118,35 @@ export default Vue.extend({
 
 	data() {
 		return {
-        user: null,
+        user: Object(),
         avatar: null
 		}
 	},
+
+  methods: {
+    async updateUser() {
+      const resp = await this.$axios.$patch('user', {
+        'pseudo': this.user.pseudo,
+        'avatarPath': this.avatar,
+      }, {withCredentials: true});
+      console.log(resp);
+    },
+    async deleteAccount() {
+      const resp = await this.$axios.$delete('user', {withCredentials: true});
+      console.log(resp);
+      authenticationStore.signOut();
+      this.$router.push('/auth');
+
+    },
+  },
+
 	async mounted() {
-      this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-      this.avatar = await (this as any).$axios.$get("users/me/avatar", {withCredentials: true})
+      this.user = await this.$axios.$get("user/me", {withCredentials: true});
+      this.avatar = await this.$axios.$get("user/me/avatar", {withCredentials: true})
       console.log(this.avatar)
   }
-
 })
+
 </script>
 
 <style scoped lang="scss">

@@ -3,7 +3,7 @@
    
      <v-row justify="center">
         <h1 v-if="user">
-           Welcome {{ user.firstName }}, to continue you will need to set a pseudo :<br>
+           Welcome to Transcendence, to continue you will need to set a pseudo :<br>
         </h1>
       </v-row>
       
@@ -22,44 +22,31 @@
             <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg" />
           </v-btn>
       </v-row>
-      
-
-
-
 </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import { authenticationStore } from '~/store';
+
 export default Vue.extend({
     layout: 'empty',
     data() {
     return {
-        user: null,
-        pseudo :null,
+        user: Object(),
+        pseudo: null,
         title: null,
       }
     },
-    
-    async mounted() {
-        this.user = await (this as any).$axios.$get("/me", {withCredentials: true})
-    },
-
-  
     methods: {
-      
       async submitPseudo() {
-          authenticationStore.signIn();
+          authenticationStore.signIn(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
           console.log(this.pseudo);
-          await this.$axios.$post('/pseudo', {pseudo: this.pseudo}, {withCredentials: true})
+          await this.$axios.$patch('/user', {pseudo: this.pseudo}, {withCredentials: true});
+          console.log('User updated successfully')
           this.$router.push('/home');
-          
-          
-
-
       }
-  }
+    }
 })
 
 </script>

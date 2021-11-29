@@ -26,7 +26,7 @@ export default {
 
      // sending file to the backend
       axios
-        .post("http://localhost:4000/users/upload/avatar", formData)
+        .post("http://localhost:4000/user/upload/avatar", formData)
         .then(res => {
           console.log(res);
         })

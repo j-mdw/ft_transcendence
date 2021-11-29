@@ -1,12 +1,12 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
-import { UsersService } from '../user/user.service';
+import { Injectable, HttpException, HttpStatus, Inject } from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
-    private readonly configService: ConfigService,
+    private userService: UserService,
   ) {}
 
   googleLogin(req) {
@@ -22,22 +22,18 @@ export class AuthService {
     };
   }
 
-  async addingUser(req) {
-    if (await this.usersService.findEmail(req.user.email)) {
-      return {
-        message: 'the user exist in the database',
-        user: await this.usersService.findEmail(req.user.email),
-      };
-    } else {
-      await this.usersService.createUser(req.user);
-      return {
-        message: 'the user was created in the database',
-        user: await this.usersService.findEmail(req.user.email),
-      };
+  async addUser(user: CreateUserDTO): Promise<UserDTO> {
+    try {
+      await this.userService.findEmail(user.email);
+    } catch(error) {
+      console.log('User not found in the database: ', user.email);
+      await this.userService.create(user);
+    } finally {
+      return await this.userService.findEmail(user.email);
     }
   }
 
   async generateAvatar(id: string) {
-    this.usersService.update_avatar(id, this.usersService.find_avatar());
+    this.userService.update_avatar(id, this.userService.find_avatar());
   }
 }

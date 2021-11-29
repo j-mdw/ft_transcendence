@@ -20,6 +20,15 @@
             >
               <img style="height:36px" src="../../assets/logo/google_white.svg" />
             </v-btn>
+            <!-- <v-btn
+              class="mx-8"
+              fab
+              color="#F6BD60"
+              @click="createRandomUser"
+              >
+              Anonymous Entry
+              <img style="height:36px" src="../../assets/logo/google_white.svg" />
+            </v-btn> -->
 
           </div> 
 
@@ -35,8 +44,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { authenticationStore }  from '~/store'
-
+// import { authenticationStore }  from '@store/index'
 export default Vue.extend({
 	layout: 'empty',
 	data() {
@@ -50,17 +58,21 @@ export default Vue.extend({
         return this.$route.params.provider;
       } 
   },
+  methods: {
+    async createRandomUser() {
+      console.log('randomeeee')
+      this.user = await this.$axios.$get("randomUser")
+  },
 
 
-	async mounted() { 
-    console.log(this.$route)
-    if ('code' in this.$route.query) {
-      console.log(`logging with ${this.provider}`)
-      
-    }
-	},
-
-
+	  async mounted() { 
+      console.log(this.$route)
+      if ('code' in this.$route.query) {
+        console.log(`logging with ${this.provider}`)
+        
+      }
+	  },
+  }
 })
 </script>
 

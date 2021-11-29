@@ -8,7 +8,9 @@
       app
       class="pt-2"
     >
-      <v-btn
+      
+      
+      <v-btn 
         text
         color="#395c6b"
         class="py-2"
@@ -49,14 +51,15 @@ export default Vue.extend({
   data: () => ({
     activeTab: 2,
   }),
-
   methods: {
-    logout() {
-      console.log("LLOGOUT");
-      authenticationStore.signOut();
-      this.$router.push("/auth");
-    },
-  },
+      
+      logout() {
+        console.log("LOGOUT")
+        authenticationStore.signOut();
+        this.$router.push('/auth');
+      }
+  }
+
 });
 </script>
 

@@ -1,43 +1,76 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  ForbiddenException,
+  forwardRef,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO } from './users.dto';
+import { UserDTO, CreateUserDTO } from './user.dto';
+import { ChannelService } from 'src/channel/channel.service';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
-    @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+    @Inject(forwardRef(() => ChannelService))
+    private channelService: ChannelService,
   ) {}
 
-  async getUsers(): Promise<User[]> {
-    return await this.usersRepository.find();
+  async getUsers(): Promise<UserDTO[]> {
+    return await (this.usersRepository
+      .find()
+      .then((users) => users.map((user) => new UserDTO(user)))
+    );
   }
 
   async findOne(id: string): Promise<UserDTO> {
-    return await this.usersRepository.findOne({
-      where: {
-        id: id,
-      },
-    });
+    return await (this.usersRepository
+      .findOne(id)
+      .then((user) => new UserDTO(user))
+    );
+  }
+
+  async isRegistered(email: string): Promise<boolean> {
+    if (
+      await this.usersRepository.find({
+        where: {
+          email: email,
+        },
+      })
+    )
+      return true;
+    return false;
   }
 
   async findEmail(email: string): Promise<UserDTO> {
-    return await this.usersRepository.findOne({
+    const user = await this.usersRepository.findOne({
       where: {
         email: email,
       },
     });
+    if (user) {
+      return new UserDTO(user);
+    } else {
+      throw new NotFoundException('user not found');
+    }
   }
 
-  async createUser(data: UserDTO) {
-    const user = this.usersRepository.create(data);
-    await this.usersRepository.save(data);
-    return user;
-  }
-
-  async remove(id: string): Promise<void> {
-    await this.usersRepository.delete(id);
+  /*
+  Create the user and doesn't return anything
+*/
+  async create(data: CreateUserDTO): Promise<void> {
+    const now = new Date();
+    await this.usersRepository.save({
+      ...data,
+      createdAt: now,
+      updatedAt: now,
+    });
+    console.log('user created: ', data);
   }
 
   async setTwoFactorAuthenticationSecret(secret: string, userId: string) {
@@ -46,16 +79,36 @@ export class UsersService {
     });
   }
 
-  async update_pseudo(id: string, pseudo: string) {
-    const editedUser = await this.usersRepository.findOne(id);
-    console.log(editedUser);
-    if (!editedUser) {
-      throw new NotFoundException('User is not found');
+  /*
+  Update the user and doesn't return anything
+  Throw if id passed as param is invalid or if trying to use a pseudo already in use
+*/
+  async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
+    const editedUser = await this.usersRepository.findOne(id).catch(() => {
+      throw new ForbiddenException('Invalid user ID');
+    });
+    if (data.pseudo) {
+      await this.usersRepository
+        .findOne({
+          where: {
+            pseudo: data.pseudo,
+          },
+        })
+        .catch(() => {
+          throw new ConflictException('Pseudo already in use!');
+        });
     }
-    editedUser.pseudo = pseudo;
+    for (const prop in data) {
+      if (data[prop]) {
+        editedUser[prop] = data[prop];
+      }
+    }
+    editedUser.updatedAt = new Date();
     await this.usersRepository.save(editedUser);
-    console.log(editedUser);
-    return editedUser;
+  }
+
+  async delete(id: string): Promise<DeleteResult> {
+    return await this.usersRepository.delete(id);
   }
 
   async update_avatar(id: string, path: string) {
@@ -64,7 +117,7 @@ export class UsersService {
     if (!editedUser) {
       throw new NotFoundException('User is not found');
     }
-    editedUser.avatar_path = path;
+    editedUser.avatarPath = path;
     await this.usersRepository.save(editedUser);
     console.log(editedUser);
     return editedUser;

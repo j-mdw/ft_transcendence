@@ -4,22 +4,19 @@ import {
   Post,
   Res,
   Req,
-  Param,
-  HttpStatus,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { UsersService } from 'src/user/user.service';
+import { UserDTO } from 'src/user/user.dto';
 
 @Controller()
 export class AuthController {
   constructor(
-    private readonly appService: AuthService,
+    private readonly authService: AuthService,
     private jwtService: JwtService,
-    private usersService: UsersService,
   ) {}
 
   @Get('google')
@@ -32,20 +29,17 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.appService.addingUser(req);
-    this.appService.generateAvatar(data.user.id);
-    const payload = { userId: data.user.id };
-    const token = this.jwtService.sign(payload);
+    const user = await this.authService.addUser(req);
+    const token = this.jwtService.sign({ userId: user.id });
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-
-    return { data };
+    return { user }; //Do we need to return smth here?
   }
 
   @Get('42')
   @UseGuards(AuthGuard('42'))
-  async school42Auth(@Req() req) {}
+  school42Auth() {}
 
   @Get('42/redirect')
   @UseGuards(AuthGuard('42'))
@@ -53,18 +47,16 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const data = await this.appService.addingUser(req);
-    this.appService.generateAvatar(data.user.id);
-
-    const payload = { userId: data.user.id };
-    const token = this.jwtService.sign(payload);
-    console.log('TOKEN');
+    const user: UserDTO = await this.authService.addUser(req.user);
+    const token = this.jwtService.sign({ userId: user.id });
+    console.log('Token signed');
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-    return { data };
+    return { user };
   }
 
+  // ok to delete?
   @Get('test')
   test(@Res({ passthrough: true }) res: Response) {
     const payload = { userId: 1 };
@@ -75,12 +67,12 @@ export class AuthController {
     });
   }
 
+  //ok to delete?
   @Post('login')
   login(@Res() response: Response) {
     // Do username+password check here.
 
     const userId = 'dummy';
-
     const payload = { userId: userId };
     const token = this.jwtService.sign(payload);
 
@@ -93,29 +85,6 @@ export class AuthController {
       .send({ success: true });
   }
 
-  @Post('pseudo')
-  @UseGuards(AuthGuard('jwt'))
-  async uppdatePseudo(@Param('id') id: string, @Req() req) {
-    await this.usersService.update_pseudo(id, req.body.pseudo);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'User updated successfully',
-    };
-  }
-
-  @Get('me')
-  @UseGuards(AuthGuard('jwt'))
-  getMe(@Req() req): string {
-    console.log();
-    return req.user;
-  }
-
-  @Get('me/pseudo')
-  @UseGuards(AuthGuard('jwt'))
-  getPseudo(@Req() req): string {
-    console.log(req.user.pseudo);
-    return req.user.pseudo;
-  }
 
   @Get('me/2fa')
   @UseGuards(AuthGuard('jwt'))

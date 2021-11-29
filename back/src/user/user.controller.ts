@@ -7,40 +7,54 @@ import {
   Post,
   Res,
   HttpStatus,
-  UploadedFile,
+  ParseUUIDPipe,
+  UseGuards,
+  Put,
+  Delete,
   UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
-import { ParseIntPipe } from '@nestjs/common/pipes/parse-int.pipe';
-import { UsersService } from './user.service';
-import { UserDTO } from './users.dto';
+import { UserService } from './user.service';
+import { UserDTO } from './user.dto';
+import { Response } from 'express';
+import { JwtGuard } from 'src/auth/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 
-@Controller('users')
-export class UsersController {
-  constructor(private usersService: UsersService) {}
+@Controller('user')
+@UseGuards(JwtGuard)
+export class UserController {
+  constructor(private userService: UserService) {}
   @Get()
-  async findAll() {
-    return await this.usersService.getUsers();
+  findAll(): Promise<UserDTO[]> {
+    return this.userService.getUsers();
+  }
+
+  @Get('me')
+  findMe(@Res({ passthrough: true }) response: Response): Promise<UserDTO> {
+    return this.userService.findOne(response.locals.id);
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id) {
-    return await this.usersService.findOne(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
+    return this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  async uppdateUser(@Param('id') id: string, @Body() data: string) {
-    await this.usersService.update_pseudo(id, data);
+  @Patch()
+  updateUser(
+    @Res({ passthrough: true }) response: Response,
+    @Body() data: Partial<Omit<UserDTO, 'id'>>,
+  ) {
+    this.userService.update(response.locals.id, data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',
     };
   }
 
-  @Post()
-  async create(@Body() data: UserDTO) {
-    return await this.usersService.createUser(data);
+  @Delete()
+  deleteAccount(@Res({ passthrough: true }) response: Response) {
+    return this.userService.delete(response.locals.id);
   }
 
   @Post('upload/avatar')
@@ -64,7 +78,7 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     console.log(file.path);
-    await this.usersService.update_avatar(id, file.path);
+    await this.userService.update_avatar(id, file.path);
   }
 
   @Get('me/avatar')
