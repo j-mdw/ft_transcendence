@@ -1,8 +1,8 @@
 <template>
-  <div class="file-upload">
-    <input type="file" @change="onFileChange" />
-    <button @click="onUploadFile" class="upload-button">Upload file</button>
-  </div>
+  <v-container justify="center" align="center" >
+        <input type="file" @change="onFileChange" class="custom-file-input"/>
+        <button @click="onUploadFile" class="upload-button" >Upload file</button>
+  </v-container>
 </template>
 
 <script>
@@ -25,8 +25,7 @@ export default {
       formData.append("file", this.selectedFile);  // appending file
       // this.user = await this.$axios.$get("user/me", {withCredentials: true});
       // console.log("ID =");
-      // console.log(this.user.id);
-     // sending file to the backend
+      console.log(formData);
      await axios
         .delete("http://localhost:4000/user/delete/avatar", { withCredentials: true})
         .then(res => {
@@ -48,3 +47,41 @@ export default {
 
 };
 </script>
+
+<style scoped lang="scss">
+.custom-file-input::-webkit-file-upload-button {
+  // visibility: hidden;
+  background-color: #f5cac3;
+  border: none;
+  width: 150px;
+  border-radius: 1rem;
+  color: #395C6B;
+  &:hover
+  {
+    background-color: #F28482
+  }
+}
+
+.custom-file-input{
+  color: #395C6B;
+}
+
+.upload-button {
+  background-color: #f5cac3;
+  border: none;
+  width: 150px;
+  border-radius: 1rem;
+  color: #395C6B;
+  margin-left: 80px;
+  &:hover
+  {
+    background-color: #F28482
+  }
+}
+
+// .upload-butto:hover  {
+//   background-color: #f5cac3;
+// }
+
+
+</style>

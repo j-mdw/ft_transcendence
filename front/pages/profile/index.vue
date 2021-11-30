@@ -66,61 +66,6 @@
         <!-- </h1> -->
     </v-row>
 
-    <v-dialog
-          transition="dialog-bottom-transition"
-          max-width="600"
-        > 
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="#f5cac3"
-              v-bind="attrs"
-              v-on="on"
-            >
-              change my picture
-              <!-- <v-icon color="#395c6b">fa fa-cog</v-icon> -->
-            </v-btn>
-          </template>
-          <v-card>
-            <v-card-text>
-            <FileUpload/>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
-
-<v-form
-    ref="form"
-    lazy-validation
-    title="Update profile"
-  >
-    <v-text-field
-      v-model="user.pseudo"
-      :counter="60"
-      label="pseudo"
-      required
-    ></v-text-field>
-
-    <v-text-field
-      v-model="user.avatarPath"
-      :counter="60"
-      label="avatar"
-      required
-    ></v-text-field>
-
-    <v-btn
-      color="success"
-      class="mr-4"
-      @click="updateUser"
-    >
-      Update
-    </v-btn>
-  </v-form>
-      <v-btn
-      color="success"
-      class="mr-4"
-      @click="deleteAccount"
-    >
-      Delete account
-    </v-btn>
 </v-container>
 </template>
 
