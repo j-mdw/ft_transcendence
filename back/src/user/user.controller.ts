@@ -57,6 +57,38 @@ export class UserController {
     return this.userService.delete(response.locals.id);
   }
 
+  @Delete('delete/avatar')
+  beforeUpload(@Res({ passthrough: true }) response: Response) {
+    console.log("in the delete");
+    const path_picture = './avatars/' + response.locals.id;
+    const fs = require('fs');
+
+    if (fs.existsSync(path_picture + '.jpeg')) {
+      try {
+        fs.unlinkSync(path_picture + '.jpeg');
+        console.log('Successfully deleted the file. jpeg');
+      } catch (err) {
+        throw err;
+      }
+    }
+    if (fs.existsSync(path_picture + '.jpg')) {
+      try {
+        fs.unlinkSync(path_picture + '.jeg');
+        console.log('Successfully deleted the file. jpg');
+      } catch (err) {
+        throw err;
+      }
+    }
+    if (fs.existsSync(path_picture + '.png')) {
+      try {
+        fs.unlinkSync(path_picture + '.png');
+        console.log('Successfully deleted the file. pnng');
+      } catch (err) {
+        throw err;
+      }
+    }
+  }
+
   @Post('upload/avatar')
   @UseInterceptors(
     FileInterceptor('file', {
@@ -75,12 +107,12 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    console.log(file.path);
     await this.userService.update_avatar(response.locals.id, file.path);
   }
 
   @Get('me/avatar')
-  seeUploadedFile(@Res() res) {
-    return res.sendFile(res.locals.id + '.' + 'jpeg', { root: './avatars' });
+  async seeUploadedFile(@Res() res) {
+    const data = await this.findOne(res.locals.id);
+    return res.sendFile(data.avatarPath, { root: './' });
   }
 }

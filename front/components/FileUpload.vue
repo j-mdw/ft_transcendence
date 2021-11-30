@@ -28,13 +28,21 @@ export default {
       // console.log(this.user.id);
      // sending file to the backend
      await axios
-        .post("http://localhost:4000/user/upload/avatar", formData, { withCredentials: true})
+        .delete("http://localhost:4000/user/delete/avatar", { withCredentials: true})
         .then(res => {
           console.log(res);
         })
         .catch(err => {
           console.log(err);
         });
+      axios
+        .post("http://localhost:4000/user/upload/avatar", formData, { withCredentials: true})
+        .then(res => {
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+      });
     }
   },
 
