@@ -58,13 +58,19 @@
     <v-row justify="center" align="center">     
       <div id="component-auth" class="d-flex flex-column justify-center align-center">
           <!-- <h1>LOGGED</h1> -->
-        
-          
       </div>
-        <!-- <h1 v-if="user"> -->
-           <br>welcome to your profile
-        <!-- </h1> -->
     </v-row>
+  <v-btn                                                                                                                                                            
+     dark                                                                                                                                                            
+     color="orange"                                                                                                                                                  
+     href="className/studentName"                                                                                                                                        
+     nuxt          
+
+     to="/profile/settings"                                                                                                                                                  
+  >    
+    <v-icon color="#395c6b">fa fa-cog</v-icon>                                                                                                                                                                                                                                                                                                               
+  </v-btn> 
+    
 
 </v-container>
 </template>

@@ -1,5 +1,19 @@
 <template>
     <v-container fill-height >
+        <v-row justify="left">
+        <h1>
+           Your Settings <br>
+        </h1>
+      </v-row>
+      
+      <v-row >
+          <v-avatar
+          size="250px"
+        >
+          <img
+            src="http://localhost:4000/user/me/avatar"
+          >
+        </v-avatar>
         <v-dialog
           transition="dialog-bottom-transition"
           max-width="600"
@@ -11,7 +25,6 @@
               v-on="on"
             >
               change my picture
-              <!-- <v-icon color="#395c6b">fa fa-cog</v-icon> -->
             </v-btn>
           </template>
           <v-card color="#f7ede2">
@@ -21,6 +34,8 @@
           </v-card>
         </v-dialog>
 
+      </v-row>
+    <v-row >
     <v-form
         ref="form"
         lazy-validation
@@ -28,7 +43,7 @@
     >
         <v-text-field
         v-model="user.pseudo"
-        :counter="60"
+        :counter="15"
         label="pseudo"
         required
         ></v-text-field>
@@ -41,6 +56,7 @@
         Update Pseudo
         </v-btn>
     </v-form>
+     </v-row>
     <v-btn
       color="#F6BD60"
       class="mr-4"
