@@ -23,17 +23,15 @@ export class UserService {
   ) {}
 
   async getUsers(): Promise<UserDTO[]> {
-    return await (this.usersRepository
+    return await this.usersRepository
       .find()
-      .then((users) => users.map((user) => new UserDTO(user)))
-    );
+      .then((users) => users.map((user) => new UserDTO(user)));
   }
 
   async findOne(id: string): Promise<UserDTO> {
-    return await (this.usersRepository
+    return await this.usersRepository
       .findOne(id)
-      .then((user) => new UserDTO(user))
-    );
+      .then((user) => new UserDTO(user));
   }
 
   async getEntity(id: string): Promise<User> {

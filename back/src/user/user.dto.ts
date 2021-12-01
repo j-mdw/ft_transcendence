@@ -11,6 +11,9 @@ export class CreateUserDTO {
 
   @IsEmail()
   email: string;
+
+  @IsString()
+  avatarPath?: string;
 }
 
 export class UserDTO {

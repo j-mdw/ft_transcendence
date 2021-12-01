@@ -10,7 +10,7 @@ import { Channel } from './channel.entity';
 import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
 // import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
-// import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 import { User } from 'src/user/user.entity';
 
@@ -21,9 +21,9 @@ export class ChannelService {
     private channelRepository: Repository<Channel>,
     @Inject(forwardRef(() => UserService))
     private userService: UserService,
-  ) // @Inject(forwardRef(() => ChannelParticipantService))
-  // private participantService: ChannelParticipantService,
-  {}
+    @Inject(forwardRef(() => ChannelParticipantService))
+    private participantService: ChannelParticipantService,
+  ) {}
 
   async findAll(): Promise<ChannelDTO[]> {
     return await this.channelRepository
@@ -39,18 +39,22 @@ export class ChannelService {
 
   //Potential error if findOne fails
   async create(userId: string, data: CreateChannelDTO) {
+    const user = await this.userService.getEntity(userId);
     if (data.type == ChannelType.protected && !data.password) {
       throw new ForbiddenException(
         'channel of type password must have a password',
       );
     }
     const date = new Date();
-    await this.channelRepository.save({
-      ...data,
-      createdAt: date,
-      updatedAt: date,
-      owner: await this.userService.getEntity(userId),
-    });
+    await this.channelRepository
+      .save({
+        ...data,
+        createdAt: date,
+        updatedAt: date,
+        owner: user,
+      })
+      .then((channel) => this.participantService.create(user, channel));
+
     // const participant = new ChannelParticipantDTO();
     // participant.admin = true;
     // const channelId = (await channel).id;
