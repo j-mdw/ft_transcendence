@@ -8,8 +8,6 @@
       app
       class="pt-2"
     >
-      
-      
       <v-btn 
         text
         color="#395c6b"
@@ -22,8 +20,8 @@
         </v-avatar>
         my profile
       </v-btn>
-      <NuxtLink to="/channels">Channels</NuxtLink>
-            <NuxtLink to="/chat">Lonly chat</NuxtLink>
+      <!-- <NuxtLink to="/channels">Channels</NuxtLink>
+            <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
           to="/profile"
@@ -41,6 +39,8 @@
       </v-tabs>
       <v-btn text color="#395c6b" @click="logout"> logout </v-btn>
     </v-app-bar>
+    <users-bar/>
+
     <v-main>
       <nuxt />
     </v-main>
@@ -48,10 +48,18 @@
 </template>
 <script lang="ts">
 import Vue from "vue";
+import UsersBar from "~/components/UsersBar.vue";
 import { authenticationStore } from "~/store";
 
 export default Vue.extend({
+  components: { UsersBar },
   middleware: "auth",
+
+  head() {
+    return {
+      title: "ft-transcendence"
+    };
+  },
 
   data: () => ({
     activeTab: 2,

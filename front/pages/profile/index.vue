@@ -30,7 +30,7 @@
       >
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#F8CF8B"
+          color="#F7C678"
           outlined
           align="center"
           max-width="500px"
@@ -40,7 +40,7 @@
         </v-card>
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#F8CF8B"
+          color="#F7C678"
           outlined
           align="center"
           max-width="500px"
@@ -50,7 +50,7 @@
         </v-card>
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#F8CF8B"
+          color="#F7C678"
           outlined
           height="200px"
           align="center"

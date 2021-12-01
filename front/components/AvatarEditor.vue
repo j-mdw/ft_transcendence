@@ -5,7 +5,7 @@
     </v-avatar>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" max-width="600">
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="#f5cac3" v-bind="attrs" v-on="on">
+        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-8">
           change my picture
         </v-btn>
       </template>

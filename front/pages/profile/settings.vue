@@ -1,48 +1,58 @@
 <template>
-    <v-container fill-height >
-        <v-row justify="left">
-        <h1>
-           Your Settings <br>
-        </h1>
-      </v-row>
-      
-      <v-row >
+  <v-container fill-height >
+    <!-- <v-row no-gutters> -->
+    <v-row justify="center" align="center">
+      <v-col
+        sm="4"
+        align="center"
+        justify="center"
+      > 
           <avatar-editor />
-
-      </v-row>
-    <v-row >
-    <v-form
-        ref="form"
-        lazy-validation
-        title="Update profile"
-    >
+      </v-col>
+      <v-col
+        sm="8"
+        align="center"
+        justify="center"
+      >
+        <v-form
+            ref="form"
+            lazy-validation
+            title="Update profile"
+        >
         <v-text-field
         v-model="user.pseudo"
-        :counter="15"
         label="pseudo"
         required
         ></v-text-field>
 
         <v-btn
         color="#F6BD60"
-        class="mr-4"
         @click="updateUser"
         >
         Update Pseudo
         </v-btn>
+       
     </v-form>
-     </v-row>
-    <v-btn
+         <v-btn
+            color="#F6BD60"
+            class="mt-10"
+            to="/profile"
+        >
+            go back to my profile
+        </v-btn>
+      </v-col>                                                                                                                                                                                                                                                                                            
+    </v-row>  
+    
+    <v-row justify="center" align="center"> 
+       <v-btn
       color="#F6BD60"
-      class="mr-4"
       @click="deleteAccount"
     >
-      Delete account
+      Delete my account
     </v-btn>
-
-    </v-container>
+  </v-row>  
+</v-container>
 </template>
-
 
 <script lang="ts">
 import Vue from 'vue'
@@ -86,5 +96,8 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
+.v-text-field{
+      max-width: 350px;
+}
 
 </style>
