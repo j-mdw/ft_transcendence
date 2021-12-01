@@ -1,18 +1,25 @@
 <template>
   <v-container fill-height >
     <!-- <v-row no-gutters> -->
+    <v-row justify="center" align="center">
       <v-col
         sm="4"
         align="center"
         justify="center"
-      >
-        <v-avatar
-          size="250px"
-        >
-          <img
-            src="http://localhost:4000/user/me/avatar"
+      > 
+          <v-avatar
+            size="250px"
           >
-        </v-avatar>
+            <img
+              src="http://localhost:4000/user/me/avatar"
+            >
+          </v-avatar>
+
+        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
+          my settings 
+          
+          <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
+        </v-btn>
         <h1 v-if="user">
            <br>welcome {{ user.pseudo }}</h1>
       </v-col>
@@ -23,7 +30,7 @@
       >
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#f6bd60"
+          color="#F8CF8B"
           outlined
           align="center"
           max-width="500px"
@@ -33,7 +40,7 @@
         </v-card>
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#f6bd60"
+          color="#F8CF8B"
           outlined
           align="center"
           max-width="500px"
@@ -43,7 +50,7 @@
         </v-card>
         <v-card
           class="pa-2 mb-7 mt-7"
-          color="#f6bd60"
+          color="#F8CF8B"
           outlined
           height="200px"
           align="center"
@@ -53,24 +60,8 @@
         </v-card>
 
        
-      </v-col>
-    <!-- </v-row> -->
-    <v-row justify="center" align="center">     
-      <div id="component-auth" class="d-flex flex-column justify-center align-center">
-          <!-- <h1>LOGGED</h1> -->
-      </div>
-    </v-row>
-  <v-btn                                                                                                                                                            
-     dark                                                                                                                                                            
-     color="orange"                                                                                                                                                  
-     href="className/studentName"                                                                                                                                        
-     nuxt          
-
-     to="/profile/settings"                                                                                                                                                  
-  >    
-    <v-icon color="#395c6b">fa fa-cog</v-icon>                                                                                                                                                                                                                                                                                                               
-  </v-btn> 
-    
+      </v-col>                                                                                                                                                                                                                                                                                            
+    </v-row>   
 
 </v-container>
 </template>

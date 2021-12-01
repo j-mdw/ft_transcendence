@@ -7,32 +7,7 @@
       </v-row>
       
       <v-row >
-          <v-avatar
-          size="250px"
-        >
-          <img
-            src="http://localhost:4000/user/me/avatar"
-          >
-        </v-avatar>
-        <v-dialog
-          transition="dialog-bottom-transition"
-          max-width="600"
-        > 
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="#f5cac3"
-              v-bind="attrs"
-              v-on="on"
-            >
-              change my picture
-            </v-btn>
-          </template>
-          <v-card color="#f7ede2">
-            <v-card-text>
-            <FileUpload/>
-            </v-card-text>
-          </v-card>
-        </v-dialog>
+          <avatar-editor />
 
       </v-row>
     <v-row >
@@ -84,7 +59,6 @@ export default Vue.extend({
 	data() {
 		return {
         user: Object(),
-        avatar: null
 		}
 	},
 
@@ -92,7 +66,6 @@ export default Vue.extend({
     async updateUser() {
       const resp = await this.$axios.$patch('user', {
         'pseudo': this.user.pseudo,
-        'avatarPath': this.avatar,
       }, {withCredentials: true});
       console.log(resp);
     },
@@ -107,8 +80,6 @@ export default Vue.extend({
 
 	async mounted() {
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
-      this.avatar = await this.$axios.$get("user/me/avatar", {withCredentials: true})
-      console.log(this.avatar)
   }
 })
 

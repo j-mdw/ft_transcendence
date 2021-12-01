@@ -18,7 +18,7 @@
       >
         
         <v-avatar size="30px" class="mr-4 ml-n2">
-          <img src="../assets/img/sample.jpg" />
+          <img src="http://localhost:4000/user/me/avatar" />
         </v-avatar>
         my profile
       </v-btn>
@@ -26,7 +26,7 @@
             <NuxtLink to="/chat">Lonly chat</NuxtLink>
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
-        to="/profile"
+          to="/profile"
           :class="{
             'red--text': activeTab == 1,
           }"
