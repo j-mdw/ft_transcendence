@@ -58,31 +58,14 @@ export class UserController {
   }
 
   @Delete('delete/avatar')
-  beforeUpload(@Res({ passthrough: true }) response: Response) {
-    console.log("in the delete");
-    const path_picture = './avatars/' + response.locals.id;
+  async beforeUpload(@Res({ passthrough: true }) response: Response) {
+    const user = await this.findOne(response.locals.id);
     const fs = require('fs');
 
-    if (fs.existsSync(path_picture + '.jpeg')) {
+    if (fs.existsSync(user.avatarPath)) {
       try {
-        fs.unlinkSync(path_picture + '.jpeg');
-        console.log('Successfully deleted the file. jpeg');
-      } catch (err) {
-        throw err;
-      }
-    }
-    if (fs.existsSync(path_picture + '.jpg')) {
-      try {
-        fs.unlinkSync(path_picture + '.jeg');
-        console.log('Successfully deleted the file. jpg');
-      } catch (err) {
-        throw err;
-      }
-    }
-    if (fs.existsSync(path_picture + '.png')) {
-      try {
-        fs.unlinkSync(path_picture + '.png');
-        console.log('Successfully deleted the file. pnng');
+        fs.unlinkSync(user.avatarPath);
+        console.log('Successfully deleted the file');
       } catch (err) {
         throw err;
       }

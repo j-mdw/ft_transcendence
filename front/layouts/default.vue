@@ -8,18 +8,7 @@
       app
       class="pt-2"
     >
-      <v-btn 
-        text
-        color="#395c6b"
-        class="py-2"
-        to="/profile"
-      >
-        
-        <v-avatar size="30px" class="mr-4 ml-n2">
-          <img src="http://localhost:4000/user/me/avatar" />
-        </v-avatar>
-        my profile
-      </v-btn>
+
       <!-- <NuxtLink to="/channels">Channels</NuxtLink>
             <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>

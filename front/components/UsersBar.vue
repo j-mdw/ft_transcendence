@@ -16,7 +16,21 @@
           </v-list-item>
 
         </v-list> -->
+        <v-list>
+          <v-list-item class="px-2 ml-n5">
+            <v-list-item-avatar>
+              <v-img :src="avatarUrl"></v-img>
+            </v-list-item-avatar>
+            <v-list-item to=/profile>
+              My Profile
+            </v-list-item>
+          </v-list-item>
 
+          
+        </v-list>
+
+      <v-divider></v-divider>
+    
       <v-list>
           <v-list-item
             v-for="item in items"
@@ -38,13 +52,21 @@
             <v-list-item-content>
               <v-list-item-title v-text="item.name" class="our_navy_blue--text" ></v-list-item-title>
             </v-list-item-content>
-            <v-list-item-icon>
-              <v-icon color="#AFE796" right>fa fa-comment-alt</v-icon>  
-            </v-list-item-icon>
+            <!-- <v-list-item-avatar class="mt-4  mb-4" tile >
+                <img  src="../assets/svg/message.svg" />
+            </v-list-item-avatar> -->
+
+            <v-list-item-action>
+              <v-btn v-ripple="false" plain  to="/channels">
+                  <messageLogo/>
+              </v-btn>
+            </v-list-item-action>
               
-            <v-list-item-avatar class="mt-4 mb-4" tile>
-              <img  src="../assets/svg/pingpong.svg" />
-            </v-list-item-avatar>
+            <v-list-item-action>
+              <v-btn v-ripple="false" plain  icon>
+                <pingpongLogo/>
+              </v-btn>
+            </v-list-item-action>
           </v-list-item>
           
         </v-list>
@@ -56,19 +78,34 @@
 <script lang="ts">
 import Vue from 'vue'
 import { authenticationStore }  from '~/store'
+import messageLogo from './Logo/messageLogo.vue'
+import pingpongLogo from './Logo/pingpongLogo.vue'
 
 export default Vue.extend({
+  components: { messageLogo, pingpongLogo},
 	data () {
       return {
         drawer: true,
+        version: 0,
         items: [
-          { name: 'Florianne', image: 'http://localhost:4000/user/me/avatar' },
-          { name: 'Laurent', image: 'http://localhost:4000/user/me/avatar' },
-          { name: 'Julien', image: 'http://localhost:4000/user/me/avatar' },
+          { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
+          { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
+          { name: 'Julien', image: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
         ],
         mini: true,
       }
     },
+    computed: {
+        avatarUrl() {
+            return `http://localhost:4000/user/me/avatar?version=${this.version}`
+        }
+    },
+    methods: {
+        onPictureChanged() {
+            this.version = Date.now()
+        }
+    }
+  
 })
 </script>
 
@@ -76,4 +113,5 @@ export default Vue.extend({
 .v-text{
   color: #fff
 }
+
 </style>

@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+// import IconComponent from './components/Logo/message.vue'
 
 export default {
   components: true,
@@ -63,9 +64,13 @@ export default {
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
+    // values: {
+    //   product: {
+    //     component: IconComponent, // you can use string here if component is registered globally
+    //   },
+    // },
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      light: true,
       themes: {
         light: {
           primary: '#f28482',
