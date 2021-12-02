@@ -5,21 +5,33 @@ import {
   WebSocketGateway,
   WebSocketServer,
   MessageBody,
+  WsResponse,
+  OnGatewayInit,
 } from '@nestjs/websockets';
-import { Socket } from 'dgram';
-import { Server } from 'http';
+import { AfterInit } from 'sequelize-typescript';
+import { Socket, Server } from 'socket.io';
+// import { Server } from 'http';
 
 @WebSocketGateway({
   cors: {
     origin: 'http://localhost:3000',
   },
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class ChatGateway
+  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
+{
   @WebSocketServer() server: Server;
   users = 0;
 
+  afterInit() {
+    this.server.use((socket, next) => {
+      console.log('WS middleware?');
+      next();
+    });
+  }
+
   @SubscribeMessage('chat-message')
-  handleEvent(@MessageBody() data: string) {
+  handleEvent(@MessageBody() data: string): void {
     console.log('Message recieved: ' + data);
     this.server.emit('chat-message', data);
   }

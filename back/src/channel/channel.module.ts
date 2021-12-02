@@ -7,6 +7,7 @@ import { Channel } from './channel.entity';
 import { ChannelService } from './channel.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,12 +15,13 @@ import { ChannelParticipantModule } from 'src/channelParticipant/channelParticip
     // forwardRef(() => ChannelParticipantModule),
     forwardRef(() => UserModule),
     forwardRef(() => ChannelParticipantModule),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: '24h',
-      },
-    }),
+    // JwtModule.register({
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: {
+    //     expiresIn: '24h',
+    //   },
+    // }),
+    forwardRef(() => AuthModule),
   ],
   providers: [ChannelService],
   controllers: [ChannelController],
