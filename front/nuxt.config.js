@@ -65,16 +65,22 @@ export default {
   vuetify: {
     customVariables: ['~/assets/variables.scss'],
     theme: {
-      dark: false,
+      light: true,
       themes: {
-        dark: {
+        light: {
           primary: '#f28482',
           accent: '#f28482',
           secondary: '#f28482',
           info: '#f28482',
           warning: '#f28482',
           error: '#f28482',
-          success: '#f28482'
+          success: '#f6bd60',
+          our_yellow: "#f6bd60",
+          our_beige: "#f7ede2",
+          our_light_pink: "#f5cac3",
+          our_navy_blue: "#395c6b",
+          our_dark_pink: "#f28482",
+          our_dark_beige: "#ebd9c5"
         }
       }
     },icons: {
