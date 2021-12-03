@@ -9,7 +9,6 @@ import {
   HttpStatus,
   ParseUUIDPipe,
   UseGuards,
-  Put,
   Delete,
   UseInterceptors,
   UploadedFile,

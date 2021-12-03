@@ -12,7 +12,6 @@ export default {
   data() {
     return {
       selectedFile: "",
-      // user: Object(),
     };
   },
   methods: {
@@ -23,8 +22,6 @@ export default {
     async onUploadFile() {
       const formData = new FormData();
       formData.append("file", this.selectedFile); // appending file
-      // this.user = await this.$axios.$get("user/me", {withCredentials: true});
-      // console.log("ID =");
       console.log(formData);
       await axios
         .delete("http://localhost:4000/user/delete/avatar", {
@@ -56,7 +53,6 @@ export default {
 
 <style scoped lang="scss">
 .custom-file-input::-webkit-file-upload-button {
-  // visibility: hidden;
   background-color: #f5cac3;
   border: none;
   width: 150px;
@@ -83,7 +79,4 @@ export default {
   }
 }
 
-// .upload-butto:hover  {
-//   background-color: #f5cac3;
-// }
 </style>

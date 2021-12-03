@@ -6,20 +6,10 @@
           permanent
           expand-on-hover
         >
-
-        <!-- <user-bar-profile/>
-        <v-list>
-          <v-list-item class="px-2">
-            <v-list-item-avatar>
-              <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-            </v-list-item-avatar>
-          </v-list-item>
-
-        </v-list> -->
         <v-list>
           <v-list-item class="px-2 ml-n5">
             <v-list-item-avatar>
-              <v-img :src="avatarUrl"></v-img>
+              <v-img src="http://localhost:4000/user/me/avatar"></v-img>
             </v-list-item-avatar>
             <v-list-item to=/profile>
               My Profile
@@ -95,17 +85,6 @@ export default Vue.extend({
         mini: true,
       }
     },
-    computed: {
-        avatarUrl() {
-            return `http://localhost:4000/user/me/avatar?version=${this.version}`
-        }
-    },
-    methods: {
-        onPictureChanged() {
-            this.version = Date.now()
-        }
-    }
-  
 })
 </script>
 
