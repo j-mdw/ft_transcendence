@@ -36,12 +36,19 @@ export class AuthService {
     }
   }
 
-  async verify(token: string): Promise<boolean> {
+  async verify(token: string): Promise<any> {
     try {
-      this.jwtService.verify(token);
-      return true;
+      return await this.jwtService.verify(token);
     } catch {
       console.log('Token verification failed');
+      return false;
+    }
+  }
+
+  async userExist(id: string): Promise<boolean> {
+    if (await this.userService.findOne(id)) {
+      return true;
+    } else {
       return false;
     }
   }

@@ -20,8 +20,6 @@ export default Vue.extend({
 	},
 	async mounted() {
 		console.log(`logging with ${this.provider}`)
-		authenticationStore.signIn();
-
 		// const user: User = (await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true})).user;
 		// console.log('user: ', user);
     // if (user.pseudo) {
@@ -40,6 +38,7 @@ export default Vue.extend({
 				this.$router.push('/pseudo');
 			}
 		});
+		authenticationStore.signIn();
 	}
 })
 </script>

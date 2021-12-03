@@ -33,6 +33,10 @@ export class JwtGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    return this.authService.verify(request.cookies['access_token']);
+    if (this.authService.verify(request.cookies['access_token'])) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
