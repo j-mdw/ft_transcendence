@@ -49,11 +49,6 @@ export class AppGateway
 
 	}
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client:Socket, message: {sender: string, message: string}): void {
-	  this.server.emit('msgToClient', message);
-	}
-
   @SubscribeMessage('initialization')
   handleEvent(client:Socket, message: void): void {
 		this.ball =  new BallDto(640, 480);
@@ -65,7 +60,7 @@ export class AppGateway
 	@SubscribeMessage('keyPress')
 	handlePaddleMove(client:Socket, data: any): void {
 		if (data.inputId === 'up')
-			this.player1.pressingUp = data.state;
+			this.player1.pressingUp = data.state;ws
 		else if (data.inputId === 'down')
 			this.player1.pressingDown = data.state;
 		}

@@ -70,25 +70,7 @@
 					this.context.fillText( this.username + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
 				},
 
-				// keyboardEvent(Id, st) {
-				// 	this.socket.emit('keyPress', { inputId: Id, state: st });
-
-				// },
-
-				// mouseMove(event){
-				// 	this.socket.emit('mouse', {mouseMove: event.clientY});
-				// 	}
-			},
-
-
-				// sendMessage () {
-				// 	this.socket.emit('msgToServer', { sender: this.username, message: this.text})
-				// 	this.text = '';
-				// },
-				// receiveMessage(msg) {
-				// 	console.log(`recv: ${msg}`);
-				// 	this.messages.push(msg);
-				// }
+				
 
 			created() {
 				this.username = prompt('Enter your username: ');

@@ -23,8 +23,13 @@
         <v-tab
           to="/channels"
         >
-        message </v-tab>
-        <v-tab>Game </v-tab>
+        message
+        </v-tab>
+        <v-tab
+        to="/game"
+        >
+        Game
+        </v-tab>
       </v-tabs>
       <v-btn text color="#395c6b" @click="logout"> logout </v-btn>
     </v-app-bar>
