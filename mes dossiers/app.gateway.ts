@@ -43,6 +43,8 @@ export class AppGateway
 			this.ball.update(this.player1, this.player2);
 			this.player1.updatePosition();
 			this.player2.updatePosition();
+		//	this.server.emit('returnFullData', new gamedto(this.ball, this.player1 etc));
+
 			this.server.emit('returnFullData', { ball: this.ball, p1: this.player1, p2: this.player2 });
 
 		}, 1000/60);
