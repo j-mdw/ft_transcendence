@@ -9,9 +9,9 @@ import {
   WsResponse,
   OnGatewayInit,
 } from '@nestjs/websockets';
-import { AfterInit } from 'sequelize-typescript';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
+import { CLIENT_RENEG_WINDOW } from 'tls';
 // import { Server } from 'http';
 
 @WebSocketGateway({
@@ -20,32 +20,31 @@ import { AuthService } from 'src/auth/auth.service';
     credentials: true,
   },
 })
-export class ChatGateway
-  implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
-{
+export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private authService: AuthService) {}
 
-  @WebSocketServer() server: Server;
-  users = null;
-
-  afterInit() {
-    this.server.use(async (socket, next) => {
-      console.log(socket.handshake.headers.cookie['access_token']);
-      console.log('Hello from WS middleware');
-      const decoded = this.authService.verify(
-        socket.handshake.headers.cookie['access_token'],
+  afterInit(srv: Server) {
+    srv.use(async (socket, next) => {
+      const decoded = await this.authService.verify(
+        socket.handshake.headers.cookie.slice(13),
       );
       if (decoded) {
         if (await this.authService.userExist(decoded['userId'])) {
           console.log('WS auth successful');
+          this.users.set(socket.id, decoded.userId);
+          // socket.handshake.auth = { userId: decoded.userId };
           next();
         } else {
           next(new ForbiddenException('Unknown user'));
         }
+      } else {
+        next(new ForbiddenException('authentication failed'));
       }
-      next(new ForbiddenException('authentication failed'));
     });
   }
+
+  @WebSocketServer() server: Server;
+  users = new Map();
 
   @SubscribeMessage('chat-message')
   handleEvent(@MessageBody() data: string): void {
@@ -54,14 +53,17 @@ export class ChatGateway
   }
 
   async handleConnection(client: Socket): Promise<void> {
-    this.users++;
+    // this.users++;
     // this.server.emit('users', this.users);
     console.log('New user connected: ' + client.id);
+    console.log('All connected users: ', this.users);
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
-    this.users--;
+    // this.users--;
+    this.users.delete(client.id);
     console.log('User disconnected: ' + client.id);
+    console.log('All connected users: ', this.users);
     // this.server.emit('users', this.users);
   }
 }
