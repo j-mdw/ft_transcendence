@@ -13,21 +13,18 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-  layout: 'default',
-	name: "game",
+  	layout: 'default',
+	name: 'gamescript',
 	data() {
 		return {
 			title:'Pong Game',
-				text:'',
-				username:'',
-				socket: null,
-				context: null,
-				canvas: null,
-				ratio:{ //on part sur un ecran de 1280 x 960
-					x:0,
-					y:0,
-					less:0,
-				},
+			text:'',
+			username:'',
+			ratio:{ //on part sur un ecran de 1280 x 960
+				x:0,
+				y:0,
+				less:0,
+			},
 		}
 	},
 	sockets: {
@@ -52,21 +49,21 @@ export default Vue.extend({
 				initialization() {
 					this.$socket.client.emit('initialization');
 					//on recupere position de la balle sur le server
-					this.$socket.on('returnInitialPosition', (data) => {
+					this.$socket.$subscribe('returnInitialPosition', (data: any) => {
 					this.drawBall(data.ball);
 					this.drawPlayer(data.p1);
 					this.drawPlayer(data.p2);
 					});
 				},
 
-				drawBall(ball) {
+				drawBall(ball: any) {
 					this.context.beginPath();
 					// this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
 					this.context.fill();
 				},
 
-				drawPlayer(player) {
+				drawPlayer(player: any) {
 					let top = (player.y - (player.h / 2)) * this.ratio.y,
 						left = (player.x - (player.w / 2)) * this.ratio.x;
 					this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
@@ -116,7 +113,7 @@ export default Vue.extend({
 
         this.$socket.client.emit('loop');
 
-        this.$socket.on('returnFullData', (data) => {
+        this.$socket.$subscribe('returnFullData', (data: any) => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.beginPath();
             this.context.moveTo(this.canvas.width / 2, 0);

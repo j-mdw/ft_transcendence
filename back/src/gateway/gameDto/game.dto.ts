@@ -11,4 +11,5 @@ export class GameDto {
     //scoreplayer2
 
     //tailleraquetteplayer 1 (w et h)
-    //tailleraquetteplayer 2 (w et h)
+	//tailleraquetteplayer 2 (w et h)
+}
