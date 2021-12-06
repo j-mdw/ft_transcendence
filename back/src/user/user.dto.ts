@@ -23,15 +23,21 @@ export class UserDTO {
   @IsString()
   pseudo: string;
 
+  @IsEmail()
+  email: string;
+
   @IsString()
   avatarPath: string;
 
   @IsEnum(UserStatus)
   status: UserStatus;
 
+  isTwoFactorAuthenticationEnabled: boolean;
+
   constructor(user: User) {
     this.id = user.id;
     this.pseudo = user.pseudo;
+    this.email = user.email;
     this.avatarPath = user.avatarPath;
     this.status = user.status;
   }

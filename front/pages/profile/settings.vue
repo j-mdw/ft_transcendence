@@ -9,7 +9,7 @@
       > 
           <avatar-editor />
       </v-col>
-      <v-col
+      <!-- <v-col
         sm="8"
         align="center"
         justify="center"
@@ -33,23 +33,35 @@
         </v-btn>
        
     </v-form>
-         <v-btn
+         
+      </v-col>                                                                                                                                                                                                                                                                                             -->
+    </v-row>  
+    <v-row justify="center">
+      <Fa/>
+    </v-row>
+    <v-row justify="center" align="center"> 
+       <v-col
+        align="center"
+        justify="center"
+      > 
+        <v-btn
             color="#F6BD60"
-            class="mt-10"
             to="/profile"
         >
             go back to my profile
         </v-btn>
-      </v-col>                                                                                                                                                                                                                                                                                            
-    </v-row>  
-    
-    <v-row justify="center" align="center"> 
-       <v-btn
-      color="#F6BD60"
-      @click="deleteAccount"
-    >
-      Delete my account
-    </v-btn>
+       </v-col>
+       <v-col
+        align="center"
+        justify="center"
+      > 
+        <v-btn
+          color="#F6BD60"
+          @click="deleteAccount"
+        >
+          Delete my account
+        </v-btn>
+       </v-col>
   </v-row>  
 </v-container>
 </template>
@@ -59,11 +71,13 @@ import Vue from 'vue'
 import { authenticationStore }  from '~/store'
 import FileUpload from "~/components/FileUpload.vue";
 import { User } from '~/models/user'
+import Fa from '~/components/2FactorAuthentification.vue';
 
 export default Vue.extend({
 	layout: 'default',
   components: {
-    FileUpload
+    FileUpload,
+    Fa
   },
 
 	data() {

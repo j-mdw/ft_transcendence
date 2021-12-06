@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { UserDTO } from 'src/user/user.dto';
+import JwtTwoFactorGuard from './jwt-two-factor.guard';
 
 @Controller()
 export class AuthController {
@@ -22,12 +23,13 @@ export class AuthController {
     @Req() req,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const user = await this.authService.addUser(req);
+    const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
+    console.log('Token signed');
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-    return { user }; //Do we need to return smth here?
+    return { user };
   }
 
   @Get('42')
@@ -81,6 +83,13 @@ export class AuthController {
   @Get('me/2fa')
   @UseGuards(AuthGuard('jwt'))
   get2fa(@Req() req): string {
+    console.log(req);
+    return req.user.pseudo;
+  }
+
+  @Get('me/jwt2fa')
+  @UseGuards(JwtTwoFactorGuard)
+  getjwt2fa(@Req() req): string {
     console.log(req);
     return req.user.pseudo;
   }

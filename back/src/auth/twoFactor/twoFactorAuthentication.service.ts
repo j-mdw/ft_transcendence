@@ -13,7 +13,7 @@ export class TwoFactorAuthenticationService {
     const secret = authenticator.generateSecret();
 
     const otpauthUrl = authenticator.keyuri(
-      user.email,
+      user.id,
       process.env.TWO_FACTOR_AUTHENTICATION_APP_NAME,
       secret,
     );

@@ -7,9 +7,14 @@ import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 })
 export default class AuthenticationModule extends VuexModule {
   isLogin = localStorage.getItem("IS_LOGIN") === "true"
+  twoFa = localStorage.getItem("TWO_FA") === "false"
 
   get isLogged(): boolean {
     return this.isLogin
+  }
+
+  get isTwoFa(): boolean {
+    return this.twoFa
   }
 
   @Mutation
@@ -24,6 +29,18 @@ export default class AuthenticationModule extends VuexModule {
     localStorage.setItem("IS_LOGIN", "false")
   }
 
+  @Mutation
+  setTwoFa() {
+    this.twoFa = true;
+    localStorage.setItem("TWO_FA", "true")
+  }
+
+  @Mutation
+  removeTwoFa(){
+    this.twoFa = false
+    localStorage.setItem("TWO_FA", "false")
+  }
+
   @Action({rawError: true})
   signIn() {
     this.context.commit("setLogin");
@@ -32,6 +49,16 @@ export default class AuthenticationModule extends VuexModule {
   @Action({rawError: true})
   signOut() {
     this.context.commit("removeLogin");
+  }
+
+  @Action({rawError: true})
+  activateTwofa() {
+    this.context.commit("setTwoFa");
+  }
+
+  @Action({rawError: true})
+  desactivateTwofa() {
+    this.context.commit("removeTwoFa");
   }
 
 }
