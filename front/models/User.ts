@@ -5,8 +5,8 @@ export enum UserStatus {
 }
 
 export class User {
-    id: string = '';
-    pseudo: string = '';
-    avatarPath: string = '';
-    status: UserStatus = 0;
+  id: string = ''
+  pseudo: string = ''
+  avatarPath: string = ''
+  status: UserStatus = UserStatus.offline
 }

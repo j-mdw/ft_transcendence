@@ -11,7 +11,6 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
-import { CLIENT_RENEG_WINDOW } from 'tls';
 // import { Server } from 'http';
 
 @WebSocketGateway({
@@ -20,7 +19,7 @@ import { CLIENT_RENEG_WINDOW } from 'tls';
     credentials: true,
   },
 })
-export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(private authService: AuthService) {}
 
   afterInit(srv: Server) {

@@ -20,8 +20,8 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { 
-        href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css', 
+      {
+        href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css',
         rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
       }
     ],
@@ -39,9 +39,6 @@ export default {
       ssr: false,
     },
   ],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [

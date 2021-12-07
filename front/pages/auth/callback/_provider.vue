@@ -1,36 +1,34 @@
 <template>
   <v-container fill-height>
-    <v-row justify="center" align="center">
-    </v-row>
+    <v-row justify="center" align="center" />
 </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { authenticationStore }  from '~/store'
+import { authenticationStore } from '~/store'
 
 export default Vue.extend({
-	layout: 'empty',
+  layout: 'empty',
 
-	computed: {
-		provider() {
-			return this.$route.params.provider;
-		} 
-	},
-	async mounted() {
-		console.log(`logging with ${this.provider}`)
-		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
-			if (res.user.pseudo) {
-				this.$router.push('/home');
-			} else {
-				this.$router.push('/pseudo');
-			}
-		});
-		authenticationStore.signIn();
-	}
+  computed: {
+    provider () {
+      return this.$route.params.provider
+    }
+  },
+  async mounted () {
+    console.log(`logging with ${this.provider}`)
+    await this.$axios.$get(`${this.provider}/redirect`, { params: this.$route.query, withCredentials: true }).then((res) => {
+      if (res.user.pseudo) {
+        this.$router.push('/home')
+      } else {
+        this.$router.push('/pseudo')
+      }
+    })
+    authenticationStore.signIn()
+  }
 })
 </script>
-
 
 <style scoped lang="scss">
 #component-logo {

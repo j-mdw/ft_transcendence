@@ -3,12 +3,6 @@ import { Channel } from 'src/channel/channel.entity';
 // import { Relationship } from 'src/relationship/relationship.entity';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
-export enum UserStatus {
-  online,
-  offline,
-  playing,
-}
-
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -35,9 +29,6 @@ export class User {
   })
   pseudo: string;
 
-  // @Exclude()
-  // public currentHashedRefreshToken?: string;
-
   @Column({ nullable: true })
   public twoFactorAuthenticationSecret?: string;
 
@@ -49,12 +40,6 @@ export class User {
     default: null,
   })
   avatarPath: string;
-
-  @Column({
-    nullable: false,
-    default: UserStatus.offline,
-  })
-  status: UserStatus;
 
   @Column({
     nullable: false,

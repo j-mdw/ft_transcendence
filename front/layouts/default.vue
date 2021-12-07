@@ -18,7 +18,7 @@
             'red--text': activeTab == 1,
           }"
         >
-          home {{activeTab}}
+          home {{ activeTab }}
         </v-tab>
         <v-tab
           to="/channels"
@@ -35,37 +35,36 @@
     </v-main>
   </v-app>
 </template>
+
 <script lang="ts">
-import Vue from "vue";
-import UsersBar from "~/components/UsersBar.vue";
-import { authenticationStore } from "~/store";
+import Vue from 'vue'
+import UsersBar from '~/components/UsersBar.vue'
+import { authenticationStore } from '~/store'
 
 export default Vue.extend({
   components: { UsersBar },
-  middleware: "auth",
-
-  head() {
-    return {
-      title: "ft-transcendence"
-    };
-  },
+  middleware: 'auth',
 
   data: () => ({
-    activeTab: 2,
+    activeTab: 2
   }),
+
+  head () {
+    return {
+      title: 'ft-transcendence'
+    }
+  },
   methods: {
-      
-      logout() {
-        console.log("LOGOUT")
-        authenticationStore.signOut();
-        this.$router.push('/auth');
-      }
+
+    logout () {
+      console.log('LOGOUT')
+      authenticationStore.signOut()
+      this.$router.push('/auth')
+    }
   }
 
-});
+})
 </script>
-
-
 
 <style scoped>
 .v-application {
