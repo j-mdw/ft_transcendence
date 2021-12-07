@@ -33,6 +33,10 @@ export class UserService {
       .then((user) => new UserDTO(user));
   }
 
+  async getEntity(id: string): Promise<User> {
+    return await this.usersRepository.findOne(id);
+  }
+
   async isRegistered(email: string): Promise<boolean> {
     if (
       await this.usersRepository.find({

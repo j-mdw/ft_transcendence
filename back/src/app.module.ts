@@ -11,12 +11,12 @@ import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: {
-        expiresIn: '24h',
-      },
-    }),
+    // JwtModule.register({
+    //   secret: process.env.JWT_SECRET,
+    //   signOptions: {
+    //     expiresIn: '24h',
+    //   },
+    // }),
     TypeOrmModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     UserModule,

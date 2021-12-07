@@ -27,9 +27,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
   layout: 'default',
-	name: "chat",
 	data() {
 		return {
 			messages: Array<string>(),
@@ -41,7 +41,7 @@ export default Vue.extend({
 			console.log("we\'re in!!");
 		},
 		disconnect() {
-			this.$socket.$unsubscribe('chat-message')
+			this.$socket.$unsubscribe('chat-message');
 		}
 	},
 	methods: {
@@ -52,9 +52,9 @@ export default Vue.extend({
 	},
 	mounted() { 
 		this.$socket.$subscribe('chat-message', (payload: string) => {
-			console.log(payload)
+			console.log(payload);
 			this.messages.push(payload);
 		});
-	}
+	},
 })
 </script>

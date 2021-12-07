@@ -4,7 +4,7 @@ import AuthenticationModule from '~/store/auth'
 
  let authenticationStore: AuthenticationModule
 
-function initialiseStores(store: Store<any>): void {
+function initializeStores(store: Store<any>): void {
     authenticationStore = getModule(AuthenticationModule, store)
 }
-export { initialiseStores, authenticationStore, }
+export { initializeStores, authenticationStore, }

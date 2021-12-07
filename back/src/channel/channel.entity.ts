@@ -3,8 +3,12 @@ import {
   Column,
   PrimaryGeneratedColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
+// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
+// import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 export enum ChannelType {
   public,
@@ -43,6 +47,12 @@ export class Channel {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, (owner) => owner.id)
+  @ManyToOne(() => User, (owner) => owner.id, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   owner: User;
+
+  @OneToMany(() => ChannelParticipant, (participant) => participant.channel)
+  channels: Channel[];
 }

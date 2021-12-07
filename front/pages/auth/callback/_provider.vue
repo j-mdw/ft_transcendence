@@ -7,7 +7,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { User } from '~/models/user';
 import { authenticationStore }  from '~/store'
 
 export default Vue.extend({
@@ -20,7 +19,6 @@ export default Vue.extend({
 	},
 	async mounted() {
 		console.log(`logging with ${this.provider}`)
-		authenticationStore.signIn();
 		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
 			if (res.user.pseudo) {
 				this.$router.push('/home');
@@ -28,6 +26,7 @@ export default Vue.extend({
 				this.$router.push('/pseudo');
 			}
 		});
+		authenticationStore.signIn();
 	}
 })
 </script>

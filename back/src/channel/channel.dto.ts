@@ -13,13 +13,14 @@ export class ChannelDTO {
   @IsEnum(ChannelType)
   type: ChannelType;
 
-  owner: UserDTO;
+  @IsUUID()
+  owner: string;
 
   constructor(channel: Channel) {
     this.id = channel.id;
     this.name = channel.name;
     this.type = channel.type;
-    this.owner = channel.owner;
+    this.owner = channel.owner.id;
     console.log('channel dto owner: ', channel.owner);
   }
 }
