@@ -97,7 +97,7 @@ export class UserService {
         });
     }
     for (const prop in data) {
-      if (data[prop]) {
+      if (data[prop] != undefined) {
         editedUser[prop] = data[prop];
       }
     }

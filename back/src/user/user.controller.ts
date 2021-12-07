@@ -40,11 +40,12 @@ export class UserController {
   }
 
   @Patch()
-  updateUser(
+  async updateUser(
     @Res({ passthrough: true }) response: Response,
     @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
-    this.userService.update(response.locals.id, data);
+    console.log(data);
+    await this.userService.update(response.locals.id, data);
     return {
       statusCode: HttpStatus.OK,
       message: 'User updated successfully',

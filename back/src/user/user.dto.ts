@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
 import { PartialType, PickType } from '@nestjs/swagger';
 import { User, UserStatus } from './user.entity';
 
@@ -14,6 +14,7 @@ export class CreateUserDTO {
 
   @IsString()
   avatarPath?: string;
+
 }
 
 export class UserDTO {
@@ -23,22 +24,20 @@ export class UserDTO {
   @IsString()
   pseudo: string;
 
-  @IsEmail()
-  email: string;
-
   @IsString()
   avatarPath: string;
 
   @IsEnum(UserStatus)
   status: UserStatus;
 
+  @IsBoolean()
   isTwoFactorAuthenticationEnabled: boolean;
 
   constructor(user: User) {
     this.id = user.id;
     this.pseudo = user.pseudo;
-    this.email = user.email;
     this.avatarPath = user.avatarPath;
     this.status = user.status;
+    this.isTwoFactorAuthenticationEnabled = user.isTwoFactorAuthenticationEnabled;
   }
 }

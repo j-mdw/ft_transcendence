@@ -83,14 +83,12 @@ export class AuthController {
   @Get('me/2fa')
   @UseGuards(AuthGuard('jwt'))
   get2fa(@Req() req): string {
-    console.log(req);
     return req.user.pseudo;
   }
 
   @Get('me/jwt2fa')
   @UseGuards(JwtTwoFactorGuard)
   getjwt2fa(@Req() req): string {
-    console.log(req);
     return req.user.pseudo;
   }
 }
