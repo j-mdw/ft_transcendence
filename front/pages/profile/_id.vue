@@ -70,33 +70,25 @@ import { User } from '~/models/user'
 
 export default Vue.extend({
 	layout: 'default',
+    data: () => ({
+        user: Object(),
+    }),
+
+    
     computed: {
 		id() {
 			return this.$route.params.id;
-		}, 
-
+		},  
+        
         imgUrl() {
-            return (`http://localhost:4000/user/${this.id}/avatar`)
+            return (`http://localhost:4000/user/${this.$route.params.id}/avatar`)
         }
 	},
-  components: {
-    FileUpload
-  },
+    
 
-	data() {
-		return {
-        user: Object(),
-        avatarUrl: null
-		}
-	},
-  methods: {
-  },
-
-	async mounted() {
+    async mounted() {
        this.user = await this.$axios.$get(`user/${this.id}`, {withCredentials: true});
-       
-    //   this.avatar = await this.$axios.$get("user/me/avatar", {withCredentials: true})
-  }
+    }
 })
 
 </script>
