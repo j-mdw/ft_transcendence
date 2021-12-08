@@ -2,7 +2,7 @@
   <v-container fill-height >
     <!-- <v-row no-gutters> -->
     <v-row justify="center" align="center">
-      <v-col
+    <v-col
         sm="4"
         align="center"
         justify="center"
@@ -11,17 +11,12 @@
             size="250px"
           >
             <img
-              src="http://localhost:4000/user/me/avatar"
+              :src="imgUrl"
             >
           </v-avatar>
 
-        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
-          my settings 
-          
-          <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
-        </v-btn>
         <h1 v-if="user">
-           <br>welcome {{ user.pseudo }}</h1>
+           <br> {{ user.pseudo }}</h1>
       </v-col>
       <v-col
         sm="8"
@@ -60,9 +55,9 @@
         </v-card>
 
        
-      </v-col>                                                                                                                                                                                                                                                                                            
+      </v-col>   
+                                                                                                                                                                                                                                                                            
     </v-row>   
-
 </v-container>
 </template>
 
@@ -75,6 +70,15 @@ import { User } from '~/models/user'
 
 export default Vue.extend({
 	layout: 'default',
+    computed: {
+		id() {
+			return this.$route.params.id;
+		}, 
+
+        imgUrl() {
+            return (`http://localhost:4000/user/${this.id}/avatar`)
+        }
+	},
   components: {
     FileUpload
   },
@@ -82,13 +86,16 @@ export default Vue.extend({
 	data() {
 		return {
         user: Object(),
-        avatar: null
+        avatarUrl: null
 		}
 	},
+  methods: {
+  },
 
 	async mounted() {
-      this.user = await this.$axios.$get("user/me", {withCredentials: true});
-      this.avatar = await this.$axios.$get("user/me/avatar", {withCredentials: true})
+       this.user = await this.$axios.$get(`user/${this.id}`, {withCredentials: true});
+       
+    //   this.avatar = await this.$axios.$get("user/me/avatar", {withCredentials: true})
   }
 })
 

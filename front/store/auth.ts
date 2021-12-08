@@ -61,4 +61,12 @@ export default class AuthenticationModule extends VuexModule {
     this.context.commit("removeTwoFa");
   }
 
+  @Action({rawError: true})
+  setTwofaFirstTime(twofa: boolean) {
+    if(twofa == true)
+      this.context.commit("removeTwoFa");
+    else
+      this.context.commit("setTwoFa");
+  }
+
 }

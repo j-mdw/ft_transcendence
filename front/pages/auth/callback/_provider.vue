@@ -12,6 +12,9 @@ import { authenticationStore }  from '~/store'
 
 export default Vue.extend({
 	layout: 'empty',
+	data: () => ({
+        user: Object(),
+    }),
 
 	computed: {
 		provider() {
@@ -21,13 +24,27 @@ export default Vue.extend({
 	async mounted() {
 		console.log(`logging with ${this.provider}`)
 		authenticationStore.signIn();
+		
 		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
+			this.goTwoFa()
 			if (res.user.pseudo) {
 				this.$router.push('/home');
 			} else {
 				this.$router.push('/pseudo');
 			}
 		});
+	},
+
+	methods: {
+		async goTwoFa()
+		{
+			this.user = await this.$axios.$get("user/me", {withCredentials: true});
+			if(this.user.isTwoFactorAuthenticationEnabled)
+			{
+          		console.log("two factor")
+				this.$router.push('/auth/twofa');
+			}
+		}
 	}
 })
 </script>

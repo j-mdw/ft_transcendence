@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height >
-    <!-- <v-row no-gutters> -->
+
     <v-row justify="center" align="center">
       <v-col
         sm="4"
@@ -8,33 +8,7 @@
         justify="center"
       > 
           <avatar-editor />
-      </v-col>
-      <!-- <v-col
-        sm="8"
-        align="center"
-        justify="center"
-      >
-        <v-form
-            ref="form"
-            lazy-validation
-            title="Update profile"
-        >
-        <v-text-field
-        v-model="user.pseudo"
-        label="pseudo"
-        required
-        ></v-text-field>
-
-        <v-btn
-        color="#F6BD60"
-        @click="updateUser"
-        >
-        Update Pseudo
-        </v-btn>
-       
-    </v-form>
-         
-      </v-col>                                                                                                                                                                                                                                                                                             -->
+      </v-col>                                                                                                                                                                                                                                                                                      -->
     </v-row>  
     <v-row justify="center">
       <Fa/>

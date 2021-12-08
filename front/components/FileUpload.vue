@@ -22,7 +22,6 @@ export default {
     async onUploadFile() {
       const formData = new FormData();
       formData.append("file", this.selectedFile); // appending file
-      console.log(formData);
       await axios
         .delete("http://localhost:4000/user/delete/avatar", {
           withCredentials: true,

@@ -1,48 +1,66 @@
-
-
 <template>
   <div>
-    <v-switch
-        color="#f28482"
-        v-model="switch1"
-        inset
-        @change="activate2fa"
-    >fa </v-switch>
-  <h1 v-if="test">Vue is awesome!</h1>
-    <!-- <v-card-text class="text-center" style="padding: 24px !important">
-            <qrcode :value="qrCode" :options="{ width: 400 }" />
-          </v-card-text> -->
-    <v-img :src=qrCode> </v-img>
+    
+        <v-switch
+          color="#f28482"
+          v-model="switch2"
+          inset
+          :label="`${switch1.toString()} Two Factor Authentification`"
+          @change="activate2fa"
+        >fa </v-switch>
+      <v-card v-if="switch2"  color="#f7ede2">
+      <v-card-text>
+        <v-img  :src=qrCode> </v-img>
+      </v-card-text>
+    </v-card>
+    
   </div>
 </template>
  
 <script lang="ts">
-import axios from 'axios'
+// import axios from 'axios'
 import Vue from 'vue'
-import { config } from 'vuex-module-decorators';
+// import { config } from 'vuex-module-decorators';
 import { authenticationStore }  from '~/store'
 export default Vue.extend({
     data: () => ({
-        switch: false,
+        dialog: false,
+        switch2: false,
         switch1: "activate",
         user: Object(),
         qrCode: "",
     }),
     async mounted() {
+      
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
+      authenticationStore.setTwofaFirstTime(this.user.isTwoFactorAuthenticationEnabled)
+      this.switch2 = authenticationStore.isTwoFa;
       this.qrCode = "data:text/plain;base64," + await this.$axios.$post(`2fa/generate`, this.user,{ responseType: 'arraybuffer', withCredentials: true})
       .then(response => Buffer.from(response, 'binary').toString('base64'))
-
-      console.log("qrCode");
-      console.log(this.qrCode);
 
     },
     methods: {
 
       async activate2fa()
       {
-        console.log("coucou")
-        // this.switch ? false : true;
+        if(authenticationStore.isTwoFa == true)
+        {
+          authenticationStore.removeTwoFa();
+          this.switch1 = "desactivate"
+        }
+        else{
+          authenticationStore.setTwoFa();
+          this.switch1 = "activate"
+        }
+
+        console.log(authenticationStore.isTwoFa)
+        await this.$axios.$patch('user', {
+              'isTwoFactorAuthenticationEnabled': authenticationStore.isTwoFa,
+        }, {withCredentials: true});
+
+        // this.user = await this.$axios.$get("user/me", {withCredentials: true});
+        //   console.log(this.user.isTwoFactorAuthenticationEnabled)
+                // this.switch ? false : true;
       },
 
     }
