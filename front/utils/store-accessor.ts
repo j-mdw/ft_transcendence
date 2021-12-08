@@ -10,4 +10,4 @@ function initializeStores (store: Store<any>): void {
   authenticationStore = getModule(AuthenticationModule, store)
   usersStore = getModule(UsersModule, store)
 }
-export { initializeStores, authenticationStore, usersStore}
+export { initializeStores, authenticationStore, usersStore }
