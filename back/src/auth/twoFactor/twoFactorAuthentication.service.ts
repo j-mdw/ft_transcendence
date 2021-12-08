@@ -7,19 +7,17 @@ import { Response } from 'express';
 
 @Injectable()
 export class TwoFactorAuthenticationService {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly userService: UserService) {}
 
   public async generateTwoFactorAuthenticationSecret(user: User) {
     const secret = authenticator.generateSecret();
-
     const otpauthUrl = authenticator.keyuri(
       user.id,
       process.env.TWO_FACTOR_AUTHENTICATION_APP_NAME,
       secret,
     );
 
-    await this.usersService.setTwoFactorAuthenticationSecret(secret, user.id);
-
+    await this.userService.setTwoFactorAuthenticationSecret(secret, user.id);
     return {
       secret,
       otpauthUrl,
@@ -28,11 +26,13 @@ export class TwoFactorAuthenticationService {
 
   public isTwoFactorAuthenticationCodeValid(
     twoFactorAuthenticationCode: string,
-    user: User,
+    userSecret: string,
   ) {
+    console.log(twoFactorAuthenticationCode);
+    console.log(userSecret);
     return authenticator.verify({
       token: twoFactorAuthenticationCode,
-      secret: user.twoFactorAuthenticationSecret,
+      secret: userSecret,
     });
   }
 

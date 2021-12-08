@@ -14,7 +14,6 @@ export class CreateUserDTO {
 
   @IsString()
   avatarPath?: string;
-
 }
 
 export class UserDTO {
@@ -27,6 +26,9 @@ export class UserDTO {
   @IsString()
   avatarPath: string;
 
+  @IsString()
+  twoFactorAuthenticationSecret?: string;
+
   @IsEnum(UserStatus)
   status: UserStatus;
 
@@ -38,6 +40,8 @@ export class UserDTO {
     this.pseudo = user.pseudo;
     this.avatarPath = user.avatarPath;
     this.status = user.status;
-    this.isTwoFactorAuthenticationEnabled = user.isTwoFactorAuthenticationEnabled;
+    this.isTwoFactorAuthenticationEnabled =
+      user.isTwoFactorAuthenticationEnabled;
+    this.twoFactorAuthenticationSecret = user.twoFactorAuthenticationSecret;
   }
 }

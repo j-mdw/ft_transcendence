@@ -15,6 +15,7 @@ import { Response } from 'express';
 import { UserService } from '../../user/user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { TwoFactorAuthenticationCodeDto } from './dto/twoFactorAuthenticationCode.dto';
+import { AuthService } from '../auth.service';
 
 @Controller('2fa')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -22,6 +23,7 @@ export class TwoFactorAuthenticationController {
   constructor(
     private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService,
     private readonly userService: UserService,
+    private readonly authenticationService: AuthService,
   ) {}
 
   @Post('generate')
@@ -37,21 +39,53 @@ export class TwoFactorAuthenticationController {
     );
   }
 
-  @Post('turn-on')
+  // @Post('turn-on')
+  // @HttpCode(200)
+  // @UseGuards(AuthGuard('jwt'))
+  // async turnOnTwoFactorAuthentication(
+  //   @Req() request,
+  //   @Body() { twoFactorAuthenticationCode }: TwoFactorAuthenticationCodeDto,
+  // ) {
+  //   console.log("PouetPouet");
+  //   console.log(request.user);
+  //   // const isCodeValid =
+  //   //   this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
+  //   //     twoFactorAuthenticationCode,
+  //   //     request.user,
+  //   //   );
+  //   // if (!isCodeValid) {
+  //   //   throw new UnauthorizedException('Wrong authentication code');
+  //   // }
+  //   // await this.userService.turnOnTwoFactorAuthentication(request.user.id);
+  // }
+
+  @Post('authenticate')
   @HttpCode(200)
   @UseGuards(AuthGuard('jwt'))
-  async turnOnTwoFactorAuthentication(
+  async authenticate(
     @Req() request,
     @Body() { twoFactorAuthenticationCode }: TwoFactorAuthenticationCodeDto,
   ) {
     const isCodeValid =
       this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
-        twoFactorAuthenticationCode,
-        request.user,
+        twoFactorAuthenticationCode.toString(),
+        request.user.twoFactorAuthenticationSecret,
       );
     if (!isCodeValid) {
+      console.log('time to cry');
       throw new UnauthorizedException('Wrong authentication code');
+    } else {
+      console.log('party time !');
     }
-    await this.userService.turnOnTwoFactorAuthentication(request.user.id);
+
+    const accessTokenCookie =
+      this.authenticationService.getCookieWithJwtAccessToken(
+        request.user.id,
+        true,
+      );
+
+    request.res.setHeader('Set-Cookie', [accessTokenCookie]);
+
+    return request.user;
   }
 }
