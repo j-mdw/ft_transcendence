@@ -24,12 +24,17 @@ export class BallDto {
   @Min(0)
   radius: number;
 
+  initialSpeed: number;
+
   constructor(x: number, y: number) {
 	this.x = x;
 	this.y = y;
-	this.xSpeed = 2;
-	this.ySpeed = -5;
-	this.acceleration = 0;
+	this.xSpeed = this.getRandomInt(2, 5)
+	this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
+	this.ySpeed = this.getRandomInt(2, 5)
+	this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
+
+
 	this.radius = 15;
   }
 
@@ -38,7 +43,6 @@ export class BallDto {
 
 	  this.x += this.xSpeed;
 	  this.y += this.ySpeed;
-	  this.xSpeed += this.acceleration
   }
 
   edges(player1: PlayerDto, player2: PlayerDto) {
@@ -84,8 +88,23 @@ export class BallDto {
     }
 
 	reinitializeBallPosition(){
-		this.xSpeed *= -1;
+		this.xSpeed = this.getRandomInt(2, 5)
+		this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
+		this.ySpeed = this.getRandomInt(2, 5)
+		this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
 		this.x = 640;
 		this.y = 480;
+	}
+
+	// 	/**
+	// * Gets random int
+	// * @param min
+	// * @param max
+	// * @returns random int - min & max inclusive
+	// */
+	getRandomInt(min: number, max: number) : number{
+		min = Math.ceil(min);
+		max = Math.floor(max);
+		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
 }

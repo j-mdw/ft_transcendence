@@ -20,6 +20,10 @@ export default Vue.extend({
 			title:'Pong Game',
 			text:'',
 			username:'',
+			context: null,
+			canvas:  null,
+			width: 0,
+			height: 0,
 			ratio:{ //on part sur un ecran de 1280 x 960
 				x:0,
 				y:0,
@@ -37,12 +41,12 @@ export default Vue.extend({
 	},
 	methods: {
 		createScreen(){
-					let	width = window.innerWidth,
-						height = window.innerHeight;
-					this.canvas.width = width //* ratio;
-					this.canvas.height = height //* ratio;
-					this.ratio.x = width / 1280;
-					this.ratio.y = height / 960;
+					this.width = window.innerWidth,
+					this.height = window.innerHeight;
+					this.canvas.width = this.width //* ratio;
+					this.canvas.height = this.height //* ratio;
+					this.ratio.x = this.width / 1280;
+					this.ratio.y = this.height / 960;
 					this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
 
 				},
@@ -58,7 +62,6 @@ export default Vue.extend({
 
 				drawBall(ball: any) {
 					this.context.beginPath();
-					// this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
 					this.context.fill();
 				},
@@ -73,8 +76,8 @@ export default Vue.extend({
 
     },
 	mounted() {
-        this.canvas = document.getElementById("game");
-        this.context = this.canvas.getContext("2d");
+		this.canvas = <HTMLCanvasElement>document.getElementById("game");
+		this.context = this.canvas.getContext('2d');
         //dessin du cadre
         this.createScreen();
         //position de depart
@@ -114,15 +117,20 @@ export default Vue.extend({
         this.$socket.client.emit('loop');
 
         this.$socket.$subscribe('returnFullData', (data: any) => {
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.context.clearRect(0, 0, this.width, this.height);
             this.context.beginPath();
-            this.context.moveTo(this.canvas.width / 2, 0);
-            this.context.lineTo (this.canvas.width / 2, this.canvas.height);
+            this.context.moveTo(this.width / 2, 0);
+            this.context.lineTo (this.width / 2, this.height);
             this.context.stroke();
 
             this.drawBall(data.ball);
             this.drawPlayer(data.p1);
-            this.drawPlayer(data.p2);
+			this.drawPlayer(data.p2);
+			// if (data.p1.score >= 2|| data.p2.score >= 2){
+
+			// 	console.log("coucou");
+			// 	this.$router.push('/profile');
+			// }
             });
     },
 
