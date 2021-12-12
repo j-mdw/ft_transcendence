@@ -42,12 +42,12 @@
             >
             <v-list-item-avatar class="mt-4 mb-4">
               <v-img
-                :src=item.image
+                :src=item.avatarPath
               ></v-img>
             </v-list-item-avatar>
           </v-badge>
             <v-list-item-content>
-              <v-list-item-title v-text="item.name" class="our_navy_blue--text" ></v-list-item-title>
+              <v-list-item-title v-text="item.pseudo" class="our_navy_blue--text" ></v-list-item-title>
             </v-list-item-content>
             <!-- <v-list-item-avatar class="mt-4  mb-4" tile >
                 <img  src="../assets/svg/message.svg" />
@@ -84,11 +84,12 @@ export default Vue.extend({
       return {
         drawer: true,
         version: 0,
-        items: [
-          { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
-          { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
-          { name: 'Julien', image: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
-        ],
+        items: this.$store.getters['users/allUsers'],
+        //  [
+        //   { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
+        //   { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
+        //   { name: 'Julien', image: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
+        // ],
         mini: true,
       }
     },

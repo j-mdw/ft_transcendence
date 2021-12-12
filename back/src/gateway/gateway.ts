@@ -13,6 +13,12 @@ import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 // import { Server } from 'http';
 
+enum UserStatus {
+  online,
+  offline,
+  playing,
+}
+
 @WebSocketGateway({
   cors: {
     origin: 'http://localhost:3000',
@@ -24,19 +30,30 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   afterInit(srv: Server) {
     srv.use(async (socket, next) => {
-      const decoded = await this.authService.verify(
-        socket.handshake.headers.cookie.slice(13),
-      );
+      const cookie = socket.handshake.headers.cookie;
+      let token = cookie.substring(cookie.indexOf('access_token'));
+      const token_end = token.indexOf(';');
+      if (token_end != -1) {
+        token = token.slice(token.indexOf('=') + 1, token_end);
+      } else {
+        token = token.slice(token.indexOf('=') + 1);
+      }
+      const decoded = await this.authService.verify(token);
       if (decoded) {
         if (await this.authService.userExist(decoded['userId'])) {
           console.log('WS auth successful');
-          this.users.set(socket.id, decoded.userId);
+          this.users.set(socket.id, {
+            id: decoded.userId,
+            status: UserStatus.online,
+          });
           // socket.handshake.auth = { userId: decoded.userId };
           next();
         } else {
+          console.log('Socker verification: unknown user');
           next(new ForbiddenException('Unknown user'));
         }
       } else {
+        console.log('Socker verification: auth failed');
         next(new ForbiddenException('authentication failed'));
       }
     });
@@ -56,6 +73,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // this.server.emit('users', this.users);
     console.log('New user connected: ' + client.id);
     console.log('All connected users: ', this.users);
+    client.emit('all-users-status', Array.from(this.users.values()));
   }
 
   async handleDisconnect(client: Socket): Promise<void> {

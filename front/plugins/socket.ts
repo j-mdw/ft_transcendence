@@ -2,23 +2,31 @@
 import Vue from 'vue'
 import { io, Socket } from 'socket.io-client'
 import VueSocketIOExt from 'vue-socket.io-extended'
+import { StatusUpdate } from '~/models';
 
 const socket: Socket = io('http://localhost:4000', {
   autoConnect: false,
   withCredentials: true
-})
+});
 
 export default ({ store }: any) => {
   Vue.use(VueSocketIOExt, socket, ({ store })),
+  
+  socket.on('all-users-status', (userStatus: StatusUpdate[]) => {
+    console.log('Reveived all user status: ', userStatus);
+    store.commit('users/setUsersStatus', userStatus);
+    console.log('Stored users after update: ', store.getters['users/allUsers']);
+  }),
+
   store.watch(
     (_state: any, getters: any) =>
       getters['auth/isLogged'],
-    (val: boolean) => {
+    async (val: boolean) => {
       if (val) {
-        console.log('User login -> trying to connect to socket')
-        socket.connect()
-        store.dispatch('users/fetchUsers')
-      } else {
+        await store.dispatch('users/fetchUsers');
+        console.log('Stored users: ', store.getters['users/allUsers']);
+        socket.connect();
+        } else {
         console.log('User login out -> disconnecting socket')
         socket.disconnect()
       }

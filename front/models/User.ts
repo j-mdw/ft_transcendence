@@ -10,3 +10,8 @@ export class User {
   avatarPath: string = ''
   status: UserStatus = UserStatus.offline
 }
+
+export class StatusUpdate {
+  id: string = ''
+  status: UserStatus = UserStatus.offline
+}

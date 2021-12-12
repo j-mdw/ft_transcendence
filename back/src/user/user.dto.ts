@@ -32,3 +32,19 @@ export class UserDTO {
     this.avatarPath = user.avatarPath;
   }
 }
+
+export enum UserStatus {
+  online,
+  offline,
+  playing,
+}
+
+export class UpdateUserStatus {
+  id: string;
+  status: UserStatus;
+
+  constructor(id: string, status: UserStatus) {
+    this.id = id;
+    this.status = status;
+  }
+}

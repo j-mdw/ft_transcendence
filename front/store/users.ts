@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { User, UserStatus } from '~/models'
+import { StatusUpdate, User, UserStatus } from '~/models'
 import { $axios } from '~/utils/api'
 
 @Module({
@@ -17,8 +17,21 @@ export default class UsersModule extends VuexModule {
   @Mutation
   set (users: User[]) {
     for (let i = 0; i < users.length; i++) {
+      users[i].status = UserStatus.offline; //Default value
       this.users.set(users[i].id, users[i]);
+      console.log('User added to store:', users[i]);
     }
+  }
+
+  @Mutation
+  setUsersStatus (userStatus: StatusUpdate[]) {
+    userStatus.forEach((element) => {
+      if (this.users.has(element.id)) {
+        const user = this.users.get(element.id) as User;
+        user.status = element.status;
+        this.users.set(element.id, user);
+      }
+    })
   }
 
   @Mutation
@@ -39,7 +52,7 @@ export default class UsersModule extends VuexModule {
 
   @Action({ commit: 'set', rawError: true })
   async fetchUsers () {
-    const users: User[] = await $axios.$get('http://localhost:4000/user', { withCredentials: true });
+    const users: User[] = await $axios.$get('/user', { withCredentials: true });
     console.log('Users: ', users);
     return users;
   }
