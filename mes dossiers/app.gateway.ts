@@ -16,6 +16,8 @@ import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
 import { BallDto } from "./dto/ball.dto";
 import { PlayerDto } from "./dto/player.dto";
+import { GameTypeDto } from "./dto/gameType.dto";
+
 import { setInterval } from 'timers';
 
 @WebSocketGateway()
@@ -26,43 +28,72 @@ export class AppGateway
   users: number = 0
 
   private logger:Logger = new Logger('GameGateway');
-
-  ball: BallDto;
+  gameType: GameTypeDto = new GameTypeDto('multiballs', 9);
+  balls: Array<BallDto> = [];
+//   ball: BallDto;
   player1: PlayerDto;
   player2: PlayerDto;
+
 
   @WebSocketServer()
   server: Server;
 
 
+  handleConnection(client: Socket, ...args: any[]) {
+	this.logger.log(`Client connected: ${client.id}`);
+	this.socketList.push(client.id)
+	}
+
+  handleDisconnect(client: Socket) {
+	this.logger.log(`Client disconnected: ${client.id}`);
+	this.socketList.forEach ((element, index) => {
+		if (element === client.id)
+			this.socketList.splice(index, 1);
+	});
+	}
+
+  afterInit(server: Server) {
+	this.logger.log('Initialized !!!');
+	}
+
   @SubscribeMessage('loop')
   handleLoop(client:Socket, message: void): void {
 		setInterval(() => {
-			this.ball.playerPaddle(this.player1);
-			this.ball.playerPaddle(this.player2);
-			this.ball.update(this.player1, this.player2);
+			for (let i in this.balls){
+				let ball = this.balls[i];
+				ball.playerPaddle(this.player1);
+				ball.playerPaddle(this.player2);
+				ball.update(this.player1, this.player2, this.gameType);
+			}
+			if (this.gameType && this.gameType.changingPaddle)
+				this.gameType.updatePlayersPaddleSize(this.player1, this.player2);
 			this.player1.updatePosition();
 			this.player2.updatePosition();
-		//	this.server.emit('returnFullData', new gamedto(this.ball, this.player1 etc));
-
-			this.server.emit('returnFullData', { ball: this.ball, p1: this.player1, p2: this.player2 });
+			this.server.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 
 		}, 1000/60);
 
 	}
 
+  @SubscribeMessage('msgToServer')
+  handleMessage(client:Socket, message: {sender: string, message: string}): void {
+	  this.server.emit('msgToClient', message);
+	}
+
   @SubscribeMessage('initialization')
   handleEvent(client:Socket, message: void): void {
-		this.ball =  new BallDto(640, 480);
+	  for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		  this.balls[i] = new BallDto(640, 480)
+		// this.ball =  new BallDto(640, 480);
 		this.player1 = new PlayerDto(40, 70, true);
 		this.player2 = new PlayerDto(1240, 1000, true);
-		this.server.emit('returnInitialPosition', { ball: this.ball, p1: this.player1, p2: this.player2});
+		this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
 		}
 
 	@SubscribeMessage('keyPress')
 	handlePaddleMove(client:Socket, data: any): void {
 		if (data.inputId === 'up')
-			this.player1.pressingUp = data.state;ws
+			this.player1.pressingUp = data.state;
 		else if (data.inputId === 'down')
 			this.player1.pressingDown = data.state;
 		}
@@ -76,23 +107,21 @@ export class AppGateway
 			this.player2.pressingDown = data.state;
 		}
 
+	@SubscribeMessage('typeofgame')
+	handleGameType(client:Socket, data: string): void {
+		this.logger.log(`type of game renseigne`);
 
-	handleConnection(client: Socket, ...args: any[]) {
-		this.logger.log(`Client connected: ${client.id}`);
-		this.socketList.push(client.id)
-	}
+		if (data === 'multiballs')
+			this.gameType = new GameTypeDto('multiballs', 9);
+		else if (data === 'rookie')
+			this.gameType = new GameTypeDto('rookie', 1, true);
+		else
+			this.gameType = new GameTypeDto('classic');
+		}
 
-	handleDisconnect(client: Socket) {
-		this.logger.log(`Client disconnected: ${client.id}`);
-		this.socketList.forEach ((element, index) => {
-			if (element === client.id)
-				this.socketList.splice(index, 1);
-		});
-	}
 
-  afterInit(server: Server) {
-	this.logger.log('Initialized !!!');
-  }
+
+
 
 
 

@@ -13,6 +13,10 @@ export class PlayerDto {
 
   @IsInt()
   @Min(0)
+  hInitial:number;
+
+  @IsInt()
+  @Min(0)
   w:number;
 
   @IsInt()
@@ -45,7 +49,8 @@ export class PlayerDto {
 	this.y = 480;
 	this.score = 0;
 	this.w = 20;
-	this.h = 100;
+	this.hInitial = 120;
+	this.h = this.hInitial;
 	this.xScore = xscore;
 	this.playing = playing;
 	this.victory = false;
@@ -64,4 +69,12 @@ export class PlayerDto {
 	if (this.y > 960 - this.h / 2)
 		this.y = 960 - this.h / 2;
   }
+
+  updatePaddleSize(multipleFactor: number){
+	  this.h = this.hInitial * multipleFactor;
+  }
+
+   
+
 }
+
