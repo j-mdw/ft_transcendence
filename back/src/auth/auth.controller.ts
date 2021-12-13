@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
+import { JwtGuard } from './jwt.guard';
 
 @Controller()
 export class AuthController {
@@ -101,5 +102,13 @@ export class AuthController {
       httpOnly: true,
     });
     return { user }; //Do we need to return smth here?
+  }
+
+  @Get('logout')
+  @UseGuards(JwtGuard)
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('access_token');
+    console.log('Loging out');
+    return;
   }
 }

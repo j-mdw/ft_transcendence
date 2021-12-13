@@ -21,7 +21,7 @@ export default Vue.extend({
     await this.$axios.$get(`${this.provider}/redirect`, { params: this.$route.query, withCredentials: true }).then((res) => {
       if (res.user.pseudo) {
         this.$router.push('/home')
-        authenticationStore.signIn()
+        authenticationStore.setLogin()
       } else {
         this.$router.push('/pseudo')
       }

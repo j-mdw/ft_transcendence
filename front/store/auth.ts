@@ -1,4 +1,6 @@
+import axios from 'axios';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { $axios } from '~/utils/api'
 
 @Module({
   name: 'auth',
@@ -23,15 +25,16 @@ export default class AuthenticationModule extends VuexModule {
     this.isLogin = false
     localStorage.setItem('IS_LOGIN', 'false')
   }
+  //Only use actions for Async code
+  // @Action({ rawError: true })
+  // signIn () {
+  //   console.log('Signing in!');
+  //   this.context.commit('setLogin');
+  // }
 
-  @Action({ rawError: true })
-  signIn () {
-    console.log('Signing in!');
-    this.context.commit('setLogin');
-  }
-
-  @Action({ rawError: true })
-  signOut () {
-    this.context.commit('removeLogin');
+  @Action({commit: 'removeLogin', rawError: true })
+  async signOut () {
+    await axios.get('/logout', { withCredentials: true });
+    return ;
   }
 }

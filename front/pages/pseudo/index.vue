@@ -42,7 +42,7 @@ export default Vue.extend({
       console.log(this.pseudo);
       await this.$axios.$patch('/user', { pseudo: this.pseudo }, { withCredentials: true });
       console.log('User updated successfully')
-      authenticationStore.signIn(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
+      authenticationStore.setLogin(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
       this.$router.push('/home');
     }
   }

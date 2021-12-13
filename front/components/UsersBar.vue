@@ -74,7 +74,7 @@
     
 <script lang="ts">
 import Vue from 'vue'
-import { authenticationStore }  from '~/store'
+import { usersStore } from '~/store'
 import messageLogo from './Logo/messageLogo.vue'
 import pingpongLogo from './Logo/pingpongLogo.vue'
 
@@ -84,7 +84,6 @@ export default Vue.extend({
       return {
         drawer: true,
         version: 0,
-        items: this.$store.getters['users/allUsers'],
         //  [
         //   { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
         //   { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
@@ -93,6 +92,12 @@ export default Vue.extend({
         mini: true,
       }
     },
+
+    computed: {
+      items: function() {
+        return usersStore.allUsers;
+      }
+    }
 })
 </script>
 

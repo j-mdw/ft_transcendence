@@ -1,2 +1,2 @@
-export * from './user_tmp'
+export * from './user'
 export * from './channel'

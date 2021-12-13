@@ -55,10 +55,9 @@ export default Vue.extend({
     }
   },
   methods: {
-
-    logout () {
+    async logout () {
       console.log('LOGOUT')
-      authenticationStore.signOut()
+      await authenticationStore.signOut()
       this.$router.push('/auth')
     }
   }
