@@ -76,7 +76,7 @@ export class ChannelService {
       throw new ForbiddenException('Only channel owner can update');
     }
     for (const prop in data) {
-      if (data[prop]) {
+      if (data[prop] != undefined) {
         channel[prop] = data[prop];
       }
     }

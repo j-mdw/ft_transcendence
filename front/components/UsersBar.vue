@@ -42,7 +42,7 @@
             >
             <v-list-item-avatar class="mt-4 mb-4">
               <v-img
-                :src=item.avatarPath
+                :src="`http://localhost:4000/${item.avatarPath}`"
               ></v-img>
             </v-list-item-avatar>
           </v-badge>

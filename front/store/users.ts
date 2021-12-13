@@ -11,7 +11,7 @@ export default class UsersModule extends VuexModule {
   users = new Map<string, User>()
 
   get allUsers (): Array<User> {
-    return Array.from(this.users, ([name, value]) => (value));
+    return Array.from(this.users.values());
   }
 
   @Mutation

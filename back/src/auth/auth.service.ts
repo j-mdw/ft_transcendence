@@ -37,12 +37,14 @@ export class AuthService {
     }
   }
 
-  async verify(token: string): Promise<any> {
+  verify(token: string): any {
     try {
-      return await this.jwtService.verify(token);
+      const decoded = this.jwtService.verify(token);
+      console.log('Verify: ', decoded);
+      return decoded;
     } catch {
       console.log('Token verification failed');
-      return false;
+      return null;
     }
   }
 
@@ -52,5 +54,15 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  randomName(length: number) {
+    let result = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const charLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
   }
 }

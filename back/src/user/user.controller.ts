@@ -44,6 +44,7 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
     @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
+    console.log('Paths - user id:', response.locals.id);
     this.userService.update(response.locals.id, data);
     return {
       statusCode: HttpStatus.OK,

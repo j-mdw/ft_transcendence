@@ -11,13 +11,8 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
+import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
 // import { Server } from 'http';
-
-enum UserStatus {
-  online,
-  offline,
-  playing,
-}
 
 @WebSocketGateway({
   cors: {
@@ -31,6 +26,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   afterInit(srv: Server) {
     srv.use(async (socket, next) => {
       const cookie = socket.handshake.headers.cookie;
+      if (!cookie) {
+        console.log('Socket verification: no token provided');
+        next(new ForbiddenException('authentication failed'));
+      }
       let token = cookie.substring(cookie.indexOf('access_token'));
       const token_end = token.indexOf(';');
       if (token_end != -1) {
@@ -42,25 +41,24 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       if (decoded) {
         if (await this.authService.userExist(decoded['userId'])) {
           console.log('WS auth successful');
-          this.users.set(socket.id, {
-            id: decoded.userId,
-            status: UserStatus.online,
-          });
-          // socket.handshake.auth = { userId: decoded.userId };
+          this.users.set(
+            socket.id,
+            new UpdateUserStatus(decoded.userId, UserStatus.online),
+          );
           next();
         } else {
-          console.log('Socker verification: unknown user');
+          console.log('Socket verification: unknown user');
           next(new ForbiddenException('Unknown user'));
         }
       } else {
-        console.log('Socker verification: auth failed');
+        console.log('Socket verification: auth failed');
         next(new ForbiddenException('authentication failed'));
       }
     });
   }
 
   @WebSocketServer() server: Server;
-  users = new Map();
+  users = new Map<string, UpdateUserStatus>();
 
   @SubscribeMessage('chat-message')
   handleEvent(@MessageBody() data: string): void {
@@ -69,18 +67,15 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleConnection(client: Socket): Promise<void> {
-    // this.users++;
-    // this.server.emit('users', this.users);
     console.log('New user connected: ' + client.id);
     console.log('All connected users: ', this.users);
     client.emit('all-users-status', Array.from(this.users.values()));
+    this.server.emit('status-update', this.users.get(client.id));
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
-    // this.users--;
     this.users.delete(client.id);
     console.log('User disconnected: ' + client.id);
     console.log('All connected users: ', this.users);
-    // this.server.emit('users', this.users);
   }
 }

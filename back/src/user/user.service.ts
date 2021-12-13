@@ -86,9 +86,11 @@ export class UserService {
   Throw if id passed as param is invalid or if trying to use a pseudo already in use
 */
   async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
-    const editedUser = await this.usersRepository.findOne(id).catch(() => {
-      throw new ForbiddenException('Invalid user ID');
-    });
+    const editedUser = await this.usersRepository
+      .findOneOrFail(id)
+      .catch(() => {
+        throw new ForbiddenException('Invalid user ID');
+      });
     if (data.pseudo) {
       await this.usersRepository
         .findOne({
@@ -101,7 +103,10 @@ export class UserService {
         });
     }
     for (const prop in data) {
-      if (data[prop]) {
+      if (data[prop] != undefined) {
+        console.log('Prop:', prop);
+        console.log('edited[prop]:', editedUser[prop]);
+        console.log('data[prop]', data[prop]);
         editedUser[prop] = data[prop];
       }
     }

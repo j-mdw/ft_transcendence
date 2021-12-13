@@ -20,15 +20,15 @@
           >
             <img style="height:36px" src="../../assets/logo/google_white.svg" />
           </v-btn>
-          <!-- <v-btn
-              class="mx-8"
-              fab
-              color="#F6BD60"
-              @click="createRandomUser"
-              >
-              Anonymous Entry
-              <img style="height:36px" src="../../assets/logo/google_white.svg" />
-            </v-btn> -->
+          <v-btn
+            class="mx-8"
+            fab
+            color="#F6BD60"
+            @click="createRandomUser"
+            >
+            Anonymous Entry
+            <img style="height:36px" src="../../assets/logo/google_white.svg" />
+          </v-btn>
 </div>
 
         <p v-if="user">
@@ -58,7 +58,8 @@ export default Vue.extend({
   methods: {
     async createRandomUser () {
       console.log('randomeeee')
-      this.user = await this.$axios.$get('randomUser')
+      this.user = await this.$axios.$get('random', { withCredentials: true })
+      this.$router.push('/pseudo')
     },
 
 	  async mounted () {
