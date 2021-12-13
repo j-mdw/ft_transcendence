@@ -8,9 +8,10 @@ import { $axios } from '~/utils/api'
   namespaced: true
 })
 export default class UsersModule extends VuexModule {
-  users = new Map<string, User>()
+  users = new Map<string, User>();
 
-  get allUsers (): Array<User> {
+  get allUsers (): User[] {
+    console.log('Users GETTER called');
     return Array.from(this.users.values());
   }
 
@@ -19,8 +20,8 @@ export default class UsersModule extends VuexModule {
     for (let i = 0; i < users.length; i++) {
       users[i].status = UserStatus.offline; //Default value
       this.users.set(users[i].id, users[i]);
-      console.log('User added to store:', users[i]);
     }
+    console.log('users set:', this.users);
   }
 
   @Mutation
@@ -32,6 +33,7 @@ export default class UsersModule extends VuexModule {
         this.users.set(element.id, user);
       }
     })
+    console.log('users status set:', this.users);
   }
 
   @Mutation
@@ -46,14 +48,14 @@ export default class UsersModule extends VuexModule {
   @Mutation
   addUser (user: User) {
     if (!this.users.has(user.id)) {
-      this.users.set(user.id, user)
+      this.users.set(user.id, user);
     }
   }
 
   @Action({ commit: 'set', rawError: true })
   async fetchUsers () {
     const users: User[] = await $axios.$get('/user', { withCredentials: true });
-    console.log('Users: ', users);
+    console.log('Users fetched: ', users);
     return users;
   }
 }

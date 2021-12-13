@@ -26,6 +26,7 @@ export default class AuthenticationModule extends VuexModule {
 
   @Action({ rawError: true })
   signIn () {
+    console.log('Signing in!');
     this.context.commit('setLogin');
   }
 
