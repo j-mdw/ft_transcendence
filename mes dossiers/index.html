@@ -78,7 +78,11 @@
 
 				gametype(typeofgame) {
 					this.socket.emit('typeofgame', typeofgame)
-				}
+				},
+
+				// putToSocketList(userName) {
+				// 	this.socket.emit('addToSocketList', {username: userName});
+				// },
 
 				// keyboardEvent(Id, st) {
 				// 	this.socket.emit('keyPress', { inputId: Id, state: st });
@@ -107,6 +111,7 @@
 			mounted() {
 				this.canvas = document.getElementById("game");
 				this.context = this.canvas.getContext("2d");
+				// this.putToSocketList();
 				//dessin du cadre et des proportions
 				this.createScreen();
 
@@ -161,11 +166,11 @@
 					this.drawPlayer(data.p2);
 					});
 
-				this.socket.on('firstPlayerInitialization', (data) => {
-					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-					this.context.font = "30px Arial";
-					this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
-					});
+				// this.socket.on('firstPlayerInitialization', (data) => {
+				// 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				// 	this.context.font = "30px Arial";
+				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
+				// 	});
 			},
 
 

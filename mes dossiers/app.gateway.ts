@@ -81,35 +81,37 @@ export class AppGateway
 	}
 
   @SubscribeMessage('initialization')
-  handleInitialization(client:Socket, username: string ): void {
+  handleInitialization(client:Socket): void {
 
 		this.socketList.push(client);
-		while (this.socketList.length  < 2)
-		{
-			if (!this.player1){
-				this.logger.log('1er client connecte');
-				this.player1 = new PlayerDto(40, 70, username);
-			}
-			this.server.emit('firstPlayerInitialization')
-		}
-		if (this.socketList.length == 2)
-		{
-			this.player2 = new PlayerDto(1240, 1000, username);
-			for(let i = 0; i < this.gameType.numberOfBalls; i++)
-				this.balls[i] = new BallDto(640, 480);
-				this.logger.log('2eme client connecte');
-			this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
-		}
-		this.logger.log('autre client connecte');
+		this.logger.log(`${this.socketList.length} client connecte`);
+
+		// while (this.socketList.length  < 2)
+		// {
+		// 	if (!this.player1){
+		// 		this.logger.log('1er client connecte');
+		// 		this.player1 = new PlayerDto(40, 70, username);
+		// 	}
+		// 	this.server.emit('firstPlayerInitialization')
+		// }
+		// if (this.socketList.length == 2)
+		// {
+		// 	this.player2 = new PlayerDto(1240, 1000, username);
+		// 	for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		// 		this.balls[i] = new BallDto(640, 480);
+		// 		this.logger.log('2eme client connecte');
+		// 	this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
+		// }
+		// this.logger.log('autre client connecte');
 
 
 
-	  	// for(let i = 0; i < this.gameType.numberOfBalls; i++)
-		//   this.balls[i] = new BallDto(640, 480)
-		// // this.ball =  new BallDto(640, 480);
-		// this.player1 = new PlayerDto(40, 70, true);
-		// this.player2 = new PlayerDto(1240, 1000, true);
-		// this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
+	  	for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		  this.balls[i] = new BallDto(640, 480)
+		// this.ball =  new BallDto(640, 480);
+		this.player1 = new PlayerDto(40, 70, "lolo");
+		this.player2 = new PlayerDto(1240, 1000, "coco");
+		this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
 		}
 
 	@SubscribeMessage('keyPress')
