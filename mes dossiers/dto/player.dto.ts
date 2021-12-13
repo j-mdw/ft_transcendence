@@ -1,4 +1,4 @@
-import { IsInt, IsBoolean, Min, Max } from 'class-validator';
+import { IsInt, IsBoolean, IsString, Min, Max } from 'class-validator';
 
 export class PlayerDto {
   @IsInt()
@@ -29,8 +29,8 @@ export class PlayerDto {
   @IsInt()
   xScore: number;
 
-  @IsBoolean()
-  playing: boolean;
+  // @IsBoolean()
+  // playing: boolean;
 
   @IsBoolean()
   victory: boolean;
@@ -44,7 +44,10 @@ export class PlayerDto {
   @IsBoolean()
   pressingDown: boolean;
 
-  constructor(x: number, xscore: number, playing: boolean) {
+  @IsString()
+  userName: string;
+
+  constructor(x: number, xscore: number, username: string){
 	this.x = x;
 	this.y = 480;
 	this.score = 0;
@@ -52,7 +55,8 @@ export class PlayerDto {
 	this.hInitial = 120;
 	this.h = this.hInitial;
 	this.xScore = xscore;
-	this.playing = playing;
+  this.userName = username;
+	// this.playing = playing;
 	this.victory = false;
 	this.defeat = false;
 	this.pressingUp = false;

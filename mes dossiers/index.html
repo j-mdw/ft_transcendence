@@ -52,7 +52,7 @@
 				},
 				initialization() {
 					this.socket.emit('initialization', {username: this.username});
-					//on recupere position de la balle sur le server
+					//on recupere position de la balle sur le server@
 					this.socket.on('returnInitialPosition', (data) => {
 					for(let i = 0; i < data.balls.length; i++)
 						this.drawBall(data.balls[i]);
@@ -161,7 +161,11 @@
 					this.drawPlayer(data.p2);
 					});
 
-				
+				this.socket.on('firstPlayerInitialization', (data) => {
+					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+					this.context.font = "30px Arial";
+					this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
+					});
 			},
 
 
