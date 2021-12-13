@@ -28,7 +28,7 @@ export class AppGateway
   users: number = 0
 
   private logger:Logger = new Logger('GameGateway');
-  gameType: GameTypeDto = new GameTypeDto('multiballs', 9);
+  gameType: GameTypeDto = new GameTypeDto('rookie', 1, true);
   balls: Array<BallDto> = [];
 //   ball: BallDto;
   player1: PlayerDto;
