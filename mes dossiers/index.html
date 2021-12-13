@@ -51,7 +51,7 @@
 
 				},
 				initialization() {
-					this.socket.emit('initialization');
+					this.socket.emit('initialization', {username: this.username});
 					//on recupere position de la balle sur le server
 					this.socket.on('returnInitialPosition', (data) => {
 					for(let i = 0; i < data.balls.length; i++)
@@ -107,11 +107,16 @@
 			mounted() {
 				this.canvas = document.getElementById("game");
 				this.context = this.canvas.getContext("2d");
-				//dessin du cadre
+				//dessin du cadre et des proportions
 				this.createScreen();
+
 				//position de depart
 				this.initialization();
-				//loop
+
+				//on lance la boucle cote server
+				this.socket.emit('loop');
+
+					// addeventlistener  d'appui sur touche
 				window.addEventListener('keydown', (event) => {
 					if(event.key === 'w') //w
 						this.socket.emit('keyPress', {inputId:'up', state:true});
@@ -121,11 +126,9 @@
 						this.socket.emit('keyPress2', {inputId:'up', state:true});
 					else if(event.key === 'ArrowDown') //down
 						this.socket.emit('keyPress2', {inputId:'down', state:true});
-
-
 					})
 
-
+					// addeventlistener de relachement d'une touche
 				window.addEventListener('keyup', (event) => {
 					if(event.key === 'w') //up
 						this.socket.emit('keyPress', {inputId:'up', state:false});
@@ -139,12 +142,13 @@
 
 					})
 
+				// addeventlistener de changement de taille de l'ecran
 				window.addEventListener('resize', (event) => {
 					this.createScreen();
 				})
 
-				this.socket.emit('loop');
-
+				
+				// on recupere les donnees en provenance du serveur
 				this.socket.on('returnFullData', (data) => {
 					this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 					this.context.beginPath();
@@ -156,6 +160,8 @@
 					this.drawPlayer(data.p1);
 					this.drawPlayer(data.p2);
 					});
+
+				
 			},
 
 

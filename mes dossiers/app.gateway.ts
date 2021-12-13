@@ -28,6 +28,7 @@ export class AppGateway
   users: number = 0
 
   private logger:Logger = new Logger('GameGateway');
+
   gameType: GameTypeDto = new GameTypeDto('multiballs', 9);
   balls: Array<BallDto> = [];
 //   ball: BallDto;
@@ -41,7 +42,6 @@ export class AppGateway
 
   handleConnection(client: Socket, ...args: any[]) {
 	this.logger.log(`Client connected: ${client.id}`);
-	this.socketList.push(client.id)
 	}
 
   handleDisconnect(client: Socket) {
@@ -81,7 +81,9 @@ export class AppGateway
 	}
 
   @SubscribeMessage('initialization')
-  handleEvent(client:Socket, message: void): void {
+  handleEvent(client:Socket, username: string ): void {
+
+		this.players.push(username);
 	  for(let i = 0; i < this.gameType.numberOfBalls; i++)
 		  this.balls[i] = new BallDto(640, 480)
 		// this.ball =  new BallDto(640, 480);
