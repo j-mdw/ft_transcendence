@@ -33,9 +33,9 @@ export class JwtGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log("auth middleware about to verify token");
+    // console.log("auth middleware about to verify token");
     const decoded = this.authService.verify(request.cookies['access_token']);
-    console.log('Verif output:', decoded);
+    // console.log('Verif output:', decoded);
     if (decoded) {
       return true;
     } else {

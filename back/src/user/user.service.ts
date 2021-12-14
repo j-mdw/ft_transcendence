@@ -104,31 +104,38 @@ export class UserService {
   Throw if id passed as param is invalid or if trying to use a pseudo already in use
 */
   async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
+    console.log('Data for PATCH update:', data);
+    let editedUser = null;
     try {
-      const editedUser = await this.findEntity(id);
-      if (data.pseudo) {
-        try {
-          await this.findByPseudo(data.pseudo);
-          console.log('Pseudo already in use!');
-          throw new ConflictException('Pseudo already in use!');
-        } catch {
-          console.log('Pseudo:', data.pseudo, 'is available');
-        }
-      }
-      for (const prop in data) {
-        if (data[prop] != undefined) {
-          console.log('Prop:', prop);
-          console.log('edited[prop]:', editedUser[prop]);
-          console.log('data[prop]', data[prop]);
-          editedUser[prop] = data[prop];
-        }
-      }
-      editedUser.updatedAt = new Date();
-      await this.userRepository.save(editedUser);
+      editedUser = await this.findEntity(id);
     } catch (error) {
       console.log(error);
       throw new ForbiddenException('Cannot update - User not in DB');
     }
+    if (data.pseudo) {
+      let isUsed = false;
+      try {
+        await this.findByPseudo(data.pseudo);
+        isUsed = true;
+        console.log('Pseudo already in use!');
+      } catch {
+        isUsed = false;
+        console.log('Pseudo:', data.pseudo, 'is available');
+      }
+      if (isUsed == true) {
+        throw new ConflictException('Pseudo already in use!');
+      }
+    }
+    for (const prop in data) {
+      if (data[prop] != undefined) {
+        // console.log('Prop:', prop);
+        // console.log('edited[prop]:', editedUser[prop]);
+        // console.log('data[prop]', data[prop]);
+        editedUser[prop] = data[prop];
+      }
+    }
+    editedUser.updatedAt = new Date();
+    await this.userRepository.save(editedUser);
   }
 
   async delete(id: string): Promise<DeleteResult> {

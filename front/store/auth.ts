@@ -35,6 +35,5 @@ export default class AuthenticationModule extends VuexModule {
   @Action({commit: 'removeLogin', rawError: true })
   async signOut () {
     await axios.get('/logout', { withCredentials: true });
-    return ;
   }
 }
