@@ -26,8 +26,7 @@
             color="#F6BD60"
             @click="createRandomUser"
             >
-            Anonymous Entry
-            <img style="height:36px" src="../../assets/logo/google_white.svg" />
+            <img style="height:36px" src="../../assets/logo/anon.png" />
           </v-btn>
 </div>
 

@@ -27,20 +27,19 @@ export class AuthService {
 
   async addUser(user: CreateUserDTO): Promise<UserDTO> {
     try {
-      await this.userService.findEmail(user.email);
+      await this.userService.findByEmail(user.email);
     } catch (error) {
       console.log('User not found in the database: ', user.email);
       user.avatarPath = this.userService.find_avatar();
       await this.userService.create(user);
     } finally {
-      return await this.userService.findEmail(user.email);
+      return await this.userService.findByEmail(user.email);
     }
   }
 
   verify(token: string): any {
     try {
       const decoded = this.jwtService.verify(token);
-      console.log('Verify: ', decoded);
       return decoded;
     } catch {
       console.log('Token verification failed');
@@ -49,7 +48,7 @@ export class AuthService {
   }
 
   async userExist(id: string): Promise<boolean> {
-    if (await this.userService.findOne(id)) {
+    if (await this.userService.findById(id)) {
       return true;
     } else {
       return false;

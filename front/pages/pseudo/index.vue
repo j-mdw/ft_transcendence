@@ -33,17 +33,31 @@ export default Vue.extend({
   data() {
     return {
       user: Object(),
-      pseudo: null,
-      title: null,
+      pseudo: '',
+      title: null, // Can remove this?
     }
   },
   methods: {
     async submitPseudo () {
       console.log(this.pseudo);
-      await this.$axios.$patch('/user', { pseudo: this.pseudo }, { withCredentials: true });
-      console.log('User updated successfully')
-      authenticationStore.setLogin(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
-      this.$router.push('/home');
+      // try {
+      //   const resp = await this.$axios.$patch('/user', { pseudo: this.pseudo }, { withCredentials: true });
+      //   console.log('User updated successfully:', resp);
+      //   authenticationStore.setLogin(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
+      //   this.$router.push('/home');
+      // } catch (error) {
+      //   this.pseudo = '';
+      // }
+        this.$axios.$patch('/user', { pseudo: this.pseudo }, { withCredentials: true })
+        .then((resp) => {
+        console.log('User updated successfully:', resp);
+        authenticationStore.setLogin(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
+        this.$router.push('/home');
+        })
+       .catch((error) => {
+         console.log('Error from user update', error);
+        this.pseudo = '';
+      });
     }
   }
 })

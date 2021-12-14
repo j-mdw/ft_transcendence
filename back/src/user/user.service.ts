@@ -16,30 +16,31 @@ import { ChannelService } from 'src/channel/channel.service';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private userRepository: Repository<User>,
     @Inject(forwardRef(() => ChannelService))
     private channelService: ChannelService,
   ) {}
 
   async getUsers(): Promise<UserDTO[]> {
-    return await this.usersRepository
-      .find()
-      .then((users) => users.map((user) => new UserDTO(user)));
+    const users: User[] = await this.userRepository.find();
+    if (users) {
+      return users.map((user) => new UserDTO(user));
+    } else {
+      throw new NotFoundException('No users in DB');
+    }
   }
 
-  async findOne(id: string): Promise<UserDTO> {
-    return await this.usersRepository
-      .findOne(id)
-      .then((user) => new UserDTO(user));
+  async findById(id: string): Promise<UserDTO> {
+    return new UserDTO(await this.userRepository.findOneOrFail(id));
   }
 
-  async getEntity(id: string): Promise<User> {
-    return await this.usersRepository.findOne(id);
+  async findEntity(id: string): Promise<User> {
+    return this.userRepository.findOneOrFail(id);
   }
 
   async isRegistered(email: string): Promise<boolean> {
     if (
-      await this.usersRepository.find({
+      await this.userRepository.findOne({
         where: {
           email: email,
         },
@@ -49,17 +50,34 @@ export class UserService {
     return false;
   }
 
-  async findEmail(email: string): Promise<UserDTO> {
-    const user = await this.usersRepository.findOne({
-      where: {
-        email: email,
-      },
-    });
-    if (user) {
-      return new UserDTO(user);
-    } else {
-      throw new NotFoundException('user not found');
-    }
+  async findByEmail(email: string): Promise<UserDTO> {
+    return new UserDTO(
+      await this.userRepository.findOneOrFail({
+        where: {
+          email: email,
+        },
+      }),
+    );
+  }
+
+  async findByPseudo(pseudo: string): Promise<UserDTO> {
+    return new UserDTO(
+      await this.userRepository.findOneOrFail({
+        where: {
+          pseudo: pseudo,
+        },
+      }),
+    );
+    // const user = await this.userRepository.findOne({
+    //   where: {
+    //     pseudo: pseudo,
+    //   },
+    // });
+    // if (user) {
+    //   return new UserDTO(user);
+    // } else {
+    //   throw new NotFoundException('user not found');
+    // }
   }
 
   /*
@@ -67,7 +85,7 @@ export class UserService {
 */
   async create(data: CreateUserDTO): Promise<void> {
     const now = new Date();
-    await this.usersRepository.save({
+    await this.userRepository.save({
       ...data,
       createdAt: now,
       updatedAt: now,
@@ -76,7 +94,7 @@ export class UserService {
   }
 
   async setTwoFactorAuthenticationSecret(secret: string, userId: string) {
-    return this.usersRepository.update(userId, {
+    return this.userRepository.update(userId, {
       twoFactorAuthenticationSecret: secret,
     });
   }
@@ -86,52 +104,51 @@ export class UserService {
   Throw if id passed as param is invalid or if trying to use a pseudo already in use
 */
   async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
-    const editedUser = await this.usersRepository
-      .findOneOrFail(id)
-      .catch(() => {
-        throw new ForbiddenException('Invalid user ID');
-      });
-    if (data.pseudo) {
-      await this.usersRepository
-        .findOne({
-          where: {
-            pseudo: data.pseudo,
-          },
-        })
-        .catch(() => {
+    try {
+      const editedUser = await this.findEntity(id);
+      if (data.pseudo) {
+        try {
+          await this.findByPseudo(data.pseudo);
+          console.log('Pseudo already in use!');
           throw new ConflictException('Pseudo already in use!');
-        });
-    }
-    for (const prop in data) {
-      if (data[prop] != undefined) {
-        console.log('Prop:', prop);
-        console.log('edited[prop]:', editedUser[prop]);
-        console.log('data[prop]', data[prop]);
-        editedUser[prop] = data[prop];
+        } catch {
+          console.log('Pseudo:', data.pseudo, 'is available');
+        }
       }
+      for (const prop in data) {
+        if (data[prop] != undefined) {
+          console.log('Prop:', prop);
+          console.log('edited[prop]:', editedUser[prop]);
+          console.log('data[prop]', data[prop]);
+          editedUser[prop] = data[prop];
+        }
+      }
+      editedUser.updatedAt = new Date();
+      await this.userRepository.save(editedUser);
+    } catch (error) {
+      console.log(error);
+      throw new ForbiddenException('Cannot update - User not in DB');
     }
-    editedUser.updatedAt = new Date();
-    await this.usersRepository.save(editedUser);
   }
 
   async delete(id: string): Promise<DeleteResult> {
-    return await this.usersRepository.delete(id);
+    return await this.userRepository.delete(id);
   }
 
   async update_avatar(id: string, path: string) {
-    const editedUser = await this.usersRepository.findOne(id);
+    const editedUser = await this.userRepository.findOne(id);
     console.log(editedUser);
     if (!editedUser) {
       throw new NotFoundException('User is not found');
     }
     editedUser.avatarPath = path;
-    await this.usersRepository.save(editedUser);
+    await this.userRepository.save(editedUser);
     console.log(editedUser);
     return editedUser;
   }
 
   async turnOnTwoFactorAuthentication(userId: number) {
-    return this.usersRepository.update(userId, {
+    return this.userRepository.update(userId, {
       isTwoFactorAuthenticationEnabled: true,
     });
   }

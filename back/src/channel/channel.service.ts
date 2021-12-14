@@ -39,7 +39,7 @@ export class ChannelService {
 
   //Potential error if findOne fails
   async create(userId: string, data: CreateChannelDTO) {
-    const user = await this.userService.getEntity(userId);
+    const user = await this.userService.findEntity(userId);
     if (data.type == ChannelType.protected && !data.password) {
       throw new ForbiddenException(
         'channel of type password must have a password',

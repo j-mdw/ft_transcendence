@@ -31,25 +31,25 @@ export class UserController {
 
   @Get('me')
   findMe(@Res({ passthrough: true }) response: Response): Promise<UserDTO> {
-    return this.userService.findOne(response.locals.id);
+    return this.userService.findById(response.locals.id);
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
-    return this.userService.findOne(id);
+    return this.userService.findById(id);
   }
 
   @Patch()
-  updateUser(
+  async updateUser(
     @Res({ passthrough: true }) response: Response,
     @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
     console.log('Paths - user id:', response.locals.id);
-    this.userService.update(response.locals.id, data);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'User updated successfully',
-    };
+    await this.userService.update(response.locals.id, data);
+    // return {
+    //   statusCode: HttpStatus.OK,
+    //   message: 'User updated successfully',
+    // };
   }
 
   @Delete()
@@ -59,7 +59,7 @@ export class UserController {
 
   @Delete('delete/avatar')
   async beforeUpload(@Res({ passthrough: true }) response: Response) {
-    const user = await this.findOne(response.locals.id);
+    const user = await this.userService.findById(response.locals.id);
     const fs = require('fs');
 
     if (fs.existsSync(user.avatarPath)) {
@@ -95,7 +95,7 @@ export class UserController {
 
   @Get('me/avatar')
   async seeUploadedFile(@Res() res) {
-    const data = await this.findOne(res.locals.id);
+    const data = await this.userService.findById(res.locals.id);
     return res.sendFile(data.avatarPath, { root: './' });
   }
 }

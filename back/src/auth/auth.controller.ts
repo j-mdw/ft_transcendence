@@ -108,7 +108,7 @@ export class AuthController {
   @UseGuards(JwtGuard)
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('access_token');
-    console.log('Loging out');
+    console.log('USER loging out - Removing Cookie');
     return;
   }
 }
