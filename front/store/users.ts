@@ -1,4 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import Vue from 'vue'
 import { StatusUpdate, User, UserStatus } from '~/models'
 import { $axios } from '~/utils/api'
 
@@ -8,29 +9,29 @@ import { $axios } from '~/utils/api'
   namespaced: true
 })
 export default class UsersModule extends VuexModule {
-  users = new Map<string, User>();
+  users = {} as { [key: string]: User };
 
   get allUsers (): User[] {
     console.log('Users GETTER called');
-    return Array.from(this.users.values());
+    return Object.values(this.users)
   }
 
   @Mutation
   set (users: User[]) {
-    for (let i = 0; i < users.length; i++) {
-      users[i].status = UserStatus.offline; //Default value
-      this.users.set(users[i].id, users[i]);
-    }
-    console.log('users set:', this.users);
+    this.users = users.map((x: User) => ({
+      ...x,
+      status: UserStatus.offline,
+    })).reduce((acc, user) => {
+      acc[user.id] = user
+      return acc
+    }, {} as { [key: string]: User })
   }
 
   @Mutation
-  setUsersStatus (userStatus: StatusUpdate[]) {
-    userStatus.forEach((element) => {
-      if (this.users.has(element.id)) {
-        const user = this.users.get(element.id) as User;
-        user.status = element.status;
-        this.users.set(element.id, user);
+  setUsersStatus (userStatuses: StatusUpdate[]) {
+    userStatuses.forEach((updateStatus) => {
+      if (updateStatus.id in this.users) {
+        this.users[updateStatus.id].status = updateStatus.status
       }
     })
     console.log('users status set:', this.users);
@@ -38,18 +39,14 @@ export default class UsersModule extends VuexModule {
 
   @Mutation
   updateUserStatus (uid: string, status: UserStatus) {
-    if (this.users.has(uid)) {
-      const user = this.users.get(uid) as User;
-      user.status = status;
-      this.users.set(uid, user);
+    if (uid in this.users) {
+      this.users[uid].status = status
     }
   }
 
   @Mutation
   addUser (user: User) {
-    if (!this.users.has(user.id)) {
-      this.users.set(user.id, user);
-    }
+    Vue.set(this.users, user.id, user)
   }
 
   @Action({ commit: 'set', rawError: true })

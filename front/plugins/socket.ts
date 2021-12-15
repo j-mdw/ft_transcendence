@@ -28,13 +28,15 @@ export default ({ store }: any) => {
     async (val: boolean) => {
       if (val) {
         await store.dispatch('users/fetchUsers');
-        console.log('State - Users(1):', store.state['users/users']);
+        // console.log('State - Users(1):', store.state['users/users']);
         console.log('Stored users: ', store.getters['users/allUsers']);
         socket.connect();
       } else {
-        console.log('User login out -> disconnecting socket');
+        // console.log('User login out -> disconnecting socket');
         socket.disconnect();
       }
-    }
-  );
+    },
+    {
+      immediate: true,
+    });
 }
