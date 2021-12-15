@@ -52,10 +52,10 @@ export class PlayerDto {
 	this.y = 480;
 	this.score = 0;
 	this.w = 20;
-	this.hInitial = 120;
+	this.hInitial = 150;
 	this.h = this.hInitial;
 	this.xScore = xscore;
-  this.userName = username;
+  	this.userName = username;
 	// this.playing = playing;
 	this.victory = false;
 	this.defeat = false;
@@ -78,7 +78,7 @@ export class PlayerDto {
 	  this.h = this.hInitial * multipleFactor;
   }
 
-   
+
 
 }
 

@@ -29,7 +29,7 @@ export class AppGateway
 
   private logger:Logger = new Logger('GameGateway');
 
-  gameType: GameTypeDto = new GameTypeDto('multiballs', 9);
+  gameType: GameTypeDto = new GameTypeDto('classic');
   balls: Array<BallDto> = [];
 //   ball: BallDto;
   player1: PlayerDto;
@@ -47,8 +47,11 @@ export class AppGateway
   handleDisconnect(client: Socket) {
 	this.logger.log(`Client disconnected: ${client.id}`);
 	this.socketList.forEach ((element, index) => {
-		if (element === client.id)
+		if (element === client)
+		{
 			this.socketList.splice(index, 1);
+			this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
+		}
 	});
 	}
 
@@ -69,7 +72,12 @@ export class AppGateway
 				this.gameType.updatePlayersPaddleSize(this.player1, this.player2);
 			this.player1.updatePosition();
 			this.player2.updatePosition();
-			this.server.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			for (let i in this.socketList) {
+				let socket = this.socketList[i];
+				socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			}
+
+			// this.server.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 
 		}, 1000/60);
 
@@ -81,10 +89,44 @@ export class AppGateway
 	}
 
   @SubscribeMessage('initialization')
-  handleInitialization(client:Socket): void {
+  handleInitialization(client:Socket, username: string): void {
 
 		this.socketList.push(client);
 		this.logger.log(`${this.socketList.length} client connecte`);
+
+		if (this.socketList.length === 1) {
+
+			this.player1 = new PlayerDto(40, 70, username);
+			this.logger.log(`1er client connecte, ${this.player1.userName}`);
+			this.player2 = this.player2 = new PlayerDto(1240, 1000, "entrainement");
+		}
+		if (this.socketList.length === 2) {
+			this.player1.y = 480;
+			this.player1.score = 0;
+			this.player2.y = 480;
+			this.player2.score = 0;   // on peut aussi delete le player 2 et le recreer
+			this.player2.userName = username;
+			this.logger.log(`2eme client connecte, ${this.player2.userName}`);
+			for(let i = 0; i < this.gameType.numberOfBalls; i++)
+				delete this.balls[i];
+		}
+		if (this.socketList.length > 2){
+			for (let i in this.socketList) {
+				let socket = this.socketList[i];
+				socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			}
+			// this.server.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+		}
+		else{
+			for(let i = 0; i < this.gameType.numberOfBalls; i++)
+			this.balls[i] = new BallDto(640, 480);
+			for (let i in this.socketList) {
+				let socket = this.socketList[i];
+				socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			}
+		// this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
+		}
+
 
 		// while (this.socketList.length  < 2)
 		// {
@@ -97,8 +139,7 @@ export class AppGateway
 		// if (this.socketList.length == 2)
 		// {
 		// 	this.player2 = new PlayerDto(1240, 1000, username);
-		// 	for(let i = 0; i < this.gameType.numberOfBalls; i++)
-		// 		this.balls[i] = new BallDto(640, 480);
+
 		// 		this.logger.log('2eme client connecte');
 		// 	this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
 		// }
@@ -106,29 +147,33 @@ export class AppGateway
 
 
 
-	  	for(let i = 0; i < this.gameType.numberOfBalls; i++)
-		  this.balls[i] = new BallDto(640, 480)
-		// this.ball =  new BallDto(640, 480);
-		this.player1 = new PlayerDto(40, 70, "lolo");
-		this.player2 = new PlayerDto(1240, 1000, "coco");
-		this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
+	  	// for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		//   this.balls[i] = new BallDto(640, 480)
+		// // this.ball =  new BallDto(640, 480);
+		// // this.player1 = new PlayerDto(40, 70, "lolo");
+		// this.player2 = new PlayerDto(1240, 1000, "coco");
+		// this.server.emit('returnInitialPosition', { balls: this.balls, p1: this.player1, p2: this.player2});
 		}
 
 	@SubscribeMessage('keyPress')
 	handlePaddleMove(client:Socket, data: any): void {
-		if (data.inputId === 'up')
-			this.player1.pressingUp = data.state;
-		else if (data.inputId === 'down')
-			this.player1.pressingDown = data.state;
+		if (client === this.socketList[0]){
+			if (data.inputId === 'up')
+				this.player1.pressingUp = data.state;
+			else if (data.inputId === 'down')
+				this.player1.pressingDown = data.state;
+			}
 		}
 
 
 	@SubscribeMessage('keyPress2')
 	handlePaddleMove2(client:Socket, data: any): void {
-		if (data.inputId === 'up')
-			this.player2.pressingUp = data.state;
-		else if (data.inputId === 'down')
-			this.player2.pressingDown = data.state;
+		if (client === this.socketList[1]) {
+			if (data.inputId === 'up')
+				this.player2.pressingUp = data.state;
+			else if (data.inputId === 'down')
+				this.player2.pressingDown = data.state;
+			}
 		}
 
 	@SubscribeMessage('typeofgame')
