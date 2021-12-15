@@ -38,9 +38,9 @@ export default class UsersModule extends VuexModule {
   }
 
   @Mutation
-  updateUserStatus (uid: string, status: UserStatus) {
-    if (uid in this.users) {
-      this.users[uid].status = status
+  updateUserStatus (data: StatusUpdate) {
+    if (data.id in this.users) {
+      this.users[data.id].status = data.status
     }
   }
 

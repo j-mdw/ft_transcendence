@@ -15,12 +15,12 @@ export default ({ store }: any) => {
   Vue.use(VueSocketIOExt, socket, ({ store }));
 
   socket.on('all-users-status', (userStatus: StatusUpdate[]) => {
-    console.log('Reveived all user status: ', userStatus);
     store.commit('users/setUsersStatus', userStatus);
-    console.log('State - Users(2):', store.state['users/users']);
     const usrs = store.getters['users/allUsers'];
-    console.log('Stored users after update: ', usrs);
   });
+  socket.on('status-update', (data: StatusUpdate) => {
+    store.commit('users/updateUserStatus')
+  })
 
   store.watch(
     (_state: any, getters: any) =>
