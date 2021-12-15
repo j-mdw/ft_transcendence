@@ -74,6 +74,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   async handleDisconnect(client: Socket): Promise<void> {
+    const usr: UpdateUserStatus = this.users.get(client.id);
+    usr.status = UserStatus.offline;
+    this.server.emit('status-update', usr);
     this.users.delete(client.id);
     console.log('User disconnected: ' + client.id);
     console.log('All connected users: ', this.users);

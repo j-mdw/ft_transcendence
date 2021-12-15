@@ -20,6 +20,7 @@ export default ({ store }: any) => {
   });
   socket.on('status-update', (data: StatusUpdate) => {
     store.commit('users/updateUserStatus')
+    console.log('Status update:', data);
   })
 
   store.watch(
