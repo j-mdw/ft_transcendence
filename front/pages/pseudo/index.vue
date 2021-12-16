@@ -40,7 +40,7 @@ export default Vue.extend({
     },
     methods: {
       async submitPseudo() {
-          authenticationStore.signIn(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
+          //authenticationStore.signIn(); //Don't think we have to do this -> already signed in if comming from auth (which we always should)
           console.log(this.pseudo);
           await this.$axios.$patch('/user', {pseudo: this.pseudo}, {withCredentials: true});
           console.log('User updated successfully')

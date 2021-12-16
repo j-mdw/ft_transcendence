@@ -26,19 +26,52 @@
             v-for="item in items"
             :key="item.title"
             class="ml-n7"
-          >
+          > 
+           <div v-if="item.connected == 0">
             <v-badge
               bottom
-              color="#AFE796"
+              color = "#F7F4E8"
               offset-x="30"
               offset-y="30"
             >
+          
             <v-list-item-avatar class="mt-4 mb-4">
               <v-img
                 :src=item.image
               ></v-img>
             </v-list-item-avatar>
           </v-badge>
+        </div>
+        <div v-if="item.connected == 1">
+            <v-badge
+              bottom
+              color = "#C596E7"
+              offset-x="30"
+              offset-y="30"
+            >
+          
+            <v-list-item-avatar class="mt-4 mb-4">
+              <v-img
+                :src=item.image
+              ></v-img>
+            </v-list-item-avatar>
+          </v-badge>
+        </div>
+        <div v-if="item.connected == 2">
+            <v-badge
+              bottom
+              color = "#AFE796"
+              offset-x="30"
+              offset-y="30"
+            >
+          
+            <v-list-item-avatar class="mt-4 mb-4">
+              <v-img
+                :src=item.image
+              ></v-img>
+            </v-list-item-avatar>
+          </v-badge>
+        </div>
             <v-list-item-content>
               <v-list-item-title v-text="item.name" class="our_navy_blue--text" ></v-list-item-title>
             </v-list-item-content>
@@ -78,13 +111,16 @@ export default Vue.extend({
         drawer: true,
         version: 0,
         items: [
-          { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
-          { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg' },
-          { name: 'Julien', image: 'https://cdn.vuetifyjs.com/images/lists/4.jpg' },
+          { name: 'Florianne', image: 'https://cdn.vuetifyjs.com/images/lists/2.jpg', connected: 1 }, // 1 = in game
+          { name: 'Laurent', image: 'https://cdn.vuetifyjs.com/images/lists/3.jpg', connected: 0 }, //0 = not connected
+          { name: 'Julien', image: 'https://cdn.vuetifyjs.com/images/lists/4.jpg', connected: 2 }, //2 = connected
         ],
         mini: true,
       }
     },
+  
+  computed: {
+  }
 })
 </script>
 

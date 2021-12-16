@@ -33,7 +33,10 @@ export default Vue.extend({
     async mounted() {
       
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
-      authenticationStore.setTwofaFirstTime(this.user.isTwoFactorAuthenticationEnabled)
+      if(this.user.isTwoFactorAuthenticationEnabled === true)
+        authenticationStore.setTwoFa();
+      else
+        authenticationStore.removeTwoFa();
       this.switch2 = authenticationStore.isTwoFa;
       this.qrCode = "data:text/plain;base64," + await this.$axios.$post(`2fa/generate`, this.user,{ responseType: 'arraybuffer', withCredentials: true})
       .then(response => Buffer.from(response, 'binary').toString('base64'))
@@ -58,9 +61,6 @@ export default Vue.extend({
               'isTwoFactorAuthenticationEnabled': authenticationStore.isTwoFa,
         }, {withCredentials: true});
 
-        // this.user = await this.$axios.$get("user/me", {withCredentials: true});
-        //   console.log(this.user.isTwoFactorAuthenticationEnabled)
-                // this.switch ? false : true;
       },
 
     }
