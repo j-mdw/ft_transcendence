@@ -54,12 +54,18 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
+    'vuetify-dialog/nuxt',
   ],
 
   axios: {
     // extra config e.g
       baseURL: 'http://localhost:4000'
   },
+
+  vuetifyDialog: {
+    property: '$dialog',
+  },
+
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

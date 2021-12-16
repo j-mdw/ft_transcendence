@@ -38,12 +38,23 @@ export default Vue.extend({
         title: null,
       }
     },
+    
     methods: {
         async submitTwofaCode() {
+          try {
             await this.$axios.$post(`2fa/authenticate`, {twoFactorAuthenticationCode: this.twofaCode}, {withCredentials: true}).then((res) => {
                 console.log("youpi !");
                 this.WhereTogo()
             });
+          }
+          catch (err)  {
+              // console.log(err.response.status)
+              // console.log(err.response.data.message)
+              this.$dialog.warning({
+                text: 'Do you really want to exit?',
+                title: 'Warning'
+              })
+          }
             
         },
 
@@ -52,6 +63,7 @@ export default Vue.extend({
 			this.user = await this.$axios.$get("user/me", {withCredentials: true});
 			if(this.user.isTwoFactorAuthenticationEnabled)
 			{
+        
         authenticationStore.signIn();
           		if (this.user.pseudo) {
                     this.$router.push('/home');
