@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { AppMiddleware } from './app.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { RelationshipModule } from './relationship/relationship.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
     UserModule,
     GatewayModule,
     AuthModule,
+    RelationshipModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthModule],
