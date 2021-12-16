@@ -64,6 +64,9 @@ export default {
 
   vuetifyDialog: {
     property: '$dialog',
+    confirm: {},
+    error: {}
+    // ...
   },
 
 

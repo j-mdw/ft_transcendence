@@ -48,12 +48,11 @@ export default Vue.extend({
             });
           }
           catch (err)  {
-              // console.log(err.response.status)
-              // console.log(err.response.data.message)
-              this.$dialog.warning({
-                text: 'Do you really want to exit?',
-                title: 'Warning'
+              this.$dialog.error({
+                text: err.response.data.message,
+                title: err.response.status
               })
+              this.$router.push('/auth');
           }
             
         },
