@@ -16,11 +16,9 @@ export default ({ store }: any) => {
 
   socket.on('all-users-status', (userStatus: StatusUpdate[]) => {
     store.commit('users/setUsersStatus', userStatus);
-    const usrs = store.getters['users/allUsers'];
   });
   socket.on('status-update', (data: StatusUpdate) => {
-    store.commit('users/updateUserStatus')
-    console.log('Status update:', data);
+    store.commit('users/updateUserStatus', data)
   })
 
   store.watch(
@@ -28,6 +26,7 @@ export default ({ store }: any) => {
       getters['auth/isLogged'],
     async (val: boolean) => {
       if (val) {
+        await store.dispatch('me/fetch');
         await store.dispatch('users/fetchUsers');
         // console.log('State - Users(1):', store.state['users/users']);
         console.log('Stored users: ', store.getters['users/allUsers']);

@@ -1,4 +1,4 @@
-import { ForbiddenException } from '@nestjs/common';
+import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -28,7 +28,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const cookie = socket.handshake.headers.cookie;
       if (!cookie) {
         console.log('Socket verification: no token provided');
-        next(new ForbiddenException('authentication failed'));
+        next(new UnauthorizedException('authentication failed'));
       }
       let token = cookie.substring(cookie.indexOf('access_token'));
       const token_end = token.indexOf(';');
@@ -48,11 +48,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
           next();
         } else {
           console.log('Socket verification: unknown user');
-          next(new ForbiddenException('Unknown user'));
+          next(new UnauthorizedException('Unknown user'));
         }
       } else {
         console.log('Socket verification: auth failed');
-        next(new ForbiddenException('authentication failed'));
+        next(new UnauthorizedException('authentication failed'));
       }
     });
   }

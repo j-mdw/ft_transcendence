@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   Inject,
   forwardRef,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { JwtService } from '@nestjs/jwt';
@@ -40,7 +41,7 @@ export class JwtGuard implements CanActivate {
       return true;
     } else {
       console.log('jwt guard verify failure');
-      return false;
+      throw new UnauthorizedException();
     }
   }
 }

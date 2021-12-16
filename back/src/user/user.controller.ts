@@ -94,7 +94,7 @@ export class UserController {
     await this.userService.update_avatar(response.locals.id, file.path);
   }
 
-  @Get('me/avatar')
+  @Get('me/avatar') //Probably don't need this anymore
   async seeUploadedFile(@Res() res) {
     const data = await this.userService.findById(res.locals.id);
     return res.sendFile(data.avatarPath, { root: './' });

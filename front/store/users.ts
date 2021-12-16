@@ -52,7 +52,6 @@ export default class UsersModule extends VuexModule {
   @Action({ commit: 'set', rawError: true })
   async fetchUsers () {
     const users: User[] = await $axios.$get('/user', { withCredentials: true });
-    console.log('Users fetched: ', users);
     return users;
   }
 }
