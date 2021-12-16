@@ -12,6 +12,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './user.dto';
@@ -30,8 +31,14 @@ export class UserController {
   }
 
   @Get('me')
-  findMe(@Res({ passthrough: true }) response: Response): Promise<UserDTO> {
-    return this.userService.findById(response.locals.id);
+  async findMe(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<UserDTO> {
+    // try {
+      return await this.userService.findById(response.locals.id);
+    // } catch {
+      // throw new BadRequestException();
+    // }
   }
 
   @Get(':id')
