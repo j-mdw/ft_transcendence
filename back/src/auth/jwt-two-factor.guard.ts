@@ -1,5 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import {
+    Injectable,
+    CanActivate,
+    ExecutionContext,
+    Inject,
+    forwardRef,
+    UnauthorizedException,
+    NotFoundException,
+  } from '@nestjs/common';
+  import { AuthService } from './auth.service';
 
 @Injectable()
-export default class JwtTwoFactorGuard extends AuthGuard('jwt-two-factor') {}
+export class JwtTwoFactorGuard implements CanActivate {
+  constructor(private authService: AuthService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const decoded = this.authService.verify(request.cookies['token2fa']);
+    if (decoded && (await this.authService.userExist(decoded['userId']))) {
+        console.log('huhuhu');
+        return true;
+    } else {
+      console.log('jwt guard verify failure tutu');
+      throw new UnauthorizedException();
+    }
+  }
+}

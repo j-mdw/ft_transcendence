@@ -16,6 +16,9 @@ import { UserService } from '../../user/user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { TwoFactorAuthenticationCodeDto } from './dto/twoFactorAuthenticationCode.dto';
 import { AuthService } from '../auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { JwtTwoFactorGuard } from '../jwt-two-factor.guard';
+
 
 @Controller('2fa')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -24,6 +27,7 @@ export class TwoFactorAuthenticationController {
     private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService,
     private readonly userService: UserService,
     private readonly authenticationService: AuthService,
+    private jwtService: JwtService,
   ) {}
 
   @Post('generate')
@@ -61,31 +65,28 @@ export class TwoFactorAuthenticationController {
 
   @Post('authenticate')
   @HttpCode(200)
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt-two-factor'))
   async authenticate(
-    @Req() request,
+    @Req() req,
     @Body() { twoFactorAuthenticationCode }: TwoFactorAuthenticationCodeDto,
+    @Res({ passthrough: true }) response: Response,
   ) {
     const isCodeValid =
-      this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
-        twoFactorAuthenticationCode.toString(),
-        request.user.twoFactorAuthenticationSecret,
-      );
+    this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
+      twoFactorAuthenticationCode.toString(),
+      req.user.twoFactorAuthenticationSecret,
+    );
     if (!isCodeValid) {
       console.log('time to cry');
       throw new UnauthorizedException('Wrong authentication code');
     } else {
       console.log('party time !');
+      const token = this.jwtService.sign({ userId: req.user.id });
+      response.cookie('access_token', token, {
+        httpOnly: true,
+      });
     }
 
-    const accessTokenCookie =
-      this.authenticationService.getCookieWithJwtAccessToken(
-        request.user.id,
-        true,
-      );
-
-    request.res.setHeader('Set-Cookie', [accessTokenCookie]);
-
-    return request.user;
+    return req.user;
   }
 }

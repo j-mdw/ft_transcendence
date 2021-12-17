@@ -16,22 +16,26 @@ export class JwtTwoFactorStrategy extends PassportStrategy(
     private readonly userService: UserService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (request: Request) => {
-          return request?.cookies?.Authentication;
-        },
-      ]),
-      secretOrKey: configService.get('JWT_SECRET'),
+      jwtFromRequest: (req) => {
+        if (!req || !req.cookies) {
+          return null;
+        }
+        return req.cookies['token2fa'];
+      },
+      ignoreExpiration: false,
+      secretOrKey: process.env.JWT_SECRET,
     });
   }
 
   async validate(payload: TokenPayload) {
     const user = await this.userService.findById(payload.userId);
-    if (!user.isTwoFactorAuthenticationEnabled) {
+    // if (!user.isTwoFactorAuthenticationEnabled) {
+    //   return user;
+    // }
+    // if (payload.twofa) {
+      console.log('VALIDATE');
+      console.log(user);
       return user;
-    }
-    if (payload.isSecondFactorAuthenticated) {
-      return user;
-    }
+   // }
   }
 }

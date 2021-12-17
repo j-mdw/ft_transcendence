@@ -27,18 +27,23 @@
     <v-list>
       <div v-for="user in users" :key="user.title">
         <div v-if="user.id != me.id">
-          <v-list-item class="ml-n7">
+          <v-list-item class="ml-n3">
             <v-badge
               bottom
               :color=colors[user.status]
               offset-x="30"
               offset-y="30"
             >
+            <router-link :to="`/profile/${user.id}`">
               <v-list-item-avatar class="mt-4 mb-4">
+                
                 <v-img
                   :src="`http://localhost:4000/${user.avatarPath}`"
                 ></v-img>
+               
+                <!-- </NuxtLink> -->
               </v-list-item-avatar>
+               </router-link >
             </v-badge>
             <v-list-item-content>
               <v-list-item-title v-text="user.pseudo" class="our_navy_blue--text" ></v-list-item-title>

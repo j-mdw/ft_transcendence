@@ -59,16 +59,16 @@ export default Vue.extend({
 
         async WhereTogo()
 	    {
-			this.user = await this.$axios.$get("user/me", {withCredentials: true});
-			if(this.user.isTwoFactorAuthenticationEnabled)
-			{
-        
-        authenticationStore.signIn();
-          		if (this.user.pseudo) {
-                    this.$router.push('/home');
-                } else {
-                    this.$router.push('/pseudo');
-                }
+        this.user = await this.$axios.$get("user/me", {withCredentials: true});
+        if(this.user.isTwoFactorAuthenticationEnabled)
+        {
+          
+          authenticationStore.signIn();
+                if (this.user.pseudo) {
+                      this.$router.push('/home');
+                  } else {
+                      this.$router.push('/pseudo');
+                  }
 			}
       
 		}

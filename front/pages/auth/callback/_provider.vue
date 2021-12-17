@@ -38,12 +38,12 @@ export default Vue.extend({
 	methods: {
 		async goTwoFa()
 		{
-			this.user = await this.$axios.$get("user/me", {withCredentials: true});
-			if(this.user.isTwoFactorAuthenticationEnabled)
-			{
+			//this.user = await this.$axios.$get("user/me", {withCredentials: true});
+			//if(this.user.isTwoFactorAuthenticationEnabled)
+			//{
           		console.log("two factor")
 				this.$router.push('/auth/twofa');
-			}
+			//}
 		}
 	}
 })

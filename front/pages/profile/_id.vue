@@ -11,7 +11,7 @@
             size="250px"
           >
             <img
-              :src="imgUrl"
+              :src="`http://localhost:4000/${user.avatarPath}`"
             >
           </v-avatar>
 
@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { authenticationStore }  from '~/store'
+import { meStore } from "~/store";
 import FileUpload from "~/components/FileUpload.vue";
 import { User } from '~/models/user'
 
@@ -73,12 +73,16 @@ export default Vue.extend({
     data: () => ({
         user: Object(),
     }),
+    
 
     
     computed: {
 		id() {
 			return this.$route.params.id;
 		},  
+    me(): User {
+      return meStore.me;
+    },
         
         imgUrl() {
             return (`http://localhost:4000/user/${this.$route.params.id}/avatar`)

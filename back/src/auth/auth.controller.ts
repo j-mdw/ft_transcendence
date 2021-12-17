@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import JwtTwoFactorGuard from './jwt-two-factor.guard';
+import { JwtTwoFactorGuard } from './jwt-two-factor.guard';
 import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 import { JwtGuard } from './jwt.guard';
 
@@ -26,12 +26,17 @@ export class AuthController {
   ) {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
+    const token2fa = this.jwtService.sign({ userId: user.id , twofa: true});
     console.log('Token signed');
-    response.cookie('access_token', token, {
-      httpOnly: true,
-    });
     if(user.isTwoFactorAuthenticationEnabled) {
-      return;
+      response.cookie('token2fa', token2fa, {
+        httpOnly: true,
+      });
+    }
+    else {
+      response.cookie('access_token', token, {
+        httpOnly: true,
+      });
     }
     return { user };
   }
@@ -48,13 +53,20 @@ export class AuthController {
   ) {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
+    const token2fa = this.jwtService.sign({ userId: user.id , twofa: true});
     console.log('Token signed');
-    response.cookie('access_token', token, {
-      httpOnly: true,
-    });
-    // if(user.isTwoFactorAuthenticationEnabled) {
-    //   return;
-    // }
+    
+  
+    if(user.isTwoFactorAuthenticationEnabled) {
+      response.cookie('token2fa', token2fa, {
+        httpOnly: true,
+      });
+    }
+    else {
+      response.cookie('access_token', token, {
+        httpOnly: true,
+      });
+    }
     return { user };
   }
 
@@ -69,7 +81,7 @@ export class AuthController {
   getjwt2fa(@Req() req): string {
     return req.user;
   }
-  
+
   @Get('random')
   async getRandomUser(@Res({ passthrough: true }) response: Response) {
     const newUser = new CreateUserDTO();

@@ -17,9 +17,14 @@
 
         <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
           my settings 
-          
           <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
         </v-btn>
+
+        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
+          my friends
+          <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
+        </v-btn>
+
         <h1 v-if="user">
            <br>welcome {{ user.pseudo }}</h1>
       </v-col>
