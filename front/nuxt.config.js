@@ -90,8 +90,9 @@ export default {
         }
       }
     },icons: {
-      iconfont: 'fa4', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+      iconfont: 'fa5',// 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
     },
+    defaultAssets: {icons: 'fa'}
   },
 
   vuetifyDialog: {

@@ -14,16 +14,18 @@
               src="http://localhost:4000/user/me/avatar"
             >
           </v-avatar>
-
+        <v-row justify="center" align="center" class="mt-8">
         <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
           my settings 
           <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
         </v-btn>
-
-        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/settings" class="mt-6" >
+        </v-row>
+        <v-row justify="center" align="center">
+        <v-btn color="#f5cac3" v-bind="attrs" v-on="on" to="/profile/friendsList" class="mt-6" >
           my friends
-          <v-icon color="#395c6b" right>fa fa-cog</v-icon>    
+          <v-icon color="#395c6b" right>fa-users </v-icon>    
         </v-btn>
+        </v-row>
 
         <h1 v-if="user">
            <br>welcome {{ user.pseudo }}</h1>
