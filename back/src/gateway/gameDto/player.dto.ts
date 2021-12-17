@@ -1,4 +1,4 @@
-import { IsInt, IsBoolean, Min, Max } from 'class-validator';
+import { IsInt, IsBoolean,IsString, Min, Max } from 'class-validator';
 
 export class PlayerDto {
   @IsInt()
@@ -20,13 +20,18 @@ export class PlayerDto {
   h:number;
 
   @IsInt()
+  @Min(0)
+  hInitial:number;
+
+
+  @IsInt()
   score: number;
 
   @IsInt()
   xScore: number;
 
-  @IsBoolean()
-  playing: boolean;
+//   @IsBoolean()
+//   playing: boolean;
 
   @IsBoolean()
   victory: boolean;
@@ -40,14 +45,19 @@ export class PlayerDto {
   @IsBoolean()
   pressingDown: boolean;
 
-  constructor(x: number, xscore: number, playing: boolean) {
+  @IsString()
+  userName: string;
+
+  constructor(x: number, xscore: number, username: string) {
 	this.x = x;
 	this.y = 480;
 	this.score = 0;
 	this.w = 20;
-	this.h = 100;
+	this.hInitial = 150;
+	this.h = this.hInitial;
 	this.xScore = xscore;
-	this.playing = playing;
+	this.userName = username;
+	// this.playing = playing;
 	this.victory = false;
 	this.defeat = false;
 	this.pressingUp = false;
@@ -64,4 +74,9 @@ export class PlayerDto {
 	if (this.y > 960 - this.h / 2)
 		this.y = 960 - this.h / 2;
   }
+
+  updatePaddleSize(multipleFactor: number){
+	this.h = this.hInitial * multipleFactor;
+	}
+
 }

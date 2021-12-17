@@ -1,6 +1,6 @@
 import { IsInt, Min } from 'class-validator';
 import { PlayerDto } from "./player.dto";
-import { GameTypeDto } from "./gameType.dto";
+import { GameTypeDto } from "./gametype.dto";
 
 
 export class BallDto {
