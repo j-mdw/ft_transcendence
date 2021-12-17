@@ -53,22 +53,15 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    //'vuetify-dialog/nuxt',
     '@nuxtjs/axios',
-    'vuetify-dialog/nuxt',
+    
   ],
 
   axios: {
     // extra config e.g
       baseURL: 'http://localhost:4000'
   },
-
-  vuetifyDialog: {
-    property: '$dialog',
-    confirm: {},
-    error: {}
-    // ...
-  },
-
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -100,6 +93,14 @@ export default {
       iconfont: 'fa4', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
     },
   },
+
+  vuetifyDialog: {
+    property: '$dialog',
+    confirm: {},
+    error: {}
+    // ...
+  },
+
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
