@@ -17,8 +17,6 @@ export class BallDto {
   @IsInt()
   ySpeed: number;
 
-
-
   @IsInt()
   @Min(0)
   radius: number;

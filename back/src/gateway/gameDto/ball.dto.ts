@@ -1,5 +1,7 @@
 import { IsInt, Min } from 'class-validator';
 import { PlayerDto } from "./player.dto";
+import { GameTypeDto } from "./gameType.dto";
+
 
 export class BallDto {
   @IsInt()
@@ -18,42 +20,38 @@ export class BallDto {
 
   @IsInt()
   @Min(0)
-  acceleration: number;
-
-  @IsInt()
-  @Min(0)
   radius: number;
 
-  initialSpeed: number;
 
   constructor(x: number, y: number) {
 	this.x = x;
 	this.y = y;
-	this.xSpeed = this.getRandomInt(2, 5)
+	this.xSpeed = this.getRandomInt(1, 2)
 	this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
-	this.ySpeed = this.getRandomInt(2, 5)
+	this.ySpeed = this.getRandomInt(1, 3)
 	this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
-
 
 	this.radius = 15;
   }
 
-  update(player1: PlayerDto, player2: PlayerDto){
-	  this.edges(player1, player2);
+  update(player1: PlayerDto, player2: PlayerDto, gameType: GameTypeDto){
+	  this.edges(player1, player2, gameType);
 
 	  this.x += this.xSpeed;
 	  this.y += this.ySpeed;
   }
 
-  edges(player1: PlayerDto, player2: PlayerDto) {
+  edges(player1: PlayerDto, player2: PlayerDto, gameType: GameTypeDto) {
 	if ((this.y + this.radius) > 960 || (this.y - this.radius) < 0)
 	this.ySpeed *= -1;
-	if ((this.x) > 1280){
-		this.reinitializeBallPosition();
+	if ((this.x) >= 1280 && this.x < (1280 + this.xSpeed)){
+		if (gameType.gameType !== 'multiballs')
+			this.reinitializeBallPosition();
 		player1.score++;
 	}
-	if ((this.x) < 0) {
-		this.reinitializeBallPosition();
+	if ((this.x) <= 0 && this.x > this.xSpeed) {
+		if (gameType.gameType !== 'multiballs')
+			this.reinitializeBallPosition();
 		player2.score++;
 	}
   }
@@ -88,9 +86,9 @@ export class BallDto {
     }
 
 	reinitializeBallPosition(){
-		this.xSpeed = this.getRandomInt(2, 5)
+		this.xSpeed = this.getRandomInt(1, 2)
 		this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
-		this.ySpeed = this.getRandomInt(2, 5)
+		this.ySpeed = this.getRandomInt(1, 3)
 		this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
 		this.x = 640;
 		this.y = 480;
