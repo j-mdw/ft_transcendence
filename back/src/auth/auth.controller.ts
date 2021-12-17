@@ -29,6 +29,9 @@ export class AuthController {
     response.cookie('access_token', token, {
       httpOnly: true,
     });
+    if(user.isTwoFactorAuthenticationEnabled) {
+      return;
+    }
     return { user };
   }
 
@@ -48,36 +51,10 @@ export class AuthController {
     response.cookie('access_token', token, {
       httpOnly: true,
     });
+    // if(user.isTwoFactorAuthenticationEnabled) {
+    //   return;
+    // }
     return { user };
-  }
-
-  // ok to delete?
-  @Get('test')
-  test(@Res({ passthrough: true }) res: Response) {
-    const payload = { userId: 1 };
-    const token = this.jwtService.sign(payload);
-    console.log('TOKEN');
-    res.cookie('access_token', token, {
-      httpOnly: true,
-    });
-  }
-
-  //ok to delete?
-  @Post('login')
-  login(@Res() response: Response) {
-    // Do username+password check here.
-
-    const userId = 'dummy';
-    const payload = { userId: userId };
-    const token = this.jwtService.sign(payload);
-
-    response
-      .cookie('access_token', token, {
-        httpOnly: true,
-        domain: 'localhost',
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-      })
-      .send({ success: true });
   }
 
   @Get('me/2fa')
@@ -89,6 +66,6 @@ export class AuthController {
   @Get('me/jwt2fa')
   @UseGuards(JwtTwoFactorGuard)
   getjwt2fa(@Req() req): string {
-    return req.user.pseudo;
+    return req.user;
   }
 }
