@@ -1,20 +1,25 @@
-import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { JwtService } from '@nestjs/jwt';
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  Inject,
+  forwardRef,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class JwtGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  constructor(private authService: AuthService) {}
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    try {
-      this.jwtService.verify(request.cookies['access_token']);
+    const decoded = this.authService.verify(request.cookies['access_token']);
+    if (decoded && (await this.authService.userExist(decoded['userId']))) {
       return true;
-    } catch {
-      console.log('Jwt Guard: verification failed');
-      return false;
+    } else {
+      console.log('jwt guard verify failure');
+      throw new UnauthorizedException();
     }
   }
 }

@@ -1,11 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Channel } from 'src/channel/channel.entity';
-
-export enum UserStatus {
-  online,
-  offline,
-  playing,
-}
+// import { Relationship } from 'src/relationship/relationship.entity';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 @Entity('users')
 export class User {
@@ -53,12 +49,6 @@ export class User {
 
   @Column({
     nullable: false,
-    default: UserStatus.offline,
-  })
-  status: UserStatus;
-
-  @Column({
-    nullable: false,
   })
   readonly createdAt: Date;
 
@@ -69,4 +59,10 @@ export class User {
 
   @OneToMany(() => Channel, (channel) => channel.owner)
   channels: Channel[];
+
+  @OneToMany(() => ChannelParticipant, (participant) => participant.user)
+  channelsParticipants: ChannelParticipant[];
+
+  // @OneToMany(() => Relationship, (relation) => relation.user)
+  // relationships: Relationship[];
 }

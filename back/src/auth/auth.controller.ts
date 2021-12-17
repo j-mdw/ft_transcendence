@@ -3,8 +3,9 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
-import { UserDTO } from 'src/user/user.dto';
 import JwtTwoFactorGuard from './jwt-two-factor.guard';
+import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
+import { JwtGuard } from './jwt.guard';
 
 @Controller()
 export class AuthController {
@@ -67,5 +68,31 @@ export class AuthController {
   @UseGuards(JwtTwoFactorGuard)
   getjwt2fa(@Req() req): string {
     return req.user;
+  }
+  
+  @Get('random')
+  async getRandomUser(@Res({ passthrough: true }) response: Response) {
+    const newUser = new CreateUserDTO();
+    newUser.firstName = this.authService.randomName(8);
+    newUser.lastName = this.authService.randomName(9);
+    newUser.email = this.authService.randomName(10) + '@' + '.blabla';
+
+    const user = await this.authService.addUser(newUser);
+    console.log('User just created:', user);
+    const token = this.jwtService.sign({ userId: user.id });
+    console.log('Signed token: ', token);
+    console.log('Decoded user Id:', this.jwtService.decode(token)['userId']);
+    response.cookie('access_token', token, {
+      httpOnly: true,
+    });
+    return { user }; //Do we need to return smth here?
+  }
+
+  @Get('logout')
+  @UseGuards(JwtGuard)
+  logout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('access_token');
+    console.log('USER loging out - Removing Cookie');
+    return;
   }
 }

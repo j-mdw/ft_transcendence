@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NestMiddleware } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
 
@@ -25,7 +29,7 @@ export class AppMiddleware implements NestMiddleware {
         }
       } catch {
         console.log('Middleware failed to decode access_token cookie');
-        throw new ForbiddenException();
+        throw new UnauthorizedException();
       }
     }
     next();

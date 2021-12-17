@@ -28,14 +28,43 @@ export class AuthService {
 
   async addUser(user: CreateUserDTO): Promise<UserDTO> {
     try {
-      await this.userService.findEmail(user.email);
+      await this.userService.findByEmail(user.email);
     } catch (error) {
-      user.avatarPath = this.userService.find_avatar();
       console.log('User not found in the database: ', user.email);
+      user.avatarPath = this.userService.find_avatar();
       await this.userService.create(user);
     } finally {
-      return await this.userService.findEmail(user.email);
+      return await this.userService.findByEmail(user.email);
     }
+  }
+
+  verify(token: string): any {
+    try {
+      const decoded = this.jwtService.verify(token);
+      return decoded;
+    } catch {
+      console.log('Token verification failed');
+      return null;
+    }
+  }
+
+  async userExist(id: string): Promise<boolean> {
+    try {
+      console.log('user exist return:', await this.userService.findById(id));
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  randomName(length: number) {
+    let result = '';
+    const characters = 'abcdefghijklmnopqrstuvwxyz';
+    const charLength = characters.length;
+    for (let i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charLength));
+    }
+    return result;
   }
 
   public getCookieWithJwtAccessToken(

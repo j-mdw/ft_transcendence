@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
- 
+import { $axios } from '~/utils/api'
+
 @Module({
   name: 'auth',
   stateFactory: true,
@@ -9,7 +11,7 @@ export default class AuthenticationModule extends VuexModule {
   isLogin = localStorage.getItem("IS_LOGIN") === "true"
   twoFa = localStorage.getItem("TWO_FA") === "false"
 
-  get isLogged(): boolean {
+  get isLogged (): boolean {
     return this.isLogin
   }
 
@@ -18,13 +20,13 @@ export default class AuthenticationModule extends VuexModule {
   }
 
   @Mutation
-  setLogin() {
+  setLogin () {
     this.isLogin = true;
-    localStorage.setItem("IS_LOGIN", "true")
+    localStorage.setItem('IS_LOGIN', 'true')
   }
 
   @Mutation
-  removeLogin(){
+  removeLogin () {
     this.isLogin = false
     localStorage.setItem("IS_LOGIN", "false")
   }
@@ -44,11 +46,18 @@ export default class AuthenticationModule extends VuexModule {
   @Action({rawError: true})
   signIn() {
     this.context.commit("setLogin");
+    localStorage.setItem('IS_LOGIN', 'false')
   }
+  //Only use actions for Async code
+  // @Action({ rawError: true })
+  // signIn () {
+  //   console.log('Signing in!');
+  //   this.context.commit('setLogin');
+  // }
 
-  @Action({rawError: true})
-  signOut() {
-    this.context.commit("removeLogin");
+  @Action({commit: 'removeLogin', rawError: true })
+  async signOut () {
+    await axios.get('/logout', { withCredentials: true });
   }
 
   @Action({rawError: true})

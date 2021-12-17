@@ -1,27 +1,24 @@
 <template>
   <v-container fill-height>
-    <v-row justify="center" align="center">
-    </v-row>
+    <v-row justify="center" align="center" />
 </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import { User } from '~/models/user';
-import { authenticationStore }  from '~/store'
+import { authenticationStore } from '~/store'
 
 export default Vue.extend({
-	layout: 'empty',
+  layout: 'empty',
 	data: () => ({
         user: Object(),
     }),
-
 	computed: {
 		provider() {
 			return this.$route.params.provider;
 		} 
 	},
-	async mounted() {
+  async mounted() {
 		console.log(`logging with ${this.provider}`)
 		
 		
@@ -38,7 +35,6 @@ export default Vue.extend({
 			}
 		});
 	},
-
 	methods: {
 		async goTwoFa()
 		{
@@ -52,7 +48,6 @@ export default Vue.extend({
 	}
 })
 </script>
-
 
 <style scoped lang="scss">
 #component-logo {

@@ -20,7 +20,8 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { 
+      {
+        href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css',
         rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
       }
     ],
@@ -33,14 +34,12 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    '~/plugins/axios',
     {
       src: '~/plugins/socket.ts',
       ssr: false,
     },
   ],
-
-  // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -60,7 +59,8 @@ export default {
 
   axios: {
     // extra config e.g
-      baseURL: 'http://localhost:4000'
+    baseURL: 'http://localhost:4000',
+    debug: true
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

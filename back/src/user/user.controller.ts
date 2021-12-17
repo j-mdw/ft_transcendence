@@ -12,6 +12,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserDTO } from './user.dto';
@@ -30,13 +31,19 @@ export class UserController {
   }
 
   @Get('me')
-  findMe(@Res({ passthrough: true }) response: Response): Promise<UserDTO> {
-    return this.userService.findOne(response.locals.id);
+  async findMe(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<UserDTO> {
+    // try {
+      return await this.userService.findById(response.locals.id);
+    // } catch {
+      // throw new BadRequestException();
+    // }
   }
 
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
-    return this.userService.findOne(id);
+    return this.userService.findById(id);
   }
 
   @Patch()
@@ -44,12 +51,12 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
     @Body() data: Partial<Omit<UserDTO, 'id'>>,
   ) {
-    console.log(data);
+    console.log('Paths - user id:', response.locals.id);
     await this.userService.update(response.locals.id, data);
-    return {
-      statusCode: HttpStatus.OK,
-      message: 'User updated successfully',
-    };
+    // return {
+    //   statusCode: HttpStatus.OK,
+    //   message: 'User updated successfully',
+    // };
   }
 
   @Delete()
@@ -59,7 +66,8 @@ export class UserController {
 
   @Delete('delete/avatar')
   async beforeUpload(@Res({ passthrough: true }) response: Response) {
-    const user = await this.findOne(response.locals.id);
+    const user = await this.userService.findById(response.locals.id);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const fs = require('fs');
 
     if (fs.existsSync(user.avatarPath)) {
@@ -93,9 +101,9 @@ export class UserController {
     await this.userService.update_avatar(response.locals.id, file.path);
   }
 
-  @Get('me/avatar')
+  @Get('me/avatar') //Probably don't need this anymore
   async seeUploadedFile(@Res() res) {
-    const data = await this.findOne(res.locals.id);
+    const data = await this.userService.findById(res.locals.id);
     return res.sendFile(data.avatarPath, { root: './' });
   }
 }
