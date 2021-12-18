@@ -3,7 +3,7 @@
     <v-list class="our_beige">
       <div v-for="user in users" :key="user.title">
         <div v-if="user.id != me.id">
-          <v-divider></v-divider>
+          
           <v-list-item class="ml-n3">
             
             <v-badge
@@ -37,6 +37,7 @@
               </v-btn>
             </v-list-item-action>
           </v-list-item>
+          <v-divider></v-divider>
         </div>
       </div>
     </v-list>   

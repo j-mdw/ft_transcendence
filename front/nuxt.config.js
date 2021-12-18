@@ -29,7 +29,8 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'font-awesome/css/font-awesome.min.css'
+    'font-awesome/css/font-awesome.min.css',
+    '@fortawesome/fontawesome-free/css/all.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins

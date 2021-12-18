@@ -14,7 +14,36 @@
               :src="`http://localhost:4000/${user.avatarPath}`"
             >
           </v-avatar>
-
+        <v-row justify="center" align="center" class="mt-8">
+          <div v-if="status == 0">
+              <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
+                add to my friends
+              <v-icon color="#395c6b" right>fa-user-plus</v-icon>    
+            </v-btn>
+            <!-- send message  -->
+          </div>
+          <div v-if="status == 1">
+            <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
+                Unfriend
+              <v-icon color="#395c6b" right>fa-user-minus</v-icon>    
+            </v-btn>
+            <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
+                block this user
+              <v-icon color="#395c6b" right>fa-user-times</v-icon>    
+            </v-btn>
+            <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
+                send a message
+              <v-icon color="#395c6b" right>fa-comment-alt</v-icon>    
+            </v-btn>
+            <!-- send message  -->
+          </div>
+          <div v-if="status == 2">
+              <v-btn color="#EDEDED" v-bind="attrs" v-on="on" class="mt-6" >
+                you have been blocked
+              <v-icon color="#395c6b" right>fa-ban</v-icon>    
+            </v-btn>
+          </div>
+        </v-row>
         <h1 v-if="user">
            <br> {{ user.pseudo }}</h1>
       </v-col>
@@ -55,6 +84,8 @@
         </v-card>
 
        
+
+       
       </v-col>   
                                                                                                                                                                                                                                                                             
     </v-row>   
@@ -68,10 +99,16 @@ import { meStore } from "~/store";
 import FileUpload from "~/components/FileUpload.vue";
 import { User } from '~/models/user'
 
+//0 = to add not friends yet
+//1 = you are fiends
+//2 = you are blocked
+
+
 export default Vue.extend({
 	layout: 'default',
     data: () => ({
         user: Object(),
+        status: 2, 
     }),
     
 
