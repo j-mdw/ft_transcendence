@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseUUIDPipe,
@@ -15,7 +16,7 @@ import { RelationshipType } from './relationship.entity';
 import { RelationshipService } from './relationship.service';
 
 @Controller('relationships')
-// @UseGuards(JwtGuard) COMMENTED FOR TESTING ONLY
+@UseGuards(JwtGuard)
 export class RelationshipController {
   constructor(private relationshipService: RelationshipService) {}
   @Get('me')
@@ -26,17 +27,25 @@ export class RelationshipController {
   }
 
   @Post(':id')
-  async updateRelationships(
+  async updateRelationship(
     @Param('id', ParseUUIDPipe) peerId: string,
     @Res({ passthrough: true }) response: Response,
     @Body() relation: RelationshipUpdate,
   ): Promise<void> {
-    console.log('Relation:', relation);
-    console.log('Update relationship request received');
+    console.log('controller userid:', response.locals.id);
+    console.log('controller peerid:', peerId);
     await this.relationshipService.updateRelationship(
       response.locals.id,
       peerId,
       relation.type,
     );
+  }
+
+  @Delete(':id')
+  async deleteRelationship(
+    @Param('id', ParseUUIDPipe) peerId: string,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
+    await this.relationshipService.deleteRelation(response.locals.id, peerId);
   }
 }

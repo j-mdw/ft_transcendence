@@ -14,7 +14,8 @@ export class Relationship {
   readonly id: string;
 
   @Column({
-    nullable: false,
+    nullable: true,
+    default: null,
   })
   type: RelationshipType;
 
