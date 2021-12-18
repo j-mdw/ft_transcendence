@@ -24,16 +24,18 @@
           </div>
           <div v-if="status == 1">
             <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
+                send a message
+              <v-icon color="#395c6b" right>fa-comment-alt</v-icon>    
+            </v-btn>
+            <v-row justify="center" align="center" class="mt-5">
+            <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
                 Unfriend
               <v-icon color="#395c6b" right>fa-user-minus</v-icon>    
             </v-btn>
+            </v-row>
             <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
                 block this user
               <v-icon color="#395c6b" right>fa-user-times</v-icon>    
-            </v-btn>
-            <v-btn color="#f5cac3" v-bind="attrs" v-on="on" class="mt-6" >
-                send a message
-              <v-icon color="#395c6b" right>fa-comment-alt</v-icon>    
             </v-btn>
             <!-- send message  -->
           </div>

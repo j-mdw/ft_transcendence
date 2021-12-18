@@ -25,13 +25,12 @@ export default Vue.extend({
 		await this.$axios.$get(`${this.provider}/redirect`, {params: this.$route.query, withCredentials: true}).then((res) => {
 			if (res.user.isTwoFactorAuthenticationEnabled) {
 				this.goTwoFa()
-			} 
+			}
 			else if (res.user.pseudo) {
-				authenticationStore.signIn();
-				this.$router.push('/home');
+				this.$router.push('/home')
+				authenticationStore.setLogin()
 			} else {
-				authenticationStore.signIn();
-				this.$router.push('/pseudo');
+				this.$router.push('/pseudo')
 			}
 		});
 	},

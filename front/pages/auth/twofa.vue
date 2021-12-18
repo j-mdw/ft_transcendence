@@ -63,12 +63,12 @@ export default Vue.extend({
         if(this.user.isTwoFactorAuthenticationEnabled)
         {
           
-          authenticationStore.signIn();
-                if (this.user.pseudo) {
-                      this.$router.push('/home');
-                  } else {
-                      this.$router.push('/pseudo');
-                  }
+          if (this.user.pseudo) {
+            this.$router.push('/home')
+            authenticationStore.setLogin()
+          } else {
+            this.$router.push('/pseudo')
+          }
 			}
       
 		}

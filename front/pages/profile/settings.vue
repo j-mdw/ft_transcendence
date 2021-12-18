@@ -8,7 +8,7 @@
         justify="center"
       > 
           <avatar-editor />
-      </v-col>                                                                                                                                                                                                                                                                                      -->
+      </v-col>                                                                                                                                                                                                                                                                                     
     </v-row>  
     <v-row justify="center">
       <Fa/>
