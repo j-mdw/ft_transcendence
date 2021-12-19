@@ -5,28 +5,38 @@
     </v-btn>
 
   
-    <v-row no-gutters class="mb-6" justify="center" align="center">
+    <v-row no-gutters class="mb-6" >
     <v-col  :key="index" v-for="(channel, index) in channels" >
       <v-list-item>
-        <v-card width="500" class="mt-5">
-        <v-list-item-title class=""> {{ channel.name }} </v-list-item-title>
-        <v-list-item-subtitle class=""> 
-          <div v-if="channel.type == 0"> 
-            public
-          </div>
-          <div v-if="channel.type == 1"> 
-            private
-          </div>
-          <div v-if="channel.type == 2"> 
-            protected
-          </div>
-        </v-list-item-subtitle>
-        <v-btn
-        class=""
-        @click="deleteChannel(channel.id)"
-        >
-          Delete Channel
-        </v-btn>
+        <v-card width="500" height="50" class="mt-5" color="#ebd9c5">
+          <v-row justify="center" align="center">
+            <v-col>
+              <v-list-item> {{ channel.name }} </v-list-item>
+            </v-col>
+            <v-col >
+              <v-list-item-subtitle> 
+                
+                <div v-if="channel.type == 0"> 
+                  public
+                </div>
+                <div v-if="channel.type == 1"> 
+                  private
+                </div>
+                <div v-if="channel.type == 2"> 
+                  protected
+                </div>
+              </v-list-item-subtitle>
+            </v-col>
+            <!-- <v-col>
+            <v-btn
+            class=""
+            @click="deleteChannel(channel.id)"
+            x-small
+            >
+              Delete Channel
+            </v-btn>
+            </v-col> -->
+          </v-row>
         </v-card>
       </v-list-item>
     </v-col>
