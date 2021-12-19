@@ -1,23 +1,36 @@
 <template>
 <div>
-  <v-card
-    class="mx-auto"
-    max-width="400"
-    tile
-  >
-    <v-list-item :key="index" v-for="(channel, index) in channels">
-      <v-list-item-content>
-        <v-list-item-title> {{ channel.name }} </v-list-item-title>
-        <v-list-item-subtitle> {{ channel.type }} </v-list-item-subtitle>
+    <v-btn color="#F6BD60" v-bind="attrs" v-on="on" to="/channels/create" class="mt-9 ml-8" >
+      create channel
+    </v-btn>
+
+  
+    <v-row>
+    <v-col  :key="index" v-for="(channel, index) in channels" >
+      <v-list-item>
+        <v-card width="300">
+        <v-list-item-title class=""> {{ channel.name }} </v-list-item-title>
+        <v-list-item-subtitle class=""> 
+          <div v-if="channel.type == 0"> 
+            public
+          </div>
+          <div v-if="channel.type == 1"> 
+            private
+          </div>
+          <div v-if="channel.type == 2"> 
+            protected
+          </div>
+        </v-list-item-subtitle>
         <v-btn
+        class=""
         @click="deleteChannel(channel.id)"
         >
           Delete Channel
         </v-btn>
-      </v-list-item-content>
-    </v-list-item>
-  </v-card>
-  <NuxtLink to="/channels/create">Create Channel</NuxtLink>
+        </v-card>
+      </v-list-item>
+    </v-col>
+    </v-row>   
 </div>
 </template>
 
