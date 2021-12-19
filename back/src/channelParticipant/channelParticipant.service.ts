@@ -34,10 +34,17 @@ export class ChannelParticipantService {
   //   });
   // }
 
-  async create(user: User, channel: Channel): Promise<ChannelParticipant> {
+  async create(
+    user: User,
+    channel: Channel,
+    admin?: boolean,
+  ): Promise<ChannelParticipant> {
     const entity = new ChannelParticipant();
     entity.user = user;
     entity.channel = channel;
+    if (admin != undefined) {
+      entity.admin = admin;
+    }
     return await this.participantRepository.save(entity);
   }
 

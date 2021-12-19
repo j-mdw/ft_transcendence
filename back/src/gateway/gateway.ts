@@ -12,6 +12,7 @@ import {
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
+import { GatewayService } from './gateway.service';
 // import { Server } from 'http';
 
 @WebSocketGateway({
@@ -21,9 +22,13 @@ import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
   },
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly gatewayService: GatewayService,
+    ) {}
 
   afterInit(srv: Server) {
+    this.gatewayService.server = srv;
     srv.use(async (socket, next) => {
       const cookie = socket.handshake.headers.cookie;
       if (!cookie) {
@@ -45,6 +50,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
             socket.id,
             new UpdateUserStatus(decoded.userId, UserStatus.online),
           );
+          socket.join(decoded.userId);//Joining a room with named after its own ID
           next();
         } else {
           console.log('Socket verification: unknown user');

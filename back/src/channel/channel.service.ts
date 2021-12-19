@@ -26,15 +26,13 @@ export class ChannelService {
   ) {}
 
   async findAll(): Promise<ChannelDTO[]> {
-    return await this.channelRepository
-      .find()
-      .then((channels) => channels.map((channel) => new ChannelDTO(channel)));
+    return (await this.channelRepository.find()).map(
+      (channel) => new ChannelDTO(channel),
+    );
   }
 
   async findOne(id: string): Promise<ChannelDTO> {
-    return await this.channelRepository
-      .findOne(id)
-      .then((channel) => new ChannelDTO(channel));
+    return new ChannelDTO(await this.channelRepository.findOneOrFail(id));
   }
 
   //Potential error if findOne fails
@@ -42,23 +40,17 @@ export class ChannelService {
     const user = await this.userService.findEntity(userId);
     if (data.type == ChannelType.protected && !data.password) {
       throw new ForbiddenException(
-        'channel of type password must have a password',
+        'channel of type protected must have a password',
       );
     }
     const date = new Date();
-    await this.channelRepository
-      .save({
-        ...data,
-        createdAt: date,
-        updatedAt: date,
-        owner: user,
-      })
-      .then((channel) => this.participantService.create(user, channel));
-
-    // const participant = new ChannelParticipantDTO();
-    // participant.admin = true;
-    // const channelId = (await channel).id;
-    // await this.participantService.create(participant, userId, channelId);
+    const channel = await this.channelRepository.save({
+      ...data,
+      createdAt: date,
+      updatedAt: date,
+      owner: user,
+    });
+    await this.participantService.create(user, channel, true);
   }
 
   /*
