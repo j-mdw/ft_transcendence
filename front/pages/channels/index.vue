@@ -5,10 +5,10 @@
     </v-btn>
 
   
-    <v-row>
+    <v-row no-gutters class="mb-6" justify="center" align="center">
     <v-col  :key="index" v-for="(channel, index) in channels" >
       <v-list-item>
-        <v-card width="300">
+        <v-card width="500" class="mt-5">
         <v-list-item-title class=""> {{ channel.name }} </v-list-item-title>
         <v-list-item-subtitle class=""> 
           <div v-if="channel.type == 0"> 
