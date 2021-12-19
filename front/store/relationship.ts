@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { Relationship, RelationshipType } from '~/models'
+import { Relationship } from '~/models'
 import { $axios } from '~/utils/api'
 
 @Module({
@@ -35,7 +35,6 @@ export default class RelationshipModule extends VuexModule {
     for (let i = 0; i < this.relationships.length; i++) {
       if (this.relationships[i].peerId === relationship.peerId) {
         this.relationships[i].type = relationship.type;
-        console.log('Relationship updated!');
         return;
       }
     }

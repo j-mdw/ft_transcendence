@@ -22,17 +22,9 @@ export default ({ store }: any) => {
   });
   socket.on('relationship-update', (data: Relationship) => {
     store.commit('relationship/update', data);
-    try {
-      const user = store.getters['relationship/one'](data.peerId);
-      console.log('Relation found:', user);
-    } catch {
-      console.log('Relationship does not exist with:', data.peerId);
-    }
-    console.log('Updated Relaitonships', store.getters['relationship/all']);
   });
   socket.on('relationship-delete', (peerId: string) => {
     store.commit('relationship/delete', peerId);
-    console.log('All Relaitonships', store.getters['relationship/all']);
   });
 
   store.watch(
