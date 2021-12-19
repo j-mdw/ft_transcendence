@@ -1,4 +1,5 @@
 export enum RelationshipType {
+  none,
   sent,
   received,
   friend,

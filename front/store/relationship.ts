@@ -14,18 +14,42 @@ export default class RelationshipModule extends VuexModule {
     return this.relationships;
   }
 
+  get one (): (peerId: string) => Relationship {
+    return (peerId: string) => {
+      for (let i = 0; i < this.relationships.length; i++) {
+        if (this.relationships[i].peerId === peerId) {
+          return this.relationships[i];
+        }
+      }
+      throw new Error('Relationship not found');
+    };
+  }
+
   @Mutation
   set (relationships: Relationship[]) {
     this.relationships = relationships;
   }
 
   @Mutation
-  update (peerId: string, type: RelationshipType) {
-    this.relationships.forEach((relation) => {
-      if (relation.peerId === peerId) {
-        relation.type = type;
+  update (relationship: Relationship) {
+    for (let i = 0; i < this.relationships.length; i++) {
+      if (this.relationships[i].peerId === relationship.peerId) {
+        this.relationships[i].type = relationship.type;
+        console.log('Relationship updated!');
+        return;
       }
-    });
+    }
+    this.relationships.push(relationship);
+  }
+
+  @Mutation
+  delete (peerId: string) {
+    for (let i = 0; i < this.relationships.length; i++) {
+      if (this.relationships[i].peerId === peerId) {
+        this.relationships.splice(i, 1);
+        return;
+      }
+    }
   }
 
   @Action({ commit: 'set', rawError: true })

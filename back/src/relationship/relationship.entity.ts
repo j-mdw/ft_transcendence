@@ -2,6 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from 'src/user/user.entity';
 
 export enum RelationshipType {
+  none,
   sent,
   received,
   friend,
@@ -14,8 +15,8 @@ export class Relationship {
   readonly id: string;
 
   @Column({
-    nullable: true,
-    default: null,
+    nullable: false,
+    default: RelationshipType.none,
   })
   type: RelationshipType;
 
