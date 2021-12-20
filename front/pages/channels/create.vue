@@ -1,38 +1,44 @@
-<template>
-  <v-form
-    ref="form"
-    lazy-validation
-    title="Create a channel"
-  >
-    <v-text-field
-      v-model="name"
-      :counter="20"
-      label="Name"
-      required
-    ></v-text-field>
+<template>   
+<v-container class="flex-container" fill-height> 
+    <v-row justify="center" color="#f7ede2" align="center">
+      <v-form
+        ref="form"
+        lazy-validation
+        title="Create a channel"
+      >
+        <v-text-field
+          v-model="name"
+          :counter="20"
+          label="Name"
+          required
+          class="mt-8"
+        ></v-text-field>
 
-    <v-select
-      v-model="select"
-      :items="items"
-      label="Type"
-      required
-    ></v-select>
+        <v-select
+          v-model="select"
+          :items="items"
+          label="Type"
+          required
+        ></v-select>
 
-	<v-text-field
-      v-if="select == 'protected'"
-      v-model="password"
-      label="password"
-      required
-    ></v-text-field>
+      
+        <v-text-field
+          v-if="select == 'Protected'"
+          v-model="password"
+          label="password"
+          required
+        ></v-text-field>
 
-    <v-btn
-      color="success"
-      class="mr-4"
-      @click="createChannel"
-    >
-      Send
-    </v-btn>
-  </v-form>
+        <v-btn
+          color="success"
+          class="mr-4"
+          @click="createChannel"
+        >
+          Send
+        </v-btn>
+      </v-form>
+    </v-row>
+</v-container>
 </template>
 
 <script lang="ts">
@@ -63,3 +69,18 @@ export default Vue.extend({
     }
 })
 </script>
+
+<style scoped lang="scss">
+.flex-container{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: cente;
+  align-content: center;
+  row-gap: 30px;
+}
+
+.v-text-field{
+      width: 50rem;
+}
+
+</style>

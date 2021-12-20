@@ -1,11 +1,12 @@
 <template>
 <div>
+  
     <v-btn color="#F6BD60" v-bind="attrs" v-on="on" to="/channels/create" class="mt-9 ml-8" >
       create channel
     </v-btn>
 
   
-    <v-row no-gutters class="mb-6" >
+    <v-row no-gutters class="mt-4 mb-6 ml-4"  >
     <v-col  :key="index" v-for="(channel, index) in channels" >
       <v-list-item>
         <v-card width="500" height="50" class="mt-5" color="#ebd9c5">
