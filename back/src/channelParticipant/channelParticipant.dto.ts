@@ -1,5 +1,5 @@
 import { IsBoolean, IsDate } from 'class-validator';
-// import { PartialType } from '@nestjs/swagger';
+import { PartialType } from '@nestjs/swagger';
 
 export class ChannelParticipantDTO {
   @IsBoolean()
@@ -15,4 +15,6 @@ export class ChannelParticipantDTO {
   muteEnd?: Date;
 }
 
-// export class UpdateChannelParticipantDTO extends PartialType(ChannelParticipantDTO) {}
+export class UpdateChannelParticipantDTO extends PartialType(
+  ChannelParticipantDTO,
+) {}

@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelService } from 'src/channel/channel.service';
 import { Repository } from 'typeorm';
@@ -18,34 +23,36 @@ export class ChannelParticipantService {
     private channelService: ChannelService,
   ) {}
 
-  // async find(): Promise<ChannelParticipant[]> {
-  //   return await this.participantRepository.find();
-  // }
+  async find(channel: Channel): Promise<ChannelParticipant[]> {
+    return await this.participantRepository.find({
+      where: {
+        channel: channel,
+      },
+    });
+  }
 
-  // async findOne(
-  //   userId: string,
-  //   channelId: string,
-  // ): Promise<ChannelParticipant> {
-  //   return await this.participantRepository.findOne({
-  //     where: {
-  //       user: userId,
-  //       channel: channelId,
-  //     },
-  //   });
-  // }
+  async findOne(user: User, channel: Channel): Promise<ChannelParticipant> {
+    return await this.participantRepository.findOneOrFail({
+      where: {
+        user: user,
+        channel: channel,
+      },
+    });
+  }
 
-  async create(
-    user: User,
-    channel: Channel,
-    admin?: boolean,
-  ): Promise<ChannelParticipant> {
-    const entity = new ChannelParticipant();
-    entity.user = user;
-    entity.channel = channel;
-    if (admin != undefined) {
-      entity.admin = admin;
+  //If the user is already a channelParticipant, this function does nothing
+  async create(user: User, channel: Channel, admin?: boolean): Promise<void> {
+    try {
+      await this.findOne(user, channel);
+    } catch {
+      const entity = new ChannelParticipant();
+      entity.user = user;
+      entity.channel = channel;
+      if (admin != undefined) {
+        entity.admin = admin;
+      }
+      await this.participantRepository.save(entity);
     }
-    return await this.participantRepository.save(entity);
   }
 
   // async update(

@@ -36,12 +36,20 @@ export class ChannelService {
     return new ChannelDTO(await this.channelRepository.findOneOrFail(id));
   }
 
+  async findEntity(id: string): Promise<Channel> {
+    return await this.channelRepository.findOneOrFail(id);
+  }
+
   async create(userId: string, data: CreateChannelDTO) {
     const user = await this.userService.findEntity(userId);
-    if (data.type == ChannelType.protected && !data.password) {
-      throw new BadRequestException(
-        'channel of type protected must have a password',
-      );
+    if (data.type == ChannelType.protected) {
+      if (!data.password) {
+        throw new BadRequestException(
+          'channel of type protected must have a password',
+        );
+      }
+    } else {
+      data.password = null;
     }
     const date = new Date();
     const channelEntity = {
@@ -68,21 +76,23 @@ export class ChannelService {
     if (channel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can update');
     }
-    channel.type = data.type;
-    if (data.type == ChannelType.protected && data.password != undefined) {
-      channel.password = data.password;
+    if (data.type == ChannelType.protected) {
+      if (data.password != undefined) {
+        channel.password = data.password;
+      } else {
+        throw new BadRequestException(
+          'No password provided for protected channel',
+        );
+      }
     } else {
-      throw new BadRequestException(
-        'No password provided for protected channel',
-      );
+      channel.password = null;
     }
+    channel.type = data.type;
     await this.channelRepository.save(channel);
   }
 
   async delete(userId: string, channelId: string): Promise<void> {
-    const currentChannel = await this.channelRepository.findOneOrFail(
-      channelId,
-    );
+    const currentChannel = await this.findEntity(channelId);
     if (currentChannel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can delete channel');
     }

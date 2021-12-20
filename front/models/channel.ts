@@ -1,7 +1,7 @@
 export enum ChannelType {
   public,
   private,
-  password,
+  protected,
 }
 
 export interface ChannelDTO {

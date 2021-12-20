@@ -68,13 +68,13 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-message')
   handleEvent(@MessageBody() data: string): void {
-    console.log('Message recieved: ' + data);
+    // console.log('Message recieved: ' + data);
     this.server.emit('chat-message', data);
   }
 
   async handleConnection(client: Socket): Promise<void> {
-    console.log('New user connected: ' + client.id);
-    console.log('All connected users: ', this.users);
+    // console.log('New user connected: ' + client.id);
+    // console.log('All connected users: ', this.users);
     client.emit('all-users-status', Array.from(this.users.values()));
     this.server.emit('status-update', this.users.get(client.id));
   }
@@ -84,7 +84,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     usr.status = UserStatus.offline;
     this.server.emit('status-update', usr);
     this.users.delete(client.id);
-    console.log('User disconnected: ' + client.id);
-    console.log('All connected users: ', this.users);
+    // console.log('User disconnected: ' + client.id);
+    // console.log('All connected users: ', this.users);
   }
 }
