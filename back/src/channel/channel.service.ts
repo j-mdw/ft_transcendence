@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Inject,
   Injectable,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -35,28 +36,28 @@ export class ChannelService {
     return new ChannelDTO(await this.channelRepository.findOneOrFail(id));
   }
 
-  //Potential error if findOne fails
   async create(userId: string, data: CreateChannelDTO) {
     const user = await this.userService.findEntity(userId);
     if (data.type == ChannelType.protected && !data.password) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         'channel of type protected must have a password',
       );
     }
     const date = new Date();
-    const channel = await this.channelRepository.save({
+    const channelEntity = {
       ...data,
       createdAt: date,
       updatedAt: date,
       owner: user,
-    });
+    };
+    const channel = await this.channelRepository.save(channelEntity);
     await this.participantService.create(user, channel, true);
   }
 
   /*
-  For now, Multiple channels with same name is allowed
+  For now, Multiple channels with same name are allowed
   Channel can only be updated by the owner (not functional yet)
-  Check if the type of the channel is 'password', and if so, if the password is null, throw an exception
+  If the channel is protected, a password must be provided, othwerise, a BadRequest exception is thrown
   */
   async update(
     userId: string,
@@ -67,22 +68,17 @@ export class ChannelService {
     if (channel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can update');
     }
-    for (const prop in data) {
-      if (data[prop] != undefined) {
-        channel[prop] = data[prop];
-      }
-    }
-    if (channel.type != ChannelType.protected) {
-      channel.password = null;
-    } else if (channel.password == null) {
-      throw new ForbiddenException(
-        'channel of type protected must have a password',
+    channel.type = data.type;
+    if (data.type == ChannelType.protected && data.password != undefined) {
+      channel.password = data.password;
+    } else {
+      throw new BadRequestException(
+        'No password provided for protected channel',
       );
     }
     await this.channelRepository.save(channel);
   }
 
-  // For now not checking if user is the owner or not due to issues with retrieving owner id
   async delete(userId: string, channelId: string): Promise<void> {
     const currentChannel = await this.channelRepository.findOneOrFail(
       channelId,
@@ -90,8 +86,6 @@ export class ChannelService {
     if (currentChannel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can delete channel');
     }
-    // const participants = channel.participants;
-    // this.participantService.deleteChannelParticipants(participants);
     await this.channelRepository.delete(channelId);
   }
 }
