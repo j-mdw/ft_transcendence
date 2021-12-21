@@ -17,8 +17,6 @@ export class BallDto {
   @IsInt()
   ySpeed: number;
 
-
-
   @IsInt()
   @Min(0)
   radius: number;
@@ -27,7 +25,7 @@ export class BallDto {
   constructor(x: number, y: number) {
 	this.x = x;
 	this.y = y;
-	this.xSpeed = this.getRandomInt(2, 5)
+	this.xSpeed = this.getRandomInt(1, 2)
 	this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
 	this.ySpeed = this.getRandomInt(2, 5)
 	this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
@@ -87,7 +85,7 @@ export class BallDto {
     }
 
 	reinitializeBallPosition(){
-		this.xSpeed = this.getRandomInt(2, 5)
+		this.xSpeed = this.getRandomInt(1, 2)
 		this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
 		this.ySpeed = this.getRandomInt(2, 5)
 		this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
