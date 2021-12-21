@@ -20,7 +20,7 @@
 <script lang="ts">
 import Vue from 'vue'
 export default Vue.extend({
-  	layout: 'default',
+  	layout: 'empty',
 	name: 'gamescript',
 	data() {
 		return {
@@ -61,7 +61,7 @@ export default Vue.extend({
 				initialization() {
 					this.$socket.client.emit('initialization', this.username);
 					//on recupere position de la balle sur le server
-					//attention a priori ce qui uit est inutile 
+					//attention a priori ce qui uit est inutile
 					this.$socket.$subscribe('returnInitialPosition', (data: any) => {
 					for(let i = 0; i < data.balls.length; i++)
 						this.drawBall(data.balls[i]);
@@ -96,7 +96,7 @@ export default Vue.extend({
         this.createScreen();
         //position de depart
         this.initialization();
-      
+
 	  // addeventlistener  d'appui sur touche
         window.addEventListener('keydown', (event) => {
             if(event.key === 'w') //w
@@ -158,4 +158,4 @@ export default Vue.extend({
 				// 	this.context.font = "30px Arial";
 				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
 				// 	});
-	-->			
+	-->
