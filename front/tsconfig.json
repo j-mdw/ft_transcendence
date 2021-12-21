@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "allowJs": true,
 	"sourceMap": true,
-	"strictNullChecks": false,
+	"strictNullChecks": false, // sinon partie Laurent ne compile pas(game/index.vue)
     "strict": true,
 	"noEmit": true,
     "experimentalDecorators": true,

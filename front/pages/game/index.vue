@@ -3,7 +3,14 @@
 		<canvas
 			id="game"
 			style="border: 4px solid black;"
+			overscroll-behavior="none"
 		></canvas>
+<!-- A UTILISER SUR AUTRE PAGE POUR SCRIPTER LE TYPE DDE JEU
+		<p>
+			<button @click="gametype('classic')">classic</button>
+			<button @click="gametype('multiballs')">multiballs</button>
+			<button @click="gametype('rookie')">rookie</button>
+		</p> -->
 	</div>
 
 
@@ -20,6 +27,7 @@ export default Vue.extend({
 			title:'Pong Game',
 			text:'',
 			username:'',
+			//socket: null, //ne sert a rien pour l'intant je crois
 			context: null,
 			canvas:  null,
 			width: 0,
@@ -36,7 +44,7 @@ export default Vue.extend({
 			console.log("we\'re in!!");
 		},
 		disconnect() {
-			this.$socket.$unsubscribe('chat-message')
+			this.$socket.$unsubscribe('chat-message') //je ne sais pas si utile
 		}
 	},
 	methods: {
@@ -51,10 +59,12 @@ export default Vue.extend({
 
 				},
 				initialization() {
-					this.$socket.client.emit('initialization');
+					this.$socket.client.emit('initialization', this.username);
 					//on recupere position de la balle sur le server
+					//attention a priori ce qui uit est inutile 
 					this.$socket.$subscribe('returnInitialPosition', (data: any) => {
-					this.drawBall(data.ball);
+					for(let i = 0; i < data.balls.length; i++)
+						this.drawBall(data.balls[i]);
 					this.drawPlayer(data.p1);
 					this.drawPlayer(data.p2);
 					});
@@ -71,7 +81,11 @@ export default Vue.extend({
 						left = (player.x - (player.w / 2)) * this.ratio.x;
 					this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
 					this.context.font = "30px Arial";
-					this.context.fillText( this.username + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+					this.context.fillText( player.username + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+				},
+
+				gametype(typeofgame: string) {
+					this.$socket.client.emit('typeofgame', typeofgame)
 				},
 
     },
@@ -82,7 +96,8 @@ export default Vue.extend({
         this.createScreen();
         //position de depart
         this.initialization();
-        //loop
+      
+	  // addeventlistener  d'appui sur touche
         window.addEventListener('keydown', (event) => {
             if(event.key === 'w') //w
                 this.$socket.client.emit('keyPress', {inputId:'up', state:true});
@@ -92,11 +107,10 @@ export default Vue.extend({
                 this.$socket.client.emit('keyPress2', {inputId:'up', state:true});
             else if(event.key === 'ArrowDown') //down
                 this.$socket.client.emit('keyPress2', {inputId:'down', state:true});
-
-
             })
 
 
+	// addeventlistener de relachement d'une touche
         window.addEventListener('keyup', (event) => {
             if(event.key === 'w') //up
                 this.$socket.client.emit('keyPress', {inputId:'up', state:false});
@@ -106,24 +120,25 @@ export default Vue.extend({
                 this.$socket.client.emit('keyPress2', {inputId:'up', state:false});
             else if(event.key === 'ArrowDown') //s
                 this.$socket.client.emit('keyPress2', {inputId:'down', state:false});
-
-
             })
 
+	// addeventlistener de changement de taille de l'ecran
         window.addEventListener('resize', (event) => {
             this.createScreen();
         })
 
+		  //loop
         this.$socket.client.emit('loop');
 
+	// on recupere les donnees en provenance du serveur
         this.$socket.$subscribe('returnFullData', (data: any) => {
-            this.context.clearRect(0, 0, this.width, this.height);
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.beginPath();
-            this.context.moveTo(this.width / 2, 0);
-            this.context.lineTo (this.width / 2, this.height);
+            this.context.moveTo(this.canvas.width / 2, 0);
+            this.context.lineTo (this.canvas.width / 2, this.canvas.height);
             this.context.stroke();
-
-            this.drawBall(data.ball);
+			for(let i = 0; i < data.balls.length; i++)
+				this.drawBall(data.balls[i]);
             this.drawPlayer(data.p1);
 			this.drawPlayer(data.p2);
 			// if (data.p1.score >= 2|| data.p2.score >= 2){
@@ -137,3 +152,10 @@ export default Vue.extend({
 
 })
 </script>
+<!--
+// this.socket.on('firstPlayerInitialization', (data) => {
+				// 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				// 	this.context.font = "30px Arial";
+				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
+				// 	});
+	-->			

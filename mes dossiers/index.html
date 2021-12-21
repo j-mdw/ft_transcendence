@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
@@ -12,9 +12,9 @@
 	<div id="v-app">
 		<canvas
 			id="game"
-			style="border: 4px solid black;"
-			overscroll-behavior="none"
-		></canvas>
+			style="border: 4px solid black;" -->
+			<!-- overscroll-behavior="none"
+		></canvas> -->
 		<p>
 			<button @click="gametype('classic')">classic</button>
 			<button @click="gametype('multiballs')">multiballs</button>
@@ -25,61 +25,61 @@
 	<script lang="ts">
 
 		let app = new Vue({
-			el:'#v-app',
-			data:{
-				title:'Pong Game',
-				text:'',
-				username:'',
-				socket: null,
-				context: null,
-				canvas: null,
-				ratio:{ //on part sur un ecran de 1280 x 960
-					x:0,
-					y:0,
-					less:0,
-				},
-			},
+			// el:'#v-app',
+			// data:{
+			// 	title:'Pong Game',
+			// 	text:'',
+			// 	username:'',
+			// 	socket: null,
+			// 	context: null,
+			// 	canvas: null,
+			// 	ratio:{ //on part sur un ecran de 1280 x 960
+			// 		x:0,
+			// 		y:0,
+			// 		less:0,
+			// 	},
+			// },
 
 			methods:{
-				createScreen(){
-					let	width = window.innerWidth,
-						height = window.innerHeight;
-					this.canvas.width = width //* ratio;
-					this.canvas.height = height //* ratio;
-					this.ratio.x = width / 1280;
-					this.ratio.y = height / 960;
-					this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
+				// createScreen(){
+				// 	let	width = window.innerWidth,
+				// 		height = window.innerHeight;
+				// 	this.canvas.width = width //* ratio;
+				// 	this.canvas.height = height //* ratio;
+				// 	this.ratio.x = width / 1280;
+				// 	this.ratio.y = height / 960;
+				// 	this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
 
-				},
-				initialization() {
-					this.socket.emit('initialization', this.username);
-					//on recupere position de la balle sur le server
-					this.socket.on('returnInitialPosition', (data) => {
-					for(let i = 0; i < data.balls.length; i++)
-						this.drawBall(data.balls[i]);
-					this.drawPlayer(data.p1);
-					this.drawPlayer(data.p2);
-					});
-				},
+				// },
+				// initialization() {
+				// 	this.socket.emit('initialization', this.username);
+				// 	//on recupere position de la balle sur le server
+				// 	this.socket.on('returnInitialPosition', (data) => {
+				// 	for(let i = 0; i < data.balls.length; i++)
+				// 		this.drawBall(data.balls[i]);
+				// 	this.drawPlayer(data.p1);
+				// 	this.drawPlayer(data.p2);
+				// 	});
+				// },
 
-				drawBall(ball) {
-					this.context.beginPath();
-					// this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-					this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
-					this.context.fill();
-				},
+				// drawBall(ball) {
+				// 	this.context.beginPath();
+				// 	// this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+				// 	this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
+				// 	this.context.fill();
+				// },
 
-				drawPlayer(player) {
-					let top = (player.y - (player.h / 2)) * this.ratio.y,
-						left = (player.x - (player.w / 2)) * this.ratio.x;
-					this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
-					this.context.font = "30px Arial";
-					this.context.fillText( player.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
-				},
+				// drawPlayer(player) {
+				// 	let top = (player.y - (player.h / 2)) * this.ratio.y,
+				// 		left = (player.x - (player.w / 2)) * this.ratio.x;
+				// 	this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
+				// 	this.context.font = "30px Arial";
+				// 	this.context.fillText( player.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+				// },
 
-				gametype(typeofgame) {
-					this.socket.emit('typeofgame', typeofgame)
-				},
+				// gametype(typeofgame) {
+				// 	this.socket.emit('typeofgame', typeofgame)
+				// },
 
 				// putToSocketList(userName) {
 				// 	this.socket.emit('addToSocketList', {username: userName});
@@ -110,17 +110,17 @@
 				this.socket = io('http://localhost:3000');
 			},
 			mounted() {
-				this.canvas = document.getElementById("game");
-				this.context = this.canvas.getContext("2d");
-				// this.putToSocketList();
-				//dessin du cadre et des proportions
-				this.createScreen();
+				// this.canvas = document.getElementById("game");
+				// this.context = this.canvas.getContext("2d");
+				// // this.putToSocketList();
+				// //dessin du cadre et des proportions
+				// this.createScreen();
 
-				//position de depart
-				this.initialization();
+				// //position de depart
+				// this.initialization();
 
-				//on lance la boucle cote server
-				this.socket.emit('loop');
+				// //on lance la boucle cote server
+				// this.socket.emit('loop');
 
 					// addeventlistener  d'appui sur touche
 				window.addEventListener('keydown', (event) => {
