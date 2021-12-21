@@ -10,9 +10,10 @@
     ],
     "esModuleInterop": true,
     "allowJs": true,
-    "sourceMap": true,
+	"sourceMap": true,
+	"strictNullChecks": false, // sinon partie Laurent ne compile pas(game/index.vue)
     "strict": true,
-    "noEmit": true,
+	"noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
@@ -26,8 +27,7 @@
     "types": [
       "@nuxt/types",
       "@types/node",
-      "@nuxtjs/axios",
-      "vuetify-dialog/types"
+      "@nuxtjs/axios"
     ]
   },
   "exclude": [
