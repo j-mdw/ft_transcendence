@@ -46,7 +46,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-
 export default Vue.extend({
   layout: 'default',
   data () {
@@ -84,42 +83,26 @@ export default Vue.extend({
   position: relative;
   overflow: hidden;
 }
-
 ul {
     list-style-type: none;
 }
-
 .v-text-field{
-      width: 60rem !important; 
+      max-width: 60rem !important; 
 }
-
 .message-wrapper{
   height: 500px;
   overflow: scroll;
+  margin-right: 4rem;
 }
-
 .message-background{
     background-color: #fff;
-    width: 30rem;
+    max-width: 30rem;
     border-radius: 10px;
     margin-bottom: 15px;
 		margin: "auto";
-		/*margin-left: 10;
-		max-height: "80%";
-		width: "95%";
-		max-width: "95%";
-		background-color: '#FFF';
-		padding: 15;
-		/* borderRadius: 20, 
-		flex-direction: 'row';
-		align-items: "center";
-		justify-content: "space-between";
-		margin-bottom: 20;
-		overflow: "scroll" */
     background-color: #fff;
     /* font-size:200px; */
 }
-
 .message{
     margin-left: 10px;
     margin-right: 10px;
