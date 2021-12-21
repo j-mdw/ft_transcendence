@@ -85,6 +85,7 @@ export class AppGateway
 
 		this.socketList.push(client);
 		this.logger.log(`${this.socketList.length} client connecte`);
+		if 
 
 		// while (this.socketList.length  < 2)
 		// {
