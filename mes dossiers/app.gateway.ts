@@ -2,32 +2,32 @@
 https://docs.nestjs.com/websockets/gateways#gateways
 */
 
-import {
-  MessageBody,
-  SubscribeMessage,
-  WebSocketGateway,
-  WebSocketServer,
-  OnGatewayConnection,
-  OnGatewayDisconnect,
-  OnGatewayInit,
-  WsResponse,
-} from '@nestjs/websockets';
-import { Logger } from '@nestjs/common';
-import { Socket, Server } from 'socket.io';
-import { BallDto } from "./dto/ball.dto";
-import { PlayerDto } from "./dto/player.dto";
-import { GameTypeDto } from "./dto/gameType.dto";
+// import {
+//   MessageBody,
+//   SubscribeMessage,
+//   WebSocketGateway,
+//   WebSocketServer,
+//   OnGatewayConnection,
+//   OnGatewayDisconnect,
+//   OnGatewayInit,
+//   WsResponse,
+// } from '@nestjs/websockets';
+// import { Logger } from '@nestjs/common';
+// import { Socket, Server } from 'socket.io';
+// import { BallDto } from "./dto/ball.dto";
+// import { PlayerDto } from "./dto/player.dto";
+// import { GameTypeDto } from "./dto/gameType.dto";
 
-import { setInterval } from 'timers';
+// import { setInterval } from 'timers';
 
 @WebSocketGateway()
 export class AppGateway
   implements OnGatewayConnection, OnGatewayDisconnect, OnGatewayInit
 {
-  socketList: Array<Socket> = [];
-  users: number = 0
+//   socketList: Array<Socket> = [];
+//   users: number = 0
 
-  private logger:Logger = new Logger('GameGateway');
+//   private logger:Logger = new Logger('GameGateway');
 
   gameType: GameTypeDto = new GameTypeDto('classic');
   balls: Array<BallDto> = [];
@@ -36,8 +36,8 @@ export class AppGateway
   player2: PlayerDto;
 
 
-  @WebSocketServer()
-  server: Server;
+//   @WebSocketServer()
+//   server: Server;
 
 
   handleConnection(client: Socket, ...args: any[]) {

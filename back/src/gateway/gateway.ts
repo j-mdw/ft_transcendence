@@ -9,6 +9,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { BallDto } from "./gameDto/ball.dto";
 import { PlayerDto } from "./gameDto/player.dto";
+import { GameTypeDto } from "./dto/gameType.dto";
 import { setInterval } from 'timers';
 import { Logger } from '@nestjs/common';
 
@@ -20,7 +21,8 @@ import { Logger } from '@nestjs/common';
 })
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
-  users = 0;
+  users: number = 0;
+
 
   @SubscribeMessage('chat-message')
   handleEvent(@MessageBody() data: string) {
@@ -45,6 +47,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 
   private logger:Logger = new Logger('GameGateway');
+  socketList: Array<Socket> = [];
 
   ball: BallDto;
   player1: PlayerDto;
