@@ -1,5 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { Relationship } from '~/models'
+import { Relationship, RelationshipType } from '~/models'
 import { $axios } from '~/utils/api'
 
 @Module({
@@ -21,7 +21,11 @@ export default class RelationshipModule extends VuexModule {
           return this.relationships[i];
         }
       }
-      throw new Error('Relationship not found');
+      return {
+        // eslint-disable-next-line object-shorthand
+        peerId: peerId,
+        type: RelationshipType.none,
+      }
     };
   }
 

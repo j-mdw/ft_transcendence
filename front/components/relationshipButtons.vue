@@ -1,7 +1,7 @@
 <template>
     <div>
-          <div>
-              <v-btn color="#f5cac3" class="mt-6" @click="becomeFriends()">
+          <div  v-if="myrelation.type == 1">
+              <v-btn color="#f5cac3" class="mt-6" @click="askFriends()">
                 add to my friends
               <v-icon color="#395c6b" right>fa-user-plus</v-icon>    
             </v-btn>
@@ -53,18 +53,11 @@ export default Vue.extend({
 
     
     computed: {
-        // myrelation (): Relationship {
-        //     // try {
-        //         console.log("computed")
-        //         return relationshipStore.one(this.userId)
-        //     // }
-        //     // catch (error)
-        //     // { 
-        //     //     console.log("no relationship");
-        //     //     console.log(this.relation);
-        //     // }
-        //     // return (this.relation)
-        // },
+        myrelation (): Relationship {
+          console.log("test");
+          console.log(relationshipStore.one(this.userId));
+            return relationshipStore.one(this.userId);
+        },
 	},
     
 
@@ -72,9 +65,15 @@ export default Vue.extend({
     },
 
     methods: {
+        async askFriends()
+        {
+            await this.$axios.$post(`relationships/${this.userId}`, {type: RelationshipType.sent}, {withCredentials: true}).then((res) => {
+                console.log("we are friends");
+            });
+        },
         async becomeFriends()
         {
-            await this.$axios.$post(`relationships/${this.userId}`, {relation: RelationshipType.friend}, {withCredentials: true}).then((res) => {
+            await this.$axios.$post(`relationships/${this.userId}`, {type: RelationshipType.sent}, {withCredentials: true}).then((res) => {
                 console.log("we are friends");
             });
         }
