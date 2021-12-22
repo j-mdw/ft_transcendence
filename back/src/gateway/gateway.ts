@@ -109,7 +109,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   socketList: Array<Socket> = [];
 
-  gameData: GameDataDto = new GameDataDto('classic');
+  gameData: GameDataDto = new GameDataDto('classic', 2);
 
   balls: Array<BallDto> = [];
 
@@ -126,14 +126,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			ball.playerPaddle(this.player2);
 			ball.update(this.player1, this.player2, this.gameData);
 		}
-		//c'est la qu'on checke le score et que l'on sort proprement si besoin
-		if (this.player1.score >= 2 || this.player2.score >= 2){//attention j'ai mis score a 2 pour les tests
-			let winner = this.gameData.winOrLoose(this.player1, this.player2);
-			this.logger.log(`${winner} vient de gagner`);
-
-			//on sort de cette boucle setinterval
-			clearInterval(intervalId);
-		}
 
 		//change paddlesize if needed
 		if (this.gameData && this.gameData.changingPaddle)
@@ -147,6 +139,33 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
 			socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+		}
+
+		//c'est la qu'on checke le score et que l'on sort proprement si besoin
+		if (this.player1.score >= 2 || this.player2.score >= 2){//attention j'ai mis score a 2 pour les tests
+			let winner = this.gameData.winOrLoose(this.player1, this.player2);
+			this.logger.log(`${winner} vient de gagner`);
+			for (let i in this.socketList) {
+				let socket = this.socketList[i];
+				socket.emit('GameWinner',  winner);
+			}
+			delete this.player1;
+			delete this.player2;
+			for (let i in this.balls)
+				delete this.balls[i];
+			while (this.balls.length)
+				this.balls.pop();
+			this.logger.log(`${this.balls.length} est la taille du tableau balls`);
+			while (this.socketList.length)
+				this.socketList.pop();
+				this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
+
+			// delete this.balls;
+
+
+			//on sort de cette boucle setinterval
+			clearInterval(intervalId);
+			return;
 		}
 		////probablement a faire avec les rooms
 	}, 1000/60);
@@ -189,7 +208,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   @SubscribeMessage('keyPress')
-  handleGamePaddleMove(client:Socket, data: any): void {
+  handleGamePaddleMove(client:Socket, data: {inputId: string, state: boolean}): void {
 	if (client === this.socketList[0]){
 		if (data.inputId === 'up')
 			this.player1.pressingUp = data.state;
@@ -200,7 +219,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 
   @SubscribeMessage('keyPress2')
-  handleGamePaddleMove2(client:Socket, data: any): void {
+  handleGamePaddleMove2(client:Socket, data: {inputId: string, state: boolean}): void {
 	if (client === this.socketList[1]) {
 		if (data.inputId === 'up')
 			this.player2.pressingUp = data.state;

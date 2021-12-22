@@ -144,9 +144,19 @@ export default Vue.extend({
 			// if (data.p1.score >= 2|| data.p2.score >= 2){
 
 			// 	console.log("coucou");
-			// 	this.$router.push('/profile');
+			// 	this.$router.push('/home');
 			// }
-            });
+			});
+
+		this.$socket.$subscribe('GameWinner', (data: string) => {
+			this.context.font = "30px Arial";
+			this.context.fillText( "Player " + data + " has won !!!!", 500 * this.ratio.x, 240 * this.ratio.y);
+			const tID = setTimeout(() => {
+				this.$router.push('/profile');
+            	window.clearTimeout(tID);		// clear time out.
+				}, 3000);
+
+			});
     },
 
 
