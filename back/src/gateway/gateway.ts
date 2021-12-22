@@ -25,7 +25,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly authService: AuthService,
     private readonly gatewayService: GatewayService,
-    ) {}
+  ) {}
 
   afterInit(srv: Server) {
     this.gatewayService.server = srv;
@@ -50,7 +50,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
             socket.id,
             new UpdateUserStatus(decoded.userId, UserStatus.online),
           );
-          socket.join(decoded.userId);//Joining a room with named after its own ID
+          socket.join(decoded.userId); //Joining a room with named after its own ID
           next();
         } else {
           console.log('Socket verification: unknown user');

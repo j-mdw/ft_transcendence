@@ -14,9 +14,9 @@
             offset-x="30"
             offset-y="30"
           >
-            <router-link to=/profile>
+            <router-link to="/profile">
               <v-list-item-avatar>
-                <v-img :src="`http://localhost:4000/${me.avatarPath}`"></v-img>
+                <v-img :src="`http://localhost:4000/${me.avatarPath}`" />
               </v-list-item-avatar>
             </router-link>
           </v-badge>
@@ -36,15 +36,14 @@
                 offset-x="30"
                 offset-y="30"
               >
-              <router-link :to="`/profile/${user.id}`">
-                <v-list-item-avatar class="mt-4 mb-4">
-                  <v-img
-                    :src="`http://localhost:4000/${user.avatarPath}`"
-                  />
-                
-                </v-list-item-avatar>
-              </router-link
-              ></v-badge>
+                <router-link :to="`/profile/${user.id}`">
+                  <v-list-item-avatar class="mt-4 mb-4">
+                    <v-img
+                      :src="`http://localhost:4000/${user.avatarPath}`"
+                    />
+                  </v-list-item-avatar>
+                </router-link>
+              </v-badge>
               <v-list-item-content>
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item-content>

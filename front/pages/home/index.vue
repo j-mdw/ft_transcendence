@@ -14,22 +14,18 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
-import { authenticationStore }  from '~/store'
+import { Vue } from 'nuxt-property-decorator'
+import { meStore } from '~/store'
 import { User } from '~/models/user'
 
-@Component({
+export default Vue.extend({
   layout: 'default',
+  computed: {
+    user (): User {
+      return meStore.me;
+    },
+  },
 })
-export default class Login extends Vue {
-  
-  user: User = Object();
-  async mounted() {
-      this.user = (await this.$axios.get('/user/me', {withCredentials: true})).data;
-      console.log('from user/me: ', this.user);
-      // this.user = await this.$axios.$get("/me", {withCredentials: true})
-  }
-}
 </script>
 
 <style scoped lang="scss">

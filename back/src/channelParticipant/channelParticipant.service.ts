@@ -23,13 +23,21 @@ export class ChannelParticipantService {
     private channelService: ChannelService,
   ) {}
 
-  async find(channel: Channel): Promise<ChannelParticipant[]> {
+  async findParticpants(channel: Channel): Promise<ChannelParticipant[]> {
     return await this.participantRepository.find({
       where: {
         channel: channel,
       },
     });
   }
+
+  // async findChannels(user: User): Promise<Channel[]> {
+  //   return await this.participantRepository.find({
+  //     where: {
+  //       channel: channel,
+  //     },
+  //   });
+  // }
 
   async findOne(user: User, channel: Channel): Promise<ChannelParticipant> {
     return await this.participantRepository.findOneOrFail({
