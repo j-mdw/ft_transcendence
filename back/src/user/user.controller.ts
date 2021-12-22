@@ -35,9 +35,9 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<UserDTO> {
     // try {
-      return await this.userService.findById(response.locals.id);
+    return await this.userService.findById(response.locals.id);
     // } catch {
-      // throw new BadRequestException();
+    // throw new BadRequestException();
     // }
   }
 
@@ -67,15 +67,17 @@ export class UserController {
   @Delete('delete/avatar')
   async beforeUpload(@Res({ passthrough: true }) response: Response) {
     const user = await this.userService.findById(response.locals.id);
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const fs = require('fs');
+    if (user.avatarPath.search('./avatars/ours/') !== 0) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fs = require('fs');
 
-    if (fs.existsSync(user.avatarPath)) {
-      try {
-        fs.unlinkSync(user.avatarPath);
-        console.log('Successfully deleted the file');
-      } catch (err) {
-        throw err;
+      if (fs.existsSync(user.avatarPath)) {
+        try {
+          fs.unlinkSync(user.avatarPath);
+          console.log('Successfully deleted the file');
+        } catch (err) {
+          throw err;
+        }
       }
     }
   }
