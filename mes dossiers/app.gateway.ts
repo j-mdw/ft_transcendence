@@ -16,7 +16,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 // import { Socket, Server } from 'socket.io';
 // import { BallDto } from "./dto/ball.dto";
 // import { PlayerDto } from "./dto/player.dto";
-// import { GameTypeDto } from "./dto/gameType.dto";
+// import { GameDataDto } from "./dto/gameData.dto";
 
 // import { setInterval } from 'timers';
 
@@ -29,7 +29,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 
 //   private logger:Logger = new Logger('GameGateway');
 
-//   gameType: GameTypeDto = new GameTypeDto('classic');
+//   gameData: GameDataDto = new GameDataDto('classic');
 //   balls: Array<BallDto> = [];
 // //   ball: BallDto;
 //   player1: PlayerDto;
@@ -66,10 +66,10 @@ https://docs.nestjs.com/websockets/gateways#gateways
 			// 	let ball = this.balls[i];
 			// 	ball.playerPaddle(this.player1);
 			// 	ball.playerPaddle(this.player2);
-			// 	ball.update(this.player1, this.player2, this.gameType);
+			// 	ball.update(this.player1, this.player2, this.gameData);
 			// }
-			// if (this.gameType && this.gameType.changingPaddle)
-			// 	this.gameType.updatePlayersPaddleSize(this.player1, this.player2);
+			// if (this.gameData && this.gameData.changingPaddle)
+			// 	this.gameData.updatePlayersPaddleSize(this.player1, this.player2);
 			// this.player1.updatePosition();
 			// this.player2.updatePosition();
 			// for (let i in this.socketList) {
@@ -93,7 +93,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 
 		// this.socketList.push(client);
 		// this.logger.log(`${this.socketList.length} client connecte`);
-		// if 
+		// if
 
 		// if (this.socketList.length === 1) {
 
@@ -108,7 +108,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 		// 	this.player2.score = 0;   // on peut aussi delete le player 2 et le recreer
 		// 	this.player2.userName = username;
 		// 	this.logger.log(`2eme client connecte, ${this.player2.userName}`);
-		// 	for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		// 	for(let i = 0; i < this.gameData.numberOfBalls; i++)
 		// 		delete this.balls[i];
 		// }
 		// if (this.socketList.length > 2){
@@ -118,7 +118,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 		// 	}
 		// 	// this.server.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 		// }
-		
+
 
 
 		// while (this.socketList.length  < 2)
@@ -140,7 +140,7 @@ https://docs.nestjs.com/websockets/gateways#gateways
 
 
 
-	  	// for(let i = 0; i < this.gameType.numberOfBalls; i++)
+	  	// for(let i = 0; i < this.gameData.numberOfBalls; i++)
 		//   this.balls[i] = new BallDto(640, 480)
 		// // this.ball =  new BallDto(640, 480);
 		// // this.player1 = new PlayerDto(40, 70, "lolo");
@@ -170,15 +170,15 @@ https://docs.nestjs.com/websockets/gateways#gateways
 	// 	}
 
 	// @SubscribeMessage('typeofgame')
-	// handleGameType(client:Socket, data: string): void {
+	// handleGameData(client:Socket, data: string): void {
 	// 	this.logger.log(`type of game renseigne`);
 
 	// 	if (data === 'multiballs')
-	// 		this.gameType = new GameTypeDto('multiballs', 9);
+	// 		this.gameData = new GameDataDto('multiballs', 9);
 	// 	else if (data === 'rookie')
-	// 		this.gameType = new GameTypeDto('rookie', 1, true);
+	// 		this.gameData = new GameDataDto('rookie', 1, true);
 	// 	else
-	// 		this.gameType = new GameTypeDto('classic');
+	// 		this.gameData = new GameDataDto('classic');
 	// 	}
 
 

@@ -15,8 +15,8 @@ import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
 import { GatewayService } from './gateway.service';
 import { BallDto } from "./gameDto/ball.dto";
 import { PlayerDto } from "./gameDto/player.dto";
-import { GameTypeDto } from "./gameDto/gametype.dto";
-import { setInterval } from 'timers';
+import { GameDataDto } from "./gameDto/gamedata.dto";
+import { setInterval, clearInterval } from 'timers';
 import { Logger } from '@nestjs/common';
 // import { Server } from 'http';
 
@@ -109,7 +109,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   socketList: Array<Socket> = [];
 
-  gameType: GameTypeDto = new GameTypeDto('classic');
+  gameData: GameDataDto = new GameDataDto('classic');
 
   balls: Array<BallDto> = [];
 
@@ -118,17 +118,32 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('loop')
   handleGameLoop(client:Socket, message: void): void {
-	setInterval(() => {
+	const intervalId = setInterval(() => {
+		//nouvelle position de la balle
 		for (let i in this.balls){
 			let ball = this.balls[i];
 			ball.playerPaddle(this.player1);
 			ball.playerPaddle(this.player2);
-			ball.update(this.player1, this.player2, this.gameType);
+			ball.update(this.player1, this.player2, this.gameData);
 		}
-		if (this.gameType && this.gameType.changingPaddle)
-			this.gameType.updatePlayersPaddleSize(this.player1, this.player2);
+		//c'est la qu'on checke le score et que l'on sort proprement si besoin
+		if (this.player1.score >= 2 || this.player2.score >= 2){//attention j'ai mis score a 2 pour les tests
+			let winner = this.gameData.winOrLoose(this.player1, this.player2);
+			this.logger.log(`${winner} vient de gagner`);
+
+			//on sort de cette boucle setinterval
+			clearInterval(intervalId);
+		}
+
+		//change paddlesize if needed
+		if (this.gameData && this.gameData.changingPaddle)
+			this.gameData.updatePlayersPaddleSize(this.player1, this.player2);
+
+		//updating players position
 		this.player1.updatePosition();
 		this.player2.updatePosition();
+
+		//send infos at each socket
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
 			socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
@@ -154,7 +169,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.player2.score = 0;   // on peut aussi delete le player 2 et le recreer
 		this.player2.userName = username;
 		this.logger.log(`2eme client connecte, ${this.player2.userName}`);
-		for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		for(let i = 0; i < this.gameData.numberOfBalls; i++)
 			delete this.balls[i];
 	}
 	if (this.socketList.length > 2){
@@ -164,7 +179,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		}
 	}
 	else{
-		for(let i = 0; i < this.gameType.numberOfBalls; i++)
+		for(let i = 0; i < this.gameData.numberOfBalls; i++)
 		this.balls[i] = new BallDto(640, 480);
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
@@ -196,15 +211,15 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	//servira pour integrer le type de jeu
   @SubscribeMessage('typeofgame')
-  handleGameType(client:Socket, data: string): void {
+  handleGameData(client:Socket, data: string): void {
 	this.logger.log(`type of game renseigne`);
 
 	if (data === 'multiballs')
-		this.gameType = new GameTypeDto('multiballs', 9);
+		this.gameData = new GameDataDto('multiballs', 9);
 	else if (data === 'rookie')
-		this.gameType = new GameTypeDto('rookie', 1, true);
+		this.gameData = new GameDataDto('rookie', 1, true);
 	else
-		this.gameType = new GameTypeDto('classic');
+		this.gameData = new GameDataDto('classic');
 	}
 
 }

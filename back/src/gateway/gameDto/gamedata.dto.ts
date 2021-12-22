@@ -1,13 +1,13 @@
 import { PlayerDto } from "./player.dto";
 
-export class GameTypeDto {
+export class GameDataDto {
 
-	gameType: string; // multiballs, rookie, classic
+	gameData: string; // multiballs, rookie, classic
 	numberOfBalls: number;
 	changingPaddle: boolean;
 
-	constructor(gametype: string, balls = 1, changepaddle = false) {
-		this.gameType = gametype;
+	constructor(gamedata: string, balls = 1, changepaddle = false) {
+		this.gameData = gamedata;
 		if (balls)
 			this.numberOfBalls = balls;
 		if (changepaddle)
@@ -27,6 +27,17 @@ export class GameTypeDto {
 		else if (diff < 0){
 			player2.updatePaddleSize(1);
 			player1.updatePaddleSize(1 - diff);
+		}
+	}
+
+	winOrLoose(player1: PlayerDto, player2: PlayerDto): string {
+		if (player1.score > player2.score){
+			//mettre dans database 1 victoire au credit de player1 et une defaite au credit de player2
+			return "1";
+		}
+		else {
+			//mettre dans database 1 victoire au credit de player2 et une defaite au credit de player1
+			return "2";
 		}
 	}
 }

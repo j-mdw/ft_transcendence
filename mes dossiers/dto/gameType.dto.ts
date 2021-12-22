@@ -1,13 +1,13 @@
 import { PlayerDto } from "./player.dto";
 
-export class GameTypeDto {
+export class GameDataDto {
 
-	gameType: string; // multiballs, rookie, classic
+	gameData: string; // multiballs, rookie, classic
 	numberOfBalls: number;
 	changingPaddle: boolean;
 
-	constructor(gametype: string, balls = 1, changepaddle = false) {
-		this.gameType = gametype;
+	constructor(gamedata: string, balls = 1, changepaddle = false) {
+		this.gameData = gamedata;
 		if (balls)
 			this.numberOfBalls = balls;
 		if (changepaddle)

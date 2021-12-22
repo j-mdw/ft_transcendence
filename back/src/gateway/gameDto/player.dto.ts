@@ -78,5 +78,4 @@ export class PlayerDto {
   updatePaddleSize(multipleFactor: number){
 	this.h = this.hInitial * multipleFactor;
 	}
-
 }

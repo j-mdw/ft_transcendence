@@ -1,6 +1,6 @@
 import { IsInt, Min } from 'class-validator';
 import { PlayerDto } from "./player.dto";
-import { GameTypeDto } from "./gameType.dto";
+import { GameDataDto } from "./gamedata.dto";
 
 export class BallDto {
   @IsInt()
@@ -33,23 +33,23 @@ export class BallDto {
 	this.radius = 15;
   }
 
-  update(player1: PlayerDto, player2: PlayerDto, gameType: GameTypeDto){
-	  this.edges(player1, player2, gameType);
+  update(player1: PlayerDto, player2: PlayerDto, gameData: GameDataDto){
+	  this.edges(player1, player2, gameData);
 
 	  this.x += this.xSpeed;
 	  this.y += this.ySpeed;
   }
 
-  edges(player1: PlayerDto, player2: PlayerDto, gameType: GameTypeDto) {
+  edges(player1: PlayerDto, player2: PlayerDto, gameData: GameDataDto) {
 	if ((this.y + this.radius) > 960 || (this.y - this.radius) < 0)
 	this.ySpeed *= -1;
 	if ((this.x) >= 1280 && this.x < (1280 + this.xSpeed)){
-		if (gameType.gameType !== 'multiballs')
+		if (gameData.gameData !== 'multiballs')
 			this.reinitializeBallPosition();
 		player1.score++;
 	}
 	if ((this.x) <= 0 && this.x > this.xSpeed) {
-		if (gameType.gameType !== 'multiballs')
+		if (gameData.gameData !== 'multiballs')
 			this.reinitializeBallPosition();
 		player2.score++;
 	}
