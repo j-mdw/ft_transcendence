@@ -1,7 +1,5 @@
 // import {
-//   Body,
 //   Controller,
-//   Get,
 //   Param,
 //   ParseUUIDPipe,
 //   Put,
@@ -9,45 +7,30 @@
 //   UseGuards,
 //   Res,
 //   Delete,
-//   Query,
-//   Post,
+//   Get,
 // } from '@nestjs/common';
-// import { ChannelParticipantDTO, UpdateChannelDTO } from './channel.dto';
+// import {
+//   ChannelParticipantDTO,
+//   UpdateChannelParticipantDTO,
+// } from './channelParticipant.dto';
 // import { ChannelParticipantService } from './channelParticipant.service';
 // import { JwtGuard } from 'src/auth/jwt.guard';
 // import { Response } from 'express';
 
-// @Controller('channel')
+// @Controller('channelParticipant')
 // @UseGuards(JwtGuard)
-// export class ChannelController {
-//   constructor(private channelService: ChannelService) {}
+// export class UserController {
+//   constructor(private channelParticipantService: ChannelParticipantService) {}
 //   @Get()
-//   allChannels(): Promise<ChannelDTO[]> {
-//     return this.channelService.findAll();
+//   findAll(): Promise<ChannelParticipantDTO[]> {
+//     return this.channelParticipantService.findChannelParticpants(2);
 //   }
-
-//   @Put()
-//   async newChannel(
+//   @Put('/:channelId/:userId')
+//   async addChannelParticipant(
+//     @Param('channelId', ParseUUIDPipe) channelId: string,
+//     @Param('userId', ParseUUIDPipe) userId: string,
 //     @Res({ passthrough: true }) response: Response,
-//     @Body() data: CreateChannelDTO,
-//   ) {
-//     await this.channelService.create(response.locals.id, data);
-//   }
-
-//   @Patch(':id')
-//   async updateChannel(
-//     @Param('id', ParseUUIDPipe) channelId: string,
-//     @Res({ passthrough: true }) response: Response,
-//     @Body() data: UpdateChannelDTO,
-//   ) {
-//     await this.channelService.update(response.locals.id, channelId, data);
-//   }
-
-//   @Delete()
-//   async deleteChannel(
-//     @Query('id', ParseUUIDPipe) channelId: string,
-//     @Res({ passthrough: true }) response: Response,
-//   ) {
-//     await this.channelService.delete(response.locals.id, channelId);
+//   ): Promise<void> {
+//     this.channelParticipantService.create(userId, channelId);
 //   }
 // }

@@ -34,7 +34,7 @@ export class AuthService {
       user.avatarPath = this.userService.find_avatar();
       await this.userService.create(user);
     } finally {
-      return await this.userService.findByEmail(user.email);
+      return new UserDTO(await this.userService.findByEmail(user.email));
     }
   }
 

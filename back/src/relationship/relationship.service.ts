@@ -9,12 +9,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserService } from 'src/user/user.service';
 import { Relationship, RelationshipType } from './relationship.entity';
-import { RelationshipDTO } from './relationship.dto';
 import { User } from 'src/user/user.entity';
-import { WebSocketServer } from '@nestjs/websockets';
-import { Server } from 'socket.io';
-import { ServerStreamFileResponseOptions } from 'http2';
-import { AppGateway } from 'src/gateway/gateway';
 import { GatewayService } from 'src/gateway/gateway.service';
 
 @Injectable()
@@ -28,12 +23,12 @@ export class RelationshipService {
     private gatewayService: GatewayService,
   ) {}
 
-  async userRelationships(id: string): Promise<RelationshipDTO[]> {
-    return (
-      await this.relationshipRepository.find({
-        where: { user: await this.userService.findEntity(id) },
-      })
-    ).map((relation) => new RelationshipDTO(relation));
+  async userRelationships(id: string): Promise<Relationship[]> {
+    return await this.relationshipRepository.find({
+      where: {
+        user: await this.userService.findById(id),
+      },
+    });
   }
 
   async findRelation(user: User, peer: User): Promise<Relationship[]> {
@@ -63,8 +58,8 @@ export class RelationshipService {
     if (userId == peerId) {
       throw new BadRequestException('user and peer cannot have same id');
     }
-    const user: User = await this.userService.findEntity(userId);
-    const peer: User = await this.userService.findEntity(peerId);
+    const user: User = await this.userService.findById(userId);
+    const peer: User = await this.userService.findById(peerId);
     let relation = new Array<Relationship>(2);
     let userRelation = RelationshipType.none;
     let peerRelation = RelationshipType.none;
@@ -165,8 +160,8 @@ export class RelationshipService {
   }
 
   async deleteRelation(userId: string, peerId: string): Promise<void> {
-    const user: User = await this.userService.findEntity(userId);
-    const peer: User = await this.userService.findEntity(peerId);
+    const user: User = await this.userService.findById(userId);
+    const peer: User = await this.userService.findById(peerId);
     const relation = await this.findRelation(user, peer);
     console.log('Relation:', relation);
     if (relation[1].type === RelationshipType.blocked) {

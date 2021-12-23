@@ -1,5 +1,5 @@
 import { IsBoolean, IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
-import { PartialType, PickType } from '@nestjs/swagger';
+import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { User } from './user.entity';
 
 export class CreateUserDTO {
@@ -41,6 +41,10 @@ export class UserDTO {
     this.twoFactorAuthenticationSecret = user.twoFactorAuthenticationSecret;
   }
 }
+
+export class UpdateUserDTO extends PartialType(
+  OmitType(UserDTO, ['id'] as const),
+) {}
 
 export enum UserStatus {
   online,

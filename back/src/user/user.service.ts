@@ -9,8 +9,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { User } from './user.entity';
-import { UserDTO, CreateUserDTO } from './user.dto';
+import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
+import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
+import { Channel } from 'src/channel/channel.entity';
 
 @Injectable()
 export class UserService {
@@ -19,23 +21,21 @@ export class UserService {
     private userRepository: Repository<User>,
     @Inject(forwardRef(() => ChannelService))
     private channelService: ChannelService,
+    @Inject(forwardRef(() => ChannelService))
+    private channelParticipantService: ChannelParticipantService,
   ) {}
 
-  async getUsers(): Promise<UserDTO[]> {
+  async getUsers(): Promise<User[]> {
     const users: User[] = await this.userRepository.find();
     if (users) {
-      return users.map((user) => new UserDTO(user));
+      return users;
     } else {
       throw new NotFoundException('No users in DB');
     }
   }
 
-  async findById(id: string): Promise<UserDTO> {
-    return new UserDTO(await this.userRepository.findOneOrFail(id));
-  }
-
-  async findEntity(id: string): Promise<User> {
-    return this.userRepository.findOneOrFail(id);
+  async findById(id: string): Promise<User> {
+    return await this.userRepository.findOneOrFail(id);
   }
 
   async isRegistered(email: string): Promise<boolean> {
@@ -50,34 +50,20 @@ export class UserService {
     return false;
   }
 
-  async findByEmail(email: string): Promise<UserDTO> {
-    return new UserDTO(
-      await this.userRepository.findOneOrFail({
-        where: {
-          email: email,
-        },
-      }),
-    );
+  async findByEmail(email: string): Promise<User> {
+    return await this.userRepository.findOneOrFail({
+      where: {
+        email: email,
+      },
+    });
   }
 
-  async findByPseudo(pseudo: string): Promise<UserDTO> {
-    return new UserDTO(
-      await this.userRepository.findOneOrFail({
-        where: {
-          pseudo: pseudo,
-        },
-      }),
-    );
-    // const user = await this.userRepository.findOne({
-    //   where: {
-    //     pseudo: pseudo,
-    //   },
-    // });
-    // if (user) {
-    //   return new UserDTO(user);
-    // } else {
-    //   throw new NotFoundException('user not found');
-    // }
+  async findByPseudo(pseudo: string): Promise<User> {
+    return await this.userRepository.findOneOrFail({
+      where: {
+        pseudo: pseudo,
+      },
+    });
   }
 
   /*
@@ -103,11 +89,11 @@ export class UserService {
   Update the user and doesn't return anything
   Throw if id passed as param is invalid or if trying to use a pseudo already in use
 */
-  async update(id: string, data: Partial<Omit<UserDTO, 'id'>>): Promise<void> {
+  async update(id: string, data: UpdateUserDTO): Promise<void> {
     console.log('Data for PATCH update:', data);
     let editedUser = null;
     try {
-      editedUser = await this.findEntity(id);
+      editedUser = await this.findById(id);
     } catch (error) {
       console.log(error);
       throw new ForbiddenException('Cannot update - User not in DB');
@@ -172,5 +158,16 @@ export class UserService {
     const my_avatar = avatars[Math.floor(Math.random() * avatars.length)];
     console.log(my_avatar);
     return my_avatar;
+  }
+
+  async findChannels(userId: string): Promise<Channel[]> {
+    const user = await this.findById(userId);
+    const participations =
+      await this.channelParticipantService.findUserParticipations(user);
+    const channels: Array<Channel> = [];
+    for (let i = 0; i < participations.length; i++) {
+      channels.push(participations[i].channel);
+    }
+    return channels;
   }
 }

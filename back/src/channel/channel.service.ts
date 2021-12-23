@@ -10,10 +10,11 @@ import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
 import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
-// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
 import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 import { User } from 'src/user/user.entity';
+import { UserDTO } from 'src/user/user.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class ChannelService {
@@ -26,27 +27,25 @@ export class ChannelService {
     private participantService: ChannelParticipantService,
   ) {}
 
-  async findAll(): Promise<ChannelDTO[]> {
-    return (await this.channelRepository.find()).map(
-      (channel) => new ChannelDTO(channel),
-    );
+  async findAll(): Promise<Channel[]> {
+    //Should probably disable this endpoint --> Only possible to get list of public/protected channels
+    return await this.channelRepository.find();
   }
 
-  async findOne(id: string): Promise<ChannelDTO> {
-    return new ChannelDTO(await this.channelRepository.findOneOrFail(id));
-  }
-
-  async findEntity(id: string): Promise<Channel> {
+  async findOne(id: string): Promise<Channel> {
     return await this.channelRepository.findOneOrFail(id);
   }
 
   async create(userId: string, data: CreateChannelDTO) {
-    const user = await this.userService.findEntity(userId);
+    const user = await this.userService.findById(userId);
     if (data.type == ChannelType.protected) {
       if (!data.password) {
         throw new BadRequestException(
           'channel of type protected must have a password',
         );
+      } else {
+        const saltOrRounds = 10;
+        data.password = await bcrypt.hash(data.password, saltOrRounds);
       }
     } else {
       data.password = null;
@@ -60,6 +59,57 @@ export class ChannelService {
     };
     const channel = await this.channelRepository.save(channelEntity);
     await this.participantService.create(user, channel, true);
+  }
+
+  //Public Channels: a participant adds himself
+  //Private Channels: admins add users
+  //Protected: participant adds himself if he can provide the password
+  async addParticipant(
+    userId: string,
+    participantId: string,
+    channelId: string,
+    password?: string,
+  ) {
+    const channel: Channel = await this.findOne(channelId);
+    const user: User = await this.userService.findById(userId);
+    await this.participantService.findOne(user, channel); //If user cannot be found, 404 will be thrown
+    const participantToCreate: User = await this.userService.findById(
+      participantId,
+    );
+    try {
+      await this.participantService.findOne(participantToCreate, channel);
+    } catch {
+      if (
+        this.isAdditionAllowed(user, participantToCreate, channel, password)
+      ) {
+        await this.participantService.create(participantToCreate, channel);
+      }
+      return;
+    }
+    throw new BadRequestException('Already channel participant');
+  }
+
+  async isAdditionAllowed(
+    userAdding: User,
+    userToAdd: User,
+    channel: Channel,
+    password?: string,
+  ): Promise<boolean> {
+    switch (channel.type) {
+      case ChannelType.public:
+        return userAdding.id === userToAdd.id; // Users can add themselves but cannot add others (TBC, might be easier
+      case ChannelType.private:
+        return (await this.participantService.findOne(userAdding, channel))
+          .admin;
+      case ChannelType.protected:
+        return await this.verifyPassword(channel, password);
+      default:
+        return false;
+    }
+  }
+
+  async verifyPassword(channel: Channel, password: string): Promise<boolean> {
+    return await bcrypt.compare(password, channel.password);
   }
 
   /*
@@ -92,7 +142,7 @@ export class ChannelService {
   }
 
   async delete(userId: string, channelId: string): Promise<void> {
-    const currentChannel = await this.findEntity(channelId);
+    const currentChannel = await this.findOne(channelId);
     if (currentChannel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can delete channel');
     }

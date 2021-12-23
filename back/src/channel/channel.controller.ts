@@ -16,22 +16,28 @@ import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { ChannelService } from './channel.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { Response } from 'express';
-import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
+import {
+  ChannelParticipantDTO,
+  UpdateChannelParticipantDTO,
+} from 'src/channelParticipant/channelParticipant.dto';
 
 @Controller('channel')
 @UseGuards(JwtGuard)
 export class ChannelController {
   constructor(private channelService: ChannelService) {}
-  @Get()
-  allChannels(): Promise<ChannelDTO[]> {
-    return this.channelService.findAll();
+  @Get() // Not sure we'll need this endpoint
+  async allChannels(): Promise<ChannelDTO[]> {
+    return (await this.channelService.findAll()).map(
+      (channel) => new ChannelDTO(channel),
+    );
   }
 
   // @Get(':channelId')
-  // allParticipants(
+  // async allChannelPatcitipants(
   //   @Param('channelId', ParseUUIDPipe) channelId: string,
-  // ): Promise<ChannelParticipantDTO> {
-  //   return;
+  //   @Res({ passthrough: true }) response: Response,
+  // ) {
+  //   return await this.channelService.findAllParticipants(channelId);
   // }
 
   @Put()
@@ -42,6 +48,21 @@ export class ChannelController {
     await this.channelService.create(response.locals.id, data);
   }
 
+  // @Put(':channelId/:participantId')
+  // async addChannelParticipant(
+  //   @Param('channelId', ParseUUIDPipe) channelId: string,
+  //   @Param('participantId', ParseUUIDPipe) participantId: string,
+  //   @Res({ passthrough: true }) response: Response,
+  //   @Body() password: string,
+  // ): Promise<void> {
+  //   this.channelService.addParticipant(
+  //     response.locals.id,
+  //     channelId,
+  //     participantId,
+  //     password,
+  //   );
+  // }
+
   @Patch(':channelId')
   async updateChannel(
     @Param('channelId', ParseUUIDPipe) channelId: string,
@@ -50,6 +71,16 @@ export class ChannelController {
   ) {
     await this.channelService.update(response.locals.id, channelId, data);
   }
+
+  // @Patch(':channelId/:userId')
+  // async updateChannelParticipant(
+  //   @Param('channelId', ParseUUIDPipe) channelId: string,
+  //   @Param('userId', ParseUUIDPipe) userId: string,
+  //   @Res({ passthrough: true }) response: Response,
+  //   @Body() data: UpdateChannelParticipantDTO,
+  // ) {
+  //   await this.channelService.update(response.locals.id, channelId, userId, data);
+  // }
 
   @Delete(':channelId')
   async deleteChannel(

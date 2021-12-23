@@ -7,7 +7,7 @@ export class ChannelDTO {
   @IsUUID()
   id: string;
 
-  @IsString()
+  @IsString() 
   name: string;
 
   @IsEnum(ChannelType)
