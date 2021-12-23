@@ -1,9 +1,6 @@
 <template>
  <div>
   <div id="message">
-              <!-- <v-list-item-content class="ml-4">  -->
-                 test
-               <!-- </v-list-item-content> -->
   </div>
   <div id="chat">
     

@@ -1,7 +1,7 @@
-import { IsBase64, IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsString, IsUUID } from 'class-validator';
 import { ChannelType } from './channel.entity';
 import { Channel } from './channel.entity';
-import { UserDTO } from 'src/user/user.dto';
+import { IntersectionType, PartialType, PickType } from '@nestjs/mapped-types';
 
 export class ChannelDTO {
   @IsUUID()
@@ -25,21 +25,17 @@ export class ChannelDTO {
   }
 }
 
-export class CreateChannelDTO {
+export class ChannelPassword {
   @IsString()
-  name!: string;
-
-  @IsEnum(ChannelType)
-  type!: ChannelType;
-
-  @IsBase64() //Could have issues when there is no password
-  password!: string;
+  password: string;
 }
 
-export class UpdateChannelDTO {
-  @IsEnum(ChannelType)
-  type!: ChannelType;
+export class CreateChannelDTO extends IntersectionType(
+  PickType(ChannelDTO, ['name', 'type'] as const),
+  PartialType(ChannelPassword),
+) {}
 
-  @IsBase64() //Could have issues when there is no password
-  password?: string;
-}
+export class UpdateChannelDTO extends IntersectionType(
+  PickType(ChannelDTO, ['type'] as const),
+  PartialType(ChannelPassword),
+) {}

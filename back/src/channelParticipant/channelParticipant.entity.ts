@@ -28,9 +28,6 @@ export class ChannelParticipant {
   })
   muteEnd: Date;
 
-  @Column()
-  userId: string;
-
   @ManyToOne(() => Channel, (channel) => channel.id, {
     onDelete: 'CASCADE',
   })

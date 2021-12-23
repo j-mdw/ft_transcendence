@@ -75,7 +75,6 @@ export class RelationshipService {
     } catch {
       console.log('No relationship exists');
     } finally {
-
       if (this.updateForbidden(userRelation, peerRelation, relationType)) {
         throw new ForbiddenException('Cannot update relation');
       }
