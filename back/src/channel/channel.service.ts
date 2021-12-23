@@ -102,14 +102,14 @@ export class ChannelService {
         return (await this.participantService.findOne(userAdding, channel))
           .admin;
       case ChannelType.protected:
-        return await this.verifyPassword(channel, password);
+        return await this.verifyPassword(password, channel.password);
       default:
         return false;
     }
   }
 
-  async verifyPassword(channel: Channel, password: string): Promise<boolean> {
-    return await bcrypt.compare(password, channel.password);
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
   }
 
   /*
@@ -147,5 +147,11 @@ export class ChannelService {
       throw new ForbiddenException('Only channel owner can delete channel');
     }
     await this.channelRepository.delete(channelId);
+  }
+
+  async deleteParticipant(userId: string, channelId: string): Promise<void> {
+    const user = await this.userService.findById(userId);
+    const channel = await this.findOne(channelId);
+    await this.participantService.deleteOne(user, channel);
   }
 }

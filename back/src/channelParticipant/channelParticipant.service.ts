@@ -13,7 +13,7 @@ export class ChannelParticipantService {
     private participantRepository: Repository<ChannelParticipant>, // @Inject(forwardRef(() => UserService)) // private userService: UserService, // @Inject(forwardRef(() => ChannelService)) // private channelService: ChannelService,
   ) {}
 
-  async findChannelParticpants(
+  async allChannelParticpants(
     channel: Channel,
   ): Promise<ChannelParticipant[]> {
     return await this.participantRepository.find({
@@ -74,5 +74,8 @@ export class ChannelParticipantService {
   //   await this.participantRepository.remove(participants);
   // }
 
-  // async deleteUserParticipations()
+  async deleteOne(user: User, channel: Channel) {
+    const participant = await this.findOne(user, channel);
+    await this.participantRepository.delete(participant);
+  }
 }

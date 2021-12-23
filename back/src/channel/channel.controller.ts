@@ -11,6 +11,7 @@ import {
   Delete,
   Query,
   Post,
+  ForbiddenException,
 } from '@nestjs/common';
 import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { ChannelService } from './channel.service';
@@ -88,5 +89,18 @@ export class ChannelController {
     @Res({ passthrough: true }) response: Response,
   ) {
     await this.channelService.delete(response.locals.id, channelId);
+  }
+
+  @Delete(':channelId/:userId')
+  async deleteParticipant(
+    @Param('channelId', ParseUUIDPipe) channelId: string,
+    @Param('userId', ParseUUIDPipe) userId: string,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    if (userId != response.locals.id) {
+      throw new ForbiddenException('cannot remove another user');
+    } else {
+      await this.channelService.deleteParticipant(userId, channelId);
+    }
   }
 }
