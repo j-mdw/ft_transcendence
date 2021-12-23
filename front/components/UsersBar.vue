@@ -6,25 +6,7 @@
       permanent
       expand-on-hover
     >
-      <v-list>
-        <v-list-item class="px-2 ml-n1">
-          <v-badge
-            bottom
-            :color="colors[me.status]"
-            offset-x="30"
-            offset-y="30"
-          >
-            <router-link to=/profile>
-              <v-list-item-avatar>
-                <v-img :src="`http://localhost:4000/${me.avatarPath}`"></v-img>
-              </v-list-item-avatar>
-            </router-link>
-          </v-badge>
-          <v-list-item to="/profile">
-            My Profile
-          </v-list-item>
-        </v-list-item>
-      </v-list>
+      <user-bar-me/>
       <v-divider />
       <v-list>
         <div v-for="user in users" :key="user.title">
@@ -72,9 +54,10 @@ import messageLogo from './Logo/messageLogo.vue';
 import pingpongLogo from './Logo/pingpongLogo.vue';
 import { User } from '~/models';
 import { usersStore, meStore } from '~/store';
+import UserBarMe from './userBarMe.vue';
 
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
+  components: { messageLogo, pingpongLogo, UserBarMe },
   data () {
     return {
       drawer: true,

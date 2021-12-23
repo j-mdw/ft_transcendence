@@ -27,7 +27,7 @@
                   become friend
                   <v-icon color="#395c6b" right>fas fa-user-check</v-icon>  
               </v-btn>
-              <v-btn color="#f5cac3"  @click="becomeFriends()" class="mb-2 mt-2 ml-2 mr-2">
+              <v-btn color="#f5cac3"  @click="deleteFriends()" class="mb-2 mt-2 ml-2 mr-2">
                   delete invitation
                   <v-icon color="#395c6b" right>fas fa-trash-alt</v-icon>  
               </v-btn>

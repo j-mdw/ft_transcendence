@@ -37,11 +37,8 @@ export class CreateChannelDTO {
 }
 
 export class UpdateChannelDTO {
-  @IsUUID()
-  id!: string;
-
   @IsEnum(ChannelType)
-  type?: ChannelType;
+  type!: ChannelType;
 
   @IsBase64() //Could have issues when there is no password
   password?: string;

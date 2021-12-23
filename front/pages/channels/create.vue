@@ -2,32 +2,30 @@
 <v-container class="flex-container" fill-height> 
     <v-row justify="center" color="#f7ede2" align="center">
       <v-form
-        ref="form"
-        lazy-validation
-        title="Create a channel"
-      >
-        <v-text-field
-          v-model="name"
-          :counter="20"
-          label="Name"
-          required
-          class="mt-8"
-        ></v-text-field>
+    ref="form"
+    lazy-validation
+    title="Create a channel"
+  >
+    <v-text-field
+      v-model="name"
+      :counter="20"
+      label="Name"
+      required
+    />
 
-        <v-select
-          v-model="select"
-          :items="items"
-          label="Type"
-          required
-        ></v-select>
+    <v-select
+      v-model="select"
+      :items="items"
+      label="Type"
+      required
+    />
 
-      
-        <v-text-field
-          v-if="select == 'Protected'"
-          v-model="password"
-          label="password"
-          required
-        ></v-text-field>
+    <v-text-field
+      v-if="select == 'Protected'"
+      v-model="password"
+      label="password"
+      required
+    />
 
         <v-btn
           color="success"
@@ -43,30 +41,29 @@
 
 <script lang="ts">
 
-
-import { ChannelDTO } from '~/models/channel'
 import Vue from 'vue'
+import { ChannelDTO } from '~/models/channel'
 export default Vue.extend({
-    data: () => ({
-      items: ['Public', 'Private', 'Protected'],
-      name: '',
-      select: '',
-      password: '',
-    }),
+  data: () => ({
+    items: ['Public', 'Private', 'Protected'],
+    name: '',
+    select: '',
+    password: '',
+  }),
 
-    methods: {
-      async createChannel() {
-        const input: ChannelDTO = {
-          name: this.name,
-          type: this.items.indexOf(this.select),
-          password: this.password,
-        }
-        await this.$axios.$put('channel', input, {withCredentials: true});
-        this.$router.push({
-						path: '/channels'
-					});
+  methods: {
+    async createChannel () {
+      const input: ChannelDTO = {
+        name: this.name,
+        type: this.items.indexOf(this.select),
+        password: this.password,
       }
+      await this.$axios.$put('channel', input, { withCredentials: true });
+      this.$router.push({
+        path: '/channels'
+      });
     }
+  }
 })
 </script>
 
