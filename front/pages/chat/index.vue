@@ -5,7 +5,7 @@
   <div id="chat">
     
     <h2 class="ml-5">My message</h2>
-    <v-card outlined color="transparent" class="mt-1">
+    <v-card outlined color="transparent" class="mt-1" width="%">
       <div class="message-wrapper">
       <ul id="chat">
       <li v-for="msg in messages" :key="messages[msg]">
@@ -37,13 +37,17 @@
         </v-col>
       </v-row>
       </v-card>
+      <chat-nav-bar/>
   </div>
+
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import chatNavBar from '~/components/chat/chatNavBar.vue'
 export default Vue.extend({
+  components: { chatNavBar },
   layout: 'default',
   data () {
     return {
@@ -89,7 +93,7 @@ ul {
 .message-wrapper{
   height: 500px;
   overflow: scroll;
-  margin-right: 4rem;
+  margin-left: 45%;
 }
 .message-background{
     background-color: #fff;
@@ -101,6 +105,25 @@ ul {
     /* font-size:200px; */
 }
 .message{
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.message-wrapper_left{
+  height: 500px;
+  overflow: scroll;
+  margin-right: 4rem;
+}
+.message-background_left{
+    background-color: #fff;
+    max-width: 30rem;
+    border-radius: 10px;
+    margin-bottom: 15px;
+		margin: "auto";
+    background-color: #fff;
+    /* font-size:200px; */
+}
+.message_left{
     margin-left: 10px;
     margin-right: 10px;
 }
