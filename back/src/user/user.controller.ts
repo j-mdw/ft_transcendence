@@ -38,7 +38,7 @@ export class UserController {
     return new UserDTO(await this.userService.findById(response.locals.id));
   }
 
-  @Get('me')
+  @Get('channels')
   async findMyChannels(
     @Res({ passthrough: true }) response: Response,
   ): Promise<ChannelDTO[]> {

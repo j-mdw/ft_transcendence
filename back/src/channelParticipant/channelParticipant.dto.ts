@@ -1,6 +1,6 @@
-import { IsBoolean, IsDate, IsUUID } from 'class-validator';
-import { PartialType } from '@nestjs/swagger';
+import { IsBoolean, IsDate, IsUUID, MinDate } from 'class-validator';
 import { ChannelParticipant } from './channelParticipant.entity';
+import { PartialType, OmitType } from '@nestjs/mapped-types';
 
 export class ChannelParticipantDTO {
   @IsUUID()
@@ -18,7 +18,7 @@ export class ChannelParticipantDTO {
   @IsBoolean()
   muted: boolean;
 
-  @IsDate()
+  @MinDate(new Date())
   muteEnd?: Date;
 
   constructor(participant: ChannelParticipant) {
@@ -32,5 +32,5 @@ export class ChannelParticipantDTO {
 }
 
 export class UpdateChannelParticipantDTO extends PartialType(
-  ChannelParticipantDTO,
+  OmitType(ChannelParticipantDTO, ['userId', 'channelId'] as const),
 ) {}

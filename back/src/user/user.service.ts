@@ -19,9 +19,9 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    @Inject(forwardRef(() => ChannelService))
-    private channelService: ChannelService,
-    @Inject(forwardRef(() => ChannelService))
+    // @Inject(forwardRef(() => ChannelService))
+    // private channelService: ChannelService,
+    @Inject(forwardRef(() => ChannelParticipantService))
     private channelParticipantService: ChannelParticipantService,
   ) {}
 
@@ -162,12 +162,8 @@ export class UserService {
 
   async findChannels(userId: string): Promise<Channel[]> {
     const user = await this.findById(userId);
-    const participations =
-      await this.channelParticipantService.findUserParticipations(user);
-    const channels: Array<Channel> = [];
-    for (let i = 0; i < participations.length; i++) {
-      channels.push(participations[i].channel);
-    }
-    return channels;
+    return (
+      await this.channelParticipantService.findUserParticipations(user)
+    ).map((participation) => participation.channel);
   }
 }

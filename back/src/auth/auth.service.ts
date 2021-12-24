@@ -50,7 +50,7 @@ export class AuthService {
 
   async userExist(id: string): Promise<boolean> {
     try {
-      console.log('user exist return:', await this.userService.findById(id));
+      await this.userService.findById(id);
       return true;
     } catch {
       return false;
