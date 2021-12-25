@@ -5,7 +5,7 @@
   <div id="chat">
     
     <h2 class="ml-5">My message</h2>
-    <v-card outlined color="transparent" class="mt-1" width="%">
+    <v-card outlined color="transparent" class="mt-1" >
       <div class="message-wrapper">
       <ul id="chat">
       <li v-for="msg in messages" :key="messages[msg]">
@@ -17,9 +17,10 @@
       </li>
     </ul>
     </div>
-  
+    </v-card>
+  </div>
       <v-row>
-        <v-col>
+        <v-col cols="7">
         <v-text-field v-model="current_message" label="message" @keydown.enter="sendMessage" class="ml-8" />
         </v-col>
         <v-col>
@@ -28,26 +29,32 @@
           id="chat send"
           elevation="2"
           @click="sendMessage()"
+          class="mt-6"
         >
           Send
         </v-btn>
-        <v-btn v-else disabled>
+        <v-btn v-else disabled class="mt-6">
           Send
         </v-btn>
         </v-col>
+        <v-col>
+          <v-btn color="#f5cac3" class="mt-6">
+          settings
+          <v-icon color="#395c6b" right>
+            fa fa-cog
+          </v-icon>
+          </v-btn>
+
+        </v-col>
       </v-row>
-      </v-card>
-      <chat-nav-bar/>
-  </div>
+  
 
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
-import chatNavBar from '~/components/chat/chatNavBar.vue'
 export default Vue.extend({
-  components: { chatNavBar },
   layout: 'default',
   data () {
     return {
@@ -87,13 +94,14 @@ export default Vue.extend({
 ul {
     list-style-type: none;
 }
-.v-text-field{
-      max-width: 60rem !important; 
-}
+/* .v-text-field{
+      max-width: rem !important; 
+} */
 .message-wrapper{
   height: 500px;
   overflow: scroll;
   margin-left: 45%;
+  text-align: right;
 }
 .message-background{
     background-color: #fff;
