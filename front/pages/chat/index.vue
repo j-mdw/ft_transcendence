@@ -37,15 +37,7 @@
           Send
         </v-btn>
         </v-col>
-        <v-col>
-          <v-btn color="#f5cac3" class="mt-6">
-          settings
-          <v-icon color="#395c6b" right>
-            fa fa-cog
-          </v-icon>
-          </v-btn>
-
-        </v-col>
+        <settings-chat/>
       </v-row>
   
 
@@ -54,7 +46,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import settingsChat from '~/components/chat/settingsChat.vue'
 export default Vue.extend({
+  components: { settingsChat },
   layout: 'default',
   data () {
     return {
