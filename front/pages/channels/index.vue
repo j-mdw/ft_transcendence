@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="#F6BD60" v-bind="attrs" to="/channels/create" class="mt-9 ml-8" v-on="on">
+    <v-btn color="#F6BD60" to="/channels/create" class="mt-9 ml-8" >
       create channel
     </v-btn>
 

@@ -15,7 +15,7 @@
           >
         </v-avatar>
         <v-row justify="center" align="center" class="mt-8">
-          <v-btn color="#f5cac3" v-bind="attrs" to="/profile/settings" class="mt-6" v-on="on">
+          <v-btn color="#f5cac3"  to="/profile/settings" class="mt-6" >
             my settings
             <v-icon color="#395c6b" right>
               fa fa-cog
@@ -23,7 +23,7 @@
           </v-btn>
         </v-row>
         <v-row justify="center" align="center">
-          <v-btn color="#f5cac3" v-bind="attrs" to="/profile/friendsList" class="mt-6" v-on="on">
+          <v-btn color="#f5cac3" to="/profile/friendsList" class="mt-6">
             my friends
             <v-icon color="#395c6b" right>
               fa-users
@@ -102,9 +102,6 @@ export default Vue.extend({
   // },
   layout: 'default',
 
-	async mounted() {
-      this.user = await this.$axios.$get("user/me", {withCredentials: true});
-  },
   
   computed : {
     user (): User {
