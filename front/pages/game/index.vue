@@ -59,10 +59,10 @@ export default Vue.extend({
 
 				},
 				initialization() {
-					this.$socket.client.emit('initialization', this.username);
+					this.$socket.client.emit('gameInitialization', this.username);
 					//on recupere position de la balle sur le server
 					//attention a priori ce qui uit est inutile
-					this.$socket.$subscribe('returnInitialPosition', (data: any) => {
+					this.$socket.$subscribe('ganeReturnInitialPosition', (data: any) => {
 					for(let i = 0; i < data.balls.length; i++)
 						this.drawBall(data.balls[i]);
 					this.drawPlayer(data.p1);
@@ -85,7 +85,7 @@ export default Vue.extend({
 				},
 
 				gametype(typeofgame: string) {
-					this.$socket.client.emit('typeofgame', typeofgame)
+					this.$socket.client.emit('gameTypeOfGame', typeofgame)
 				},
 
     },
@@ -100,26 +100,26 @@ export default Vue.extend({
 	  // addeventlistener  d'appui sur touche
         window.addEventListener('keydown', (event) => {
             if(event.key === 'w') //w
-                this.$socket.client.emit('keyPress', {inputId:'up', state:true});
+                this.$socket.client.emit('gameKeyPress', {inputId:'up', state:true});
             else if(event.key === 's') //s
-                this.$socket.client.emit('keyPress', {inputId:'down', state:true});
+                this.$socket.client.emit('gameKeyPress', {inputId:'down', state:true});
             else if(event.key === 'ArrowUp') //up
-                this.$socket.client.emit('keyPress2', {inputId:'up', state:true});
+                this.$socket.client.emit('gameKeyPress2', {inputId:'up', state:true});
             else if(event.key === 'ArrowDown') //down
-                this.$socket.client.emit('keyPress2', {inputId:'down', state:true});
+                this.$socket.client.emit('gameKeyPress2', {inputId:'down', state:true});
             })
 
 
 	// addeventlistener de relachement d'une touche
         window.addEventListener('keyup', (event) => {
             if(event.key === 'w') //up
-                this.$socket.client.emit('keyPress', {inputId:'up', state:false});
+                this.$socket.client.emit('gameKeyPress', {inputId:'up', state:false});
             else if(event.key === 's') //down
-                this.$socket.client.emit('keyPress', {inputId:'down', state:false});
+                this.$socket.client.emit('gameKeyPress', {inputId:'down', state:false});
             else if(event.key === 'ArrowUp') //s
-                this.$socket.client.emit('keyPress2', {inputId:'up', state:false});
+                this.$socket.client.emit('gameKeyPress2', {inputId:'up', state:false});
             else if(event.key === 'ArrowDown') //s
-                this.$socket.client.emit('keyPress2', {inputId:'down', state:false});
+                this.$socket.client.emit('gameKeyPress2', {inputId:'down', state:false});
             })
 
 	// addeventlistener de changement de taille de l'ecran
@@ -127,11 +127,11 @@ export default Vue.extend({
             this.createScreen();
         })
 
-		  //loop
-        this.$socket.client.emit('loop');
+		  //gameloop
+        this.$socket.client.emit('gameLoop');
 
 	// on recupere les donnees en provenance du serveur
-        this.$socket.$subscribe('returnFullData', (data: any) => {
+        this.$socket.$subscribe('gameReturnFullData', (data: any) => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             this.context.beginPath();
             this.context.moveTo(this.canvas.width / 2, 0);
@@ -148,7 +148,7 @@ export default Vue.extend({
 			// }
 			});
 
-		this.$socket.$subscribe('GameWinner', (data: string) => {
+		this.$socket.$subscribe('gameWinner', (data: string) => {
 			this.context.font = "30px Arial";
 			this.context.fillText( "Player " + data + " has won !!!!", 500 * this.ratio.x, 240 * this.ratio.y);
 			const tID = setTimeout(() => {

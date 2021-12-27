@@ -116,7 +116,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   player1: PlayerDto;
   player2: PlayerDto;
 
-  @SubscribeMessage('loop')
+  @SubscribeMessage('gameLoop')
   handleGameLoop(client:Socket, message: void): void {
 	const intervalId = setInterval(() => {
 		//nouvelle position de la balle
@@ -138,16 +138,16 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		//send infos at each socket
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
-			socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 		}
 
 		//c'est la qu'on checke le score et que l'on sort proprement si besoin
-		if (this.player1.score >= 2 || this.player2.score >= 2){//attention j'ai mis score a 2 pour les tests
+		if (this.player1.score >= 10 || this.player2.score >= 10){//attention j'ai mis score a 2 pour les tests
 			let winner = this.gameData.winOrLoose(this.player1, this.player2);
 			this.logger.log(`${winner} vient de gagner`);
 			for (let i in this.socketList) {
 				let socket = this.socketList[i];
-				socket.emit('GameWinner',  winner);
+				socket.emit('gameWinner',  winner);
 			}
 			delete this.player1;
 			delete this.player2;
@@ -172,7 +172,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	}
 
-  @SubscribeMessage('initialization')
+  @SubscribeMessage('gameInitialization')
   handleGameInitEvent(client:Socket, username: string): void {
 	this.socketList.push(client);
 	this.logger.log(`${this.socketList.length} client connecte`);
@@ -194,7 +194,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	if (this.socketList.length > 2){
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
-			socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 		}
 	}
 	else{
@@ -202,12 +202,12 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.balls[i] = new BallDto(640, 480);
 		for (let i in this.socketList) {
 			let socket = this.socketList[i];
-			socket.emit('returnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
+			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
 		}
 	}
   }
 
-  @SubscribeMessage('keyPress')
+  @SubscribeMessage('gameKeyPress')
   handleGamePaddleMove(client:Socket, data: {inputId: string, state: boolean}): void {
 	if (client === this.socketList[0]){
 		if (data.inputId === 'up')
@@ -218,7 +218,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 
-  @SubscribeMessage('keyPress2')
+  @SubscribeMessage('gameKeyPress2')
   handleGamePaddleMove2(client:Socket, data: {inputId: string, state: boolean}): void {
 	if (client === this.socketList[1]) {
 		if (data.inputId === 'up')
@@ -229,7 +229,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	//servira pour integrer le type de jeu
-  @SubscribeMessage('typeofgame')
+  @SubscribeMessage('gameTypeOfGame')
   handleGameData(client:Socket, data: string): void {
 	this.logger.log(`type of game renseigne`);
 
