@@ -140,7 +140,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   socketList: Array<Socket> = [];
 
-  gameData: GameDataDto = new GameDataDto('classic', 2);
+  gameData: GameDataDto = new GameDataDto('multiballs', 9);
 
   balls: Array<BallDto> = [];
 
@@ -211,7 +211,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		}
 
 		//c'est la qu'on checke le score et que l'on sort proprement si besoin
-		if (this.player1.score >= 2 || this.player2.score >= 2){//attention j'ai mis score a 2 pour les tests
+		if (this.player1.score >= 5 || this.player2.score >= 5){//attention j'ai mis score a 2 pour les tests
 			let winner = this.gameData.winOrLoose(this.player1, this.player2);
 			this.logger.log(`${winner} vient de gagner`);
 			for (let i in this.socketList) {

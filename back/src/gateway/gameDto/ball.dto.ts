@@ -26,11 +26,7 @@ export class BallDto {
   constructor(x: number, y: number) {
 	this.x = x;
 	this.y = y;
-	this.xSpeed = this.getRandomInt(1, 2)
-	this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
-	this.ySpeed = this.getRandomInt(1, 3)
-	this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
-
+	this.createBall();
 	this.radius = 15;
   }
 
@@ -97,12 +93,17 @@ export class BallDto {
     }
 
 	reinitializeBallPosition(){
-		this.xSpeed = this.getRandomInt(1, 2)
-		this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
-		this.ySpeed = this.getRandomInt(1, 3)
-		this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
+		this.createBall();
 		this.x = 640;
 		this.y = 480;
+	}
+
+	createBall(){
+		let angle: number = this.getRandomInt(5, 75)
+		this.xSpeed = Math.random() + Math.cos(angle * Math.PI / 180);
+		this.ySpeed = Math.random() + Math.sin(angle * Math.PI / 180);
+		this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
+		this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
 	}
 
 	// 	/**
