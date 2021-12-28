@@ -1,34 +1,33 @@
 <template>
   <div>
-      <v-list>
-        <v-list-item class="px-2 ml-n1">
-            
-          <v-badge
-            v-if="friends_request"
-            offset-x="30"
-            offset-y="20"
-            :content=friends_request
-          >
-            <router-link to=/profile>
-              <v-list-item-avatar>
-                <v-img :src="`http://localhost:4000/${me.avatarPath}`"></v-img>
-              </v-list-item-avatar>
-            </router-link>
-          </v-badge>
-          <div
-            v-if="!friends_request"
-          >
-            <router-link to=/profile>
-              <v-list-item-avatar>
-                <v-img :src="`http://localhost:4000/${me.avatarPath}`"></v-img>
-              </v-list-item-avatar>
-            </router-link>
-          </div>
-          <v-list-item to="/profile">
-            My Profile
-          </v-list-item>
+    <v-list>
+      <v-list-item class="px-2 ml-n1">
+        <v-badge
+          v-if="friends_request"
+          offset-x="30"
+          offset-y="20"
+          :content="friends_request"
+        >
+          <router-link to="/profile">
+            <v-list-item-avatar>
+              <v-img :src="`http://localhost:4000/${me.avatarPath}`" />
+            </v-list-item-avatar>
+          </router-link>
+        </v-badge>
+        <div
+          v-if="!friends_request"
+        >
+          <router-link to="/profile">
+            <v-list-item-avatar>
+              <v-img :src="`http://localhost:4000/${me.avatarPath}`" />
+            </v-list-item-avatar>
+          </router-link>
+        </div>
+        <v-list-item to="/profile">
+          My Profile
         </v-list-item>
-      </v-list>
+      </v-list-item>
+    </v-list>
   </div>
 </template>
 
@@ -54,14 +53,14 @@ export default Vue.extend({
       return meStore.me;
     },
 
-    friends_request() { 
-        let e = 0;
-        for (let i = 0; relationshipStore.relationships[i]; i++) {
+    friends_request () {
+      let e = 0;
+      for (let i = 0; relationshipStore.relationships[i]; i++) {
         if (relationshipStore.relationships[i].type === 2) {
-                e++;
-            }
+          e++;
         }
-        return e;
+      }
+      return e;
     }
   },
 
@@ -70,7 +69,6 @@ export default Vue.extend({
       return '';
     },
 
-    
   },
 });
 </script>

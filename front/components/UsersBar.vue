@@ -73,12 +73,6 @@ export default Vue.extend({
       return meStore.me;
     },
   },
-
-  methods: {
-    getColor (): string {
-      return '';
-    },
-  },
 });
 </script>
 

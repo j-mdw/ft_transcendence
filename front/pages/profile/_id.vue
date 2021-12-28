@@ -84,13 +84,9 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
-
-    imgUrl () {
-      return `http://localhost:4000/user/${this.$route.params.id}/avatar`; // TBU --> Use Store
-    },
   },
 
-  async mounted () {
+  async created () {
     this.user = await this.$axios.$get(`user/${this.id}`, {
       withCredentials: true,
     });
