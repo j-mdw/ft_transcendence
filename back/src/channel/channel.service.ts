@@ -37,6 +37,13 @@ export class ChannelService {
     return await this.channelRepository.findOneOrFail(channelId);
   }
 
+  async findOneParticipant(
+    user: User,
+    channel: Channel,
+  ): Promise<ChannelParticipant> {
+    return await this.participantService.findOne(user, channel);
+  }
+
   async findParticipants(
     userId: string,
     channelId: string,
