@@ -13,7 +13,6 @@ import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
 import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
 import { GatewayService } from './gateway.service';
-// import { Server } from 'http';
 
 @WebSocketGateway({
   cors: {
@@ -67,9 +66,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   users = new Map<string, UpdateUserStatus>();
 
   @SubscribeMessage('chat-message')
-  handleEvent(@MessageBody() data: string): void {
+  handleEvent(@MessageBody() msg: string): void {
     // console.log('Message recieved: ' + data);
-    this.server.emit('chat-message', data);
+    this.server.emit('chat-message', msg);
   }
 
   async handleConnection(client: Socket): Promise<void> {

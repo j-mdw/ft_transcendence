@@ -34,7 +34,7 @@ export class AuthService {
       user.avatarPath = this.userService.find_avatar();
       await this.userService.create(user);
     } finally {
-      return await this.userService.findByEmail(user.email);
+      return new UserDTO(await this.userService.findByEmail(user.email));
     }
   }
 
@@ -50,7 +50,7 @@ export class AuthService {
 
   async userExist(id: string): Promise<boolean> {
     try {
-      console.log('user exist return:', await this.userService.findById(id));
+      await this.userService.findById(id);
       return true;
     } catch {
       return false;

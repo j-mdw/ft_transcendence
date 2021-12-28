@@ -35,6 +35,9 @@ export default ({ store }: any) => {
         await store.dispatch('me/fetch');
         await store.dispatch('users/fetchUsers');
         await store.dispatch('relationship/fetch');
+        await store.dispatch('channels/fetch');
+        console.log('My channels:', store.getters['channels/mine']);
+        console.log('Visible channels:', store.getters['channels/visible']);
         socket.connect();
       } else {
         socket.disconnect();

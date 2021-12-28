@@ -6,7 +6,12 @@ import { DatabaseExceptionFilter } from './db.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true,
+      skipNullProperties: false,
+    }),
+  );
   app.enableCors({ credentials: true, origin: 'http://localhost:3000' });
   app.use(cookieParser());
   app.useGlobalFilters(new DatabaseExceptionFilter());

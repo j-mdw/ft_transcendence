@@ -14,7 +14,7 @@ export class RelationshipDTO {
   }
 }
 
-export class RelationshipUpdate {
+export class RelationshipUpdateDTO {
   @IsEnum(RelationshipType)
   type: RelationshipType;
 }

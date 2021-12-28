@@ -30,12 +30,14 @@ export class ChannelPassword {
   password: string;
 }
 
+export class ChannelPasswordDTO extends PartialType(ChannelPassword) {}
+
 export class CreateChannelDTO extends IntersectionType(
   PickType(ChannelDTO, ['name', 'type'] as const),
-  PartialType(ChannelPassword),
+  ChannelPasswordDTO,
 ) {}
 
 export class UpdateChannelDTO extends IntersectionType(
   PickType(ChannelDTO, ['type'] as const),
-  PartialType(ChannelPassword),
+  ChannelPasswordDTO,
 ) {}

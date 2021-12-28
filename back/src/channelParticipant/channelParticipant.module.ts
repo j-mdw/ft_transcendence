@@ -8,8 +8,7 @@ import { ChannelParticipantService } from './channelParticipant.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([ChannelParticipant]),
-    // forwardRef(() => UserModule),
-    forwardRef(() => ChannelModule),
+    forwardRef(() => UserModule),
   ],
   providers: [ChannelParticipantService],
   controllers: [],
