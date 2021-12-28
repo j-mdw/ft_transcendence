@@ -38,7 +38,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { ChannelDTO } from '~/models/channel'
+import { CreateChannelDTO } from '~/models/channel'
 export default Vue.extend({
   data: () => ({
     items: ['Public', 'Private', 'Protected'],
@@ -49,7 +49,7 @@ export default Vue.extend({
 
   methods: {
     async createChannel () {
-      const input: ChannelDTO = {
+      const input: CreateChannelDTO = {
         name: this.name,
         type: this.items.indexOf(this.select),
         password: this.password,

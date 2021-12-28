@@ -4,9 +4,19 @@ export enum ChannelType {
   protected,
 }
 
-export interface ChannelDTO {
-  id?: string;
+export interface CreateChannelDTO {
   name: string;
   type: ChannelType;
-  password?: string;
+  password: string;
+}
+
+export interface ChannelDTO {
+  id: string;
+  name: string;
+  type: ChannelType;
+  owner: string;
+}
+
+export interface PasswordDTO {
+  password: string;
 }

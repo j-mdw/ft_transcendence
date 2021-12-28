@@ -6,7 +6,7 @@ import { UserService } from '../user/user.service';
 import TokenPayload from './tokenPayload.interface';
 import { UserDTO } from 'src/user/user.dto';
 import { Request } from 'express';
-import { ExtractJwt} from 'passport-jwt';
+import { ExtractJwt } from 'passport-jwt';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {

@@ -9,11 +9,14 @@ import {
   UseGuards,
   Res,
   Delete,
-  Query,
-  Post,
   ForbiddenException,
 } from '@nestjs/common';
-import { ChannelDTO, ChannelPasswordDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
+import {
+  ChannelDTO,
+  ChannelPasswordDTO,
+  CreateChannelDTO,
+  UpdateChannelDTO,
+} from './channel.dto';
 import { ChannelService } from './channel.service';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { Response } from 'express';

@@ -1,6 +1,7 @@
 import { IsBoolean, IsDate, IsUUID, MinDate } from 'class-validator';
 import { ChannelParticipant } from './channelParticipant.entity';
 import { PartialType, OmitType } from '@nestjs/mapped-types';
+import { Type } from 'class-transformer';
 
 export class ChannelParticipantDTO {
   @IsUUID()
@@ -18,6 +19,8 @@ export class ChannelParticipantDTO {
   @IsBoolean()
   muted: boolean;
 
+  @Type(() => Date)
+  @IsDate()
   @MinDate(new Date())
   muteEnd?: Date;
 

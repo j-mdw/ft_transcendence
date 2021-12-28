@@ -30,7 +30,6 @@ export class ChannelService {
   ) {}
 
   async findAll(): Promise<Channel[]> {
-    //Should probably disable this endpoint --> Only possible to get list of public/protected channels
     return await this.channelRepository.find();
   }
 
@@ -78,7 +77,7 @@ export class ChannelService {
   }
 
   //Public Channels: a participant adds himself
-  //Private Channels: admins add users
+  //Private Channels: admins add participants
   //Protected: participant adds himself if he can provide the password
   async addParticipant(
     userId: string,
@@ -88,7 +87,6 @@ export class ChannelService {
   ) {
     const channel: Channel = await this.findOne(channelId);
     const user: User = await this.userService.findById(userId);
-    // await this.participantService.findOne(user, channel); //If user cannot be found, 404 will be thrown
     const participantToCreate: User = await this.userService.findById(
       participantId,
     );
@@ -130,6 +128,9 @@ export class ChannelService {
           return false;
         }
       case ChannelType.protected:
+        if (password == undefined) {
+          return false;
+        }
         if (userAdding.id === userToAdd.id) {
           return await this.verifyPassword(password, channel.password);
         } else {
