@@ -1,42 +1,36 @@
 <template>
   <div>
+    <v-row align="center" class="mt-8 mb-8 ml-8">
     <v-btn color="#F6BD60" to="/channels/create" class="mt-9 ml-8" >
       create channel
     </v-btn>
-
-    <v-row no-gutters class="mb-6" justify="center" align="center">
-      <v-col v-for="(channel, index) in channels" :key="index">
-        <v-list-item>
-          <v-card width="500" height="50" class="mt-5" color="#ebd9c5">
-          <v-row justify="center" align="center">
-            <v-col>
-            <v-list-item-title class="">
-              {{ channel.name }}
-            </v-list-item-title>
-            </v-col>
-            <v-col>
-            <v-list-item-subtitle class="">
-              <div v-if="channel.type == 0">
-                public
-              </div>
-              <div v-if="channel.type == 1">
-                private
-              </div>
-              <div v-if="channel.type == 2">
-                protected
-              </div>
-            </v-list-item-subtitle>
-            </v-col>
-            <v-btn
-              class=""
-              @click="deleteChannel(channel.id)"
-            >
-              Delete Channel
-            </v-btn>
-            </v-row>
-          </v-card>
-        </v-list-item>
-      </v-col>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-5 mb-5">
+    <v-card class="our_beige" width="90%">
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          My channels
+        </v-card-title>
+        <v-divider></v-divider>
+        <my-channels-list/>
+      </v-card>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-5 mb-5">
+    <v-card class="our_beige" width="90%">
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          Public Channels
+        </v-card-title>
+        <v-divider></v-divider>
+        <public-channels/>
+      </v-card>
+    </v-row>
+    <v-row justify="center" align="center" class="mt-5 mb-5">
+    <v-card class="our_beige" width="90%">
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          Protected Channels
+        </v-card-title>
+        <v-divider></v-divider>
+        <protected-channels/>
+      </v-card>
     </v-row>
   </div>
 </template>
@@ -44,9 +38,13 @@
 <script lang="ts">
 
 import Vue from 'vue'
+import myChannelsList from '~/components/channel/myChannelsList.vue'
+import ProtectedChannels from '~/components/channel/protectedChannels.vue'
+import PublicChannels from '~/components/channel/publicChannels.vue'
 import { ChannelDTO } from '~/models/channel'
 
 export default Vue.extend({
+  components: { myChannelsList, PublicChannels, ProtectedChannels },
   data () {
     return {
       channels: Array<ChannelDTO>(),

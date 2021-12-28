@@ -31,12 +31,22 @@
         <v-divider></v-divider>
         <v-row justify="center" align="center">
           <v-btn
-            v-btn color="#f5cac3" class="mt-6 mb-6" 
+            v-btn color="#f5cac3" class="mt-6 mb-6 mr-6" 
           >
             Leave channel
           </v-btn>
-        </v-row>
 
+          <v-btn
+            v-btn color="#f5cac3" class="mt-6 mb-6 ml-6" 
+          >
+            delete channel
+          </v-btn>
+        </v-row>
+        <v-divider></v-divider>
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          Change channel Type
+        </v-card-title>
+        <type-chat/>
         <v-divider></v-divider>
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Channel Participants
@@ -55,8 +65,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import ParticipantChat from './ParticipantChat.vue'
+import TypeChat from './typeChat.vue'
 export default Vue.extend({
-  components: { ParticipantChat },
+  components: { ParticipantChat, TypeChat },
   layout: 'default',
   data () {
     return {
