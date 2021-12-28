@@ -6,14 +6,30 @@
     
     <h2 class="ml-5">My message</h2>
     <v-card outlined color="transparent" class="mt-1" >
-      <div class="message-wrapper">
+      <div class="message-wrapper_left">
       <ul id="chat">
       <li v-for="msg in messages" :key="messages[msg]">
-        <div class="message-background">
-          <div class="message">
+        <v-row class="mt-7 mb-7">
+        <v-dialog
+            v-model="dialog"
+            width="500"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
+                    <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+              </v-avatar>
+            </template>
+            <v-card>
+            <profil-chat/>
+          </v-card>
+          </v-dialog>
+        
+        <div class="message-background_left">
+          <div class="message_left">
           {{ msg }}
           </div>
         </div>
+        </v-row>
       </li>
     </ul>
     </div>
@@ -47,8 +63,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
+import profilChat from '~/components/chat/profileChat.vue'
 export default Vue.extend({
-  components: { settingsChat },
+  components: { settingsChat, profilChat},
   layout: 'default',
   data () {
     return {
@@ -91,13 +108,13 @@ ul {
 /* .v-text-field{
       max-width: rem !important; 
 } */
-.message-wrapper{
+.message-wrapper_righ{
   height: 500px;
   overflow: scroll;
   margin-left: 45%;
   text-align: right;
 }
-.message-background{
+.message-background_right{
     background-color: #fff;
     max-width: 30rem;
     border-radius: 10px;
@@ -106,7 +123,7 @@ ul {
     background-color: #fff;
     /* font-size:200px; */
 }
-.message{
+.message_righ{
     margin-left: 10px;
     margin-right: 10px;
 }
