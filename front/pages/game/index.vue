@@ -81,7 +81,8 @@ export default Vue.extend({
 						left = (player.x - (player.w / 2)) * this.ratio.x;
 					this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
 					this.context.font = "30px Arial";
-					this.context.fillText( player.username + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+					// console.log(`${player.username}`)
+					this.context.fillText( player.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
 				},
 
 				gametype(typeofgame: string) {
