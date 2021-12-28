@@ -1,24 +1,44 @@
 <template>
-    <v-card>
-        <v-card-title class="text-h5 grey lighten-2">
-          Privacy Policy
+    <v-card height="200" width="200">
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          name
         </v-card-title>
+        <v-row justify="center" align="center" class="mt-9 mb-9">
+        <v-badge
+                bottom
 
-        <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </v-card-text>
+                offset-x="15"
+                offset-y="15"
+              >
+                  <v-avatar >
+                    <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
+                  </v-avatar>
+              </v-badge>
+                <v-btn v-ripple="false" plain to="/channels">
+                  <messageLogo />
+                </v-btn>
+                <v-btn v-ripple="false" plain icon>
+                  <pingpongLogo />
+                </v-btn>
 
-        <v-divider></v-divider>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-            I accept
-          </v-btn>
-        </v-card-actions>
+        </v-row>
       </v-card>
 </template>
+
+<script lang="ts">
+import Vue from 'vue';
+import messageLogo from '../Logo/messageLogo.vue';
+import pingpongLogo from '../Logo/pingpongLogo.vue';
+
+export default Vue.extend({
+  components: { messageLogo, pingpongLogo },
+  data () {
+  },
+  computed: {
+
+  },
+
+  methods: {
+  },
+});
+</script>

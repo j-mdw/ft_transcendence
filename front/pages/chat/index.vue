@@ -12,14 +12,14 @@
         <v-row class="mt-7 mb-7">
         <v-dialog
             v-model="dialog"
-            width="500"
+            
           >
             <template v-slot:activator="{ on, attrs }">
               <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
                     <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
               </v-avatar>
             </template>
-            <v-card>
+            <v-card >
             <profil-chat/>
           </v-card>
           </v-dialog>
