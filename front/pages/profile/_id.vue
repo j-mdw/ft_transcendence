@@ -7,7 +7,7 @@
           <img :src="`http://localhost:4000/${user.avatarPath}`">
         </v-avatar>
         <v-row justify="center" align="center" class="mt-8">
-          <relationship-buttons :user-id="this.$route.params.id" />
+          <relationship-buttons :user-id="$route.params.id" />
         </v-row>
         <h1 v-if="user">
           <br>
@@ -56,14 +56,14 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { meStore,relationshipStore } from "~/store";
-import FileUpload from "~/components/FileUpload.vue";
+import { meStore, relationshipStore } from '~/store';
+import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 import relationshipButtons from '~/components/relationshipButtons.vue';
 
-//0 = to add not friends yet
-//1 = you are fiends
-//2 = you are blocked
+// 0 = to add not friends yet
+// 1 = you are fiends
+// 2 = you are blocked
 
 // 0 = to add not friends yet
 // 1 = you are fiends
@@ -71,12 +71,11 @@ import relationshipButtons from '~/components/relationshipButtons.vue';
 
 export default Vue.extend({
   components: { relationshipButtons },
-	layout: 'default',
-    data: () => ({
-        user: Object(),
-        relation: Object(), 
-    }),
-    
+  layout: 'default',
+  data: () => ({
+    user: Object(),
+    relation: Object(),
+  }),
 
   computed: {
     id () {

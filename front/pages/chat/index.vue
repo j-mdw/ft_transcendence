@@ -1,62 +1,59 @@
 <template>
- <div>
-  <div id="message">
-  </div>
-  <div id="chat">
-    
-    <h2 class="ml-5">My message</h2>
-    <v-card outlined color="transparent" class="mt-1" >
-      <div class="message-wrapper_left">
-      <ul id="chat">
-      <li v-for="msg in messages" :key="messages[msg]">
-        <v-row class="mt-7 mb-7">
-        <v-dialog
-            v-model="dialog"
-            
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
-                    <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-              </v-avatar>
-            </template>
-            <v-card >
-            <profil-chat/>
-          </v-card>
-          </v-dialog>
-        
-        <div class="message-background_left">
-          <div class="message_left">
-          {{ msg }}
-          </div>
+  <div>
+    <div id="message" />
+    <div id="chat">
+      <h2 class="ml-5">
+        My message
+      </h2>
+      <v-card outlined color="transparent" class="mt-1">
+        <div class="message-wrapper_left">
+          <ul id="chat">
+            <li v-for="msg in messages" :key="messages[msg]">
+              <v-row class="mt-7 mb-7">
+                <v-dialog
+                  v-model="dialog"
+                >
+                  <template #activator="{ on, attrs }">
+                    <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
+                      <v-img src="https://randomuser.me/api/portraits/women/85.jpg" />
+                    </v-avatar>
+                  </template>
+                  <v-card>
+                    <profil-chat />
+                  </v-card>
+                </v-dialog>
+
+                <div class="message-background_left">
+                  <div class="message_left">
+                    {{ msg }}
+                  </div>
+                </div>
+              </v-row>
+            </li>
+          </ul>
         </div>
-        </v-row>
-      </li>
-    </ul>
+      </v-card>
     </div>
-    </v-card>
-  </div>
-      <v-row>
-        <v-col cols="7">
-        <v-text-field v-model="current_message" label="message" @keydown.enter="sendMessage" class="ml-8" />
-        </v-col>
-        <v-col>
+    <v-row>
+      <v-col cols="7">
+        <v-text-field v-model="current_message" label="message" class="ml-8" @keydown.enter="sendMessage" />
+      </v-col>
+      <v-col>
         <v-btn
           v-if="current_message.length > 0"
           id="chat send"
           elevation="2"
-          @click="sendMessage()"
           class="mt-6"
+          @click="sendMessage()"
         >
           Send
         </v-btn>
         <v-btn v-else disabled class="mt-6">
           Send
         </v-btn>
-        </v-col>
-        <settings-chat/>
-      </v-row>
-  
-
+      </v-col>
+      <settings-chat />
+    </v-row>
   </div>
 </template>
 
@@ -65,7 +62,7 @@ import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
 export default Vue.extend({
-  components: { settingsChat, profilChat},
+  components: { settingsChat, profilChat },
   layout: 'default',
   data () {
     return {
@@ -106,7 +103,7 @@ ul {
     list-style-type: none;
 }
 /* .v-text-field{
-      max-width: rem !important; 
+      max-width: rem !important;
 } */
 .message-wrapper_righ{
   height: 500px;
@@ -147,4 +144,3 @@ ul {
     margin-right: 10px;
 }
 </style>
-

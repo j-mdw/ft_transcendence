@@ -15,7 +15,7 @@
           >
         </v-avatar>
         <v-row justify="center" align="center" class="mt-8">
-          <v-btn color="#f5cac3"  to="/profile/settings" class="mt-6" >
+          <v-btn color="#f5cac3" to="/profile/settings" class="mt-6">
             my settings
             <v-icon color="#395c6b" right>
               fa fa-cog
@@ -30,12 +30,14 @@
             </v-icon>
           </v-btn>
         </v-row>
-        
+
         <div v-if="friends_request">
           <v-row justify="center" align="center" class="mt-8">
-            <v-btn color="#f5cac3" to="/profile/requestList" class="mt-6" >
+            <v-btn color="#f5cac3" to="/profile/requestList" class="mt-6">
               see friends request
-              <v-icon color="#395c6b" right>fa-users </v-icon>    
+              <v-icon color="#395c6b" right>
+                fa-users
+              </v-icon>
             </v-btn>
           </v-row>
         </div>
@@ -90,9 +92,8 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { relationshipStore }  from '~/store'
-import FileUpload from "~/components/FileUpload.vue";
-import { meStore } from '~/store'
+import { relationshipStore, meStore } from '~/store'
+import FileUpload from '~/components/FileUpload.vue';
 // import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 
@@ -102,22 +103,21 @@ export default Vue.extend({
   // },
   layout: 'default',
 
-  
-  computed : {
+  computed: {
     user (): User {
       return meStore.me;
     },
-    friends_request() { 
-        let e = 0;
-        for (let i = 0; relationshipStore.relationships[i]; i++) {
+    friends_request () {
+      let e = 0;
+      for (let i = 0; relationshipStore.relationships[i]; i++) {
         if (relationshipStore.relationships[i].type === 2) {
-                e++;
-            }
+          e++;
         }
-        return e;
+      }
+      return e;
     }
   },
- 
+
 })
 
 </script>

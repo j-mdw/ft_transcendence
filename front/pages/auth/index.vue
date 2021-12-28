@@ -10,7 +10,7 @@
             color="#F6BD60"
             href="http://localhost:4000/42"
           >
-            <img style="height:36px" src="../../assets/logo/42_white.svg" />
+            <img style="height:36px" src="../../assets/logo/42_white.svg">
           </v-btn>
           <v-btn
             class="mx-8"
@@ -18,22 +18,22 @@
             color="#F6BD60"
             href="http://localhost:4000/google"
           >
-            <img style="height:36px" src="../../assets/logo/google_white.svg" />
+            <img style="height:36px" src="../../assets/logo/google_white.svg">
           </v-btn>
           <v-btn
             class="mx-8"
             fab
             color="#F6BD60"
             @click="createRandomUser"
-            >
-            <img style="height:36px" src="../../assets/logo/anon.png" />
+          >
+            <img style="height:36px" src="../../assets/logo/anon.png">
           </v-btn>
-</div>
+        </div>
 
         <p v-if="user">
           welcome {{ user }}
         </p>
-</div>
+      </div>
     </v-row>
   </v-container>
 </template>
