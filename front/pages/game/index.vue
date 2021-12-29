@@ -37,6 +37,7 @@ export default Vue.extend({
 				y:0,
 				less:0,
 			},
+			
 		}
 	},
 	sockets: {

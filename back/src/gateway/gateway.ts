@@ -102,7 +102,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	if (this.socketList.length <= 1) {//mode entrainement
 		this.cleanExit();
 		clearInterval(this.intervalId);
-		this.logger.log(`coucou22`);
+		// this.logger.log(`coucou22`);
 	}
 	else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
 	{
@@ -160,6 +160,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.player2 = this.player2 = new PlayerDto(1240, 1000, "entrainement");
 	}
 	if (this.socketList.length === 2) {
+		clearInterval(this.intervalId);
 		this.player1.y = 480;
 		this.player1.score = 0;
 		this.player2.y = 480;
@@ -188,6 +189,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @SubscribeMessage('gameLoop')
   handleGameLoop(client:Socket, message: void): void {
 	this.intervalId = setInterval(() => {
+		// this.logger.log(` au debut du scope ${this.intervalId}`);
+
 		//nouvelle position de la balle
 		for (let i in this.balls){
 			let ball = this.balls[i];
@@ -213,31 +216,16 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		//c'est la qu'on checke le score et que l'on sort proprement si besoin
 		if (this.player1.score >= 5 || this.player2.score >= 5){//attention j'ai mis score a 2 pour les tests
 			let winner = this.gameData.winOrLoose(this.player1, this.player2);
-			this.logger.log(`${winner} vient de gagner`);
+			// this.logger.log(`${winner} vient de gagner`);
 			for (let i in this.socketList) {
 				let socket = this.socketList[i];
 				socket.emit('gameWinner',  winner);
 			}
 			this.cleanExit();
-			// delete this.player1;
-			// delete this.player2;
-			// for (let i in this.balls)
-			// 	delete this.balls[i];
-			// while (this.balls.length)
-			// 	this.balls.pop();
-			// this.logger.log(`${this.balls.length} est la taille du tableau balls`);
-			// while (this.socketList.length)
-			// 	this.socketList.pop();
-			// 	this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
-
-			// delete this.balls;
-			//on sort de cette boucle setinterval
 			clearInterval(this.intervalId);
-			this.logger.log(`coucou`);
-			return;
 		}
 		////probablement a faire avec les rooms
-	}, 1000/60);
+	}, 1000/30);
 
 	}
 
@@ -277,8 +265,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	}
 
 	cleanExit(): void {
-		// delete this.player1;
-		// delete this.player2;
+		delete this.player1;
+		delete this.player2;
 		//AREVOIR ++++ car cree une erreur sinon
 		// a rajouter une fois les mnouvelles pages html faites
 		for (let i in this.balls)
