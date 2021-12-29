@@ -37,7 +37,7 @@ export default Vue.extend({
 				y:0,
 				less:0,
 			},
-			
+
 		}
 	},
 	sockets: {
@@ -90,7 +90,28 @@ export default Vue.extend({
 					this.$socket.client.emit('gameTypeOfGame', typeofgame)
 				},
 
-    },
+	},
+
+	beforeUpdate(){
+				console.log("ohoh beforeupdate");
+
+	},
+
+	updated(){
+				console.log("ohoh updated");
+
+	},
+
+	beforeDestroy(){
+				console.log("ohoh beforedestroy");
+
+	},
+
+	destroyed(){
+		console.log("ohoh destroyed");
+
+	},
+
 	mounted() {
 		this.canvas = <HTMLCanvasElement>document.getElementById("game");
 		this.context = this.canvas.getContext('2d');
@@ -106,9 +127,9 @@ export default Vue.extend({
             else if(event.key === 's') //s
                 this.$socket.client.emit('gameKeyPress', {inputId:'down', state:true});
             else if(event.key === 'ArrowUp') //up
-                this.$socket.client.emit('gameKeyPress2', {inputId:'up', state:true});
+                this.$socket.client.emit('gameKeyPress', {inputId:'up', state:true});
             else if(event.key === 'ArrowDown') //down
-                this.$socket.client.emit('gameKeyPress2', {inputId:'down', state:true});
+                this.$socket.client.emit('gameKeyPress', {inputId:'down', state:true});
             })
 
 
@@ -119,9 +140,9 @@ export default Vue.extend({
             else if(event.key === 's') //down
                 this.$socket.client.emit('gameKeyPress', {inputId:'down', state:false});
             else if(event.key === 'ArrowUp') //s
-                this.$socket.client.emit('gameKeyPress2', {inputId:'up', state:false});
+                this.$socket.client.emit('gameKeyPress', {inputId:'up', state:false});
             else if(event.key === 'ArrowDown') //s
-                this.$socket.client.emit('gameKeyPress2', {inputId:'down', state:false});
+                this.$socket.client.emit('gameKeyPress', {inputId:'down', state:false});
             })
 
 	// addeventlistener de changement de taille de l'ecran

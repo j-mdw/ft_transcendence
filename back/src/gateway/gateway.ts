@@ -204,8 +204,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			this.gameData.updatePlayersPaddleSize(this.player1, this.player2);
 
 		//updating players position
-		this.player1.updatePosition();
-		this.player2.updatePosition();
+		if (this.player1)
+			this.player1.updatePosition();
+		if (this.player2)
+			this.player2.updatePosition();
 
 		//send infos at each socket
 		for (let i in this.socketList) {
@@ -222,7 +224,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				socket.emit('gameWinner',  winner);
 			}
 			this.cleanExit();
-			clearInterval(this.intervalId);
+			clearInterval(this.intervalId); 
 		}
 		////probablement a faire avec les rooms
 	}, 1000/30);
@@ -238,12 +240,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		else if (data.inputId === 'down')
 			this.player1.pressingDown = data.state;
 		}
-	}
 
-
-  @SubscribeMessage('gameKeyPress2')
-  handleGamePaddleMove2(client:Socket, data: {inputId: string, state: boolean}): void {
-	if (client === this.socketList[1]) {
+	else if (client === this.socketList[1]) {
 		if (data.inputId === 'up')
 			this.player2.pressingUp = data.state;
 		else if (data.inputId === 'down')
