@@ -273,8 +273,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	cleanExit(): void {
 		delete this.player1;
 		delete this.player2;
-		//AREVOIR ++++ car cree une erreur sinon
-		// a rajouter une fois les mnouvelles pages html faites
 		for (let i in this.balls)
 			delete this.balls[i];
 		while (this.balls.length)
