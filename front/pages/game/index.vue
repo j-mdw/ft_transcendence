@@ -92,20 +92,7 @@ export default Vue.extend({
 
 	},
 
-	beforeUpdate(){
-				console.log("ohoh beforeupdate");
 
-	},
-
-	updated(){
-				console.log("ohoh updated");
-
-	},
-
-	beforeDestroy(){
-				console.log("ohoh beforedestroy");
-
-	},
 
 	destroyed(){
 		console.log("ohoh destroyed");
@@ -180,7 +167,12 @@ export default Vue.extend({
 				}, 3000);
 
 			});
-    },
+	},
+
+	beforeDestroy(){
+		console.log("ohoh beforedestroy");
+		this.$socket.client.emit('gameCheckIfCleanlyExited');
+	},
 
 
 })

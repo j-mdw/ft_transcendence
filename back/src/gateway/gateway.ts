@@ -98,41 +98,43 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	// partie pour laurent
 
 	this.logger.log(`Client disconnected of game: ${client.id}`);
-	//on regarde si la deconnexion concerne un des joueurs principaux
-	if (this.socketList.length <= 1) {//mode entrainement
-		this.cleanExit();
-		clearInterval(this.intervalId);
-		// this.logger.log(`coucou22`);
-	}
-	else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
-	{
-		//changement de scores sur base de donnee et sur page interhnet
-		let winner: string;
-		client === this.socketList[0] ? winner = "2": winner = "1";
-		if (client === this.socketList[0])
-			this.socketList.splice(0, 1);
-		else {
-			this.socketList.splice(1, 1);
-			this.logger.log("yipee")
+	this.manageDeconnection(client);
 
-		}
-		this.logger.log("hey on est passe par la !")
-		for (let i in this.socketList) {
-			let socket = this.socketList[i];
-			socket.emit('gameWinner',  winner);
-		}
-		this.cleanExit();
-		clearInterval(this.intervalId);
-	}
-	else { //c'est un spectateur qui se deconnecte
-		this.socketList.forEach ((element, index) => {
-			if (element === client)
-			{
-				this.socketList.splice(index, 1);
-				this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
-			}
-		});
-	}
+	// //on regarde si la deconnexion concerne un des joueurs principaux
+	// if (this.socketList.length == 1) {//mode entrainement
+	// 	this.cleanExit();
+	// 	clearInterval(this.intervalId);
+	// 	// this.logger.log(`coucou22`);
+	// }
+	// else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
+	// {
+	// 	//changement de scores sur base de donnee et sur page interhnet
+	// 	let winner: string;
+	// 	client === this.socketList[0] ? winner = "2": winner = "1";
+	// 	if (client === this.socketList[0])
+	// 		this.socketList.splice(0, 1);
+	// 	else {
+	// 		this.socketList.splice(1, 1);
+	// 		this.logger.log("yipee")
+
+	// 	}
+	// 	this.logger.log("hey on est passe par la !")
+	// 	for (let i in this.socketList) {
+	// 		let socket = this.socketList[i];
+	// 		socket.emit('gameWinner',  winner);
+	// 	}
+	// 	this.cleanExit();
+	// 	clearInterval(this.intervalId);
+	// }
+	// else { //c'est un spectateur qui se deconnecte
+	// 	this.socketList.forEach ((element, index) => {
+	// 		if (element === client)
+	// 		{
+	// 			this.socketList.splice(index, 1);
+	// 			this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
+	// 		}
+	// 	});
+	// }
   }
 
 
@@ -224,7 +226,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 				socket.emit('gameWinner',  winner);
 			}
 			this.cleanExit();
-			clearInterval(this.intervalId); 
+			clearInterval(this.intervalId);
 		}
 		////probablement a faire avec les rooms
 	}, 1000/30);
@@ -262,6 +264,12 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.gameData = new GameDataDto('classic');
 	}
 
+	@SubscribeMessage('gameCheckIfCleanlyExited')
+  	handleGameCheckIfCleanlyExited(client:Socket, message: void): void {
+		this.logger.log(`on passe dans checkifcleanlyexited`);
+		this.manageDeconnection(client);
+	  }
+
 	cleanExit(): void {
 		delete this.player1;
 		delete this.player2;
@@ -275,6 +283,46 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		while (this.socketList.length)
 			this.socketList.pop();
 			this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
+	}
 
+	manageDeconnection(client: Socket):void {
+		//on verifie que l'on n'a pas deja fait une sortie propre
+		if (this.socketList.length == 0) //on a deja fait le job
+			return;
+
+		//on regarde si la deconnexion concerne un des joueurs principaux
+		else if (this.socketList.length == 1) {//mode entrainement
+			this.cleanExit();
+			clearInterval(this.intervalId);
+			// this.logger.log(`coucou22`);
+		}
+		else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
+		{
+			//changement de scores sur base de donnee et sur page interhnet
+			let winner: string;
+			client === this.socketList[0] ? winner = "2": winner = "1";
+			if (client === this.socketList[0])
+				this.socketList.splice(0, 1);
+			else {
+				this.socketList.splice(1, 1);
+				this.logger.log("yipee")
+			}
+			this.logger.log("hey on est passe par la !")
+			for (let i in this.socketList) {
+				let socket = this.socketList[i];
+				socket.emit('gameWinner',  winner);
+			}
+			this.cleanExit();
+			clearInterval(this.intervalId);
+		}
+		else { //c'est un spectateur qui se deconnecte
+			this.socketList.forEach ((element, index) => {
+				if (element === client)
+				{
+					this.socketList.splice(index, 1);
+					this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
+				}
+			});
+		}
 	}
 }
