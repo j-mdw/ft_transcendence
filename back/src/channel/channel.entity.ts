@@ -6,9 +6,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
-// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
-// import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 export enum ChannelType {
   public,

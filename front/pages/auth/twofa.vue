@@ -43,7 +43,9 @@ export default Vue.extend({
       try {
         await this.$axios.$post('2fa/authenticate', { twoFactorAuthenticationCode: this.twofaCode }, { withCredentials: true }).then((res) => {
           console.log('youpi !');
-          this.whereTogo()
+          authenticationStore.setLogin()
+          this.$router.push('/home')
+          // this.whereTogo()
         });
       } catch (err) {
         (this as any).$dialog.error({
@@ -54,17 +56,17 @@ export default Vue.extend({
       }
     },
 
-    async whereTogo () {
-      this.user = await this.$axios.$get('user/me', { withCredentials: true });
-      if (this.user.isTwoFactorAuthenticationEnabled) { //Seems this if statement is not doing anything
-        if (this.user.pseudo) {
-          authenticationStore.setLogin()
-          this.$router.push('/home')
-        } else {
-          this.$router.push('/pseudo')
-        }
-      }
-    }
+    // async whereTogo () {
+    //   this.user = await this.$axios.$get('user/me', { withCredentials: true });
+    //   if (this.user.isTwoFactorAuthenticationEnabled) { //Seems this if statement is not doing anything
+    //     if (this.user.pseudo) {
+    //       authenticationStore.setLogin()
+    //       this.$router.push('/home')
+    //     } else {
+    //       this.$router.push('/pseudo')
+    //     }
+    //   }
+    // }
 
   }
 })

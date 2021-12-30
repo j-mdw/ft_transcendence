@@ -21,16 +21,15 @@ export default Vue.extend({
   async mounted () {
     console.log(`logging with ${this.provider}`)
 
-    await this.$axios.$get(`${this.provider}/redirect`, { params: this.$route.query, withCredentials: true }).then((res) => {
-      if (res.user.isTwoFactorAuthenticationEnabled) {
-        this.$router.push('/auth/twofa');
-      } else if (res.user.pseudo) {
-        authenticationStore.setLogin()
-        this.$router.push('/home')
-      } else {
-        this.$router.push('/pseudo')
-      }
-    });
+    const res = await this.$axios.$get(`${this.provider}/redirect`, { params: this.$route.query, withCredentials: true })
+    if (res.user.isTwoFactorAuthenticationEnabled) {
+      this.$router.push('/auth/twofa');
+    } else if (res.user.pseudo) {
+      authenticationStore.setLogin()
+      this.$router.push('/home')
+    } else {
+      this.$router.push('/pseudo')
+    }
   },
 //   methods: {
 //     async goTwoFa () {

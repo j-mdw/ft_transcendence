@@ -1,50 +1,40 @@
 <template>
   <v-container justify="center" align="center">
-    <input type="file" @change="onFileChange" class="custom-file-input" />
-    <button @click="onUploadFile" class="upload-button">Upload file</button>
+    <input type="file" class="custom-file-input" @change="onFileChange">
+    <button class="upload-button" @click="onUploadFile">
+      Upload file
+    </button>
   </v-container>
 </template>
 
 <script>
-import axios from "axios";
+import axios from 'axios';
+import { meStore } from '~/store';
 
 export default {
-  data() {
+  data () {
     return {
-      selectedFile: "",
+      selectedFile: '',
     };
   },
   methods: {
-    onFileChange(e) {
+    onFileChange (e) {
       const selectedFile = e.target.files[0]; // accessing file
       this.selectedFile = selectedFile;
     },
-    async onUploadFile() {
+    async onUploadFile () {
       const formData = new FormData();
-      formData.append("file", this.selectedFile); // appending file
-      await axios
-        .delete("http://localhost:4000/user/delete/avatar", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      formData.append('file', this.selectedFile); // appending file
+      console.log('Uploading file:', formData); // DELETE
+      await axios.delete('http://localhost:4000/user/delete/avatar', {
+        withCredentials: true,
+      });
 
-      await axios
-        .post("http://localhost:4000/user/upload/avatar", formData, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-
-      this.$emit("change");
+      await axios.post('http://localhost:4000/user/upload/avatar', formData, {
+        withCredentials: true,
+      });
+      await meStore.fetch();
+      // this.$emit('change');
     },
   },
 };

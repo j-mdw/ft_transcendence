@@ -4,16 +4,19 @@ import {
   Inject,
   Injectable,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Channel } from './channel.entity';
-import { ChannelDTO, CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
+import { CreateChannelDTO, UpdateChannelDTO } from './channel.dto';
 import { UserService } from 'src/user/user.service';
-// import { ChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
 import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { ChannelType } from './channel.entity';
 import { User } from 'src/user/user.entity';
+import * as bcrypt from 'bcrypt';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
+import { UpdateChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
 
 @Injectable()
 export class ChannelService {
@@ -26,22 +29,41 @@ export class ChannelService {
     private participantService: ChannelParticipantService,
   ) {}
 
-  async findAll(): Promise<ChannelDTO[]> {
-    return (await this.channelRepository.find()).map(
-      (channel) => new ChannelDTO(channel),
-    );
+  async findAll(): Promise<Channel[]> {
+    return await this.channelRepository.find();
   }
 
-  async findOne(id: string): Promise<ChannelDTO> {
-    return new ChannelDTO(await this.channelRepository.findOneOrFail(id));
+  async findOne(channelId: string): Promise<Channel> {
+    return await this.channelRepository.findOneOrFail(channelId);
+  }
+
+  async findParticipants(
+    userId: string,
+    channelId: string,
+  ): Promise<ChannelParticipant[]> {
+    const user = await this.userService.findById(userId);
+    const channel = await this.findOne(channelId);
+    try {
+      await this.participantService.findOne(user, channel);
+      return await this.participantService.allChannelParticpants(channel);
+    } catch {
+      throw new ForbiddenException('Only members can see other members');
+    }
   }
 
   async create(userId: string, data: CreateChannelDTO) {
-    const user = await this.userService.findEntity(userId);
-    if (data.type == ChannelType.protected && !data.password) {
-      throw new BadRequestException(
-        'channel of type protected must have a password',
-      );
+    const user = await this.userService.findById(userId);
+    if (data.type == ChannelType.protected) {
+      if (!data.password) {
+        throw new BadRequestException(
+          'channel of type protected must have a password',
+        );
+      } else {
+        const saltOrRounds = 10;
+        data.password = await bcrypt.hash(data.password, saltOrRounds);
+      }
+    } else {
+      data.password = null;
     }
     const date = new Date();
     const channelEntity = {
@@ -52,6 +74,75 @@ export class ChannelService {
     };
     const channel = await this.channelRepository.save(channelEntity);
     await this.participantService.create(user, channel, true);
+  }
+
+  //Public Channels: a participant adds himself
+  //Private Channels: admins add participants
+  //Protected: participant adds himself if he can provide the password
+  async addParticipant(
+    userId: string,
+    participantId: string,
+    channelId: string,
+    password?: string,
+  ) {
+    const channel: Channel = await this.findOne(channelId);
+    const user: User = await this.userService.findById(userId);
+    const participantToCreate: User = await this.userService.findById(
+      participantId,
+    );
+    try {
+      await this.participantService.findOne(participantToCreate, channel); // If participant is not found, we can create it, otherwise, we won't create it and will throw
+      console.log('Participant already exists!'); // DEBUG
+    } catch {
+      if (
+        await this.isAdditionAllowed(
+          user,
+          participantToCreate,
+          channel,
+          password,
+        )
+      ) {
+        await this.participantService.create(participantToCreate, channel);
+        return;
+      } else {
+        console.log('Addition not allowed'); // DEBUG
+      }
+    }
+    throw new BadRequestException('Cannot add participant to channel');
+  }
+
+  async isAdditionAllowed(
+    userAdding: User,
+    userToAdd: User,
+    channel: Channel,
+    password?: string,
+  ): Promise<boolean> {
+    switch (channel.type) {
+      case ChannelType.public:
+        return userAdding.id === userToAdd.id; // Users can add themselves but cannot add others (TBC, might be easier this way)
+      case ChannelType.private:
+        try {
+          return (await this.participantService.findOne(userAdding, channel))
+            .admin;
+        } catch {
+          return false;
+        }
+      case ChannelType.protected:
+        if (password == undefined) {
+          return false;
+        }
+        if (userAdding.id === userToAdd.id) {
+          return await this.verifyPassword(password, channel.password);
+        } else {
+          return false;
+        }
+      default:
+        return false;
+    }
+  }
+
+  async verifyPassword(password: string, hash: string): Promise<boolean> {
+    return await bcrypt.compare(password, hash);
   }
 
   /*
@@ -68,24 +159,111 @@ export class ChannelService {
     if (channel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can update');
     }
-    channel.type = data.type;
-    if (data.type == ChannelType.protected && data.password != undefined) {
-      channel.password = data.password;
+    if (data.type == ChannelType.protected) {
+      if (data.password != undefined) {
+        channel.password = data.password;
+      } else {
+        throw new BadRequestException(
+          'No password provided for protected channel',
+        );
+      }
     } else {
-      throw new BadRequestException(
-        'No password provided for protected channel',
-      );
+      channel.password = null;
     }
+    channel.type = data.type;
     await this.channelRepository.save(channel);
   }
 
-  async delete(userId: string, channelId: string): Promise<void> {
-    const currentChannel = await this.channelRepository.findOneOrFail(
-      channelId,
+  //Update Admin, Ban and Mute status
+  async updateParticipant(
+    userId: string,
+    participantId: string,
+    channelId: string,
+    updateData: UpdateChannelParticipantDTO,
+  ): Promise<void> {
+    const channel: Channel = await this.findOne(channelId);
+    const user: User = await this.userService.findById(userId);
+    const participantToUpdate: User = await this.userService.findById(
+      participantId,
     );
+    let participationUpdating: ChannelParticipant;
+    let participationToUpdate: ChannelParticipant;
+    try {
+      participationUpdating = await this.participantService.findOne(
+        user,
+        channel,
+      );
+      participationToUpdate = await this.participantService.findOne(
+        participantToUpdate,
+        channel,
+      );
+    } catch {
+      console.log('Cannot update channel member: not found');
+      throw new NotFoundException('user not found');
+    }
+    if (
+      this.isUpdateAllowed(
+        participationUpdating,
+        participationToUpdate,
+        channel,
+        updateData,
+      )
+    ) {
+      await this.participantService.update(participationToUpdate, updateData);
+    } else {
+      throw new BadRequestException('Cannot update channel member');
+    }
+  }
+
+  isUpdateAllowed(
+    participationUpdating: ChannelParticipant,
+    participationToUpdate: ChannelParticipant,
+    channel: Channel,
+    updateData: UpdateChannelParticipantDTO,
+  ): boolean {
+    // Only admins can update members
+    if (!participationUpdating.admin) {
+      console.log('only admin can update');
+      return false;
+    }
+    const isOwner = participationUpdating.user.id == channel.owner.id;
+    // Only owner can update admins
+    if (participationToUpdate.admin && !isOwner) {
+      console.log('only owner can update admin');
+      return false;
+    }
+    // Only owner can promote to admin
+    if (updateData.admin && !isOwner) {
+      console.log('only owner can promote to admin');
+      return false;
+    }
+    // Cannot update MuteEndDate if user is not muted
+    if (updateData.muted == false && updateData.muteEnd != undefined) {
+      console.log('user is not muted but date is set');
+      return false;
+    }
+    if (
+      participationToUpdate.muted == false &&
+      updateData.muted == undefined &&
+      updateData.muteEnd != undefined
+    ) {
+      console.log('user is not muted but date is set');
+      return false;
+    }
+    return true;
+  }
+
+  async delete(userId: string, channelId: string): Promise<void> {
+    const currentChannel = await this.findOne(channelId);
     if (currentChannel.owner.id != userId) {
       throw new ForbiddenException('Only channel owner can delete channel');
     }
     await this.channelRepository.delete(channelId);
+  }
+
+  async deleteParticipant(userId: string, channelId: string): Promise<void> {
+    const user = await this.userService.findById(userId);
+    const channel = await this.findOne(channelId);
+    await this.participantService.deleteOne(user, channel);
   }
 }

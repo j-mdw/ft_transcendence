@@ -15,48 +15,50 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UserDTO } from './user.dto';
+import { UpdateUserDTO, UserDTO } from './user.dto';
 import { Response } from 'express';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
+import { ChannelDTO } from 'src/channel/channel.dto';
 
 @Controller('user')
 @UseGuards(JwtGuard)
 export class UserController {
   constructor(private userService: UserService) {}
   @Get()
-  findAll(): Promise<UserDTO[]> {
-    return this.userService.getUsers();
+  async findAll(): Promise<UserDTO[]> {
+    return (await this.userService.getUsers()).map((user) => new UserDTO(user));
   }
 
   @Get('me')
   async findMe(
     @Res({ passthrough: true }) response: Response,
   ): Promise<UserDTO> {
-    // try {
-      return await this.userService.findById(response.locals.id);
-    // } catch {
-      // throw new BadRequestException();
-    // }
+    return new UserDTO(await this.userService.findById(response.locals.id));
+  }
+
+  @Get('channels')
+  async findMyChannels(
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<ChannelDTO[]> {
+    return (await this.userService.findChannels(response.locals.id)).map(
+      (channel) => new ChannelDTO(channel),
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
-    return this.userService.findById(id);
+  async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {
+    return new UserDTO(await this.userService.findById(id));
   }
 
   @Patch()
   async updateUser(
     @Res({ passthrough: true }) response: Response,
-    @Body() data: Partial<Omit<UserDTO, 'id'>>,
-  ) {
+    @Body() data: UpdateUserDTO,
+  ): Promise<void> {
     console.log('Paths - user id:', response.locals.id);
     await this.userService.update(response.locals.id, data);
-    // return {
-    //   statusCode: HttpStatus.OK,
-    //   message: 'User updated successfully',
-    // };
   }
 
   @Delete()
@@ -67,15 +69,17 @@ export class UserController {
   @Delete('delete/avatar')
   async beforeUpload(@Res({ passthrough: true }) response: Response) {
     const user = await this.userService.findById(response.locals.id);
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const fs = require('fs');
+    if (user.avatarPath.search('./avatars/ours/') !== 0) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fs = require('fs');
 
-    if (fs.existsSync(user.avatarPath)) {
-      try {
-        fs.unlinkSync(user.avatarPath);
-        console.log('Successfully deleted the file');
-      } catch (err) {
-        throw err;
+      if (fs.existsSync(user.avatarPath)) {
+        try {
+          fs.unlinkSync(user.avatarPath);
+          console.log('Successfully deleted the file');
+        } catch (err) {
+          throw err;
+        }
       }
     }
   }

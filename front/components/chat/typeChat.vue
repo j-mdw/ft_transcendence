@@ -1,17 +1,17 @@
-<template>   
-<v-container class="flex-container" fill-height> 
+<template>
+    <div class="mt-5 mb-9">
     <v-row justify="center" color="#f7ede2" align="center">
       <v-form
     ref="form"
     lazy-validation
     title="Create a channel"
   >
-    <v-text-field
+    <!-- <v-text-field
       v-model="name"
       :counter="20"
       label="Name"
       required
-    />
+    /> -->
 
     <v-select
       v-model="select"
@@ -36,13 +36,13 @@
         </v-btn>
       </v-form>
     </v-row>
-</v-container>
+</div>
 </template>
 
 <script lang="ts">
 
 import Vue from 'vue'
-import { CreateChannelDTO } from '~/models/channel'
+import {CreateChannelDTO} from '~/models/channel'
 export default Vue.extend({
   data: () => ({
     items: ['Public', 'Private', 'Protected'],
@@ -77,7 +77,7 @@ export default Vue.extend({
 }
 
 .v-text-field{
-      width: 50rem;
+      width: 100%;
 }
 
 </style>

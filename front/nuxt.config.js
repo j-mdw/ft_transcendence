@@ -1,5 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 // import IconComponent from './components/Logo/message.vue'
+import VueChatScroll from 'vue-chat-scroll'
 
 export default {
   components: true,

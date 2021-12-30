@@ -11,8 +11,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtGuard } from 'src/auth/jwt.guard';
-import { RelationshipDTO, RelationshipUpdate } from './relationship.dto';
-import { RelationshipType } from './relationship.entity';
+import { RelationshipDTO, RelationshipUpdateDTO } from './relationship.dto';
 import { RelationshipService } from './relationship.service';
 
 @Controller('relationships')
@@ -23,14 +22,16 @@ export class RelationshipController {
   async getMyRelationships(
     @Res({ passthrough: true }) response: Response,
   ): Promise<RelationshipDTO[]> {
-    return await this.relationshipService.userRelationships(response.locals.id);
+    return (
+      await this.relationshipService.userRelationships(response.locals.id)
+    ).map((relation) => new RelationshipDTO(relation));
   }
 
   @Post(':id')
   async updateRelationship(
     @Param('id', ParseUUIDPipe) peerId: string,
     @Res({ passthrough: true }) response: Response,
-    @Body() relation: RelationshipUpdate,
+    @Body() relation: RelationshipUpdateDTO,
   ): Promise<void> {
     console.log('controller userid:', response.locals.id);
     console.log('controller peerid:', peerId);

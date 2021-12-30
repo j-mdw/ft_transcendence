@@ -2,7 +2,7 @@
   <div class="mt-5">
     <v-list class="our_beige">
       <div v-for="relationship in relationships" :key="relationship.type">
-        <div v-if="relationship.type == 3">
+        <div v-if="relationship.type == 2">
           <v-list-item class="ml-n3">
             <v-badge
               bottom
@@ -18,19 +18,23 @@
                 </v-list-item-avatar>
               </router-link>
             </v-badge>
-            <v-list-item-content>
-              <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
-            </v-list-item-content>
-            <v-list-item-action>
-              <v-btn v-ripple="false" plain to="/channels">
-                <messageLogo />
+            <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
+            <v-col>
+              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="becomeFriends(relationship.peerId)">
+                become friend
+                <v-icon color="#395c6b" right>
+                  fas fa-user-check
+                </v-icon>
               </v-btn>
-            </v-list-item-action>
-            <v-list-item-action>
-              <v-btn v-ripple="false" plain icon>
-                <pingpongLogo />
+            </v-col>
+            <v-col>
+              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="deleteFriends(relationship.peerId)">
+                delete invitation
+                <v-icon color="#395c6b" right>
+                  fas fa-trash-alt
+                </v-icon>
               </v-btn>
-            </v-list-item-action>
+            </v-col>
           </v-list-item>
         </div>
       </div>
@@ -40,21 +44,20 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import messageLogo from '../../components/Logo/messageLogo.vue';
-import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
-import { Relationship, User } from '~/models';
+import { Relationship, User, RelationshipType } from '~/models';
 import { usersStore, meStore, relationshipStore } from '~/store';
 
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
   data () {
     return {
       drawer: true,
       version: 0,
       mini: true,
       colors: ['#AFE796', '#F7F4E8', '#C596E7'],
+      alertBlocked: false,
     };
   },
+
   computed: {
     relationships (): Relationship[] {
       return relationshipStore.all;
@@ -65,7 +68,6 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
-
   },
 
   methods: {
@@ -79,7 +81,29 @@ export default Vue.extend({
 
     getStatus (peerId: string) {
       return usersStore.oneUser(peerId).status;
-    }
+    },
+
+    async becomeFriends (peerId: string) {
+      await this.$axios.$post(`relationships/${peerId}`, { type: RelationshipType.friend }, { withCredentials: true }).then((res) => {
+        console.log('we are friends');
+      })
+        .catch((err) => {
+          console.log('there is an error');
+          console.log(err);
+          this.alertBlocked = true;
+        });
+    },
+
+    async deleteFriends (peerId:string) {
+      await this.$axios.$delete(`relationships/${peerId}`, { withCredentials: true }).then((res) => {
+        console.log('we nothing');
+      })
+        .catch((err) => {
+          console.log('there is an error');
+          console.log(err);
+          this.alertBlocked = true;
+        });
+    },
   },
 });
 </script>

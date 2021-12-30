@@ -16,6 +16,12 @@ export default class UsersModule extends VuexModule {
     return Object.values(this.users)
   }
 
+  get oneUser (): (userId: string) => User {
+    return (userId: string) => {
+      return this.users[userId];
+    }
+  }
+
   @Mutation
   set (users: User[]) {
     this.users = users.map((x: User) => ({

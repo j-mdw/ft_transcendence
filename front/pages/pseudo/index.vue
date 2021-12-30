@@ -44,7 +44,7 @@ export default Vue.extend({
         this.$router.push('/home');
       } catch (error) {
         console.log('Error:', error); // Should only intercept 409
-        this.pseudo = '';
+        this.pseudo = ''; // Here could have a pop-up/message to let user know pseudo is not available
       }
     }
   }
