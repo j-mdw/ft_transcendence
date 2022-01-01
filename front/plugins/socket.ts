@@ -32,10 +32,19 @@ export default ({ store }: any) => {
       getters['auth/isLogged'],
     async (val: boolean) => {
       if (val) {
-        await store.dispatch('me/fetch');
-        await store.dispatch('users/fetchUsers');
-        await store.dispatch('relationship/fetch');
-        await store.dispatch('channels/fetch');
+        try {
+          await store.dispatch('me/fetch');
+          await store.dispatch('users/fetchUsers');
+          await store.dispatch('relationship/fetch');
+          await store.dispatch('channels/fetch');
+        } catch (error: any) {
+          if (error?.response?.status !== 401) {
+            console.log('error, not 401:', error);
+            throw (error);
+          } else {
+            console.log('401 caught!');
+          }
+        }
         console.log('My channels:', store.getters['channels/mine']);
         console.log('Visible channels:', store.getters['channels/visible']);
         socket.connect();
