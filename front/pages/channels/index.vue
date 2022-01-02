@@ -17,19 +17,10 @@
     <v-row justify="center" align="center" class="mt-5 mb-5">
     <v-card class="our_beige" width="90%">
         <v-card-title class="our_dark_beige our_navy_blue--text">
-          Public Channels
+          Visible Channels
         </v-card-title>
         <v-divider></v-divider>
-        <public-channels/>
-      </v-card>
-    </v-row>
-    <v-row justify="center" align="center" class="mt-5 mb-5">
-    <v-card class="our_beige" width="90%">
-        <v-card-title class="our_dark_beige our_navy_blue--text">
-          Protected Channels
-        </v-card-title>
-        <v-divider></v-divider>
-        <protected-channels/>
+        <visible-channels/>
       </v-card>
     </v-row>
   </div>
@@ -39,15 +30,24 @@
 
 import Vue from 'vue'
 import myChannelsList from '~/components/channel/myChannelsList.vue'
-import ProtectedChannels from '~/components/channel/protectedChannels.vue'
-import PublicChannels from '~/components/channel/publicChannels.vue'
+import VisibleChannels from '~/components/channel/visibleChannels.vue'
+import { channelsStore } from '~/store';
 import { ChannelDTO } from '~/models/channel'
 
 export default Vue.extend({
-  components: { myChannelsList, PublicChannels, ProtectedChannels },
+  components: { myChannelsList, VisibleChannels },
   data () {
     return {
       channels: Array<ChannelDTO>(),
+    }
+  },
+
+  computed: {
+    myChannel () {
+      return channelsStore.mine
+    },
+    visibleChannel () {
+      return channelsStore.visible
     }
   },
   async mounted () {

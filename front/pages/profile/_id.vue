@@ -65,10 +65,6 @@ import relationshipButtons from '~/components/relationshipButtons.vue';
 // 1 = you are fiends
 // 2 = you are blocked
 
-// 0 = to add not friends yet
-// 1 = you are fiends
-// 2 = you are blocked
-
 export default Vue.extend({
   components: { relationshipButtons },
   layout: 'default',
