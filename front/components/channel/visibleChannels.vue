@@ -24,24 +24,9 @@
               </div>
             </v-col> 
              <!-- <v-col> -->
-            <!-- <div v-if="channel.type == 2">
-              <v-dialog
-                v-model="dialog"
-                width="500"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn small class="our_beige">
-                    Click Me
-                  </v-btn>
-                </template>
-
-                <v-card>
-                  <v-card-title class="text-h5 grey lighten-2">
-                    Privacy Policy
-                  </v-card-title>
-                </v-card>
-              </v-dialog>
-            </div> -->
+            <div v-if="channel.type == 2">
+              <join-protected :channel-id="channel.id" />
+            </div>
             <div v-if="channel.type == 0">
               <v-btn small class="our_beige" @click="joinPublic(channel.id)">
                 join
@@ -60,8 +45,10 @@
 import Vue from 'vue'
 import { ChannelDTO } from '~/models/channel'
 import { channelsStore, meStore } from '~/store';
+import joinProtected from './joinProtected.vue';
 
 export default Vue.extend({
+  components: { joinProtected },
    computed: {
      me () {
        return meStore.me;
@@ -76,13 +63,6 @@ export default Vue.extend({
       console.log("channel ID")
       console.log(id)
       console.log(this.me.id)
-      await this.$axios.$put(`/channel/${id}/${this.me.id}`, '',{ withCredentials: true});
-      channelsStore.fetch();
-      this.$router.push(`/channels/${id}`)
-    },
-    async joinPrivate(id: string) {
-      console.log("channel ID")
-      console.log(id)
       await this.$axios.$put(`/channel/${id}/${this.me.id}`, '',{ withCredentials: true});
       channelsStore.fetch();
       this.$router.push(`/channels/${id}`)
