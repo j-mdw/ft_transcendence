@@ -20,6 +20,7 @@
               <v-list-item-content>
                 <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
               </v-list-item-content>
+              <div v-if="participant.userId != me.id">
               <v-list-item-action>
                 <v-btn v-ripple="false" plain icon title="give admin right">
                    <v-icon color="#395c6b">fa-crown</v-icon>    
@@ -40,6 +41,7 @@
                    <v-icon color="#395c6b">fa-sign-out-alt</v-icon>    
                 </v-btn>
               </v-list-item-action>
+              </div>
             </v-list-item>
       </div>
     </v-list>   

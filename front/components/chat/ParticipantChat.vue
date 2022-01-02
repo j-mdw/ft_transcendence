@@ -2,8 +2,8 @@
   <div v-if="thisChannel.owner == me.id">
     <owner-view :channel-id="channelId"/>
   </div>
-  <div v-else-if="isAdmin(me.id)">
-    <owner-view :channel-id="channelId"/>
+  <div v-else-if="isAdmin(me.id) == true">
+    <admin-view :channel-id="channelId"/>
   </div>
   <div v-else>
     <user-view :channel-id="channelId"/>
@@ -18,9 +18,11 @@ import messageLogo from "../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../components/Logo/pingpongLogo.vue";
 import UserView from "./participantsView/userView.vue";
 import OwnerView from './participantsView/ownerView.vue'
+import AdminView from './participantsView/adminView.vue'
+
 
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, OwnerView, UserView },
+  components: { messageLogo, pingpongLogo, OwnerView, UserView, AdminView },
   props: ['channelId'],
   data() {
     return {
@@ -67,10 +69,22 @@ export default Vue.extend({
 
     async isAdmin(peerId: string)
     {
-      this.participant = await this.$axios.$get(`channel/${this.channelId}/${peerId}`, { withCredentials: true });
-      if(this.participant.admin)
-        return(true);
-      else false
+      console.log("SHHHHHHHHHIIIIIIIIT")
+      for (let i = 0; i < this.participants.length; i++) {
+        if(this.participants[i].userId = peerId)
+        {
+          if(this.participant.admin)
+          {
+            console.log("ADMINNN")
+            return(true);
+          }
+          else 
+          {
+            console.log("NOT ADMINNN")
+            return false
+          }
+        } 
+      }
     }
   },
 });
