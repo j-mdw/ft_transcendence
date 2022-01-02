@@ -7,6 +7,7 @@
             class="pa-2 mt-2 mb-2" 
             width="400"
             color="#ebd9c5"
+            :to="`/channels/${channel.id}`"
           >
             <v-col> 
                 {{ channel.name }}

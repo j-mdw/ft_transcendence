@@ -4,7 +4,8 @@
       <template v-for="(channel, index) in visibleChannels" >
         <v-col :key="index" class="ml-2 mr-2" >
           <v-btn
-            class="pa-2 mt-2 mb-2" 
+            :to="`/channels/${channel.id}`"
+            class="pa-2 m-2 mb-2" 
             width="400"
             color="#ebd9c5"
           >

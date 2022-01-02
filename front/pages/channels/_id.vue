@@ -3,7 +3,7 @@
     <div id="message" />
     <div id="chat">
       <h2 class="ml-5">
-        My message
+        {{ thisChannel.name }}
       </h2>
       <v-card outlined color="transparent" class="mt-1">
         <div class="message-wrapper_left">
@@ -52,7 +52,7 @@
           Send
         </v-btn>
       </v-col>
-      <settings-chat />
+      <settings-chat :channel-id="$route.params.id"/>
     </v-row>
   </div>
 </template>
@@ -61,6 +61,8 @@
 import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
+
+import { channelsStore } from '~/store'
 export default Vue.extend({
   components: { settingsChat, profilChat },
   layout: 'default',
@@ -69,6 +71,15 @@ export default Vue.extend({
       messages: Array<string>(),
       current_message: ''
     }
+  },
+  computed: {
+      channelid () {
+          return this.$route.params.id;
+      },
+
+      thisChannel () {
+        return  channelsStore.one(this.$route.params.id);
+      }
   },
   sockets: {
     connect () {
