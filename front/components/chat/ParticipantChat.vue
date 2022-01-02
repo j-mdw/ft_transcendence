@@ -70,22 +70,24 @@ export default Vue.extend({
     async isAdmin(peerId: string)
     {
       console.log("SHHHHHHHHHIIIIIIIIT")
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+      
       for (let i = 0; i < this.participants.length; i++) {
         if(this.participants[i].userId = peerId)
         {
           if(this.participant.admin)
           {
-            console.log("ADMINNN")
+            console.log("ADMIIIN")
             return(true);
           }
           else 
           {
-            console.log("NOT ADMINNN")
+            console.log("NOT ADMIIIN")
             return false
           }
         } 
       }
-    }
+    },
   },
 });
 </script>

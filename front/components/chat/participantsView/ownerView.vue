@@ -21,9 +21,14 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
               </v-list-item-content>
               <div v-if="participant.userId != me.id">
-              <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="give admin right">
+              <v-list-item-action v-if="participant.admin == false">
+                <v-btn v-ripple="false" plain icon title="give admin right" @click="becomeAdmin(participant.userId)">
                    <v-icon color="#395c6b">fa-crown</v-icon>    
+                </v-btn>
+              </v-list-item-action>
+              <v-list-item-action v-else>
+                <v-btn v-ripple="false" plain icon title="give admin right" @click="removeAdmin(participant.userId)">
+                   <v-icon color="#395c6b">fa-eraser</v-icon>    
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action>
@@ -83,6 +88,23 @@ export default Vue.extend({
     getStatus(peerId: string)
     {
         return usersStore.oneUser(peerId).status;
+    },
+    async becomeAdmin(peerId: string)
+    {
+      await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: true}, { withCredentials: true });
+    },
+    async removeAdmin(peerId: string)
+    {
+      await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: false}, { withCredentials: true });
+    },
+    async muteUser(peerId: string)
+    {
+      
+    },
+
+    async banUser(peerId: string)
+    {
+
     }
   },
   computed: {
