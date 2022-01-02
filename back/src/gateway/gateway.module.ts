@@ -6,11 +6,7 @@ import { AppGateway } from './gateway';
 import { GatewayService } from './gateway.service';
 
 @Module({
-  imports: [
-    AuthModule,
-    UserModule,
-    ChannelModule,
-  ],
+  imports: [AuthModule, UserModule, ChannelModule],
   controllers: [],
   providers: [AppGateway, GatewayService],
   exports: [GatewayService],

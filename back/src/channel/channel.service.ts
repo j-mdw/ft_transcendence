@@ -17,6 +17,8 @@ import { User } from 'src/user/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 import { UpdateChannelParticipantDTO } from 'src/channelParticipant/channelParticipant.dto';
+import { MessageService } from 'src/message/message.service';
+import { Message } from 'src/message/message.entity';
 
 @Injectable()
 export class ChannelService {
@@ -27,6 +29,8 @@ export class ChannelService {
     private userService: UserService,
     @Inject(forwardRef(() => ChannelParticipantService))
     private participantService: ChannelParticipantService,
+    @Inject(MessageService)
+    private messageService: MessageService,
   ) {}
 
   async findAll(): Promise<Channel[]> {
@@ -35,6 +39,14 @@ export class ChannelService {
 
   async findOne(channelId: string): Promise<Channel> {
     return await this.channelRepository.findOneOrFail(channelId);
+  }
+
+  async findOneDMchannel(channelName: string): Promise<Channel> {
+    return await this.channelRepository.findOneOrFail({
+      where: {
+        name: channelName,
+      },
+    });
   }
 
   async findOneParticipant(
@@ -58,7 +70,14 @@ export class ChannelService {
     }
   }
 
-  async create(userId: string, data: CreateChannelDTO) {
+  async findMessages(userId: string, channelId: string): Promise<Message[]> {
+    const user = await this.userService.findById(userId);
+    const channel = await this.findOne(channelId);
+    await this.participantService.findOne(user, channel); // Check if user is a participant
+    return await this.messageService.findChannelMessages(channel);
+  }
+
+  async create(userId: string, data: CreateChannelDTO): Promise<void> {
     const user = await this.userService.findById(userId);
     if (data.type == ChannelType.protected) {
       if (!data.password) {
@@ -81,6 +100,33 @@ export class ChannelService {
     };
     const channel = await this.channelRepository.save(channelEntity);
     await this.participantService.create(user, channel, true);
+  }
+
+  async createDMchannel(
+    user1: User,
+    user2: User,
+    channelName: string,
+  ): Promise<Channel> {
+    const date = new Date();
+    const channelEntity = {
+      name: channelName,
+      type: ChannelType.private,
+      createdAt: date,
+      updatedAt: date,
+      owner: user1,
+      DM: true,
+    };
+    const channel = await this.channelRepository.save(channelEntity);
+    await this.participantService.create(user1, channel);
+    await this.participantService.create(user2, channel);
+    return channel;
+  }
+
+  async addMessage(userId: string, channelId: string, message: string) {
+    const channel = await this.findOne(channelId);
+    const user = await this.userService.findById(userId);
+    await this.participantService.findOne(user, channel); // Check if user is a participant
+    await this.messageService.addMessage(channel, user, message);
   }
 
   //Public Channels: a participant adds himself
@@ -222,6 +268,13 @@ export class ChannelService {
     }
   }
 
+  async removeMute(participant: ChannelParticipant) {
+    await this.participantService.update(participant, {
+      muted: false,
+      muteEnd: null,
+    });
+  }
+
   isUpdateAllowed(
     participationUpdating: ChannelParticipant,
     participationToUpdate: ChannelParticipant,
@@ -271,6 +324,10 @@ export class ChannelService {
   async deleteParticipant(userId: string, channelId: string): Promise<void> {
     const user = await this.userService.findById(userId);
     const channel = await this.findOne(channelId);
-    await this.participantService.deleteOne(user, channel);
+    if (user.id === channel.owner.id) {
+      await this.channelRepository.delete(channelId);
+    } else {
+      await this.participantService.deleteOne(user, channel);
+    }
   }
 }

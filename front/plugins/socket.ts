@@ -2,8 +2,7 @@
 import Vue from 'vue'
 import { io, Socket } from 'socket.io-client'
 import VueSocketIOExt from 'vue-socket.io-extended'
-import { Store } from 'vuex';
-import { Relationship, StatusUpdate } from '~/models';
+import { MessageReceived, Relationship, StatusUpdate } from '~/models';
 // import { getters } from '~/store';
 
 const socket: Socket = io('http://localhost:4000', {
@@ -26,6 +25,17 @@ export default ({ store }: any) => {
   socket.on('relationship-delete', (peerId: string) => {
     store.commit('relationship/delete', peerId);
   });
+  socket.on('chat-channel-joined', async (channelId: string) => {
+    store.commit('messages/setCurrentChannel', channelId);
+    await store.dispatch('messages/fetch');
+  });
+  socket.on('chat-DM-joined', async (channelId: string) => {
+    store.commit('messages/setCurrentChannel', channelId);
+    await store.dispatch('messages/fetch');
+  });
+  socket.on('chat-message-to-client', (message: MessageReceived) => {
+    store.commit('messages/add', message);
+  });
 
   store.watch(
     (_state: any, getters: any) =>
@@ -37,12 +47,10 @@ export default ({ store }: any) => {
           await store.dispatch('users/fetchUsers');
           await store.dispatch('relationship/fetch');
           await store.dispatch('channels/fetch');
+          await store.dispatch('messages/fetch');
         } catch (error: any) {
           if (error?.response?.status !== 401) {
-            console.log('error, not 401:', error);
             throw (error);
-          } else {
-            console.log('401 caught!');
           }
         }
         console.log('My channels:', store.getters['channels/mine']);

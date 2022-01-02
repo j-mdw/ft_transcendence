@@ -3,6 +3,18 @@
     <v-btn color="#F6BD60" v-bind="attrs" to="/channels/create" class="mt-9 ml-8" v-on="on">
       create channel
     </v-btn>
+                <v-btn
+              class=""
+              @click="disconnect()"
+            >
+              Disconnect
+            </v-btn>
+            <v-btn
+              class=""
+              @click="connect()"
+            >
+              Connect
+            </v-btn>
 
     <v-row no-gutters class="mb-6" justify="center" align="center">
       <v-col v-for="(channel, index) in channels" :key="index">
@@ -39,6 +51,7 @@
 
 import Vue from 'vue'
 import { ChannelDTO } from '~/models/channel'
+import { authenticationStore } from '~/store'
 
 export default Vue.extend({
   data () {
@@ -58,6 +71,12 @@ export default Vue.extend({
       this.channels = await this.$axios.$get('/channel', { withCredentials: true })
     },
     async updateChannel () {},
+    disconnect () {
+      authenticationStore.removeLogin();
+    },
+    connect () {
+      authenticationStore.setLogin();
+    },
   },
 })
 </script>

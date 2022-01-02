@@ -24,6 +24,16 @@ export default class ChannelsModule extends VuexModule {
     return this.visibleChannels;
   }
 
+  get one (): (channelId: string) => ChannelDTO | undefined {
+    return (channelId: string) => {
+      let channel = this.myChannels.find(channel => channel.id === channelId);
+      if (channel === undefined) {
+        channel = this.visibleChannels.find(channel => channel.id === channelId);
+      }
+      return channel;
+    };
+  }
+
   @Mutation
   set (channels: AllChans) {
     this.myChannels = channels.myChan;

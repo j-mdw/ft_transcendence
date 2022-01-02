@@ -25,6 +25,7 @@ import {
   UpdateChannelParticipantDTO,
 } from 'src/channelParticipant/channelParticipant.dto';
 import { ChannelType } from './channel.entity';
+import { MessageDTO } from 'src/message/message.dto';
 
 @Controller('channel')
 @UseGuards(JwtGuard)
@@ -35,6 +36,16 @@ export class ChannelController {
     return (await this.channelService.findAll())
       .filter((channel) => channel.type !== ChannelType.private)
       .map((channel) => new ChannelDTO(channel));
+  }
+
+  @Get('messages/:channelId')
+  async allChannelMessages(
+    @Param('channelId', ParseUUIDPipe) channelId: string,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<MessageDTO[]> {
+    return (
+      await this.channelService.findMessages(response.locals.id, channelId)
+    ).map((msg) => new MessageDTO(msg));
   }
 
   @Get(':channelId')
@@ -66,7 +77,7 @@ export class ChannelController {
   async newChannel(
     @Res({ passthrough: true }) response: Response,
     @Body() data: CreateChannelDTO,
-  ) {
+  ): Promise<void> {
     await this.channelService.create(response.locals.id, data);
   }
 

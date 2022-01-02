@@ -1,6 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import Vue from 'vue'
-import { StatusUpdate, User, UserStatus } from '~/models'
+import { User, UserStatus } from '~/models'
 import { $axios } from '~/utils/api'
 
 @Module({

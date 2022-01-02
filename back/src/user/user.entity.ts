@@ -62,7 +62,4 @@ export class User {
 
   @OneToMany(() => ChannelParticipant, (participant) => participant.user)
   channelsParticipants: ChannelParticipant[];
-
-  // @OneToMany(() => Relationship, (relation) => relation.user)
-  // relationships: Relationship[];
 }

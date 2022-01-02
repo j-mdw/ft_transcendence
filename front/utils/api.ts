@@ -1,5 +1,4 @@
-// import { NuxtAxiosInstance } from '@nuxtjs/axios'
-
+// eslint-disable-next-line import/named
 import { NuxtAxiosInstance } from '@nuxtjs/axios'
 
 // eslint-disable-next-line import/no-mutable-exports
