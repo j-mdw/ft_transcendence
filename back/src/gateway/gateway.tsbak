@@ -234,18 +234,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.manageDeconnection(client);
 	  }
 
-	@SubscribeMessage('gameJoinRoom')
-  	handleGameJoinRoom(client:Socket, room: string): void {
-		  client.join(room);
-		  client.emit('gameJoinedRoom', room)
-	  }
-
-	@SubscribeMessage('gameLeaveRoom')
-  	handleGameLeaveRoom(client:Socket, room: string): void {
-		  client.leave(room);
-		  client.emit('gameLeftRoom', room)
-	  }
-
 	cleanExit(): void {
 		delete this.player1;
 		delete this.player2;

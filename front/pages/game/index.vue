@@ -30,8 +30,16 @@
           align="center"
           max-width="500px"
         >
-           <div> play ?
-           <br> 0 </div>
+           <div> play or not ?</div>
+			<div class="tab-row">
+				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'none' }" @click="buttonClickPlay('none')"  >Spectator</v-btn>
+				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'classic' }" @click="buttonClickPlay('classic')" >Classic</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'rookie' }"  @click="buttonClickPlay('rookie')" >Rookie</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'multiballs' }" @click="buttonClickPlay('multiballs')"  >Multiballs</v-btn>
+		  </div>
+		  <div>
+			  <br> {{messagePlayer}} <br>
+		  </div>
         </v-card>
         <v-card
           class="pa-2 mb-7 mt-7"
@@ -40,8 +48,16 @@
           align="center"
           max-width="500px"
         >
-          <div> watch ?
-          <br> 0 </div>
+          <div> watch a game?
+          </div>
+			<div class="tab-row">
+				<v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch('classic')" >Classic</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch('rookie')" >Rookie</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch('multiballs')"  >Multiballs</v-btn>
+		  </div>
+			<div>
+			  <br> {{messageWatch}} <br>
+		  </div>
         </v-card>
         <!-- <v-card
           class="pa-2 mb-7 mt-7"
@@ -72,14 +88,40 @@ export default Vue.extend({
 	layout: 'default',
 	data() {
 		return {
-        user: Object(),
+		user: Object(),
+		messagePlayer: "",
+		messageWatch: "",
+		activeRoom: [
+			"none",
+			"classic",
+			"rookie",
+			"multiballs"
+		]
 		}
+	},
+
+	methods: {
+
+	buttonClickPlay(gametype: string): void {
+		this.activeRoom = gametype;
+		if (gametype === 'none')
+			this.messagePlayer = "choose the game you want to watch below";
+		else {
+			this.messagePlayer = 'bien recu';
+		}
+	},
+
+	buttonClickWatch(gametype: string): void {
+		this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
 	},
 
 	async mounted() {
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
-  }
+  		}
+	}
+
 })
+
 
 </script>
 
@@ -89,5 +131,10 @@ export default Vue.extend({
   i{
     font-size: 32px;
   }
+}
+
+
+.tab-btn.active {
+    color: goldenrod;
 }
 </style>
