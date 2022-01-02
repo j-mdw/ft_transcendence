@@ -26,15 +26,36 @@
       label="password"
       required
     />
+     
 
         <v-btn
+          v-if="select != 'Protected'"
           color="success"
           class="mr-4"
-          @click="createChannel"
+          @click="updateType"
         >
           Send
         </v-btn>
+        <v-btn
+          v-else-if="password.length > 0" 
+          color="success"
+          class="mr-4"
+           @click="updateType"
+        >
+          Send
+        </v-btn>
+        <v-btn
+          v-else
+          color="success"
+          class="mr-4"
+           @click="updateType"
+          disabled
+        >
+          Send
+        </v-btn>
+        
       </v-form>
+      
     </v-row>
 </div>
 </template>
@@ -55,9 +76,15 @@ export default Vue.extend({
   }),
 
   methods: {
-    async createChannel () {
+    async updateType() {
       console.log(this.items.indexOf(this.select))
-     await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select)}, {withCredentials: true });
+      if(this.items.indexOf(this.select) != 2)
+        await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select)}, {withCredentials: true });
+      else
+      {
+        console.log(this.password)
+        await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select), password: this.password}, {withCredentials: true });
+      }
      channelsStore.fetch();
       this.$router.push({
         path: '/channels'
