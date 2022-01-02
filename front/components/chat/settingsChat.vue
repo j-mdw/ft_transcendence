@@ -37,12 +37,19 @@
             Leave channel
           </v-btn>
 
+          <div v-if="thisChannel.owner == me.id">
           <v-btn
-            v-if="thisChannel.owner == me.id"
             color="#f5cac3" class="mt-6 mb-6 ml-6" @click="deleteChannel()"
           >
             delete channel
           </v-btn>
+          <v-btn
+            v-if="thisChannel.type == 1"
+            color="#f5cac3" class="mt-6 mb-6 ml-6" @click="deleteChannel()"
+          >
+            add participant
+          </v-btn>
+          </div>
         </v-row>
         <v-divider></v-divider>
         <div v-if="thisChannel.owner == me.id">
@@ -55,7 +62,7 @@
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Channel Participants
         </v-card-title>
-        <participant-chat/>
+        <participant-chat :channel-id="channelId" />
         
       </v-card>
     </v-dialog>
