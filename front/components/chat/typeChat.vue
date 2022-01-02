@@ -43,6 +43,8 @@
 
 import Vue from 'vue'
 import {CreateChannelDTO} from '~/models/channel'
+
+import {channelsStore} from '~/store';
 export default Vue.extend({
   props: ['channelId'],
   data: () => ({
@@ -55,10 +57,11 @@ export default Vue.extend({
   methods: {
     async createChannel () {
       console.log(this.items.indexOf(this.select))
-     // await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select), withCredentials: true });
-      // this.$router.push({
-      //   path: '/channels'
-      // });
+     await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select)}, {withCredentials: true });
+     channelsStore.fetch();
+      this.$router.push({
+        path: '/channels'
+      });
     }
   }
 })
