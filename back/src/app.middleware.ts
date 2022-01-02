@@ -19,6 +19,7 @@ Throw:
 export class AppMiddleware implements NestMiddleware {
   constructor(private jwtService: JwtService) {}
   use(req: Request, res: Response, next: NextFunction) {
+    console.log(req);
     if (req.cookies && req.cookies['access_token']) {
       try {
         const decoded = this.jwtService.decode(req.cookies['access_token']);

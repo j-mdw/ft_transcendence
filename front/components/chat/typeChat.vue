@@ -44,6 +44,7 @@
 import Vue from 'vue'
 import {CreateChannelDTO} from '~/models/channel'
 export default Vue.extend({
+  props: ['channelId'],
   data: () => ({
     items: ['Public', 'Private', 'Protected'],
     name: '',
@@ -53,15 +54,11 @@ export default Vue.extend({
 
   methods: {
     async createChannel () {
-      const input: CreateChannelDTO = {
-        name: this.name,
-        type: this.items.indexOf(this.select),
-        password: this.password,
-      }
-      await this.$axios.$put('channel', input, { withCredentials: true });
-      this.$router.push({
-        path: '/channels'
-      });
+      console.log(this.items.indexOf(this.select))
+     // await this.$axios.$patch(`channel/${this.channelId}`, {type: this.items.indexOf(this.select), withCredentials: true });
+      // this.$router.push({
+      //   path: '/channels'
+      // });
     }
   }
 })

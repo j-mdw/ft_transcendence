@@ -21,11 +21,11 @@
               <v-list-item-content>
                 <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
               </v-list-item-content>
-              <v-list-item-action>
+              <!-- <v-list-item-action>
                 <v-btn v-ripple="false" plain icon title="transfer ownership">
                    <v-icon color="#395c6b">fa-exchange-alt</v-icon>    
                 </v-btn>
-              </v-list-item-action>
+              </v-list-item-action> -->
               <v-list-item-action>
                 <v-btn v-ripple="false" plain icon title="give admin right">
                    <v-icon color="#395c6b">fa-crown</v-icon>    

@@ -31,7 +31,8 @@
         <v-divider></v-divider>
         <v-row justify="center" align="center">
           <v-btn
-            color="#f5cac3" class="mt-6 mb-6 mr-6" 
+            v-if="thisChannel.owner != me.id"
+            color="#f5cac3" class="mt-6 mb-6 mr-6"  @click="leaveChannel()"
           >
             Leave channel
           </v-btn>
@@ -44,10 +45,12 @@
           </v-btn>
         </v-row>
         <v-divider></v-divider>
+        <div v-if="thisChannel.owner == me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Change channel Type
         </v-card-title>
-        <type-chat/>
+        <type-chat :channel-id="channelId"/>
+        </div>
         <v-divider></v-divider>
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Channel Participants
@@ -93,11 +96,15 @@ export default Vue.extend({
   },
   methods: {
     async deleteChannel(id: string) {
-      console.log("channel ID")
-      console.log(this.channelId)
       await this.$axios.$delete(`/channel/${this.channelId}`, { withCredentials: true});
-      this.$router.push('/')
+      channelsStore.fetch();
+      this.$router.push('/channels')
     },
+    async leaveChannel(){
+      await this.$axios.$delete(`/channel/${this.channelId}/${this.me.id}`, { withCredentials: true});
+      channelsStore.fetch();
+      this.$router.push('/channels')
+    }
   }
 })
 </script>
