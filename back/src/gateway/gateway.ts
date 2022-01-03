@@ -105,6 +105,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   ///Partie Laurent PongGame
 
   socketList: Array<Socket> = [];
+  socketListClassic: Array<Socket> = [];
+  socketListRookie: Array<Socket> = [];
+  socketListMultiballs: Array<Socket> = [];
 
   gameData: GameDataDto = new GameDataDto('multiballs', 9);
 
@@ -230,20 +233,35 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	@SubscribeMessage('gameCheckIfCleanlyExited')
   	handleGameCheckIfCleanlyExited(client:Socket, message: void): void {
-		this.logger.log(`on passe dans checkifcleanlyexited`);
+		// this.logger.log(`on passe dans checkifcleanlyexited`);
 		this.manageDeconnection(client);
 	  }
 
 	@SubscribeMessage('gameJoinRoom')
   	handleGameJoinRoom(client:Socket, room: string): void {
 		  client.join(room);
-		  client.emit('gameJoinedRoom', room)
+		  this.logger.log(`on a rejoint ${room}`);
+
+		  client.emit('gameJoinedRoom', room) //utile ou non ?
 	  }
 
 	@SubscribeMessage('gameLeaveRoom')
   	handleGameLeaveRoom(client:Socket, room: string): void {
 		  client.leave(room);
-		  client.emit('gameLeftRoom', room)
+		  this.logger.log(`on a quitte ${room}`);
+
+		  client.emit('gameLeftRoom', room) //utile ou non ?
+	  }
+
+	  @SubscribeMessage('gameCheckListLength')
+  	  handleGameCheckListLength(client:Socket, room: string): void {
+		let length: number;  
+		let socketList = this.chooseSocketList(room);
+		length = socketList.length;
+		client.emit('gameSocketListLength', length);
+
+
+
 	  }
 
 	cleanExit(): void {
@@ -299,4 +317,13 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			});
 		}
 	}
+
+	chooseSocketList(name: string): Array<Socket> {
+		if (name === "classic")
+			return (this.socketListClassic);
+		else if (name === "rookie")
+			return (this.socketListRookie);
+		else if (name === "multiballs")
+			return (this.socketListMultiballs);
+		}
 }

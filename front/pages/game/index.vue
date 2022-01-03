@@ -32,10 +32,10 @@
         >
            <div> play or not ?</div>
 			<div class="tab-row">
-				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'none' }" @click="buttonClickPlay('none')"  >Spectator</v-btn>
-				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'classic' }" @click="buttonClickPlay('classic')" >Classic</v-btn>
-        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'rookie' }"  @click="buttonClickPlay('rookie')" >Rookie</v-btn>
-        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeRoom == 'multiballs' }" @click="buttonClickPlay('multiballs')"  >Multiballs</v-btn>
+				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeWaitingList == 'none' }" @click="buttonClickPlay('none')"  >Spectator</v-btn>
+				<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeWaitingList == 'classic' }" @click="buttonClickPlay('classic')" >Classic</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeWaitingList == 'rookie' }"  @click="buttonClickPlay('rookie')" >Rookie</v-btn>
+        		<v-btn class="mt-6 tab-btn" color="#f5cac3" :class="{ active: activeWaitingList == 'multiballs' }" @click="buttonClickPlay('multiballs')"  >Multiballs</v-btn>
 		  </div>
 		  <div>
 			  <br> {{messagePlayer}} <br>
@@ -96,14 +96,20 @@ export default Vue.extend({
 			"classic",
 			"rookie",
 			"multiballs"
-		]
+		],
+    activeWaitingList: [
+      "none",
+			"classic",
+			"rookie",
+			"multiballs"
+    ]
 		}
 	},
 
 	methods: {
 
 	buttonClickPlay(gametype: string): void {
-		this.activeRoom = gametype;
+		this.activeWaitingList = gametype;
 		if (gametype === 'none')
 			this.messagePlayer = "choose the game you want to watch below";
 		else {
@@ -112,13 +118,24 @@ export default Vue.extend({
 	},
 
 	buttonClickWatch(gametype: string): void {
-		this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
+    if (this.activeRoom != "none")
+      this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
+    this.$socket.client.emit('gameJoinRoom', gametype);//permet de rejoindre la room cliquee
+    this.activeRoom = gametype;
+    this.$socket.client.emit('gameCheckListLength', gametype);//permet de verifier si jeu en cours
+    this.$socket.$subscribe('gameSocketListLength', (data: number) => {
+      if (data <= 2)
+        this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
+      else
+        this.messageWatch = ``;
+    })
 	},
 
 	async mounted() {
+      this.activeRoom = "none";
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
   		}
-	}
+  }
 
 })
 
