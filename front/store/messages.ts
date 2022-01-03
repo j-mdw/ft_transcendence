@@ -40,6 +40,7 @@ export default class MessagesModule extends VuexModule {
   @Mutation
   setCurrentChannel (channelId: string) {
     localStorage.setItem('CURRENT_CHANNEL', channelId)
+    this.messages = [];
   }
 
   @Action({ commit: 'set', rawError: true })

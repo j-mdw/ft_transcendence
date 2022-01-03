@@ -100,17 +100,20 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   
   *** CHAT MESSAGES (Channels + DM) ***
 
-  Suscribe:
-  chat-suscribe-channel --> join room identified by channelID
-  chat-suscribe-dm --> join room identified by userID & peerID
+  Join:
+  -> chat-join-channel (join room identified by channelID)
+  <- chat-channel-joined (receive channel ID)
+  -> chat-join-DM (join room identified by userID & peerID)
+  <- chat-DM-joinned (receive channel ID)
 
   Messages:
+  -> chat-channel-message (MessageToServerDTO)
+  <- chat-message-to-client (MessageToClientDTO)
   chat-channel-message --> load participant, check if mute/ban, emit if
   chat-DM-message --> emit to both (no checks)
 
-  Unsuscribe:
-  chat-quit-channel
-  chat-quit-dm
+  Leave:
+  -> chat-leave (channelId)
 
 */
 
@@ -132,7 +135,10 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         throw new NotFoundException();
       }
       try {
-        const participant = await this.channelService.findOneParticipant(user, channel);
+        const participant = await this.channelService.findOneParticipant(
+          user,
+          channel,
+        );
         if (!participant.banned) {
           client.join(channel.id);
           client.emit('chat-channel-joined', channel.id);
@@ -254,6 +260,29 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
       await this.channelService.addMessage(uid, chan.id, msg.message);
     }
+  }
+
+  @SubscribeMessage('chat-leave')
+  async leaveChannel(
+    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
+    @MessageBody() channelId: string,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const uid = this.users.get(client.id).id;
+    let user: User;
+    let chan: Channel;
+    try {
+      user = await this.userService.findById(uid);
+      chan = await this.channelService.findOne(channelId);
+    } catch {
+      throw new NotFoundException();
+    }
+    try {
+      await this.channelService.findOneParticipant(user, chan);
+    } catch {
+      throw new ForbiddenException('User is not a member');
+    }
+    client.leave(channelId);
   }
 }
 
