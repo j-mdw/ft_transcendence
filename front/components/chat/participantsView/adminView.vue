@@ -21,14 +21,7 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="give admin right">
-                   <v-icon color="#395c6b">fa-crown</v-icon>    
-                </v-btn>
-              </v-list-item-action>
-              <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="mute">
-                   <v-icon color="#395c6b">fa-volume-mute</v-icon>    
-                </v-btn>
+                <mute-button/>
               </v-list-item-action>
               <v-list-item-action>
                 <v-btn v-ripple="false" plain icon title="ban">
@@ -47,8 +40,9 @@ import { Relationship, User } from "~/models";
 import { usersStore, meStore, relationshipStore } from "~/store";
 import messageLogo from "../../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../../components/Logo/pingpongLogo.vue";
+import MuteButton from "./muteButton.vue"
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
+  components: { messageLogo, pingpongLogo, MuteButton },
   props: ['channelId'],
   data() {
     return {

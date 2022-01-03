@@ -23,7 +23,7 @@
               <div v-if="participant.userId != me.id">
               <v-list-item-action v-if="participant.admin == false">
                 <v-btn v-ripple="false" plain icon title="give admin right" @click="becomeAdmin(participant.userId)">
-                   <v-icon color="#395c6b">fa-crown</v-icon>    
+                   <v-icon color="#395c6b">fa-user-tie</v-icon>    
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action v-else>
@@ -32,18 +32,17 @@
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="mute">
-                   <v-icon color="#395c6b">fa-volume-mute</v-icon>    
+                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)"/>
+                <v-btn v-else v-ripple="false" plain icon title="unmute" @click="unmuteUser(participant.userId)">
+                  <v-icon color="#395c6b">fa-volume-up</v-icon> 
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="ban">
+                <v-btn v-if="participant.banned == false" v-ripple="false" plain icon title="ban" @click="banUser(participant.userId)">
                    <v-icon color="#395c6b">fa-user-slash</v-icon>    
                 </v-btn>
-              </v-list-item-action>
-              <v-list-item-action>
-                <v-btn v-ripple="false" plain icon title="kick out">
-                   <v-icon color="#395c6b">fa-sign-out-alt</v-icon>    
+                <v-btn v-else v-ripple="false" plain icon title="ban" @click="unbanUser(participant.userId)">
+                   <v-icon color="#395c6b">fa-user</v-icon>    
                 </v-btn>
               </v-list-item-action>
               </div>
@@ -59,8 +58,9 @@ import { Relationship, User } from "~/models";
 import { usersStore, meStore, relationshipStore, channelsStore } from "~/store";
 import messageLogo from "../../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../../components/Logo/pingpongLogo.vue";
+import MuteButton from "./muteButton.vue";
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
+  components: { messageLogo, pingpongLogo, MuteButton },
   props: ['channelId'],
   data() {
     return {
@@ -92,20 +92,33 @@ export default Vue.extend({
     async becomeAdmin(peerId: string)
     {
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: true}, { withCredentials: true });
-      channelsStore.fetch();
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
     async removeAdmin(peerId: string)
     {
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: false}, { withCredentials: true });
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
     async muteUser(peerId: string)
     {
-      
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    },
+    async unmuteUser(peerId: string)
+    {
+      await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {muted: false}, { withCredentials: true });
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
 
     async banUser(peerId: string)
     {
+      await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {banned: true}, { withCredentials: true });
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    },
 
+    async unbanUser(peerId: string)
+    {
+      await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {banned: false}, { withCredentials: true });
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     }
   },
   computed: {
