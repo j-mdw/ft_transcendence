@@ -127,7 +127,8 @@ export default Vue.extend({
       if (data <= 2)
         this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
       else
-        this.messageWatch = ``;
+		this.messageWatch = ``;
+		//on va sur game
     })
 	},
 
