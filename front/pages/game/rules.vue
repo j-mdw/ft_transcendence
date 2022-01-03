@@ -6,8 +6,8 @@ justify="center" align="center"
 	  <!-- <v-container > -->
 
 		      <!-- <v-row > -->
-
-		  <h1>	<br><br> PONG RULES - HOW TO PLAY IF YOU WERE NOT BORN IN 1972 </h1>
+	<GoBack />
+	<h1> PONG RULES - HOW TO PLAY IF YOU WERE NOT BORN IN 1972 </h1>
 
 	<br>
 	<h2>Classic game</h2>
@@ -25,11 +25,20 @@ justify="center" align="center"
 	<br>
 	<p>Long games are so boring ! Let put all the balls together to decide which player is the best.</p>
 	<br>
-	<br>
 	<h1>ENJOY !</h1>
-
+	<GoBack />
 		<!-- </v-row> -->
 	  <!-- </v-container> -->
 	</div>
 
 </template>
+
+<script lang="ts">
+	import Vue from 'vue'
+	import GoBack from "~/components/GoBack.vue"
+	export default Vue.extend({
+		components: {
+			GoBack,
+		},
+	})
+</script>

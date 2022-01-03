@@ -1,6 +1,9 @@
 <template>
 	<span class="go-back">
-		<button @click="goBack">Go Back</button>
+		<v-btn color="#f5cac3" v-bind="attrs" @click="goBack" class="mt-6" >
+          <v-icon color="#395c6b" left>fa fa-angle-left</v-icon>
+		  Go Back
+        </v-btn>
 	</span>
 
 </template>
