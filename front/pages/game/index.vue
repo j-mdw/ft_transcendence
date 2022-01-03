@@ -118,8 +118,8 @@ export default Vue.extend({
 	},
 
 	buttonClickWatch(gametype: string): void {
-    if (this.activeRoom != "none")
-      this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
+	console.log (`${this.activeRoom}`);
+    this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
     this.$socket.client.emit('gameJoinRoom', gametype);//permet de rejoindre la room cliquee
     this.activeRoom = gametype;
     this.$socket.client.emit('gameCheckListLength', gametype);//permet de verifier si jeu en cours
@@ -131,8 +131,11 @@ export default Vue.extend({
     })
 	},
 
+	created() {
+		this.activeRoom = "none";
+	},
+
 	async mounted() {
-      this.activeRoom = "none";
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
   		}
   }
