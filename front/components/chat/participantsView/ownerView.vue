@@ -56,7 +56,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Relationship, User } from "~/models";
-import { usersStore, meStore, relationshipStore } from "~/store";
+import { usersStore, meStore, relationshipStore, channelsStore } from "~/store";
 import messageLogo from "../../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../../components/Logo/pingpongLogo.vue";
 export default Vue.extend({
@@ -73,7 +73,7 @@ export default Vue.extend({
   },
   async mounted () {
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants");
+    console.log("My participants owner");
     console.log(this.participants);
     
   },
@@ -92,6 +92,7 @@ export default Vue.extend({
     async becomeAdmin(peerId: string)
     {
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: true}, { withCredentials: true });
+      channelsStore.fetch();
     },
     async removeAdmin(peerId: string)
     {

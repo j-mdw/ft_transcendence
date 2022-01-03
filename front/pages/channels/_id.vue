@@ -3,7 +3,7 @@
     <div id="message" />
     <div id="chat">
       <h2 class="ml-5">
-        {{ thisChannel.name }}
+        {{ thisChannelName }}
       </h2>
       <v-card outlined color="transparent" class="mt-1">
         <div class="message-wrapper_left">
@@ -78,7 +78,13 @@ export default Vue.extend({
       },
 
       thisChannel () {
+        console.log("THIIIIIS CHANNEL")
+        console.log(this.$route.params.id)
         return  channelsStore.one(this.$route.params.id);
+      },
+
+      thisChannelName: function (): any {
+        return this.thisChannel?.name
       }
   },
   sockets: {

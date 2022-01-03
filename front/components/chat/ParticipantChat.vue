@@ -2,82 +2,52 @@
   <div v-if="thisChannel.owner == me.id">
     <owner-view :channel-id="channelId"/>
   </div>
-  <div v-else-if="isAdmin(me.id) == true">
-    <admin-view :channel-id="channelId"/>
+  <div v-else-if="amIAdmin == true">
+     <admin-view :channel-id="channelId"/> 
+    <!-- COUCOU -->
   </div>
-  <div v-else>
+  <div v-else >
+    
     <user-view :channel-id="channelId"/>
+    <!-- POUET -->
   </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import { Relationship, User } from "~/models";
-import { usersStore, meStore, relationshipStore, channelsStore  } from "~/store";
+import { usersStore, meStore, channelsStore } from "~/store";
 import messageLogo from "../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../components/Logo/pingpongLogo.vue";
+import { ChannelDTO } from '~/models';
+import OwnerView from "./participantsView/ownerView.vue";
+import AdminView from "./participantsView/adminView.vue";
 import UserView from "./participantsView/userView.vue";
-import OwnerView from './participantsView/ownerView.vue'
-import AdminView from './participantsView/adminView.vue'
-
-
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, OwnerView, UserView, AdminView },
+  components: { messageLogo, pingpongLogo, OwnerView, AdminView, UserView },
   props: ['channelId'],
   data() {
     return {
-      drawer: true,
-      version: 0,
-      mini: true,
-      colors: ["#AFE796", "#F7F4E8", "#C596E7"],
       participants: Object(),
-      participant: Object(),
+      counter: this.channelId
     };
   },
   computed : {
-     me () {
+    me () {
        return meStore.me;
      },
-     thisChannel () {
-        return  channelsStore.one(this.channelId);
-      }
-     
-  },
-
-  async mounted () {
-    this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants");
-    console.log(this.participants);
-    
-  },
-
-
-  methods: {
-    getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+    thisChannel: function (): any {
+        return  channelsStore.one(this.counter);
     },
 
-    getPseudo(peerId: string)
-    {
-        return usersStore.oneUser(peerId).pseudo;
-    },
-
-    getStatus(peerId: string)
-    {
-        return usersStore.oneUser(peerId).status;
-    },
-
-    async isAdmin(peerId: string)
-    {
-      console.log("SHHHHHHHHHIIIIIIIIT")
-      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-      
+    amIAdmin () {   
+       channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
-        if(this.participants[i].userId = peerId)
+        if(this.participants[i].userId == this.me.id)
         {
-          if(this.participant.admin)
+          if(this.participants[i].admin)
           {
-            console.log("ADMIIIN")
+            console.log(" he is ADMIIIN")
             return(true);
           }
           else 
@@ -85,10 +55,34 @@ export default Vue.extend({
             console.log("NOT ADMIIIN")
             return false
           }
-        } 
+        }
+        
       }
-    },
+      console.log("NOT found")
+      return false
+    }
   },
+  async mounted () {
+    channelsStore.fetch();
+    this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    console.log("My participants chat ");
+    console.log(this.participants);
+  },
+  methods: {
+    getAvatar(peerId: string) {
+        return usersStore.oneUser(peerId).avatarPath;
+    },
+    getPseudo(peerId: string)
+    {
+        return usersStore.oneUser(peerId).pseudo;
+    },
+    getStatus(peerId: string)
+    {
+        return usersStore.oneUser(peerId).status;
+    },
+
+  },
+  
 });
 </script>
 

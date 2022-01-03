@@ -60,8 +60,9 @@ export default Vue.extend({
     };
   },
   async mounted () {
+    console.log("we are in  ADMIIIIN");
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants");
+    console.log("My participants admin");
     console.log(this.participants);
     
   },

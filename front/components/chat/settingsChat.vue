@@ -31,13 +31,13 @@
         <v-divider></v-divider>
         <v-row justify="center" align="center">
           <v-btn
-            v-if="thisChannel.owner != me.id"
+            v-if="thisChannelOwner != me.id"
             color="#f5cac3" class="mt-6 mb-6 mr-6"  @click="leaveChannel()"
           >
             Leave channel
           </v-btn>
 
-          <div v-if="thisChannel.owner == me.id">
+          <div v-if="thisChannelOwner == me.id">
           <v-btn
             color="#f5cac3" class="mt-6 mb-6 ml-6" @click="deleteChannel()"
           >
@@ -52,7 +52,7 @@
           </div>
         </v-row>
         <v-divider></v-divider>
-        <div v-if="thisChannel.owner == me.id">
+        <div v-if="thisChannelOwner == me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Change channel Type
         </v-card-title>
@@ -94,6 +94,10 @@ export default Vue.extend({
      },
      thisChannel () {
         return  channelsStore.one(this.channelId);
+      },
+
+      thisChannelOwner: function (): any {
+        return this.thisChannel?.owner
       }
      
   },

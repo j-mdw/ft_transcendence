@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5">
     <v-list class="our_beige">
-      <div v-for="participant in participants" :key="participant">
+      <div v-for="participant in participants">
             <v-list-item class="ml-n3">
               <v-badge
                 bottom
@@ -45,8 +45,10 @@ export default Vue.extend({
     };
   },
   async mounted () {
+    console.log("CHANEL IIIIIIIID");
+    console.log(this.channelId)
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants");
+    console.log("My participants user");
     console.log(this.participants);
     
   },
