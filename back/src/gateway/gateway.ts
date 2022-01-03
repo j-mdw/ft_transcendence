@@ -259,10 +259,28 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		let socketList = this.chooseSocketList(room);
 		length = socketList.length;
 		client.emit('gameSocketListLength', length);
+	  }
 
-
+	  @SubscribeMessage('gameAddToGameSocketList')
+  	  handleGameAddToGameSocketList(client:Socket, data: {new: string, old: string}): void {
+		if (data.old != "none") {
+			let socketListOld = this.chooseSocketList(data.old);
+			socketListOld.forEach ((element, index) => {
+				if (element === client)
+				{
+					socketListOld.splice(index, 1);
+					// this.logger.log(`${socketListOld.length} client connecte suite a deconnection`);
+				}
+			})
+		
+		}
+		let socketListNew = this.chooseSocketList(data.new)
+		socketListNew.push(client);
+		this.logger.log(`taille classic : ${this.socketListClassic.length} , rookie : ${this.socketListRookie.length} , multiballs : ${this.socketListMultiballs.length}`);
 
 	  }
+
+
 
 	cleanExit(): void {
 		delete this.player1;

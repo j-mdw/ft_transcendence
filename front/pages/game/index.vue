@@ -102,19 +102,29 @@ export default Vue.extend({
 			"classic",
 			"rookie",
 			"multiballs"
-    ]
+    ],
+    goingToPlayOrWatch: false,
 		}
 	},
 
 	methods: {
 
 	buttonClickPlay(gametype: string): void {
-		this.activeWaitingList = gametype;
+
 		if (gametype === 'none')
 			this.messagePlayer = "choose the game you want to watch below";
 		else {
-			this.messagePlayer = 'bien recu';
+      this.$socket.client.emit('gameAddToGameSocketList', { new: gametype, old: this.activeWaitingList } );
+
+
+      //puis calcul de la taille de la socketlist
+      //si taille  = 1 : en attente autre joueur,
+      //si taille  = 2  : on passe joueur 1 et 2 sur socketlist et on joue et on les mets dans la room
+      // si taille > 2 : message  : liste d'attente, attendre que terrain se libere
+      			this.messagePlayer = "ok";
+
 		}
+    this.activeWaitingList = gametype;
 	},
 
 	buttonClickWatch(gametype: string): void {
@@ -126,19 +136,24 @@ export default Vue.extend({
     this.$socket.$subscribe('gameSocketListLength', (data: number) => {
       if (data <= 2)
         this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
-      else
-		this.messageWatch = ``;
-		//on va sur game
-    })
-	},
+      else {
+        this.messageWatch = ``;
+        this.goingToPlayOrWatch = true;
 
-	created() {
-		this.activeRoom = "none";
+      }
+    })
 	},
 
 	async mounted() {
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
   		}
+
+  //before destroy, retirer socket de la socketlist si pas parti pour un jeu
+  //booleen a mettre en place (goingToPlayOrWatch)
+  //si true, ne pas retirer le socket de la socketlist
+
+
+
   }
 
 })
