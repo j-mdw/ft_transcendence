@@ -3,7 +3,6 @@
         <v-dialog
       v-model="dialog"
       width="600"
-      height="600"
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
@@ -15,7 +14,7 @@
         </v-btn>
       </template>
 
-      <v-card class="our_beige">
+      <v-card class="our_beige" height="250">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           enter the pseudo of the person you want to add
         </v-card-title>
@@ -51,7 +50,7 @@
       <div v-if="alertExist == true">
       <v-alert
         type="error"
-        class="mt-6"
+        class=""
       >
          Sorry this user doesn't exist <br/>
         or he is already in the channel

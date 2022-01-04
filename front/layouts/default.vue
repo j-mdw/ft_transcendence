@@ -13,17 +13,18 @@
             <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
-          to="/profile"
-          :class="{
-            'red--text': activeTab == 1,
-          }"
+          to="/"
         >
-          home {{ activeTab }}
+          home
         </v-tab>
         <v-tab
           to="/channels"
         >
-        message </v-tab>
+        Channels</v-tab>
+        <v-tab
+          to="/channels"
+        >
+        dm</v-tab>
         <v-tab>Game </v-tab>
       </v-tabs>
       <v-btn text color="#395c6b" @click="logout"> logout </v-btn>
