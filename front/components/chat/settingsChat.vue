@@ -43,12 +43,12 @@
           >
             delete channel
           </v-btn>
-          <v-btn
+          
+          </div>
+          <div
             v-if="thisChannel.type == 1"
-            color="#f5cac3" class="mt-6 mb-6 ml-6" @click="deleteChannel()"
           >
-            add participant
-          </v-btn>
+            <add-participant-private :channel-id="channelId" />
           </div>
         </v-row>
         <v-divider></v-divider>
@@ -78,8 +78,10 @@ import Vue from 'vue'
 import ParticipantChat from './ParticipantChat.vue'
 import TypeChat from './typeChat.vue'
 import { meStore, channelsStore } from '~/store';
+import AddParticipantPrivate from './addParticipantPrivate.vue';
+import { ChannelDTO } from '~/models/channel'
 export default Vue.extend({
-  components: { ParticipantChat, TypeChat },
+  components: { ParticipantChat, TypeChat, AddParticipantPrivate },
   layout: 'default',
   props: ['channelId'],
   data () {
@@ -92,18 +94,18 @@ export default Vue.extend({
      me () {
        return meStore.me;
      },
-     thisChannel () {
+     thisChannel () : ChannelDTO | undefined {
+       console.log("CHANNEL ID")
+       console.log(this.channelId)
+       console.log(channelsStore.one(this.channelId))
         return  channelsStore.one(this.channelId);
       },
-
       thisChannelOwner: function (): any {
         return this.thisChannel?.owner
       }
      
   },
   mounted () {
-
-
   },
   methods: {
     async deleteChannel(id: string) {
@@ -121,7 +123,4 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-
-
 </style>
-

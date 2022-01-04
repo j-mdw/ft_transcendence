@@ -40,7 +40,7 @@ export default Vue.extend({
         return  channelsStore.one(this.counter);
     },
 
-    amIAdmin () {   
+    amIAdmin: function (): any {   
        channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
         if(this.participants[i].userId == this.me.id)
