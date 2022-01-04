@@ -1,13 +1,14 @@
 <template>
-  <div class="mt-5">
-    <v-list class="our_beige">
-      <div v-if="doIhavefriends == 0">
+    <div v-if="doIhavefriends == 0">
          <v-row justify="center" class="mt-11">
             <h1>
               Sorry you have no friends<br>
             </h1>
           </v-row>
       </div>
+      <div v-else>
+  <div class="mt-5">
+    <v-list class="our_beige">
       <div v-for="relationship in relationships" :key="relationship.type">
         <div v-if="relationship.type == 3">
           <v-list-item class="ml-n3">
@@ -43,6 +44,7 @@
       </div>
     </v-list>
   </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -72,9 +74,16 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
+    doIhavefriends(): number {
+      let j = 0;
 
-    doIhavefriends (): number {
-      return this.relationships.length;
+      for (let i = 0; this.relationships[i]; i++) {
+        if(this.relationships[i].type == 3)
+          j++
+      }   
+      console.log("LENGTH")
+      console.log(j)
+      return j;
     }
 
   },
@@ -90,7 +99,7 @@ export default Vue.extend({
 
     getStatus (peerId: string) {
       return usersStore.oneUser(peerId).status;
-    }
+    },
   },
 });
 </script>
