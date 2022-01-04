@@ -8,6 +8,13 @@
           fa-user-plus
         </v-icon>
       </v-btn>
+      <v-btn color="#f5cac3" class="mt-6" @click="blockFriends()">
+        block this user
+        <v-icon color="#395c6b" right>
+          fa-user-times
+        </v-icon>
+      </v-btn>
+
     </div>
     <!-- invitation sent -->
     <div v-if="myrelation.type == 1">

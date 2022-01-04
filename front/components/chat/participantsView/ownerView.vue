@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5">
     <v-list class="our_beige">
-      <div v-for="participant in participants" >
+      <div v-for="participant in participants" :key="participant.userId">
             <v-list-item class="ml-n3">
               <v-badge
                 bottom

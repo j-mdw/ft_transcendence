@@ -1,7 +1,7 @@
 <template>
   <div class="mt-5">
     <v-list class="our_beige">
-      <div v-for="participant in participants" >
+      <div v-for="participant in participants" :key="participant.userId">
             <v-list-item class="ml-n3">
               <v-badge
                 bottom
@@ -22,16 +22,6 @@
               </v-list-item-content>
               <div v-if="participant.userId != me.id">
                 <div v-if="participant.userId != thisChannelOwner">
-              <v-list-item-action v-if="participant.admin == false">
-                <v-btn v-ripple="false" plain icon title="give admin right" @click="becomeAdmin(participant.userId)">
-                   <v-icon color="#395c6b">fa-user-tie</v-icon>    
-                </v-btn>
-              </v-list-item-action>
-              <v-list-item-action v-else>
-                <v-btn v-ripple="false" plain icon title="give admin right" @click="removeAdmin(participant.userId)">
-                   <v-icon color="#395c6b">fa-eraser</v-icon>    
-                </v-btn>
-              </v-list-item-action>
               <v-list-item-action>
                 <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)"/>
                 <v-btn v-else v-ripple="false" plain icon title="unmute" @click="unmuteUser(participant.userId)">
