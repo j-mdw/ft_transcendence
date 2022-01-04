@@ -42,9 +42,9 @@ export class UserController {
   async findMyChannels(
     @Res({ passthrough: true }) response: Response,
   ): Promise<ChannelDTO[]> {
-    return (await this.userService.findChannels(response.locals.id)).map(
-      (channel) => new ChannelDTO(channel),
-    );
+    return (await this.userService.findChannels(response.locals.id))
+      .filter((channel) => !channel.DM)
+      .map((channel) => new ChannelDTO(channel));
   }
 
   @Get(':id')

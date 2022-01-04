@@ -1,0 +1,52 @@
+import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { relationshipStore } from '.';
+import { MessageReceived, RelationshipType } from '~/models'
+import { $axios } from '~/utils/api'
+
+@Module({
+  name: 'messages',
+  stateFactory: true,
+  namespaced: true,
+})
+export default class MessagesModule extends VuexModule {
+  currentChannel = localStorage.getItem('CURRENT_CHANNEL');
+  messages: MessageReceived[] = [];
+
+  get channelMessages () {
+    return this.messages;
+  }
+
+  @Mutation
+  set (messages: MessageReceived[]) {
+    this.messages = messages;
+    const relations = relationshipStore.all;
+    for (let i = 0; i < relations.length; i++) {
+      if (relations[i].type === RelationshipType.blocked) {
+        this.messages = this.messages.filter(message => message.userId !== relations[i].peerId);
+      }
+    }
+  }
+
+  @Mutation
+  add (message: MessageReceived) {
+    if (message.channelId === this.currentChannel) {
+      const relation = relationshipStore.one(message.userId);
+      if (!relation || relation.type !== RelationshipType.blocked) {
+        this.messages.push(message);
+      }
+    }
+  }
+
+  @Mutation
+  setCurrentChannel (channelId: string) {
+    localStorage.setItem('CURRENT_CHANNEL', channelId)
+    this.messages = [];
+  }
+
+  @Action({ commit: 'set', rawError: true })
+  async fetch () {
+    if (this.currentChannel && this.currentChannel.length > 0) {
+      return await $axios.$get(`channel/messages/${this.currentChannel}`);
+    }
+  }
+}

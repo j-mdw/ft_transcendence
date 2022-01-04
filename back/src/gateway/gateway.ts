@@ -1,4 +1,13 @@
-import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  NotFoundException,
+  ParseUUIDPipe,
+  UnauthorizedException,
+  UseFilters,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -6,20 +15,28 @@ import {
   WebSocketGateway,
   WebSocketServer,
   MessageBody,
-  WsResponse,
-  OnGatewayInit,
+  ConnectedSocket,
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { AuthService } from 'src/auth/auth.service';
+import { Channel } from 'src/channel/channel.entity';
+import { ChannelService } from 'src/channel/channel.service';
+import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
+import { User } from 'src/user/user.entity';
+import { UserService } from 'src/user/user.service';
+import { MessageToClientDTO, MessageToServerDTO } from './gateway.dto';
+import { HttpExceptionTransformationFilter } from './gateway.filter';
 import { GatewayService } from './gateway.service';
-import { BallDto } from "./gameDto/ball.dto";
-import { PlayerDto } from "./gameDto/player.dto";
-import { GameDataDto } from "./gameDto/gamedata.dto";
+import { BallDto } from './gameDto/ball.dto';
+import { PlayerDto } from './gameDto/player.dto';
+import { GameDataDto } from './gameDto/gamedata.dto';
 import { setInterval, clearInterval } from 'timers';
 import { Logger } from '@nestjs/common';
 // import { Server } from 'http';
 
+@UseFilters(HttpExceptionTransformationFilter)
+@UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
     origin: 'http://localhost:3000',
@@ -29,6 +46,8 @@ import { Logger } from '@nestjs/common';
 export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   constructor(
     private readonly authService: AuthService,
+    private readonly userService: UserService,
+    private readonly channelService: ChannelService,
     private readonly gatewayService: GatewayService,
   ) {}
 
@@ -59,11 +78,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
           next();
         } else {
           console.log('Socket verification: unknown user');
-          next(new UnauthorizedException('Unknown user'));
+          next(new UnauthorizedException('unknown user'));
         }
       } else {
         console.log('Socket verification: auth failed');
-        next(new UnauthorizedException('authentication failed'));
+        next(new UnauthorizedException('auth failed'));
       }
     });
   }
@@ -71,17 +90,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   users = new Map<string, UpdateUserStatus>();
 
-  private logger:Logger = new Logger('GameGateway');
-
-  @SubscribeMessage('chat-message')
-  handleEvent(@MessageBody() msg: string): void {
-    // console.log('Message recieved: ' + data);
-    this.server.emit('chat-message', msg);
-  }
+  private logger: Logger = new Logger('GameGateway');
 
   async handleConnection(client: Socket): Promise<void> {
-    // console.log('New user connected: ' + client.id);
-    // console.log('All connected users: ', this.users);
     client.emit('all-users-status', Array.from(this.users.values()));
     this.server.emit('status-update', this.users.get(client.id));
   }
@@ -91,54 +102,47 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     usr.status = UserStatus.offline;
     this.server.emit('status-update', usr);
     this.users.delete(client.id);
-    console.log('User disconnected: ' + client.id);
-	console.log('All connected users: ', this.users);
+    this.logger.log(`Client disconnected of game: ${client.id}`);
+    this.manageDeconnection(client);
 
+    // //on regarde si la deconnexion concerne un des joueurs principaux
+    // if (this.socketList.length == 1) {//mode entrainement
+    // 	this.cleanExit();
+    // 	clearInterval(this.intervalId);
+    // 	// this.logger.log(`coucou22`);
+    // }
+    // else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
+    // {
+    // 	//changement de scores sur base de donnee et sur page interhnet
+    // 	let winner: string;
+    // 	client === this.socketList[0] ? winner = "2": winner = "1";
+    // 	if (client === this.socketList[0])
+    // 		this.socketList.splice(0, 1);
+    // 	else {
+    // 		this.socketList.splice(1, 1);
+    // 		this.logger.log("yipee")
 
-	// partie pour laurent
-
-	this.logger.log(`Client disconnected of game: ${client.id}`);
-	this.manageDeconnection(client);
-
-	// //on regarde si la deconnexion concerne un des joueurs principaux
-	// if (this.socketList.length == 1) {//mode entrainement
-	// 	this.cleanExit();
-	// 	clearInterval(this.intervalId);
-	// 	// this.logger.log(`coucou22`);
-	// }
-	// else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
-	// {
-	// 	//changement de scores sur base de donnee et sur page interhnet
-	// 	let winner: string;
-	// 	client === this.socketList[0] ? winner = "2": winner = "1";
-	// 	if (client === this.socketList[0])
-	// 		this.socketList.splice(0, 1);
-	// 	else {
-	// 		this.socketList.splice(1, 1);
-	// 		this.logger.log("yipee")
-
-	// 	}
-	// 	this.logger.log("hey on est passe par la !")
-	// 	for (let i in this.socketList) {
-	// 		let socket = this.socketList[i];
-	// 		socket.emit('gameWinner',  winner);
-	// 	}
-	// 	this.cleanExit();
-	// 	clearInterval(this.intervalId);
-	// }
-	// else { //c'est un spectateur qui se deconnecte
-	// 	this.socketList.forEach ((element, index) => {
-	// 		if (element === client)
-	// 		{
-	// 			this.socketList.splice(index, 1);
-	// 			this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
-	// 		}
-	// 	});
-	// }
+    // 	}
+    // 	this.logger.log("hey on est passe par la !")
+    // 	for (let i in this.socketList) {
+    // 		let socket = this.socketList[i];
+    // 		socket.emit('gameWinner',  winner);
+    // 	}
+    // 	this.cleanExit();
+    // 	clearInterval(this.intervalId);
+    // }
+    // else { //c'est un spectateur qui se deconnecte
+    // 	this.socketList.forEach ((element, index) => {
+    // 		if (element === client)
+    // 		{
+    // 			this.socketList.splice(index, 1);
+    // 			this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
+    // 		}
+    // 	});
+    // }
   }
 
-
-  ///Partie Laurent PongGame
+  /* **** PONG **** */
 
   socketList: Array<Socket> = [];
 
@@ -150,177 +154,399 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   player2: PlayerDto;
   intervalId: NodeJS.Timer;
 
-
   @SubscribeMessage('gameInitialization')
-  handleGameInitEvent(client:Socket, username: string): void {
-
-	this.socketList.push(client);
-	this.logger.log(`${this.socketList.length} client connecte`);
-	if (this.socketList.length === 1) {
-		this.player1 = new PlayerDto(40, 70, username);
-		this.logger.log(`1er client connecte, ${this.player1.userName}`);
-		this.player2 = this.player2 = new PlayerDto(1240, 1000, "entrainement");
-	}
-	if (this.socketList.length === 2) {
-		clearInterval(this.intervalId);
-		this.player1.y = 480;
-		this.player1.score = 0;
-		this.player2.y = 480;
-		this.player2.score = 0;   // on peut aussi delete le player 2 et le recreer
-		this.player2.userName = username;
-		this.logger.log(`2eme client connecte, ${this.player2.userName}`);
-		for(let i = 0; i < this.gameData.numberOfBalls; i++)
-			delete this.balls[i];
-	}
-	if (this.socketList.length > 2){
-		for (let i in this.socketList) {
-			let socket = this.socketList[i];
-			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
-		}
-	}
-	else{
-		for(let i = 0; i < this.gameData.numberOfBalls; i++)
-		this.balls[i] = new BallDto(640, 480);
-		for (let i in this.socketList) {
-			let socket = this.socketList[i];
-			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
-		}
-	}
+  handleGameInitEvent(client: Socket, username: string): void {
+    this.socketList.push(client);
+    this.logger.log(`${this.socketList.length} client connecte`);
+    if (this.socketList.length === 1) {
+      this.player1 = new PlayerDto(40, 70, username);
+      this.logger.log(`1er client connecte, ${this.player1.userName}`);
+      this.player2 = this.player2 = new PlayerDto(1240, 1000, 'entrainement'); // typo
+    }
+    if (this.socketList.length === 2) {
+      clearInterval(this.intervalId); // Why do we do this while there should not be any intervals?
+      this.player1.y = 480;
+      this.player1.score = 0;
+      this.player2.y = 480;
+      this.player2.score = 0; // on peut aussi delete le player 2 et le recreer
+      this.player2.userName = username;
+      this.logger.log(`2eme client connecte, ${this.player2.userName}`);
+      for (let i = 0; i < this.gameData.numberOfBalls; i++)
+        delete this.balls[i];
+    }
+    if (this.socketList.length > 2) {
+      for (const i in this.socketList) {
+        const socket = this.socketList[i];
+        socket.emit('gameReturnFullData', {
+          balls: this.balls,
+          p1: this.player1,
+          p2: this.player2,
+        });
+      }
+    } else {
+      for (let i = 0; i < this.gameData.numberOfBalls; i++)
+        this.balls[i] = new BallDto(640, 480);
+      for (const i in this.socketList) {
+        const socket = this.socketList[i];
+        socket.emit('gameReturnFullData', {
+          balls: this.balls,
+          p1: this.player1,
+          p2: this.player2,
+        });
+      }
+    }
   }
 
   @SubscribeMessage('gameLoop')
-  handleGameLoop(client:Socket, message: void): void {
-	this.intervalId = setInterval(() => {
-		// this.logger.log(` au debut du scope ${this.intervalId}`);
+  handleGameLoop(client: Socket, message: void): void {
+    this.intervalId = setInterval(() => {
+      // this.logger.log(` au debut du scope ${this.intervalId}`);
 
-		//nouvelle position de la balle
-		for (let i in this.balls){
-			let ball = this.balls[i];
-			ball.playerPaddle(this.player1);
-			ball.playerPaddle(this.player2);
-			ball.update(this.player1, this.player2, this.gameData);
-		}
+      //nouvelle position de la balle
+      for (const i in this.balls) {
+        const ball = this.balls[i];
+        ball.playerPaddle(this.player1);
+        ball.playerPaddle(this.player2);
+        ball.update(this.player1, this.player2, this.gameData);
+      }
 
-		//change paddlesize if needed
-		if (this.gameData && this.gameData.changingPaddle)
-			this.gameData.updatePlayersPaddleSize(this.player1, this.player2);
+      //change paddlesize if needed
+      if (this.gameData && this.gameData.changingPaddle)
+        this.gameData.updatePlayersPaddleSize(this.player1, this.player2);
 
-		//updating players position
-		if (this.player1)
-			this.player1.updatePosition();
-		if (this.player2)
-			this.player2.updatePosition();
+      //updating players position
+      if (this.player1) this.player1.updatePosition();
+      if (this.player2) this.player2.updatePosition();
 
-		//send infos at each socket
-		for (let i in this.socketList) {
-			let socket = this.socketList[i];
-			socket.emit('gameReturnFullData', { balls: this.balls, p1: this.player1, p2: this.player2 });
-		}
+      //send infos at each socket
+      for (const i in this.socketList) {
+        const socket = this.socketList[i];
+        socket.emit('gameReturnFullData', {
+          balls: this.balls,
+          p1: this.player1,
+          p2: this.player2,
+        });
+      }
 
-		//c'est la qu'on checke le score et que l'on sort proprement si besoin
-		if (this.player1.score >= 5 || this.player2.score >= 5){//attention j'ai mis score a 2 pour les tests
-			let winner = this.gameData.winOrLoose(this.player1, this.player2);
-			// this.logger.log(`${winner} vient de gagner`);
-			for (let i in this.socketList) {
-				let socket = this.socketList[i];
-				socket.emit('gameWinner',  winner);
-			}
-			this.cleanExit();
-			clearInterval(this.intervalId);
-		}
-		////probablement a faire avec les rooms
-	}, 1000/30);
-
-	}
-
+      //c'est la qu'on checke le score et que l'on sort proprement si besoin
+      if (this.player1.score >= 5 || this.player2.score >= 5) {
+        //attention j'ai mis score a 2 pour les tests
+        const winner = this.gameData.winOrLoose(this.player1, this.player2);
+        // this.logger.log(`${winner} vient de gagner`);
+        for (const i in this.socketList) {
+          const socket = this.socketList[i];
+          socket.emit('gameWinner', winner);
+        }
+        this.cleanExit();
+        clearInterval(this.intervalId);
+      }
+      ////probablement a faire avec les rooms
+    }, 1000 / 30); //Does interval make sense?
+  }
 
   @SubscribeMessage('gameKeyPress')
-  handleGamePaddleMove(client:Socket, data: {inputId: string, state: boolean}): void {
-	if (client === this.socketList[0]){
-		if (data.inputId === 'up')
-			this.player1.pressingUp = data.state;
-		else if (data.inputId === 'down')
-			this.player1.pressingDown = data.state;
-		}
+  handleGamePaddleMove(
+    client: Socket,
+    data: { inputId: string; state: boolean },
+  ): void {
+    if (client === this.socketList[0]) {
+      if (data.inputId === 'up') this.player1.pressingUp = data.state;
+      else if (data.inputId === 'down') this.player1.pressingDown = data.state;
+    } else if (client === this.socketList[1]) {
+      if (data.inputId === 'up') this.player2.pressingUp = data.state;
+      else if (data.inputId === 'down') this.player2.pressingDown = data.state;
+    }
+  }
 
-	else if (client === this.socketList[1]) {
-		if (data.inputId === 'up')
-			this.player2.pressingUp = data.state;
-		else if (data.inputId === 'down')
-			this.player2.pressingDown = data.state;
-		}
-	}
-
-	//servira pour integrer le type de jeu
+  //servira pour integrer le type de jeu
   @SubscribeMessage('gameTypeOfGame')
-  handleGameData(client:Socket, data: string): void {
-	this.logger.log(`type of game renseigne`);
+  handleGameData(client: Socket, data: string): void {
+    this.logger.log(`type of game renseigne`);
 
-	if (data === 'multiballs')
-		this.gameData = new GameDataDto('multiballs', 9);
-	else if (data === 'rookie')
-		this.gameData = new GameDataDto('rookie', 1, true);
-	else
-		this.gameData = new GameDataDto('classic');
-	}
+    if (data === 'multiballs') this.gameData = new GameDataDto('multiballs', 9);
+    else if (data === 'rookie')
+      this.gameData = new GameDataDto('rookie', 1, true);
+    else this.gameData = new GameDataDto('classic');
+  }
 
-	@SubscribeMessage('gameCheckIfCleanlyExited')
-  	handleGameCheckIfCleanlyExited(client:Socket, message: void): void {
-		this.logger.log(`on passe dans checkifcleanlyexited`);
-		this.manageDeconnection(client);
-	  }
+  @SubscribeMessage('gameCheckIfCleanlyExited')
+  handleGameCheckIfCleanlyExited(client: Socket, message: void): void {
+    this.logger.log(`on passe dans checkifcleanlyexited`);
+    this.manageDeconnection(client);
+  }
 
-	cleanExit(): void {
-		delete this.player1;
-		delete this.player2;
-		for (let i in this.balls)
-			delete this.balls[i];
-		while (this.balls.length)
-			this.balls.pop();
-		this.logger.log(`${this.balls.length} est la taille du tableau balls`);
-		while (this.socketList.length)
-			this.socketList.pop();
-			this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
-	}
+  cleanExit(): void {
+    delete this.player1;
+    delete this.player2;
+    for (const i in this.balls) delete this.balls[i];
+    while (this.balls.length) this.balls.pop();
+    this.logger.log(`${this.balls.length} est la taille du tableau balls`);
+    while (this.socketList.length) this.socketList.pop();
+    this.logger.log(
+      `${this.balls.length} est la taille du tableau bsocketlist`,
+    );
+  }
 
-	manageDeconnection(client: Socket):void {
-		//on verifie que l'on n'a pas deja fait une sortie propre
-		if (this.socketList.length == 0) //on a deja fait le job
-			return;
+  manageDeconnection(client: Socket): void {
+    //on verifie que l'on n'a pas deja fait une sortie propre
+    if (this.socketList.length == 0)
+      //on a deja fait le job
+      return;
+    //on regarde si la deconnexion concerne un des joueurs principaux
+    else if (this.socketList.length == 1) {
+      //mode entrainement
+      this.cleanExit();
+      clearInterval(this.intervalId);
+      // this.logger.log(`coucou22`);
+    } else if (client === this.socketList[0] || client === this.socketList[1]) {
+      //la deconnection vient du joueur 1 ou 2
+      //changement de scores sur base de donnee et sur page interhnet
+      let winner: string;
+      client === this.socketList[0] ? (winner = '2') : (winner = '1');
+      if (client === this.socketList[0]) this.socketList.splice(0, 1);
+      else {
+        this.socketList.splice(1, 1);
+        this.logger.log('yipee');
+      }
+      this.logger.log('hey on est passe par la !');
+      for (const i in this.socketList) {
+        const socket = this.socketList[i];
+        socket.emit('gameWinner', winner);
+      }
+      this.cleanExit();
+      clearInterval(this.intervalId);
+    } else {
+      //c'est un spectateur qui se deconnecte
+      this.socketList.forEach((element, index) => {
+        if (element === client) {
+          this.socketList.splice(index, 1);
+          this.logger.log(
+            `${this.socketList.length} client connecte suite a deconnection`,
+          );
+        }
+      });
+    }
+  }
 
-		//on regarde si la deconnexion concerne un des joueurs principaux
-		else if (this.socketList.length == 1) {//mode entrainement
-			this.cleanExit();
-			clearInterval(this.intervalId);
-			// this.logger.log(`coucou22`);
-		}
-		else if (client === this.socketList[0] || client === this.socketList[1]) //la deconnection vient du joueur 1 ou 2
-		{
-			//changement de scores sur base de donnee et sur page interhnet
-			let winner: string;
-			client === this.socketList[0] ? winner = "2": winner = "1";
-			if (client === this.socketList[0])
-				this.socketList.splice(0, 1);
-			else {
-				this.socketList.splice(1, 1);
-				this.logger.log("yipee")
-			}
-			this.logger.log("hey on est passe par la !")
-			for (let i in this.socketList) {
-				let socket = this.socketList[i];
-				socket.emit('gameWinner',  winner);
-			}
-			this.cleanExit();
-			clearInterval(this.intervalId);
-		}
-		else { //c'est un spectateur qui se deconnecte
-			this.socketList.forEach ((element, index) => {
-				if (element === client)
-				{
-					this.socketList.splice(index, 1);
-					this.logger.log(`${this.socketList.length} client connecte suite a deconnection`);
-				}
-			});
-		}
-	}
+  /*
+  
+  *** CHAT MESSAGES (Channels + DM) ***
+
+  Join:
+  -> chat-join-channel (join room identified by channelID)
+  <- chat-channel-joined (receive channel ID)
+  -> chat-join-DM (join room identified by userID & peerID)
+  <- chat-DM-joinned (receive channel ID)
+
+  Messages:
+  -> chat-channel-message (MessageToServerDTO)
+  <- chat-message-to-client (MessageToClientDTO)
+  chat-channel-message --> load participant, check if mute/ban, emit if
+  chat-DM-message --> emit to both (no checks)
+
+  Leave:
+  -> chat-leave (channelId)
+
+*/
+
+  @SubscribeMessage('chat-join-channel')
+  async joinChannel(
+    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
+    @MessageBody() channelId: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    if (this.users.has(client.id)) {
+      const uid = this.users.get(client.id).id;
+      let user: User;
+      let channel: Channel;
+      try {
+        user = await this.userService.findById(uid);
+        console.log(channelId.toString());
+        channel = await this.channelService.findOne(channelId.toString());
+      } catch {
+        throw new NotFoundException();
+      }
+      try {
+        const participant = await this.channelService.findOneParticipant(
+          user,
+          channel,
+        );
+        if (!participant.banned) {
+          client.join(channel.id);
+          client.emit('chat-channel-joined', channel.id);
+        }
+      } catch {
+        throw new ForbiddenException('User is not part of the channel');
+      }
+    } else {
+      throw new UnauthorizedException('Unknown user');
+    }
+  }
+
+  @SubscribeMessage('chat-join-DM')
+  async joinDM(
+    // @MessageBody('peerId', ParseUUIDPipe) peerId: string,
+    @MessageBody() peerId: string,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    console.log('Join DM request received');
+    if (this.users.has(client.id)) {
+      const uid = this.users.get(client.id).id;
+      let user: User;
+      let peer: User;
+      try {
+        user = await this.userService.findById(uid);
+        peer = await this.userService.findById(peerId);
+      } catch {
+        throw new NotFoundException();
+      }
+      const chanName = this.gatewayService.createDMname(user.id, peer.id);
+      if (chanName.length === 0) {
+        throw new BadRequestException('User and peer have same id');
+      } else {
+        let channel: Channel;
+        try {
+          channel = await this.channelService.findOneDMchannel(chanName);
+        } catch {
+          channel = await this.channelService.createDMchannel(
+            user,
+            peer,
+            chanName,
+          );
+        }
+        client.join(channel.id);
+        client.emit('chat-DM-joined', channel.id);
+      }
+    } else {
+      throw new UnauthorizedException('Unknown user');
+    }
+  }
+
+  @SubscribeMessage('chat-channel-message')
+  async sendChannelMessage(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() msg: MessageToServerDTO,
+  ): Promise<void> {
+    if (this.users.has(client.id)) {
+      const uid = this.users.get(client.id).id;
+      let user: User;
+      let chan: Channel;
+      try {
+        user = await this.userService.findById(uid);
+        chan = await this.channelService.findOne(msg.channelId);
+      } catch {
+        throw new NotFoundException();
+      }
+      let participant: ChannelParticipant;
+      try {
+        participant = await this.channelService.findOneParticipant(user, chan);
+      } catch {
+        throw new ForbiddenException('User is not a channel member');
+      }
+      if (participant.banned) {
+        client.leave(chan.id);
+        return;
+      }
+      if (participant.muted) {
+        if (participant.muteEnd < new Date()) {
+          await this.channelService.removeMute(participant);
+        } else {
+          return;
+        }
+      }
+      this.server
+        .to(msg.channelId)
+        .emit(
+          'chat-message-to-client',
+          new MessageToClientDTO(user, chan.id, msg.message),
+        );
+      await this.channelService.addMessage(uid, chan.id, msg.message);
+    }
+  }
+
+  @SubscribeMessage('chat-DM-message')
+  async sendDM(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() msg: MessageToServerDTO,
+  ): Promise<void> {
+    if (this.users.has(client.id)) {
+      const uid = this.users.get(client.id).id;
+      let user: User;
+      let chan: Channel;
+      try {
+        user = await this.userService.findById(uid);
+        chan = await this.channelService.findOne(msg.channelId);
+      } catch {
+        throw new NotFoundException();
+      }
+      try {
+        await this.channelService.findOneParticipant(user, chan);
+      } catch {
+        throw new ForbiddenException('User is not a member');
+      }
+      this.server
+        .to(msg.channelId)
+        .emit(
+          'chat-message-to-client',
+          new MessageToClientDTO(user, chan.id, msg.message),
+        );
+      await this.channelService.addMessage(uid, chan.id, msg.message);
+    }
+  }
+
+  @SubscribeMessage('chat-leave')
+  async leaveChannel(
+    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
+    @MessageBody() channelId: string,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    const uid = this.users.get(client.id).id;
+    let user: User;
+    let chan: Channel;
+    try {
+      user = await this.userService.findById(uid);
+      chan = await this.channelService.findOne(channelId);
+    } catch {
+      throw new NotFoundException();
+    }
+    try {
+      await this.channelService.findOneParticipant(user, chan);
+    } catch {
+      throw new ForbiddenException('User is not a member');
+    }
+    client.leave(channelId);
+  }
 }
+
+/*
+    TESTING - CHAT
+
+  - Join channel:
+    - Channel does not exist -> 404
+    - channel member try to join -> receive chat-channel-joined message w/ chan ID
+    - non-member try to join -> 403
+  - Join DM:
+    - Peer exists:
+      - 1st time -> creates channel, receive chat-DM-joined message w/ chan ID
+      - Another time -> receive chat-DM-joined message w/ chan ID
+    - Peer does not exist:
+      - 404
+  - Channel Message:
+    - Empty message -> 400
+    - Unknown channel -> 404
+    - User not a participant -> 403
+    - User is banned -> Do nothing
+    - User is muted (not expired) -> Do nothing
+    - User is muted (expired) -> set muted to false, send and save message
+    - Normal -> save msg, Receive MessageToClientDTO
+  
+  - DM Message:
+    - channel does not exist -> 404
+    - User is not a participant -> 403
+    - Empty message -> 400
+    - Normal -> save msg, Receive MessageToClientDTO
+
+  - Message test:
+    - Deleted on channel delete
+    - Deleted on user delete
+*/

@@ -29,6 +29,7 @@ export class AppMiddleware implements NestMiddleware {
         }
       } catch {
         console.log('Middleware failed to decode access_token cookie');
+        res.clearCookie('access_token');
         throw new UnauthorizedException();
       }
     } else {

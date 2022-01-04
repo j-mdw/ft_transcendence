@@ -7,19 +7,15 @@ import { ChannelService } from './channel.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
 import { AuthModule } from 'src/auth/auth.module';
+import { MessageModule } from 'src/message/message.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Channel]),
     forwardRef(() => UserModule),
     forwardRef(() => ChannelParticipantModule),
-    // JwtModule.register({
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: {
-    //     expiresIn: '24h',
-    //   },
-    // }),
     forwardRef(() => AuthModule),
+    forwardRef(() => MessageModule),
   ],
   providers: [ChannelService],
   controllers: [ChannelController],
