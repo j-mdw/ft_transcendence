@@ -13,6 +13,9 @@ import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
 import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { Channel } from 'src/channel/channel.entity';
+import { MatchHistory } from 'src/matchHistory/matchHistory.entity';
+import { MatchHistoryService } from 'src/matchHistory/matchHistory.service';
+import { MatchHistoryDTO } from 'src/matchHistory/matchHistory.dto';
 
 @Injectable()
 export class UserService {
@@ -21,6 +24,8 @@ export class UserService {
     private userRepository: Repository<User>,
     // @Inject(forwardRef(() => ChannelService))
     // private channelService: ChannelService,
+    @Inject(forwardRef(() => MatchHistoryService))
+    private matchesService: MatchHistoryService,
     @Inject(forwardRef(() => ChannelParticipantService))
     private channelParticipantService: ChannelParticipantService,
   ) {}
@@ -66,9 +71,19 @@ export class UserService {
     });
   }
 
+  async getMatches(userId: string): Promise<MatchHistoryDTO[]> {
+    const user = await this.userRepository.findOneOrFail({
+      where: {
+        id: userId,
+      },
+    });
+    const matches = await this.matchesService.findUserMatches(user);
+    return matches.map((match) => new MatchHistoryDTO(match));
+  }
+
   /*
   Create the user and doesn't return anything
-*/
+  */
   async create(data: CreateUserDTO): Promise<void> {
     const now = new Date();
     await this.userRepository.save({
