@@ -73,7 +73,10 @@ export class ChannelService {
   async findMessages(userId: string, channelId: string): Promise<Message[]> {
     const user = await this.userService.findById(userId);
     const channel = await this.findOne(channelId);
-    await this.participantService.findOne(user, channel); // Check if user is a participant
+    const participant = await this.participantService.findOne(user, channel); // Check if user is a participant
+    if (participant.banned) {
+      return [];
+    }
     return await this.messageService.findChannelMessages(channel);
   }
 

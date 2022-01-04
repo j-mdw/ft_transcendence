@@ -57,7 +57,6 @@ export default Vue.extend({
 					this.ratio.x = this.width / 1280;
 					this.ratio.y = this.height / 960;
 					this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
-
 				},
 				initialization() {
 					this.$socket.client.emit('gameInitialization', this.username);
@@ -92,11 +91,8 @@ export default Vue.extend({
 
 	},
 
-
-
 	destroyed(){
 		console.log("ohoh destroyed");
-
 	},
 
 	mounted() {
@@ -118,8 +114,6 @@ export default Vue.extend({
             else if(event.key === 'ArrowDown') //down
                 this.$socket.client.emit('gameKeyPress', {inputId:'down', state:true});
             })
-
-
 	// addeventlistener de relachement d'une touche
         window.addEventListener('keyup', (event) => {
             if(event.key === 'w') //up
@@ -138,7 +132,7 @@ export default Vue.extend({
         })
 
 		  //gameloop
-        this.$socket.client.emit('gameLoop');
+        this.$socket.client.emit('gameLoop'); //Most likely wrong
 
 	// on recupere les donnees en provenance du serveur
         this.$socket.$subscribe('gameReturnFullData', (data: any) => {
@@ -183,4 +177,4 @@ export default Vue.extend({
 				// 	this.context.font = "30px Arial";
 				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
 				// 	});
-	-->
+-->
