@@ -9,21 +9,17 @@ import { ConfigModule } from '@nestjs/config';
 import { AppMiddleware } from './app.middleware';
 import { JwtModule } from '@nestjs/jwt';
 import { RelationshipModule } from './relationship/relationship.module';
+import { MessageModule } from './message/message.module';
 
 @Module({
   imports: [
-    // JwtModule.register({
-    //   secret: process.env.JWT_SECRET,
-    //   signOptions: {
-    //     expiresIn: '24h',
-    //   },
-    // }),
     TypeOrmModule.forRoot(),
     ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     AuthModule,
     GatewayModule,
     RelationshipModule,
+    MessageModule,
   ],
   controllers: [AppController],
   providers: [AppService, AuthModule],

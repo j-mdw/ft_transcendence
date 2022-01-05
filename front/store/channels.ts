@@ -27,11 +27,9 @@ export default class ChannelsModule extends VuexModule {
   get one (): (channelId: string) => ChannelDTO | undefined {
     return (channelId: string) => {
       let channel = this.myChannels.find(channel => channel.id === channelId);
-      console.log(this.myChannels)
       if (channel === undefined) {
         channel = this.visibleChannels.find(channel => channel.id === channelId);
       }
-
       return channel;
     };
   }

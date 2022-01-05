@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Res, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Res, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtService } from '@nestjs/jwt';
@@ -26,14 +26,13 @@ export class AuthController {
   ) {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
-    const token2fa = this.jwtService.sign({ userId: user.id , twofa: true});
+    const token2fa = this.jwtService.sign({ userId: user.id, twofa: true });
     console.log('Token signed');
-    if(user.isTwoFactorAuthenticationEnabled) {
+    if (user.isTwoFactorAuthenticationEnabled) {
       response.cookie('token2fa', token2fa, {
         httpOnly: true,
       });
-    }
-    else {
+    } else {
       response.cookie('access_token', token, {
         httpOnly: true,
       });
@@ -53,16 +52,14 @@ export class AuthController {
   ) {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
-    const token2fa = this.jwtService.sign({ userId: user.id , twofa: true});
+    const token2fa = this.jwtService.sign({ userId: user.id, twofa: true });
     console.log('Token signed');
-    
-  
-    if(user.isTwoFactorAuthenticationEnabled) {
+
+    if (user.isTwoFactorAuthenticationEnabled) {
       response.cookie('token2fa', token2fa, {
         httpOnly: true,
       });
-    }
-    else {
+    } else {
       response.cookie('access_token', token, {
         httpOnly: true,
       });
@@ -101,10 +98,9 @@ export class AuthController {
   }
 
   @Get('logout')
-  @UseGuards(JwtGuard)
   logout(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('access_token');
     console.log('USER loging out - Removing Cookie');
+    response.clearCookie('access_token');
     return;
   }
 }

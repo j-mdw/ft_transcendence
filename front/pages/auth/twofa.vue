@@ -48,7 +48,7 @@ export default Vue.extend({
           // this.whereTogo()
         });
       } catch (err) {
-        this.$dialog.error({
+        (this as any).$dialog.error({
           text: err.response.data.message,
           title: err.response.status
         })

@@ -1,8 +1,11 @@
 import { Middleware } from '@nuxt/types'
 
-const middleware: Middleware = ({ redirect, store }) => {
+const middleware: Middleware = async ({ redirect, store, route }) => {
   if (!store.getters['auth/isLogged']) {
-    return redirect('/auth')
+    await store.dispatch('auth/signOut');
+    if (route.path !== '/auth') {
+      redirect('/auth')
+    }
   }
 }
 

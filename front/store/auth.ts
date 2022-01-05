@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
 import { $axios } from '~/utils/api'
 
@@ -48,16 +47,10 @@ export default class AuthenticationModule extends VuexModule {
     this.context.commit('setLogin');
     localStorage.setItem('IS_LOGIN', 'false')
   }
-  // Only use actions for Async code
-  // @Action({ rawError: true })
-  // signIn () {
-  //   console.log('Signing in!');
-  //   this.context.commit('setLogin');
-  // }
 
   @Action({ commit: 'removeLogin', rawError: true })
   async signOut () {
-    await axios.get('/logout', { withCredentials: true });
+    await $axios.$get('/logout');
   }
 
   @Action({ rawError: true })
@@ -72,6 +65,6 @@ export default class AuthenticationModule extends VuexModule {
 
   @Action({ rawError: true })
   setTwofaFirstTime (twofa: boolean) {
-    if (twofa == true) { this.context.commit('removeTwoFa'); } else { this.context.commit('setTwoFa'); }
+    if (twofa === true) { this.context.commit('removeTwoFa'); } else { this.context.commit('setTwoFa'); }
   }
 }

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { User } from 'src/user/user.entity';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
+import { Message } from 'src/message/message.entity';
 
 export enum ChannelType {
   public,
@@ -37,6 +38,12 @@ export class Channel {
 
   @Column({
     nullable: false,
+    default: false,
+  })
+  readonly DM: boolean;
+
+  @Column({
+    nullable: false,
   })
   readonly createdAt: Date;
 
@@ -53,4 +60,7 @@ export class Channel {
 
   @OneToMany(() => ChannelParticipant, (participant) => participant.channel)
   channels: Channel[];
+
+  @OneToMany(() => Message, (message) => message.channel)
+  messages: Message[];
 }
