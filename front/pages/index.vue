@@ -7,14 +7,22 @@
           
       </div> -->
       <v-col>
+        <v-row align="center" justify="center" class="mb-7">
         <h1>
           Welcome to Transcendence
         </h1>
+        </v-row>
+        <v-row align="center" justify="center">
         <pingpong-logo height/>
+        </v-row>
       </v-col>
        <v-col>
-        <v-card color="#FFF" height="500">
-          tutu
+        <v-card color="our_dark_beige" height="500">
+          <v-card-title class="our_beige our_navy_blue--text">
+            <v-row align="center" justify="center">
+               top players
+            </v-row>
+        </v-card-title>
         </v-card>
       </v-col>
     </v-row>
