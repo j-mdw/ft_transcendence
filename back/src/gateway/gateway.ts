@@ -18,6 +18,7 @@ import { PlayerDto } from "./gameDto/player.dto";
 import { GameDataDto } from "./gameDto/gamedata.dto";
 import { setInterval, clearInterval } from 'timers';
 import { Logger } from '@nestjs/common';
+import { Game } from "./../game/game";
 // import { Server } from 'http';
 
 @WebSocketGateway({

@@ -6,12 +6,14 @@ export class GameDataDto {
 	numberOfBalls: number;
 	changingPaddle: boolean;
 
-	constructor(gamedata: string, balls = 1, changepaddle = false) {
+	constructor(gamedata: string) {
 		this.gameData = gamedata;
-		if (balls)
-			this.numberOfBalls = balls;
-		if (changepaddle)
-			this.changingPaddle = changepaddle;
+		this.numberOfBalls = 1;
+		if (gamedata === "multiballs")
+			this.numberOfBalls = 9;
+		this.changingPaddle = false;
+		if (gamedata === "rookie")
+			this.changingPaddle = true;
 	}
 
 	updatePlayersPaddleSize(player1: PlayerDto, player2: PlayerDto){
