@@ -5,12 +5,6 @@
 			style="border: 4px solid black;"
 			overscroll-behavior="none"
 		></canvas>
-<!-- A UTILISER SUR AUTRE PAGE POUR SCRIPTER LE TYPE DDE JEU
-		<p>
-			<button @click="gametype('classic')">classic</button>
-			<button @click="gametype('multiballs')">multiballs</button>
-			<button @click="gametype('rookie')">rookie</button>
-		</p> -->
 	</div>
 
 
@@ -50,54 +44,48 @@ export default Vue.extend({
 	},
 	methods: {
 		createScreen(){
-					this.width = window.innerWidth,
-					this.height = window.innerHeight;
-					this.canvas.width = this.width //* ratio;
-					this.canvas.height = this.height //* ratio;
-					this.ratio.x = this.width / 1280;
-					this.ratio.y = this.height / 960;
-					this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
+			this.width = window.innerWidth,
+			this.height = window.innerHeight;
+			this.canvas.width = this.width //* ratio;
+			this.canvas.height = this.height //* ratio;
+			this.ratio.x = this.width / 1280;
+			this.ratio.y = this.height / 960;
+			this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
 
-				},
-				initialization() {
-					this.$socket.client.emit('gameInitialization', this.username);
-					//on recupere position de la balle sur le server
-					//attention a priori ce qui uit est inutile
-					this.$socket.$subscribe('ganeReturnInitialPosition', (data: any) => {
-					for(let i = 0; i < data.balls.length; i++)
-						this.drawBall(data.balls[i]);
-					this.drawPlayer(data.p1);
-					this.drawPlayer(data.p2);
-					});
-				},
+		},
+		initialization() {
+			this.$socket.client.emit('gameInitialization', this.username);
+			//on recupere position de la balle sur le server
+			//attention a priori ce qui uit est inutile
+			this.$socket.$subscribe('ganeReturnInitialPosition', (data: any) => {
+			for(let i = 0; i < data.balls.length; i++)
+				this.drawBall(data.balls[i]);
+			this.drawPlayer(data.p1);
+			this.drawPlayer(data.p2);
+			});
+		},
 
-				drawBall(ball: any) {
-					this.context.beginPath();
-					this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
-					this.context.fill();
-				},
+		drawBall(ball: any) {
+			this.context.beginPath();
+			this.context.arc((ball.x * this.ratio.x), (ball.y * this.ratio.y), (ball.radius * this.ratio.less), 0, 2 * Math.PI);
+			this.context.fill();
+		},
 
-				drawPlayer(player: any) {
-					let top = (player.y - (player.h / 2)) * this.ratio.y,
-						left = (player.x - (player.w / 2)) * this.ratio.x;
-					this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
-					this.context.font = "30px Arial";
-					// console.log(`${player.username}`)
-					this.context.fillText( player.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
-				},
+		drawPlayer(player: any) {
+			let top = (player.y - (player.h / 2)) * this.ratio.y,
+				left = (player.x - (player.w / 2)) * this.ratio.x;
+			this.context.fillRect(left, top, player.w * this.ratio.x, player.h * this.ratio.y);
+			this.context.font = "30px Arial";
+			// console.log(`${player.username}`)
+			this.context.fillText( player.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+		},
 
-				gametype(typeofgame: string) {
-					this.$socket.client.emit('gameTypeOfGame', typeofgame)
-				},
-
-	},
-
-
-
-	destroyed(){
-		console.log("ohoh destroyed");
+		gametype(typeofgame: string) {
+			this.$socket.client.emit('gameTypeOfGame', typeofgame)
+		},
 
 	},
+
 
 	mounted() {
 		this.canvas = <HTMLCanvasElement>document.getElementById("game");
@@ -177,10 +165,3 @@ export default Vue.extend({
 
 })
 </script>
-<!--
-// this.socket.on('firstPlayerInitialization', (data) => {
-				// 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				// 	this.context.font = "30px Arial";
-				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
-				// 	});
-	-->

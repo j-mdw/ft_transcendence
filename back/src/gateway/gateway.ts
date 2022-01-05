@@ -255,7 +255,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	  @SubscribeMessage('gameCheckListLength')
   	  handleGameCheckListLength(client:Socket, room: string): void {
-		let length: number;  
+		let length: number;
 		let socketList = this.chooseSocketList(room);
 		length = socketList.length;
 		client.emit('gameSocketListLength', length);
@@ -263,21 +263,36 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 	  @SubscribeMessage('gameAddToGameSocketList')
   	  handleGameAddToGameSocketList(client:Socket, data: {new: string, old: string}): void {
-		if (data.old != "none") {
-			let socketListOld = this.chooseSocketList(data.old);
+		let socketListOld = this.chooseSocketList(data.old); //on retire le client de l'ancienne socketList
+		if (socketListOld) {
 			socketListOld.forEach ((element, index) => {
 				if (element === client)
 				{
 					socketListOld.splice(index, 1);
-					// this.logger.log(`${socketListOld.length} client connecte suite a deconnection`);
 				}
 			})
-		
 		}
-		let socketListNew = this.chooseSocketList(data.new)
-		socketListNew.push(client);
+		let socketListNew = this.chooseSocketList(data.new)  //on l'ajoute a la nouvelle socketList
+		if (socketListNew){
+			socketListNew.push(client);
+		}
 		this.logger.log(`taille classic : ${this.socketListClassic.length} , rookie : ${this.socketListRookie.length} , multiballs : ${this.socketListMultiballs.length}`);
 
+	  }
+
+	  @SubscribeMessage('gameRemoveFromGameSocketList')
+  	  handleGameRemoveFromGameSocketList(client:Socket, data: string): void {
+		this.logger.log(`coucouc ${data}`);
+		let socketListOld = this.chooseSocketList(data);
+		if (socketListOld) {
+			socketListOld.forEach ((element, index) => {
+				if (element === client)
+				{
+					socketListOld.splice(index, 1);
+				}
+			})
+		}
+		this.logger.log(` sortie taille classic : ${this.socketListClassic.length} , rookie : ${this.socketListRookie.length} , multiballs : ${this.socketListMultiballs.length}`);
 	  }
 
 
@@ -343,5 +358,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			return (this.socketListRookie);
 		else if (name === "multiballs")
 			return (this.socketListMultiballs);
+		else
+			return; //on retourne indefini
 		}
 }

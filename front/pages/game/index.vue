@@ -59,17 +59,6 @@
 			  <br> {{messageWatch}} <br>
 		  </div>
         </v-card>
-        <!-- <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          height="200px"
-          align="center"
-          max-width="500px"
-        >
-        MATCHES
-        </v-card> -->
-
 
       </v-col>
     </v-row>
@@ -97,64 +86,80 @@ export default Vue.extend({
 			"rookie",
 			"multiballs"
 		],
-    activeWaitingList: [
-      "none",
+		activeWaitingList: [
+			"none",
 			"classic",
 			"rookie",
 			"multiballs"
-    ],
-    goingToPlayOrWatch: false,
+		],
+		goingToPlayOrWatch: false,
 		}
 	},
 
 	methods: {
 
-	buttonClickPlay(gametype: string): void {
+		buttonClickPlay(gametype: string): void {
+			this.$socket.client.emit('gameAddToGameSocketList', { new: gametype, old: this.activeWaitingList } );
+			this.activeWaitingList = gametype;
+			if (gametype === 'none')
+				this.messagePlayer = "choose the game you want to watch below";
+			else {
+				this.$socket.client.emit('gameCheckListLength', gametype);//permet de verifier la taille de la socket list
+				this.$socket.$subscribe('gameSocketListLength', (data: number) => {
+					if (data < 2)
+						this.messagePlayer = `waiting a second player to play` ;
+					else if (data > 2)
+						this.messagePlayer = "no table available, you are on waiting list"
+					else {
+						this.messagePlayer = "YOUPI on va jouer"
+						this.goingToPlayOrWatch = true; // attention, a envoyer aussi au player 1
+						//on part pour la partie apres avoir envoye data pour la page suivante
+						//et il faut rejoindre la room apres avoir quitte la room precedente
+					}
 
-		if (gametype === 'none')
-			this.messagePlayer = "choose the game you want to watch below";
-		else {
-      this.$socket.client.emit('gameAddToGameSocketList', { new: gametype, old: this.activeWaitingList } );
+				})
+			}
+		},
 
 
-      //puis calcul de la taille de la socketlist
-      //si taille  = 1 : en attente autre joueur,
-      //si taille  = 2  : on passe joueur 1 et 2 sur socketlist et on joue et on les mets dans la room
-      // si taille > 2 : message  : liste d'attente, attendre que terrain se libere
-      			this.messagePlayer = "ok";
-
-		}
-    this.activeWaitingList = gametype;
-	},
-
-	buttonClickWatch(gametype: string): void {
-	console.log (`${this.activeRoom}`);
-    this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
-    this.$socket.client.emit('gameJoinRoom', gametype);//permet de rejoindre la room cliquee
-    this.activeRoom = gametype;
-    this.$socket.client.emit('gameCheckListLength', gametype);//permet de verifier si jeu en cours
-    this.$socket.$subscribe('gameSocketListLength', (data: number) => {
-      if (data <= 2)
-        this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
-      else {
-        this.messageWatch = ``;
-        this.goingToPlayOrWatch = true;
-
-      }
-    })
+		buttonClickWatch(gametype: string): void {
+		console.log (`${this.activeRoom}`);
+		this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
+		this.$socket.client.emit('gameJoinRoom', gametype);//permet de rejoindre la room cliquee
+		this.activeRoom = gametype;
+		this.$socket.client.emit('gameCheckListLength', gametype);//permet de verifier si jeu en cours
+		this.$socket.$subscribe('gameSocketListLength', (data: number) => {
+			if (data < 2)
+				this.messageWatch = `no ${gametype} game actually, please try another gametype or wait` ;
+			else {
+				//
+				//A FAIRE
+				//
+				//
+				this.messageWatch = `cool`;
+				this.goingToPlayOrWatch = true;
+				//on part pour la partie apres avoir envoye data pour la page suivante
+			}
+    	})
+		},
 	},
 
 	async mounted() {
       this.user = await this.$axios.$get("user/me", {withCredentials: true});
-  		}
+  	},
+
+	beforeDestroy(){
+		console.log("before destroy");
+		// console.log(``)
+		if (!this.goingToPlayOrWatch) {
+			this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
+			this.$socket.client.emit('gameRemoveFromGameSocketList', this.activeWaitingList );
+		}
+	},
 
   //before destroy, retirer socket de la socketlist si pas parti pour un jeu
   //booleen a mettre en place (goingToPlayOrWatch)
   //si true, ne pas retirer le socket de la socketlist
-
-
-
-  }
 
 })
 
