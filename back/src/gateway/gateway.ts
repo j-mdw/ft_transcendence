@@ -225,9 +225,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	this.logger.log(`type of game renseigne`);
 
 	if (data === 'multiballs')
-		this.gameData = new GameDataDto('multiballs', 9);
+		this.gameData = new GameDataDto('multiballs');
 	else if (data === 'rookie')
-		this.gameData = new GameDataDto('rookie', 1, true);
+		this.gameData = new GameDataDto('rookie');
 	else
 		this.gameData = new GameDataDto('classic');
 	}
@@ -299,16 +299,16 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
 
 	cleanExit(): void {
-		delete this.player1;
-		delete this.player2;
-		for (let i in this.balls)
-			delete this.balls[i];
-		while (this.balls.length)
-			this.balls.pop();
-		this.logger.log(`${this.balls.length} est la taille du tableau balls`);
-		while (this.socketList.length)
-			this.socketList.pop();
-			this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
+	// 	delete this.player1;
+	// 	delete this.player2;
+	// 	for (let i in this.balls)
+	// 		delete this.balls[i];
+	// 	while (this.balls.length)
+	// 		this.balls.pop();
+	// 	this.logger.log(`${this.balls.length} est la taille du tableau balls`);
+	// 	while (this.socketList.length)
+	// 		this.socketList.pop();
+	// 		this.logger.log(`${this.balls.length} est la taille du tableau bsocketlist`);
 	}
 
 	manageDeconnection(client: Socket):void {

@@ -78,6 +78,7 @@ export default Vue.extend({
 	data() {
 		return {
 		user: Object(),
+		userName: "",
 		messagePlayer: "",
 		messageWatch: "",
 		activeRoom: [
@@ -145,7 +146,8 @@ export default Vue.extend({
 	},
 
 	async mounted() {
-      this.user = await this.$axios.$get("user/me", {withCredentials: true});
+	  this.user = await this.$axios.$get("user/me", {withCredentials: true});
+	  this.userName = this.user.pseudo;
   	},
 
 	beforeDestroy(){
