@@ -79,6 +79,7 @@ export default Vue.extend({
       name: '',
       dialog: false,
       alertExist: false,
+      
     };
   },
   computed : {

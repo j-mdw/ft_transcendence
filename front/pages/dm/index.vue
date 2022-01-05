@@ -13,9 +13,9 @@
                 <v-dialog
                   v-model="dialog"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template #activator="{ on, attrs }">
                     <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
-                      <v-img :src="`http://localhost:4000/${getAvatar(msg.userId)}`" />
+                      <v-img src="https://randomuser.me/api/portraits/women/85.jpg" />
                     </v-avatar>
                   </template>
                   <v-card>
@@ -25,7 +25,7 @@
 
                 <div class="message-background_left">
                   <div class="message_left">
-                    {{ msg.message }}
+                    {{ msg }}
                   </div>
                 </div>
               </v-row>
@@ -52,7 +52,7 @@
           Send
         </v-btn>
       </v-col>
-      <settings-chat :channel-id="$route.params.id"/>
+      <!-- <settings-chat :channel-id="$route.params.id"/> -->
     </v-row>
   </div>
 </template>
@@ -62,14 +62,14 @@ import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
 
-import { channelsStore, messagesStore, usersStore } from '~/store'
+import { channelsStore } from '~/store'
 export default Vue.extend({
   components: { settingsChat, profilChat },
   layout: 'default',
   data () {
     return {
-      current_message: '',
-      dialog: false,
+      messages: Array<string>(),
+      current_message: ''
     }
   },
   computed: {
@@ -85,41 +85,28 @@ export default Vue.extend({
 
       thisChannelName: function (): any {
         return this.thisChannel?.name
-      },
-
-      messages () {
-        console.log("MESSAGES :");
-        console.log(messagesStore.channelMessages);
-        return messagesStore.channelMessages;
       }
   },
-
-    methods: {
-      sendMessage (): void {
-        this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
-        
-        console.log(this.current_message)
-        console.log(this.messages)
-        this.current_message = '';
-        console.log("EMIIT")
-      },
-      getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+  sockets: {
+    connect () {
+      console.log("we're in!!")
     },
-    },
-      
-    mounted() {
-      this.$socket.client.emit('chat-join-channel', this.$route.params.id);
-        //...
-    },
-
-    beforeDestroy() {
-      console.log(this.$route.params.id)
-      this.$socket.client.emit('chat-leave', this.channelid);
-      //...
-    },
-
-    
+    disconnect () {
+      this.$socket.$unsubscribe('chat-message')
+    }
+  },
+  mounted () {
+    this.$socket.$subscribe('chat-message', (payload: string) => {
+      console.log(payload)
+      this.messages.push(payload)
+    })
+  },
+  methods: {
+    sendMessage (): void {
+      this.$socket.client.emit('chat-message', this.current_message)
+      this.current_message = ''
+    }
+  }
 })
 </script>
 

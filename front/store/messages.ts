@@ -9,7 +9,7 @@ import { $axios } from '~/utils/api'
   namespaced: true,
 })
 export default class MessagesModule extends VuexModule {
-  currentChannel = localStorage.getItem('CURRENT_CHANNEL');
+  currentChannel: string = '';
   messages: MessageReceived[] = [];
 
   get channelMessages () {
@@ -30,23 +30,26 @@ export default class MessagesModule extends VuexModule {
   @Mutation
   add (message: MessageReceived) {
     if (message.channelId === this.currentChannel) {
+      console.log("we are in the first if")
       const relation = relationshipStore.one(message.userId);
       if (!relation || relation.type !== RelationshipType.blocked) {
         this.messages.push(message);
+        console.log("we are in the second if")
+        console.log(this.messages)
       }
     }
   }
 
   @Mutation
   setCurrentChannel (channelId: string) {
-    localStorage.setItem('CURRENT_CHANNEL', channelId)
+    this.currentChannel = channelId;
     this.messages = [];
   }
 
   @Action({ commit: 'set', rawError: true })
   async fetch () {
     if (this.currentChannel && this.currentChannel.length > 0) {
-      return await $axios.$get(`channel/messages/${this.currentChannel}`);
+      return await $axios.$get(`channel/messages/${this.currentChannel}`, {withCredentials : true});
     }
   }
 }

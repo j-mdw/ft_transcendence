@@ -48,6 +48,15 @@
             </v-btn>
         </v-row>
         </v-form>
+        <div v-if="alertPassword == true">
+      <v-alert
+        type="error"
+        class=""
+      >
+         Sorry this user doesn't exist <br/>
+        or he is already in the channel
+      </v-alert>
+      </div>
       </v-card>
     </v-dialog>
 
@@ -68,6 +77,7 @@ export default Vue.extend({
     props: ['channelId'],
     data: () => ({
     password: '',
+    alertPassword: false
   }),
    computed: {
      me () {
@@ -83,9 +93,27 @@ export default Vue.extend({
       console.log("channel ID")
       console.log(this.channelId)
       console.log(this.me.id)
-      await this.$axios.$put(`/channel/${this.channelId}/${this.me.id}`, {password: this.password},{ withCredentials: true});
-      channelsStore.fetch();
-      this.$router.push(`/channels/${this.channelId}`)
+      try {
+        await this.$axios.$put(`/channel/${this.channelId}/${this.me.id}`, {password: this.password},{ withCredentials: true})
+      } catch (error) {
+        this.alertPassword = true;
+      }
+      
+      // .then((res) => {
+      //     //channelsStore.fetch();
+      //     //this.$router.push(`/channels/${this.channelId}`)
+      //   })
+      //   .catch((err) => {
+      //     // console.log('there is an error');
+      //     // console.log(err);
+      //     this.alertPassword = true;
+      //   });
+
+      if(this.alertPassword === true)
+        console.log("SHIIIIT!")
+      else
+        console.log("SHOOOOT!")
+     //try catch
     },
   }
 })

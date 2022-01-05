@@ -22,7 +22,7 @@
         >
         Channels</v-tab>
         <v-tab
-          to="/channels"
+          to="/dm"
         >
         dm</v-tab>
         <v-tab>Game </v-tab>

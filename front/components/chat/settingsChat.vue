@@ -87,7 +87,8 @@ export default Vue.extend({
   data () {
     return {
       messages: Array<string>(),
-      current_message: ''
+      current_message: '',
+      dialog: false,
     }
   },
   computed : {
