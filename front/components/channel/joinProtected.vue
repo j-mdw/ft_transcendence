@@ -53,8 +53,8 @@
         type="error"
         class=""
       >
-         Sorry this user doesn't exist <br/>
-        or he is already in the channel
+         Sorry either this is the wrong password <br/>
+        or you are already in the channel and need to refresh the page
       </v-alert>
       </div>
       </v-card>

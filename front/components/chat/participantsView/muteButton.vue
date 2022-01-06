@@ -66,16 +66,19 @@ export default Vue.extend({
                 d.setHours(d.getHours() + 24)
                 console.log(d)
                 await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
+                this.$emit('changeMute');
             }
             else if (time == 1)
             {
                 d.setHours( d.getHours() + 1 );
                 console.log(d)
                 await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
+                this.$emit('changeMute');
             }
             else
-            {
-                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:''}, { withCredentials: true });
+            {   d.setFullYear( d.getFullYear() + 300 );
+                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
+                this.$emit('changeMute');
             }
             
         
