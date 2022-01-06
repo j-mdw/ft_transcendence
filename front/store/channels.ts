@@ -50,6 +50,7 @@ export default class ChannelsModule extends VuexModule {
 
   @Action({ commit: 'set', rawError: true })
   async fetch () {
+    console.log("FEEEETCH !!")
     const channels = {} as AllChans;
     channels.myChan = (await $axios.get('/user/channels', { withCredentials: true })).data;
     channels.visibleChan = (await $axios.get('/channel', { withCredentials: true })).data;

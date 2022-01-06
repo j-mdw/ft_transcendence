@@ -1,4 +1,12 @@
 <template>
+<div v-if="doIhaverequest == 0">
+         <v-row justify="center" class="mt-11">
+            <h1>
+              you have no more request<br>
+            </h1>
+          </v-row>
+      </div>
+      <div v-else>
   <div class="mt-5">
     <v-list class="our_beige">
       <div v-for="relationship in relationships" :key="relationship.type">
@@ -40,6 +48,7 @@
       </div>
     </v-list>
   </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,6 +77,17 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
+    doIhaverequest(): number {
+      let j = 0;
+
+      for (let i = 0; this.relationships[i]; i++) {
+        if(this.relationships[i].type == 2)
+          j++
+      }   
+      console.log("LENGTH")
+      console.log(j)
+      return j;
+    }
   },
 
   methods: {

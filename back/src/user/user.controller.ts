@@ -50,9 +50,10 @@ export class UserController {
 
   @Get('matches/:id')
   async findMatchHistory(
-    @Res({ passthrough: true }) response: Response,
+    @Param('id', ParseUUIDPipe) userId: string,
+    // @Res({ passthrough: true }) response: Response,
   ): Promise<MatchHistoryDTO[]> {
-    return await this.userService.getMatches(response.locals.id);
+    return await this.userService.getMatches(userId);
   }
 
   @Get(':id')

@@ -13,7 +13,7 @@
     >
       <template v-slot:activator="{ on, attrs }">
         <v-btn
-          v-btn color="#f5cac3" class="mr-6"
+          color="#f5cac3" class="mr-6"
           v-bind="attrs"
           v-on="on"
         >
@@ -31,27 +31,38 @@
         <v-divider></v-divider>
         <v-row justify="center" align="center">
           <v-btn
-            v-btn color="#f5cac3" class="mt-6 mb-6 mr-6" 
+            v-if="thisChannelOwner != me.id"
+            color="#f5cac3" class="mt-6 mb-6 mr-6"  @click="leaveChannel()"
           >
             Leave channel
           </v-btn>
 
+          <div v-if="thisChannelOwner == me.id">
           <v-btn
-            v-btn color="#f5cac3" class="mt-6 mb-6 ml-6" 
+            color="#f5cac3" class="mt-6 mb-6 ml-6" @click="deleteChannel()"
           >
             delete channel
           </v-btn>
+          
+          </div>
+          <div
+            v-if="thisChannel.type == 1"
+          >
+            <add-participant-private :channel-id="channelId" />
+          </div>
         </v-row>
         <v-divider></v-divider>
+        <div v-if="thisChannelOwner == me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Change channel Type
         </v-card-title>
-        <type-chat/>
+        <type-chat :channel-id="channelId"/>
+        </div>
         <v-divider></v-divider>
         <v-card-title class="our_dark_beige our_navy_blue--text">
           Channel Participants
         </v-card-title>
-        <participant-chat/>
+        <participant-chat :channel-id="channelId" />
         
       </v-card>
     </v-dialog>
@@ -66,25 +77,50 @@
 import Vue from 'vue'
 import ParticipantChat from './ParticipantChat.vue'
 import TypeChat from './typeChat.vue'
+import { meStore, channelsStore } from '~/store';
+import AddParticipantPrivate from './addParticipantPrivate.vue';
+import { ChannelDTO } from '~/models/channel'
 export default Vue.extend({
-  components: { ParticipantChat, TypeChat },
+  components: { ParticipantChat, TypeChat, AddParticipantPrivate },
   layout: 'default',
+  props: ['channelId'],
   data () {
     return {
       messages: Array<string>(),
       current_message: ''
     }
   },
+  computed : {
+     me () {
+       return meStore.me;
+     },
+     thisChannel () : ChannelDTO | undefined {
+       console.log("CHANNEL ID")
+       console.log(this.channelId)
+       console.log(channelsStore.one(this.channelId))
+        return  channelsStore.one(this.channelId);
+      },
+      thisChannelOwner: function (): any {
+        return this.thisChannel?.owner
+      }
+     
+  },
   mounted () {
-
   },
   methods: {
+    async deleteChannel(id: string) {
+      await this.$axios.$delete(`/channel/${this.channelId}`, { withCredentials: true});
+      channelsStore.fetch();
+      this.$router.push('/channels')
+    },
+    async leaveChannel(){
+      await this.$axios.$delete(`/channel/${this.channelId}/${this.me.id}`, { withCredentials: true});
+      channelsStore.fetch();
+      this.$router.push('/channels')
+    }
   }
 })
 </script>
 
 <style scoped lang="scss">
-
-
 </style>
-

@@ -43,6 +43,9 @@
 
 import Vue from 'vue'
 import { CreateChannelDTO } from '~/models/channel'
+
+import { channelsStore } from '~/store';
+
 export default Vue.extend({
   data: () => ({
     items: ['Public', 'Private', 'Protected'],
@@ -62,6 +65,7 @@ export default Vue.extend({
       this.$router.push({
         path: '/channels'
       });
+      channelsStore.fetch();
     }
   }
 })

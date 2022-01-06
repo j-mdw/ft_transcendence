@@ -9,7 +9,7 @@ import { $axios } from '~/utils/api'
   namespaced: true,
 })
 export default class MessagesModule extends VuexModule {
-  currentChannel = localStorage.getItem('CURRENT_CHANNEL');
+  currentChannel: string = '';
   messages: MessageReceived[] = [];
 
   get channelMessages () {
@@ -39,7 +39,7 @@ export default class MessagesModule extends VuexModule {
 
   @Mutation
   setCurrentChannel (channelId: string) {
-    localStorage.setItem('CURRENT_CHANNEL', channelId)
+    this.currentChannel = channelId;
     this.messages = [];
   }
 

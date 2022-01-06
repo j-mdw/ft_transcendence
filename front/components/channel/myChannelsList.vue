@@ -1,12 +1,13 @@
 <template>
   <v-container>
     <v-row no-gutters class="mt-2">
-      <template v-for="(channel, index) in channels" >
+      <template v-for="(channel, index) in myChannel" >
         <v-col :key="index" class="ml-2 mr-2">
           <v-btn
             class="pa-2 mt-2 mb-2" 
             width="400"
             color="#ebd9c5"
+            :to="`/channels/${channel.id}`"
           >
             <v-col> 
                 {{ channel.name }}
@@ -24,6 +25,7 @@
             </v-col> 
           </v-btn>
         </v-col>
+        
       </template>
     </v-row>
   </v-container>
@@ -33,15 +35,13 @@
 
 import Vue from 'vue'
 import { ChannelDTO } from '~/models/channel'
+import { channelsStore } from '~/store';
 
 export default Vue.extend({
-  data () {
-    return {
-      channels: Array<ChannelDTO>(),
-    }
-  },
-  async mounted () {
-    this.channels = await this.$axios.$get('/channel', { withCredentials: true })
-  },
+  computed: {
+    myChannel () {
+      return channelsStore.mine
+    },
+  }
 })
 </script>

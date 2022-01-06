@@ -26,9 +26,9 @@
                   </v-list-item-avatar>
                 </router-link>
               </v-badge>
-              <v-list-item-content>
+              <v-list-item :to="`/profile/${user.id}`">
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
-              </v-list-item-content>
+              </v-list-item>
               <v-list-item-action>
                 <v-btn v-ripple="false" plain to="/channels">
                   <messageLogo />
