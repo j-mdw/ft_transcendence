@@ -3,7 +3,7 @@
     <div id="message" />
     <div id="chat">
       <h2 class="ml-5">
-        {{ thisChannelName }}
+        {{ getChannelName  }}
       </h2>
       <v-card outlined color="transparent" class="mt-1">
         <div id="message-wrapper_left" class="message-wrapper_left">

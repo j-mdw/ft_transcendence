@@ -33,12 +33,18 @@
 
         <div v-if="friends_request">
           <v-row justify="center" align="center" class="mt-8">
+            <v-badge
+              offset-y="36"
+              offset-x="8"
+              :content="friends_request"
+            >
             <v-btn color="#f5cac3" to="/profile/requestList" class="mt-6">
               see friends request
               <v-icon color="#395c6b" right>
                 fa-users
               </v-icon>
             </v-btn>
+            </v-badge>
           </v-row>
         </div>
 

@@ -1,9 +1,24 @@
 <template>
   <v-container justify="center" align="center">
     <input type="file" class="custom-file-input" @change="onFileChange">
-    <button class="upload-button" @click="onUploadFile">
+    <!-- <v-btn
+            v-if="name"
+          color="success"
+          class="mt-3 mb-5"
+          @click="addUser"
+        >
+          Send
+        </v-btn>
+        <v-btn v-else disabled class="mt-3 mb-5">
+          Send
+        </v-btn> -->
+    <button v-if="selectedFile" class="upload-button" @click="onUploadFile">
       Upload file
     </button>
+    <button v-else disabled class="upload-button">
+      no file provided
+    </button>
+    
   </v-container>
 </template>
 
@@ -15,6 +30,7 @@ export default {
   data () {
     return {
       selectedFile: '',
+    
     };
   },
   methods: {
@@ -34,7 +50,8 @@ export default {
         withCredentials: true,
       });
       await meStore.fetch();
-      // this.$emit('change');
+      
+      this.$emit('change');
     },
   },
 };
@@ -65,6 +82,9 @@ export default {
   margin-left: 80px;
   &:hover {
     background-color: #f28482;
+  }
+  &:disabled {
+    background-color: #fff;
   }
 }
 

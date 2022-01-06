@@ -13,8 +13,11 @@
           change my picture
         </v-btn>
       </template>
-      <v-card color="#f7ede2">
-        <v-card-text>
+      <v-card color="#f7ede2">      
+        <v-card-title class="our_dark_beige our_navy_blue--text">
+          change my picture
+        </v-card-title>
+        <v-card-text class="mt-6">
           <FileUpload @change="onPictureChanged" />
         </v-card-text>
       </v-card>

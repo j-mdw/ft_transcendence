@@ -2,8 +2,9 @@
   <div>
     <div id="message" />
     <div id="chat">
-      <h2 class="ml-5">
-        {{ thisChannelName }}
+      <h2 class="mt-5 ml-5">
+        <!-- this is your conversation with {{ `${getChannelName()}` }} -->
+        dm
       </h2>
       <v-card outlined color="transparent" class="mt-1">
         <div id="message-wrapper_left" class="message-wrapper_left">
@@ -69,13 +70,11 @@ export default Vue.extend({
         return  channelsStore.one(this.$route.params.id);
       },
 
-      thisChannelName: function (): any {
-        return this.thisChannel?.name
-      },
-
       messages () {
         return messagesStore.channelMessages;
       }
+
+      
   },
 
     methods: {
@@ -92,6 +91,9 @@ export default Vue.extend({
       scrollToEnd() {
         const element = document.getElementById('message-wrapper_left')
         element.scrollTop = element.scrollHeight
+      },
+      getChannelName() {
+        return usersStore.oneUser(this.peerId).pseudo;
       },
 
     },
