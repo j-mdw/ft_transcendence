@@ -53,7 +53,7 @@
     </div>
     <!-- we are friends -->
     <div v-if="myrelation.type == 3">
-      <v-btn color="#f5cac3" class="mt-6">
+      <v-btn color="#f5cac3" class="mt-6" :to="`/dm/${getNameDM()}`">
         send a message
         <v-icon color="#395c6b" right>
           fa-comment-alt
@@ -99,7 +99,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { meStore, relationshipStore } from '~/store';
+import { meStore, relationshipStore, usersStore } from '~/store';
 import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 import { Relationship, RelationshipType } from '~/models';
@@ -117,6 +117,13 @@ export default Vue.extend({
       console.log('test');
       console.log(relationshipStore.one(this.userId));
       return relationshipStore.one(this.userId);
+    },
+
+    users (): User[] {
+      return usersStore.allUsers;
+    },
+    me (): User {
+      return meStore.me;
     },
   },
 
@@ -164,6 +171,11 @@ export default Vue.extend({
           console.log(err);
           this.alertBlocked = true;
         });
+    },
+
+    getNameDM() {
+      var name = this.me.id + ':' + this.userId;
+      return name;
     }
   }
 })

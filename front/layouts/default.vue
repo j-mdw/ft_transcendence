@@ -26,7 +26,7 @@
         >
           dm
         </v-tab>
-        <v-tab>Game </v-tab>
+        <v-tab to="/game">Game </v-tab>
       </v-tabs>
       <v-btn text color="#395c6b" @click="logout">
         logout
