@@ -143,6 +143,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   /* **** PONG **** */
+  /*
+  
+  */
 
   socketList: Array<Socket> = [];
 
@@ -302,7 +305,18 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       //la deconnection vient du joueur 1 ou 2
       //changement de scores sur base de donnee et sur page interhnet
       let winner: string;
-      client === this.socketList[0] ? (winner = '2') : (winner = '1');
+      if (client === this.socketList[0]) {
+        winner = '2';
+
+      } else {
+        winner = '1';
+      }
+
+      //Added by Julien for testing of match history and ladder:
+
+
+      // Until here
+
       if (client === this.socketList[0]) this.socketList.splice(0, 1);
       else {
         this.socketList.splice(1, 1);

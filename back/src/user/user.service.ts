@@ -13,6 +13,8 @@ import { CreateUserDTO, UpdateUserDTO } from './user.dto';
 import { ChannelService } from 'src/channel/channel.service';
 import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { Channel } from 'src/channel/channel.entity';
+// import { MatchHistoryService } from 'src/matchHistory/matchHistory.service';
+// import { MatchHistoryDTO } from 'src/matchHistory/matchHistory.dto';
 
 @Injectable()
 export class UserService {
@@ -21,6 +23,8 @@ export class UserService {
     private userRepository: Repository<User>,
     // @Inject(forwardRef(() => ChannelService))
     // private channelService: ChannelService,
+    // @Inject(forwardRef(() => MatchHistoryService))
+    // private matchService: MatchHistoryService,
     @Inject(forwardRef(() => ChannelParticipantService))
     private channelParticipantService: ChannelParticipantService,
   ) {}
@@ -66,9 +70,15 @@ export class UserService {
     });
   }
 
+  // async getMatches(userId: string): Promise<MatchHistoryDTO[]> {
+  //   const user = await this.findById(userId);
+  //   const matches = await this.matchService.findUserMatches(user);
+  //   return matches.map((match) => new MatchHistoryDTO(match));
+  // }
+
   /*
   Create the user and doesn't return anything
-*/
+  */
   async create(data: CreateUserDTO): Promise<void> {
     const now = new Date();
     await this.userRepository.save({
@@ -135,6 +145,24 @@ export class UserService {
     await this.userRepository.save(editedUser);
     console.log(editedUser);
     return editedUser;
+  }
+
+  async endOfGame(
+    userId: string,
+    peerId: string,
+    userWon: boolean,
+  ): Promise<void> {
+    const user = await this.findById(userId);
+    const peer = await this.findById(peerId);
+    if (userWon) {
+      user.victories++;
+      peer.defeats++;
+    } else {
+      peer.victories++;
+      user.defeats++;
+    }
+    await this.userRepository.save(user);
+    await this.userRepository.save(peer);
   }
 
   async turnOnTwoFactorAuthentication(userId: number) {

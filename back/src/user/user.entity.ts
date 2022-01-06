@@ -29,6 +29,18 @@ export class User {
   })
   pseudo: string;
 
+  @Column({
+    nullable: false,
+    default: 0,
+  })
+  victories: number;
+
+  @Column({
+    nullable: false,
+    default: 0,
+  })
+  defeats: number;
+
   // @Exclude()
   // public currentHashedRefreshToken?: string;
 

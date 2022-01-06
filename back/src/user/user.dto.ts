@@ -1,4 +1,4 @@
-import { IsBoolean, IsEmail, IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { User } from './user.entity';
 
@@ -26,6 +26,12 @@ export class UserDTO {
   @IsString()
   avatarPath: string;
 
+  @IsNumber()
+  victories: number;
+
+  @IsNumber()
+  defeats: number;
+
   @IsString()
   twoFactorAuthenticationSecret?: string;
 
@@ -36,6 +42,8 @@ export class UserDTO {
     this.id = user.id;
     this.pseudo = user.pseudo;
     this.avatarPath = user.avatarPath;
+    this.victories = user.victories;
+    this.defeats = user.defeats;
     this.isTwoFactorAuthenticationEnabled =
       user.isTwoFactorAuthenticationEnabled;
     this.twoFactorAuthenticationSecret = user.twoFactorAuthenticationSecret;
