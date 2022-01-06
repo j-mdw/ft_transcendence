@@ -77,6 +77,7 @@ export default Vue.extend({
     props: ['channelId'],
     data: () => ({
     password: '',
+    dialog: false,
     alertPassword: false
   }),
    computed: {
@@ -94,21 +95,21 @@ export default Vue.extend({
       console.log(this.channelId)
       console.log(this.me.id)
       try {
-        await this.$axios.$put(`/channel/${this.channelId}/${this.me.id}`, {password: this.password},{ withCredentials: true})
-      } catch (error) {
-        this.alertPassword = true;
+          await this.$axios.$put(
+              `/channel/${this.channelId}/${this.me.id}`,
+              {
+                  password: this.password
+              },
+              {
+                 withCredentials: true
+              }
+          );
+          console.log("still good")
+      } catch (error: Error | any) {
+         // debugger;
+          console.log(error.response.data)
       }
-      
-      // .then((res) => {
-      //     //channelsStore.fetch();
-      //     //this.$router.push(`/channels/${this.channelId}`)
-      //   })
-      //   .catch((err) => {
-      //     // console.log('there is an error');
-      //     // console.log(err);
-      //     this.alertPassword = true;
-      //   });
-
+    
       if(this.alertPassword === true)
         console.log("SHIIIIT!")
       else

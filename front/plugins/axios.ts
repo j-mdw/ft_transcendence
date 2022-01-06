@@ -9,7 +9,9 @@ const plugin: Plugin = ({ $axios, redirect, store, route }) => {
       if (route.path !== '/auth') {
         redirect('/auth')
       }
+      return;
     }
+    throw error;
   });
 }
 
