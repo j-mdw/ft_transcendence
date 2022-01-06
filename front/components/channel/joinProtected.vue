@@ -21,7 +21,7 @@
           join
         </v-btn>
       </template>
-      <v-card class="our_beige" height="200" >       
+      <v-card class="our_beige" height="240" >       
         <v-card-title class="our_dark_beige our_navy_blue--text">
           channel password
         </v-card-title>
@@ -48,7 +48,7 @@
             </v-btn>
         </v-row>
         </v-form>
-        <div v-if="alertPassword == true">
+        <div v-if="alertPassword == true" class="mt-6">
       <v-alert
         type="error"
         class=""
@@ -95,6 +95,7 @@ export default Vue.extend({
       console.log(this.channelId)
       console.log(this.me.id)
       try {
+          this.alertPassword = false
           await this.$axios.$put(
               `/channel/${this.channelId}/${this.me.id}`,
               {
@@ -107,15 +108,13 @@ export default Vue.extend({
           console.log("still good")
       } catch (error: Error | any) {
          // debugger;
+         this.alertPassword = true
           console.log(error.response.data)
       }
     
-      if(this.alertPassword === true)
-        console.log("SHIIIIT!")
-      else
-        console.log("SHOOOOT!")
-     //try catch
-    },
+      if(this.alertPassword !== true) 
+        this.$router.push(`/channels/${this.channelId}`)
+    }
   }
 })
 </script>
