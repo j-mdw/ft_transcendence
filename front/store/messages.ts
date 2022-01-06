@@ -22,11 +22,13 @@ export default class MessagesModule extends VuexModule {
 
   @Mutation
   set (messages: MessageReceived[]) {
-    this.messages = messages;
-    const relations = relationshipStore.all;
-    for (let i = 0; i < relations.length; i++) {
-      if (relations[i].type === RelationshipType.blocked) {
-        this.messages = this.messages.filter(message => message.userId !== relations[i].peerId);
+    if (messages) {
+      this.messages = messages;
+      const relations = relationshipStore.all;
+      for (let i = 0; i < relations.length; i++) {
+        if (relations[i].type === RelationshipType.blocked) {
+          this.messages = this.messages.filter(message => message.userId !== relations[i].peerId);
+        }
       }
     }
   }

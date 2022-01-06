@@ -1,8 +1,9 @@
 <template>
-<div id="v-app">
+<div id="v-app" class="v-app">
 		<canvas
 			id="game"
-			style="border: 4px solid black;"
+			class="game"
+			style="border: none;"
 			overscroll-behavior="none"
 		></canvas>
 <!-- A UTILISER SUR AUTRE PAGE POUR SCRIPTER LE TYPE DDE JEU
@@ -171,6 +172,21 @@ export default Vue.extend({
 
 })
 </script>
+
+<style scoped lang="scss">
+.v-app {
+	//background-color: #ABBAEA;
+ // overscroll-behavior: none !important;
+	overflow: hidden !important;
+}
+
+.game {
+	//background-color: #000;
+//overscroll-behavior: none !important;
+	overflow: hidden !important;
+	display:block
+}
+</style>
 <!--
 // this.socket.on('firstPlayerInitialization', (data) => {
 				// 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);

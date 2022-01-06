@@ -30,7 +30,7 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item>
               <v-list-item-action>
-                <v-btn v-ripple="false" plain :to="`/dm/${getName(user.id)}`">
+                <v-btn v-ripple="false" plain :to="`/dm/${getNameDM(user.id)}`">
                   <messageLogo/>
                 </v-btn>
               </v-list-item-action>
@@ -74,7 +74,7 @@ export default Vue.extend({
     },
   },
   methods: {
-    getName(idpeer : string) {
+    getNameDM(idpeer : string) {
       var name = this.me.id + ':' + idpeer;
       return name;
     }
