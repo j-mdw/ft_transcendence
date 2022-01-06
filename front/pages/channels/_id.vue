@@ -6,22 +6,13 @@
         {{ thisChannelName }}
       </h2>
       <v-card outlined color="transparent" class="mt-1">
-        <div class="message-wrapper_left">
+        <div id="message-wrapper_left" class="message-wrapper_left">
           <ul id="chat">
             <li v-for="msg in messages" :key="messages[msg]">
               <v-row class="mt-7 mb-7">
-                <v-dialog
-                  v-model="dialog"
-                >
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
-                      <v-img :src="`http://localhost:4000/${getAvatar(msg.userId)}`" />
-                    </v-avatar>
-                  </template>
-                  <v-card>
-                    <profil-chat />
-                  </v-card>
-                </v-dialog>
+                
+                    <profil-chat :user-id="msg.userId"/>
+            
 
                 <div class="message-background_left">
                   <div class="message_left">
@@ -69,7 +60,6 @@ export default Vue.extend({
   data () {
     return {
       current_message: '',
-      dialog: false,
     }
   },
   computed: {
@@ -88,8 +78,6 @@ export default Vue.extend({
       },
 
       messages () {
-        console.log("MESSAGES :");
-        console.log(messagesStore.channelMessages);
         return messagesStore.channelMessages;
       }
   },
@@ -101,13 +89,25 @@ export default Vue.extend({
         console.log(this.current_message)
         console.log(this.messages)
         this.current_message = '';
-        console.log("EMIIT")
+        console.log("EMIIT");
+        //this.scrollToEnd();
       },
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
     },
+
+      scrollToEnd() {
+        const element = document.getElementById('message-wrapper_left')
+        element.scrollTop = element.scrollHeight
+      }
     },
-      
+
+
+    updated() {
+      this.scrollToEnd()
+    },
+
+  
     mounted() {
       this.$socket.client.emit('chat-join-channel', this.$route.params.id);
         //...

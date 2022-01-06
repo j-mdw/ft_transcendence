@@ -30,8 +30,8 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item>
               <v-list-item-action>
-                <v-btn v-ripple="false" plain to="/channels">
-                  <messageLogo />
+                <v-btn v-ripple="false" plain :to="`/dm/${getName(user.id)}`">
+                  <messageLogo/>
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action>
@@ -73,6 +73,12 @@ export default Vue.extend({
       return meStore.me;
     },
   },
+  methods: {
+    getName(idpeer : string) {
+      var name = idpeer + ':' + this.me.id;
+      return name;
+    }
+  }
 });
 </script>
 

@@ -60,7 +60,7 @@ import { meStore, relationshipStore } from '~/store';
 import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 import relationshipButtons from '~/components/relationshipButtons.vue';
-
+import { usersStore } from '~/store';
 // 0 = to add not friends yet
 // 1 = you are fiends
 // 2 = you are blocked
@@ -69,7 +69,6 @@ export default Vue.extend({
   components: { relationshipButtons },
   layout: 'default',
   data: () => ({
-    user: Object(),
     relation: Object(),
   }),
 
@@ -80,12 +79,10 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
-  },
 
-  async created () {
-    this.user = await this.$axios.$get(`user/${this.id}`, {
-      withCredentials: true,
-    });
+    user () : User {
+      return usersStore.oneUser(this.$route.params.id);
+    }
   },
 });
 </script>

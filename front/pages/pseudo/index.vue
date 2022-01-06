@@ -11,14 +11,18 @@
         label="Pseudo"
         @keydown.enter="submitPseudo"
       />
+
       <v-btn
+        v-if="pseudo"
         text
-        color="#395c6b"
         type="submit"
         @click="submitPseudo"
       >
         <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg">
       </v-btn>
+       <v-btn v-else disabled class="mt-3 mb-5" text type="submit" @click="submitPseudo">
+          <img style="height:36px" src="../../assets/svg/arrow_right_grey.svg">
+        </v-btn>
     </v-row>
   </v-container>
 </template>

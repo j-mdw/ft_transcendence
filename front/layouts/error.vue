@@ -1,16 +1,25 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
+  <v-container class="flex-container" fill-height>
+    <v-row justify="center" >
+      <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>
     <h1 v-else>
       {{ otherError }}
     </h1>
-    <NuxtLink to="/">
-      Home page
-    </NuxtLink>
-  </v-app>
+    </v-row>
+    <v-row justify="center">
+      <router-link to="/">
+        <h2> Go back Home </h2>
+      </router-link>
+      <!-- <NuxtLink to="/">
+        Go back Home
+      </NuxtLink> -->
+    </v-row>
+  </v-container>
 </template>
+
+
 
 <script>
 export default {
@@ -39,6 +48,15 @@ export default {
 
 <style scoped>
 h1 {
-  font-size: 20px;
+  font-size: 60px;
 }
+
+.flex-container{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: cente;
+  align-content: center;
+  row-gap: 30px;
+}
+
 </style>
