@@ -13,8 +13,13 @@
                 
                     <profil-chat :user-id="msg.userId"/>
             
-
+              
                 <div class="message-background_left">
+                  <div class="pseudo_message_left">
+                  <h4>
+                    {{ msg.pseudo }}
+                  </h4>
+                  </div>
                   <div class="message_left">
                     {{ msg.message }}
                   </div>
@@ -72,8 +77,6 @@ export default Vue.extend({
       },
 
       thisChannel () {
-        console.log("THIIIIIS CHANNEL")
-        console.log(this.$route.params.id)
         return  channelsStore.one(this.$route.params.id);
       },
 
@@ -89,10 +92,7 @@ export default Vue.extend({
     methods: {
       sendMessage (): void {
         this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
-        console.log(this.current_message)
-        console.log(this.messages)
         this.current_message = '';
-        console.log("EMIIT");
       },
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
@@ -166,7 +166,17 @@ ul {
     margin-bottom: 15px;
 		margin: "auto";
     background-color: #fff;
+
+    
     /* font-size:200px; */
+}
+
+.pseudo_message_left {
+  /* color:"#395c6b"; */
+  color: #395c6b;
+  margin-left: 10px;
+  margin-right: 10px;
+
 }
 .message_left{
     margin-left: 10px;

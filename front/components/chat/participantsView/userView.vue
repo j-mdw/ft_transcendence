@@ -45,11 +45,7 @@ export default Vue.extend({
     };
   },
   async mounted () {
-    console.log("CHANEL IIIIIIIID");
-    console.log(this.channelId)
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants user");
-    console.log(this.participants);
     
   },
   methods: {

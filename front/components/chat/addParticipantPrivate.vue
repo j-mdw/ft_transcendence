@@ -93,15 +93,9 @@ export default Vue.extend({
         if(this.participants[i].userId == this.me.id)
         {
           if(this.participants[i].admin)
-          {
-            console.log(" he is ADMIIIN")
             return(true);
-          }
           else 
-          {
-            console.log("NOT ADMIIIN")
             return false
-          }
         }
         
       }
@@ -116,8 +110,6 @@ export default Vue.extend({
   async mounted () {
     channelsStore.fetch();
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants chat ");
-    console.log(this.participants);
   },
   methods: {
     doesHeExist() {
@@ -131,8 +123,6 @@ export default Vue.extend({
     async addUser () {
       //forthis.allUsers.find(this.name)
       let id = this.doesHeExist()
-      console.log("IIID")
-      console.log(id)
       if(id)
       {
         await this.$axios.$put(`/channel/${this.channelId}/${id}`, '',{ withCredentials: true})

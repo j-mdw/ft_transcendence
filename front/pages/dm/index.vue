@@ -78,8 +78,6 @@ export default Vue.extend({
       },
 
       thisChannel () {
-        console.log("THIIIIIS CHANNEL")
-        console.log(this.$route.params.id)
         return  channelsStore.one(this.$route.params.id);
       },
 

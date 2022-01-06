@@ -83,9 +83,7 @@ export default Vue.extend({
       for (let i = 0; this.relationships[i]; i++) {
         if(this.relationships[i].type == 2)
           j++
-      }   
-      console.log("LENGTH")
-      console.log(j)
+      }
       return j;
     }
   },

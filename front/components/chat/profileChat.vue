@@ -3,13 +3,14 @@
                   v-model="dialog"
                 >
                   <template v-slot:activator="{ on, attrs }">
-                    <v-avatar class="mr-4 mt-n3" v-bind="attrs" v-on="on">
+                    <v-avatar class="mr-4" v-bind="attrs" v-on="on">
                       <v-img :src="`http://localhost:4000/${getAvatar(userId)}`" />
                       <!-- <v-img src=https://cdn.pixabay.com/photo/2020/06/24/19/12/cabbage-5337431_1280.jpg /> -->
                     </v-avatar>
                   </template>
-                
+      
     <v-card height="200" width="200">
+      <div v-if="userId != me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
            {{ user.pseudo }}
         </v-card-title>
@@ -26,7 +27,7 @@
                   </v-avatar>
                   </router-link>
               </v-badge>
-                <v-btn v-ripple="false" plain to="/channels">
+                <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(userId)}`">
                   <messageLogo />
                 </v-btn>
                 <v-btn v-ripple="false" plain icon>
@@ -34,8 +35,15 @@
                 </v-btn>
 
         </v-row>
+        </div>
+        <div v-else>
+          <v-row align="center" justify="center">
+            <h1 class="mt-11">it's you</h1>
+          </v-row>
+        </div>
     </v-card>
-                </v-dialog>
+    
+  </v-dialog>
 </template>
 
 <script lang="ts">
@@ -44,6 +52,7 @@ import messageLogo from '../Logo/messageLogo.vue';
 import pingpongLogo from '../Logo/pingpongLogo.vue';
 import { usersStore } from '~/store';
 import { User } from '~/models';
+import { meStore } from '~/store';
 
 export default Vue.extend({
   components: { messageLogo, pingpongLogo },
@@ -58,14 +67,20 @@ export default Vue.extend({
   computed: {
     user(): User {
       return usersStore.oneUser(this.userId);
-    }
+    },
+    me (): User {
+      return meStore.me;
+    },
   },
 
   methods: {
       getAvatar(peerId: string) {
-        //console.log(this.user.pseudo)
         return usersStore.oneUser(peerId).avatarPath;
     },
+    getNameChannel(idpeer : string) {
+      var name = this.me.id + ':' + idpeer;
+      return name;
+    }
     },
 });
 </script>

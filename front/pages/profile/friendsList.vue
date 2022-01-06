@@ -30,7 +30,7 @@
               <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn v-ripple="false" plain to="/channels">
+              <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(relationship.peerId)}`">
                 <messageLogo />
               </v-btn>
             </v-list-item-action>
@@ -80,9 +80,7 @@ export default Vue.extend({
       for (let i = 0; this.relationships[i]; i++) {
         if(this.relationships[i].type == 3)
           j++
-      }   
-      console.log("LENGTH")
-      console.log(j)
+      } 
       return j;
     }
 
@@ -100,6 +98,10 @@ export default Vue.extend({
     getStatus (peerId: string) {
       return usersStore.oneUser(peerId).status;
     },
+    getNameChannel(idpeer : string) {
+      var name = this.me.id + ':' + idpeer;
+      return name;
+    }
   },
 });
 </script>

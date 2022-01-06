@@ -96,9 +96,6 @@ export default Vue.extend({
        return meStore.me;
      },
      thisChannel () : ChannelDTO | undefined {
-       console.log("CHANNEL ID")
-       console.log(this.channelId)
-       console.log(channelsStore.one(this.channelId))
         return  channelsStore.one(this.channelId);
       },
       thisChannelOwner: function (): any {

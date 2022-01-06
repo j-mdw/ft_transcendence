@@ -114,8 +114,6 @@ export default Vue.extend({
 
   computed: {
     myrelation (): Relationship {
-      console.log('test');
-      console.log(relationshipStore.one(this.userId));
       return relationshipStore.one(this.userId);
     },
   },

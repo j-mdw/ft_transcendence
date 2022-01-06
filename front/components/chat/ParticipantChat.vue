@@ -46,15 +46,9 @@ export default Vue.extend({
         if(this.participants[i].userId == this.me.id)
         {
           if(this.participants[i].admin)
-          {
-            console.log(" he is ADMIIIN")
             return(true);
-          }
-          else 
-          {
-            console.log("NOT ADMIIIN")
+          else
             return false
-          }
         }
         
       }
@@ -65,8 +59,6 @@ export default Vue.extend({
   async mounted () {
     channelsStore.fetch();
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    console.log("My participants chat ");
-    console.log(this.participants);
   },
   methods: {
     getAvatar(peerId: string) {

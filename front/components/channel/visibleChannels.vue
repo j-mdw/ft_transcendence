@@ -60,9 +60,6 @@ export default Vue.extend({
 
   methods: {
     async joinPublic(id: string) {
-      console.log("channel ID")
-      console.log(id)
-      console.log(this.me.id)
       await this.$axios.$put(`/channel/${id}/${this.me.id}`, '',{ withCredentials: true});
       channelsStore.fetch();
       this.$router.push(`/channels/${id}`)

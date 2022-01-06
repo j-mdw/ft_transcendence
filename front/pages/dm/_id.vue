@@ -39,10 +39,6 @@
         <v-btn v-else disabled class="mt-6">
           Send
         </v-btn>
-
-        <v-btn class="mt-6" @click="leave">
-          leave
-        </v-btn>
       </v-col>
     </v-row>
   </div>
@@ -70,8 +66,6 @@ export default Vue.extend({
       },
 
       thisChannel () {
-        console.log("THIIIIIS CHANNEL")
-        console.log(this.$route.params.id)
         return  channelsStore.one(this.$route.params.id);
       },
 
@@ -86,13 +80,9 @@ export default Vue.extend({
 
     methods: {
       sendMessage (): void {
-        console.log("channel ID :", this.channelid)
         this.$socket.client.emit('chat-DM-message', {channelId: this.channelid, message: this.current_message});
         this.thisChannelId = this.channelid
-        console.log(this.current_message)
-        console.log(this.messages)
         this.current_message = '';
-        console.log("EMIIT");
         //this.scrollToEnd();
       },
       getAvatar(peerId: string) {
@@ -104,9 +94,6 @@ export default Vue.extend({
         element.scrollTop = element.scrollHeight
       },
 
-      leave() {
-          this.$socket.client.emit('chat-leave', this.channelid);
-      }
     },
 
 
@@ -116,7 +103,6 @@ export default Vue.extend({
 
   
     mounted() {
-      console.log("SLUG");
       const str = this.$route.params.id;
       this.peerId = str.split(':').pop();;
       this.$socket.client.emit('chat-join-DM', this.peerId);
