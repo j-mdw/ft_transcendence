@@ -9,11 +9,8 @@
         <div id="message-wrapper_left" class="message-wrapper_left">
           <ul id="chat">
             <li v-for="msg in messages" :key="messages[msg]">
-              <v-row class="mt-7 mb-7">
-                
+              <v-row class="mt-7 mb-7">    
                     <profil-chat :user-id="msg.userId"/>
-            
-
                 <div class="message-background_left">
                   <div class="message_left">
                     {{ msg.message }}
@@ -42,8 +39,11 @@
         <v-btn v-else disabled class="mt-6">
           Send
         </v-btn>
+
+        <v-btn class="mt-6" @click="leave">
+          leave
+        </v-btn>
       </v-col>
-      <settings-chat :channel-id="$route.params.id"/>
     </v-row>
   </div>
 </template>
@@ -60,11 +60,13 @@ export default Vue.extend({
   data () {
     return {
       current_message: '',
+      peerId: '',
+      thisChannelId: '',
     }
   },
   computed: {
       channelid () {
-          return this.$route.params.id;
+          return messagesStore.currentChannelId;
       },
 
       thisChannel () {
@@ -84,8 +86,9 @@ export default Vue.extend({
 
     methods: {
       sendMessage (): void {
-        this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
-        
+        console.log("channel ID :", this.channelid)
+        this.$socket.client.emit('chat-DM-message', {channelId: this.channelid, message: this.current_message});
+        this.thisChannelId = this.channelid
         console.log(this.current_message)
         console.log(this.messages)
         this.current_message = '';
@@ -99,6 +102,10 @@ export default Vue.extend({
       scrollToEnd() {
         const element = document.getElementById('message-wrapper_left')
         element.scrollTop = element.scrollHeight
+      },
+
+      leave() {
+          this.$socket.client.emit('chat-leave', this.channelid);
       }
     },
 
@@ -109,14 +116,14 @@ export default Vue.extend({
 
   
     mounted() {
-      this.$socket.client.emit('chat-join-channel', this.$route.params.id);
-        //...
+      console.log("SLUG");
+      const str = this.$route.params.id;
+      this.peerId = str.split(':').pop();;
+      this.$socket.client.emit('chat-join-DM', this.peerId);
     },
 
     beforeDestroy() {
-      console.log(this.$route.params.id)
-      this.$socket.client.emit('chat-leave', this.channelid);
-      //...
+      this.$socket.client.emit('chat-leave', this.thisChannelId);
     },
 
     

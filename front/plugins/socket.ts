@@ -42,27 +42,31 @@ export default ({ store }: any) => {
   store.watch(
     (_state: any, getters: any) =>
       getters['auth/isLogged'],
-    async (val: boolean) => {
+    (val: boolean) => {
       if (val) {
-        // try {
-          await store.dispatch('me/fetch');
-          await store.dispatch('users/fetchUsers');
-          await store.dispatch('relationship/fetch');
-          await store.dispatch('channels/fetch');
-          await store.dispatch('messages/fetch');
-          console.log('My channels:', store.getters['channels/mine']);
-          console.log('Visible channels:', store.getters['channels/visible']);
-          socket.connect();
-        // } catch (error: any) {
-          // if (error?.response?.status !== 401) {
-            // throw (error);
-          // }
-        // }
+        // await store.dispatch('me/fetch');
+        // await store.dispatch('users/fetchUsers');
+        // await store.dispatch('relationship/fetch');
+        // await store.dispatch('channels/fetch');
+        // await store.dispatch('messages/fetch');
+        console.log('My channels:', store.getters['channels/mine']);
+        console.log('Visible channels:', store.getters['channels/visible']);
+        // socket.connect();
+        // store.commit('fetchStatus/complete');
       } else {
         socket.disconnect();
       }
     },
     {
       immediate: true,
+    });
+
+  store.watch(
+    (_state: any, getters: any) =>
+      getters['fetchStatus/status'],
+    (val: boolean) => {
+      if (val) {
+        socket.connect();
+      }
     });
 }

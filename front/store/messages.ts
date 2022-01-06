@@ -16,6 +16,10 @@ export default class MessagesModule extends VuexModule {
     return this.messages;
   }
 
+  get currentChannelId () {
+    return this.currentChannel;
+  }
+
   @Mutation
   set (messages: MessageReceived[]) {
     this.messages = messages;

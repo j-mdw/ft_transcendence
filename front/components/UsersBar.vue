@@ -75,7 +75,7 @@ export default Vue.extend({
   },
   methods: {
     getName(idpeer : string) {
-      var name = idpeer + ':' + this.me.id;
+      var name = this.me.id + ':' + idpeer;
       return name;
     }
   }

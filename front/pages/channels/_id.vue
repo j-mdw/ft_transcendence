@@ -67,6 +67,10 @@ export default Vue.extend({
           return this.$route.params.id;
       },
 
+      channelIdStore() {
+        return messagesStore.currentChannelId;
+      },
+
       thisChannel () {
         console.log("THIIIIIS CHANNEL")
         console.log(this.$route.params.id)
@@ -85,12 +89,10 @@ export default Vue.extend({
     methods: {
       sendMessage (): void {
         this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
-        
         console.log(this.current_message)
         console.log(this.messages)
         this.current_message = '';
         console.log("EMIIT");
-        //this.scrollToEnd();
       },
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
@@ -110,13 +112,10 @@ export default Vue.extend({
   
     mounted() {
       this.$socket.client.emit('chat-join-channel', this.$route.params.id);
-        //...
     },
 
     beforeDestroy() {
-      console.log(this.$route.params.id)
-      this.$socket.client.emit('chat-leave', this.channelid);
-      //...
+      this.$socket.client.emit('chat-leave', this.channelIdStore);
     },
 
     

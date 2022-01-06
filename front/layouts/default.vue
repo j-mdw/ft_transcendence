@@ -8,7 +8,6 @@
       app
       class="pt-2"
     >
-
       <!-- <NuxtLink to="/channels">Channels</NuxtLink>
             <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
@@ -20,16 +19,20 @@
         <v-tab
           to="/channels"
         >
-        Channels</v-tab>
+          Channels
+        </v-tab>
         <v-tab
           to="/dm"
         >
-        dm</v-tab>
+          dm
+        </v-tab>
         <v-tab>Game </v-tab>
       </v-tabs>
-      <v-btn text color="#395c6b" @click="logout"> logout </v-btn>
+      <v-btn text color="#395c6b" @click="logout">
+        logout
+      </v-btn>
     </v-app-bar>
-    <users-bar/>
+    <users-bar />
 
     <v-main>
       <nuxt />
@@ -44,7 +47,7 @@ import { authenticationStore } from '~/store'
 
 export default Vue.extend({
   components: { UsersBar },
-  middleware: 'auth',
+  middleware: ['auth', 'fetch'],
 
   data: () => ({
     activeTab: 2
