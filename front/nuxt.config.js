@@ -13,8 +13,8 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - new_front_bis',
-    title: 'new_front_bis',
+    titleTemplate: 'transcendence',
+    title: 'transcendence',
     htmlAttrs: {
       lang: 'en'
     },
