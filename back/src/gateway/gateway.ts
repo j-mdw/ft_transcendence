@@ -105,19 +105,20 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   ///Partie Laurent PongGame
 
-//   socketList: Array<Socket> = [];
   socketListClassic: Array<Socket> = [];
   socketListRookie: Array<Socket> = [];
   socketListMultiballs: Array<Socket> = [];
   gameList: Array<Game> = [];
 
-//   gameData: GameDataDto = new GameDataDto('multiballs', 9);
+  socketList: Array<Socket> = [];
 
-//   balls: Array<BallDto> = [];
+  gameData: GameDataDto = new GameDataDto('multiballs');
 
-//   player1: PlayerDto;
-//   player2: PlayerDto;
-//   intervalId: NodeJS.Timer;
+  balls: Array<BallDto> = [];
+
+  player1: PlayerDto;
+  player2: PlayerDto;
+  intervalId: NodeJS.Timer;
 
 
   @SubscribeMessage('gameInitialization')
@@ -307,6 +308,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.gameList.push(new Game(player1, player2, "", player2Name, room));
 		//dire au player 1 :on veut ton nom et te mettre dans la room
 		//une fois que player 1 a repondu, toute la room ira sur page d'apres, avec debut de partie
+		console.log(`le socketid de 2  est ${client.id} et celui de 1 est ${player1.id}`);
 		player1.emit('gameGatherName', room);
 	  }
 
@@ -317,7 +319,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 			if (element.roomName === data.room)
 				game = this.gameList[index];
 		})
-		game.player1UserName = name;
+		game.player1UserName = data.name;
+		console.log(`voiciles noms 1 = ${game.player1UserName} 2 = ${game.player2UserName}`)
 		//all datas are set, lets play
 		//il faut changer de page, on envoie le message a tous les membres de la room
 		this.server.to(game.roomName).emit('gameLetsPlay');
@@ -325,6 +328,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	  }
 
 	cleanExit(): void {
+
+///on fait cette fonction dans le destructeur de game
+
 	// 	delete this.player1;
 	// 	delete this.player2;
 	// 	for (let i in this.balls)

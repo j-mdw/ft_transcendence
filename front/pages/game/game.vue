@@ -5,12 +5,7 @@
 			style="border: 4px solid black;"
 			overscroll-behavior="none"
 		></canvas>
-<!-- A UTILISER SUR AUTRE PAGE POUR SCRIPTER LE TYPE DDE JEU
-		<p>
-			<button @click="gametype('classic')">classic</button>
-			<button @click="gametype('multiballs')">multiballs</button>
-			<button @click="gametype('rookie')">rookie</button>
-		</p> -->
+
 	</div>
 
 
