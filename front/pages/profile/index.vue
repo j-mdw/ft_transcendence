@@ -1,9 +1,8 @@
 <template>
   <v-container fill-height>
-    <!-- <v-row no-gutters> -->
     <v-row justify="center" align="center">
       <v-col
-        sm="4"
+        sm="5"
         align="center"
         justify="center"
       >
@@ -14,7 +13,18 @@
             :src="`http://localhost:4000/${user.avatarPath}`"
           >
         </v-avatar>
-        <v-row justify="center" align="center" class="mt-8">
+       
+
+        <h1 v-if="user">
+          <br>welcome {{ user.pseudo }}
+        </h1>
+      </v-col>
+      <v-col
+        sm="5"
+        align="center"
+        justify="center"
+      >
+       <v-row justify="center" align="center" class="mt-8">
           <v-btn color="#f5cac3" to="/profile/settings" class="mt-6">
             my settings
             <v-icon color="#395c6b" right>
@@ -27,6 +37,14 @@
             my friends
             <v-icon color="#395c6b" right>
               fa-users
+            </v-icon>
+          </v-btn>
+        </v-row>
+        <v-row justify="center" align="center">
+          <v-btn color="#f5cac3" to="/stats" class="mt-6">
+            my stats
+            <v-icon color="#395c6b" right>
+              fa-chart-line
             </v-icon>
           </v-btn>
         </v-row>
@@ -47,50 +65,6 @@
             </v-badge>
           </v-row>
         </div>
-
-        <h1 v-if="user">
-          <br>welcome {{ user.pseudo }}
-        </h1>
-      </v-col>
-      <v-col
-        sm="8"
-        align="center"
-        justify="center"
-      >
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          align="center"
-          max-width="500px"
-        >
-          <div>
-            victories
-            <br> 0
-          </div>
-        </v-card>
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          align="center"
-          max-width="500px"
-        >
-          <div>
-            losses
-            <br> 0
-          </div>
-        </v-card>
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          height="200px"
-          align="center"
-          max-width="500px"
-        >
-          MATCHES
-        </v-card>
       </v-col>
     </v-row>
   </v-container>

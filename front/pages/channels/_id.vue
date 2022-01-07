@@ -11,13 +11,14 @@
             <li v-for="msg in messages" :key="messages[msg]">
               <v-row class="mt-7 mb-7">
                 
-                    <profil-chat :user-id="msg.userId"/>
+                    <!-- <profil-chat :user-id="msg.userId"/> -->
+                    <!-- A REGLER -->
             
               
                 <div class="message-background_left">
                   <div class="pseudo_message_left">
                   <h4>
-                    {{ msg.pseudo }}
+                    <!-- {{ msg.pseudo }} -->
                   </h4>
                   </div>
                   <div class="message_left">

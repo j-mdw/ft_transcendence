@@ -61,18 +61,6 @@ export default Vue.extend({
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
   },
   methods: {
-    getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
-    },
-    getPseudo(peerId: string)
-    {
-        return usersStore.oneUser(peerId).pseudo;
-    },
-    getStatus(peerId: string)
-    {
-        return usersStore.oneUser(peerId).status;
-    },
-
   },
   
 });
