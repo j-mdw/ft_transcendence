@@ -105,18 +105,19 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   ///Partie Laurent PongGame
 
-  socketList: Array<Socket> = [];
+//   socketList: Array<Socket> = [];
   socketListClassic: Array<Socket> = [];
   socketListRookie: Array<Socket> = [];
   socketListMultiballs: Array<Socket> = [];
+  gameList: Array<Game> = [];
 
-  gameData: GameDataDto = new GameDataDto('multiballs', 9);
+//   gameData: GameDataDto = new GameDataDto('multiballs', 9);
 
-  balls: Array<BallDto> = [];
+//   balls: Array<BallDto> = [];
 
-  player1: PlayerDto;
-  player2: PlayerDto;
-  intervalId: NodeJS.Timer;
+//   player1: PlayerDto;
+//   player2: PlayerDto;
+//   intervalId: NodeJS.Timer;
 
 
   @SubscribeMessage('gameInitialization')
@@ -296,7 +297,32 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		this.logger.log(` sortie taille classic : ${this.socketListClassic.length} , rookie : ${this.socketListRookie.length} , multiballs : ${this.socketListMultiballs.length}`);
 	  }
 
+	  @SubscribeMessage('gameGatherInfoAndCreateGame')
+  	  handleGameGatherInfoAndCreateGame(client:Socket, data: {type: string, playername: string}): void {
+		let socketList = this.chooseSocketList(data.type);
+		let player1 = socketList[0];
+		let player2 = socketList[1];
+		let room = data.type;
+		let player2Name = data.playername;
+		this.gameList.push(new Game(player1, player2, "", player2Name, room));
+		//dire au player 1 :on veut ton nom et te mettre dans la room
+		//une fois que player 1 a repondu, toute la room ira sur page d'apres, avec debut de partie
+		player1.emit('gameGatherName', room);
+	  }
 
+	  @SubscribeMessage('gameLastInfosForGameCreation')
+	  handleGameLastInfosForGameCreation(client:Socket, data: {room: string, name: string}): void {
+		let game: Game;
+		this.gameList.forEach ((element, index) => {
+			if (element.roomName === data.room)
+				game = this.gameList[index];
+		})
+		game.player1UserName = name;
+		//all datas are set, lets play
+		//il faut changer de page, on envoie le message a tous les membres de la room
+		this.server.to(game.roomName).emit('gameLetsPlay');
+
+	  }
 
 	cleanExit(): void {
 	// 	delete this.player1;

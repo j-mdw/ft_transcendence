@@ -113,7 +113,14 @@ export default Vue.extend({
 						this.messagePlayer = "no table available, you are on waiting list"
 					else {
 						this.messagePlayer = "YOUPI on va jouer"
-						this.goingToPlayOrWatch = true; // attention, a envoyer aussi au player 1
+						this.goingToPlayOrWatch = true; // attention, a envoyer aussi au player 1(ou alors a envoyer a la room quand on va partir sur la partie)
+						//on s'occupe de la room
+						this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
+						this.$socket.client.emit('gameJoinRoom', gametype);
+						this.activeRoom = gametype;
+						//on envoie les donnees
+						this.$socket.client.emit('gameGatherInfoAndCreateGame', {type: gametype, playername: this.userName});
+
 						//on part pour la partie apres avoir envoye data pour la page suivante
 						//et il faut rejoindre la room apres avoir quitte la room precedente
 					}
@@ -148,6 +155,20 @@ export default Vue.extend({
 	async mounted() {
 	  this.user = await this.$axios.$get("user/me", {withCredentials: true});
 	  this.userName = this.user.pseudo;
+
+	  this.$socket.$subscribe('gameGatherName', (room: string ) => {
+		this.$socket.client.emit('gameLeaveRoom', this.activeRoom);
+		this.$socket.client.emit('gameJoinRoom', room);//permet de rejoindre la room de la partie
+		this.activeRoom = room;
+		//on envoie les dernieres infos au gateway
+		this.$socket.client.emit('gameLastInfosForGameCreation', {room: room, name: this.userName});
+	  })
+
+	  this.$socket.$subscribe('gameLetsPlay', (data: void) => {
+		  this.goingToPlayOrWatch = true;
+		  this.$router.push('/game/pongGame');
+	  })
+
   	},
 
 	beforeDestroy(){
@@ -156,6 +177,8 @@ export default Vue.extend({
 		if (!this.goingToPlayOrWatch) {
 			this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room
 			this.$socket.client.emit('gameRemoveFromGameSocketList', this.activeWaitingList );
+			console.log("ON A DESTROY GRAVE");
+
 		}
 	},
 
