@@ -2,8 +2,8 @@
 <v-container fill-height>
 
     <!-- <v-row no-gutters> -->
-        <v-row class="mt-4 mb-n7">
-           <h1> your stats : </h1>
+        <v-row class="mt-4 mb-n7 ml-1">
+           <h1> Your Stats : </h1>
         </v-row>
     <v-row >
       <v-col 
@@ -34,7 +34,7 @@
           justify="center"
         >
         <v-card-title class="our_beige our_navy_blue--text justify-center">
-           achievements
+           Achievements
         </v-card-title>
         <achivements/>
         </v-card>
@@ -56,7 +56,7 @@
           max-width="500px"
         >
           <h3>
-            victories : 0
+            Victories : 0
           </h3>
         </v-card>
         <v-card

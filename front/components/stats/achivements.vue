@@ -2,33 +2,33 @@
   <v-container>
     <v-row justify="center" align="center" no-gutters class="mt-14 mb-10" dense>
       <v-col sm="3" class="ml-3 mr-3">
-            <v-row justify="center" align="center" no-gutters dense>
+            <v-row justify="center" align="center" no-gutters dense class="mb-3">
                 1 match won
             </v-row>
         <v-icon color="#395c6b" right>
-            fa-seedling
+            fa-paper-plane
         </v-icon>
     </v-col>
     <v-col sm="3" class="ml-3 mr-3">
-        <v-row justify="center" align="center" no-gutters dense>
+        <v-row justify="center" align="center" no-gutters dense class="mb-3">
         10 match won
         </v-row>
         <v-icon color="#808080" right>
-            fa-leaf
+            fa-plane
         </v-icon>
     </v-col>
     <v-col sm="3" class="ml-3 mr-3">
-        <v-row justify="center" align="center" no-gutters dense>
+        <v-row justify="center" align="center" no-gutters dense class="mb-3">
         20 match won
         </v-row>
         <v-icon color="#808080" right>
-            fa-tree
+            fa-fighter-jet
         </v-icon>
     </v-col>
     </v-row>
     <v-row justify="center" align="center" no-gutters class="mt-10 mb-10" dense>
       <v-col sm="3" class="ml-3 mr-3">
-        <v-row justify="center" align="center" no-gutters dense>
+        <v-row justify="center" align="center" no-gutters dense class="mb-3">
             1 friend
         </v-row>
         <v-icon color="#395c6b" right>
@@ -36,7 +36,7 @@
         </v-icon>
     </v-col>
     <v-col sm="3" class="ml-3 mr-3">
-        <v-row justify="center" align="center" no-gutters dense>
+        <v-row justify="center" align="center" no-gutters dense class="mb-3">
             10 friends
         </v-row>
         <v-icon color="#808080" right>
@@ -44,7 +44,7 @@
         </v-icon>
     </v-col>
     <v-col sm="3" class="ml-3 mr-3">
-        <v-row justify="center" align="center" no-gutters dense>
+        <v-row justify="center" align="center" no-gutters dense class="mb-3">
         20 friends
         </v-row>
         <v-icon color="#808080" right>

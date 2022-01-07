@@ -8,6 +8,28 @@
       >
         <avatar-editor />
       </v-col>
+      <v-col sm="4">
+        <v-form
+        ref="form"
+        lazy-validation
+        title="Update profile"
+    >
+        <v-text-field
+        v-model="newPseudo"
+        :counter="15"
+        label="pseudo"
+        required
+        ></v-text-field>
+
+        <v-btn
+        color="#F6BD60"
+        class="mr-4"
+        @click="updateUser"
+        >
+        Update Pseudo
+        </v-btn>
+    </v-form>
+      </v-col>
     </v-row>
     <v-row justify="center">
       <Fa />
@@ -56,6 +78,7 @@ export default Vue.extend({
   data () {
     return {
       user: Object(),
+      newPseudo:'',
     }
   },
 
@@ -65,8 +88,10 @@ export default Vue.extend({
 
   methods: {
     async updateUser () {
+      console.log("PSEUDO")
+      console.log(this.newPseudo)
       const resp = await this.$axios.$patch('user', {
-        pseudo: this.user.pseudo,
+        pseudo: this.newPseudo,
       }, { withCredentials: true });
       console.log(resp);
     },

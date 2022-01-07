@@ -1,4 +1,5 @@
 <template>
+<div v-if="UserExist(userId)">
 <v-dialog
                   v-model="dialog"
                 >
@@ -10,9 +11,10 @@
                   </template>
       
     <v-card height="200" width="200">
+      <!-- <div v-if="userId != me.id"> -->
       <div v-if="userId != me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
-           {{ user.pseudo }}
+           {{ user.pseudo}}
         </v-card-title>
         <v-row justify="center" align="center" class="mt-9 mb-9">
         <v-badge
@@ -44,6 +46,25 @@
     </v-card>
     
   </v-dialog>
+</div>
+<div v-else>
+<v-dialog
+                  v-model="dialog"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-avatar class="mr-4" v-bind="attrs" v-on="on" color="our_light_yellow">
+                    </v-avatar>
+                  </template>
+      
+    <v-card height="200" width="200">
+          <v-row align="center" justify="center">
+            <h3 class="mt-11">reload the page <br/> to access this user</h3>
+          </v-row>
+    </v-card>
+    
+  </v-dialog>
+
+</div>
 </template>
 
 <script lang="ts">
@@ -66,6 +87,7 @@ export default Vue.extend({
 
   computed: {
     user(): User {
+      // usersStore.fetchUsers();
       return usersStore.oneUser(this.userId);
     },
     me (): User {
@@ -74,6 +96,14 @@ export default Vue.extend({
   },
 
   methods: {
+    UserExist(peerId: string) {
+      if(!usersStore.oneUser(peerId))
+      {
+        console.log("loosing my mind");
+        return false
+      }
+      return(true);
+    },
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
     },

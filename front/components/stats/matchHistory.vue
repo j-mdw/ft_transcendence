@@ -8,7 +8,7 @@
           justify="center"
         >
         <v-card-title class="our_beige our_navy_blue--text justify-center mb-n6">
-           history matches
+          Match History
         </v-card-title>
     <div v-if="matches.length == 0">
          <v-row justify="center" class="mt-11">

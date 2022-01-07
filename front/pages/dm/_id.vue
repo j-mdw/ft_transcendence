@@ -3,8 +3,7 @@
     <div id="message" />
     <div id="chat">
       <h2 class="mt-5 ml-5">
-        <!-- this is your conversation with {{ `${getChannelName()}` }} -->
-        dm
+        this is your conversation with {{ `${getChannelName()}` }}
       </h2>
       <v-card outlined color="transparent" class="mt-1">
         <div id="message-wrapper_left" class="message-wrapper_left">
@@ -93,6 +92,8 @@ export default Vue.extend({
         element.scrollTop = element.scrollHeight
       },
       getChannelName() {
+        const str = this.$route.params.id;
+      this.peerId = str.split(':').pop();;
         return usersStore.oneUser(this.peerId).pseudo;
       },
 
