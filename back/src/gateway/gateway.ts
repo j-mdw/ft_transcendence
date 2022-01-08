@@ -25,14 +25,13 @@ import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.en
 import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
-import { MessageToClientDTO, MessageToServerDTO } from './gateway.dto';
+import { MessageToClientDTO, MessageToServerDTO } from './channel.dto';
 import { HttpExceptionTransformationFilter } from './gateway.filter';
 import { GatewayService } from './gateway.service';
-import { BallDto } from './gameDto/ball.dto';
-import { PlayerDto } from './gameDto/player.dto';
-import { GameDataDto } from './gameDto/gamedata.dto';
-import { setInterval, clearInterval } from 'timers';
-import { Logger } from '@nestjs/common';
+// import { Logger } from '@nestjs/common';
+import { GameManager } from './types/gameManager';
+import { MatchMaker } from './types/matchMaker';
+import { GameStyleDTO, PaddleMoveDTO } from './types/game.dto';
 // import { Server } from 'http';
 
 @UseFilters(HttpExceptionTransformationFilter)
@@ -90,10 +89,15 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer() server: Server;
   users = new Map<string, UpdateUserStatus>();
 
-  private logger: Logger = new Logger('GameGateway');
+  // private logger: Logger = new Logger('GameGateway');
 
   async handleConnection(client: Socket): Promise<void> {
     client.emit('all-users-status', Array.from(this.users.values()));
+    const user = this.users.get(client.id);
+    if (user && this.gameManager.isPlaying(user.id)) {
+      this.gameManager.reJoin(user.id, client);
+      user.status = UserStatus.playing;
+    }
     this.server.emit('status-update', this.users.get(client.id));
   }
 
@@ -102,8 +106,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     usr.status = UserStatus.offline;
     this.server.emit('status-update', usr);
     this.users.delete(client.id);
-    this.logger.log(`Client disconnected of game: ${client.id}`);
-    this.manageDeconnection(client);
 
     // //on regarde si la deconnexion concerne un des joueurs principaux
     // if (this.socketList.length == 1) {//mode entrainement
@@ -142,10 +144,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     // }
   }
 
-  /* **** PONG **** */
-  /*
-  
-  */
+  /* **** OLD PONG **** 
 
   socketList: Array<Socket> = [];
 
@@ -262,7 +261,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   //servira pour integrer le type de jeu
-  @SubscribeMessage('gameTypeOfGame')
+  @SubscribeMessage('gameStyleOfGame')
   handleGameData(client: Socket, data: string): void {
     this.logger.log(`type of game renseigne`);
 
@@ -341,7 +340,93 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       });
     }
   }
+*/
+  /* NEW PONG */
 
+  /*
+    EVENTS
+    -> game-play @Body: GameStyleDTO
+    -> game-leave
+    <- game-update-from-player
+    -> game-data-update
+
+    Deconnection/Reconnection:
+    - On connect: check if user is playing, if so, add it to the room, update player socket
+    - On disconnect: do nothing? Just remove from room?
+      /!\ Question: Will a disconneciton always trigger a page reload (=> mounted + destroy events)
+    - On page Leave:
+      - If currently playing: End game? Emit game-update with state End and clearInterval + pop game?
+    
+      Spectator:
+    - game-watch event sent by client, redirecting him to game-watch page, where he suscribes to game-data-upade and received game-updates?
+    - 
+    
+    Game Begin:
+    - Add countdown? Use state + countdown
+    - On reset, 3sec countdown?
+    
+    Game end:
+    - Just set state to end? Then don't send anything, everything is done in front
+
+    Private Games:
+    - Need to find a smart system..
+
+  */
+  gameManager = new GameManager(this.gatewayService);
+  matchMaker = new MatchMaker(this.gameManager);
+
+  @SubscribeMessage('game-play')
+  async addPlayer(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() gameStyle: GameStyleDTO,
+  ): Promise<void> {
+    console.log('Queue before join:', this.matchMaker.queue);
+    const user = this.users.get(client.id);
+    if (user) {
+      const userEntity = await this.userService.findById(user.id);
+      if (!this.gameManager.isPlaying(user.id)) {
+        this.matchMaker.join(
+          client,
+          userEntity.id,
+          userEntity.pseudo,
+          gameStyle.pongType,
+        );
+        user.status = UserStatus.playing;
+        this.server.emit('status-update', this.users.get(client.id));
+        console.log('Queue after join:', this.matchMaker.queue);
+      }
+    }
+  }
+
+  @SubscribeMessage('game-leave')
+  removePlayer(@ConnectedSocket() client: Socket) {
+    console.log('Queue before leave:', this.matchMaker.queue);
+    const user = this.users.get(client.id);
+    if (user) {
+      this.matchMaker.leave(user.id);
+      if (this.gameManager.isPlaying(user.id)) {
+        this.gameManager.leaveGame(user.id);
+      }
+      // Leave game?
+      user.status = UserStatus.online;
+      this.server.emit('status-update', this.users.get(client.id));
+      console.log('Queue after leave:', this.matchMaker.queue);
+    }
+  }
+
+  @SubscribeMessage('game-update-from-player')
+  updatePlayer(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() paddleMove: PaddleMoveDTO,
+  ) {
+    const user = this.users.get(client.id);
+    if (user) {
+      const game = this.gameManager.getGame(paddleMove.gameId);
+      if (game) {
+        game.playerAction(user.id, paddleMove.keyChange);
+      }
+    }
+  }
   /*
   
   *** CHAT MESSAGES (Channels + DM) ***
