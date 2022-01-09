@@ -1,4 +1,10 @@
-import { IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { User } from './user.entity';
 

@@ -17,6 +17,12 @@ export enum GameKey {
   DownRelease,
 }
 
+export enum Role {
+  spectator,
+  player1,
+  player2,
+}
+
 export interface PaddleMoveDTO {
   gameId: string;
   keyChange: GameKey;
@@ -24,6 +30,10 @@ export interface PaddleMoveDTO {
 
 export interface GameStyleDTO {
   pongType: GameStyle;
+}
+
+export interface GameIdDTO {
+  id: string;
 }
 
 export interface Ball {

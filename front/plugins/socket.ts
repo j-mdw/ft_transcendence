@@ -34,8 +34,6 @@ export default ({ store }: any) => {
     await store.dispatch('messages/fetch');
   });
   socket.on('chat-message-to-client', (message: MessageReceived) => {
-    console.log("we received a message")
-    console.log(message)
     store.commit('messages/add', message);
   });
 

@@ -1,4 +1,4 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Ball } from './ball';
 import { GameState, GameStyle } from './game';
 import { GameKey, Paddle } from './paddle';
@@ -15,6 +15,12 @@ export class PaddleMoveDTO {
 export class GameStyleDTO {
   @IsEnum(GameStyle)
   pongType: GameStyle;
+}
+
+export class GameIdDTO {
+  @IsOptional()
+  @IsString()
+  id: string;
 }
 
 export class BallDTO {

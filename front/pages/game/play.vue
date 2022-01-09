@@ -14,14 +14,16 @@ import Vue from "vue";
 import {
   Ball,
   GameDTO,
+  GameIdDTO,
   GameKey,
   GameState,
   GameStyle,
   GameStyleDTO,
   Paddle,
   PaddleMoveDTO,
+  Role,
 } from "~/models";
-import { gameStatusStore } from "~/store";
+import { gameStatusStore, meStore } from "~/store";
 
 export default Vue.extend({
   middleware: ['auth', 'fetch'],
@@ -76,7 +78,7 @@ export default Vue.extend({
           paddle.w * this.ratio.x,
           paddle.h * this.ratio.y
         );
-        this.context.font = "30px Arial"; // Used for fillText??
+        this.context.font = "30px Arial"; // Used for fillText only, remove??
         // this.context.fillText( paddle.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
       }
     },
@@ -88,30 +90,34 @@ export default Vue.extend({
     },
 
     keydownListener(event: KeyboardEvent) {
-      const paddleMove: PaddleMoveDTO = {
-        gameId: this.game.id,
-        keyChange: -1,
-      };
-      if (event.key === "ArrowUp") {
-        paddleMove.keyChange = GameKey.UpPress;
-        this.$socket.client.emit("game-update-from-player", paddleMove);
-      } else if (event.key === "ArrowDown") {
-        paddleMove.keyChange = GameKey.DownPress;
-        this.$socket.client.emit("game-update-from-player", paddleMove);
+      if (this.role !== undefined && this.role !== Role.spectator) {
+        const paddleMove: PaddleMoveDTO = {
+          gameId: this.game.id,
+          keyChange: -1,
+        };
+        if (event.key === "ArrowUp") {
+          paddleMove.keyChange = GameKey.UpPress;
+          this.$socket.client.emit("game-update-from-player", paddleMove);
+        } else if (event.key === "ArrowDown") {
+          paddleMove.keyChange = GameKey.DownPress;
+          this.$socket.client.emit("game-update-from-player", paddleMove);
+        }
       }
     },
 
     keyupListener(event: KeyboardEvent) {
-      const paddleMove: PaddleMoveDTO = {
-        gameId: this.game.id,
-        keyChange: -1,
-      };
-      if (event.key === "ArrowUp") {
-        paddleMove.keyChange = GameKey.UpRelease;
-        this.$socket.client.emit("game-update-from-player", paddleMove);
-      } else if (event.key === "ArrowDown") {
-        paddleMove.keyChange = GameKey.DownRelease;
-        this.$socket.client.emit("game-update-from-player", paddleMove);
+      if (this.role !== undefined && this.role !== Role.spectator) {
+        const paddleMove: PaddleMoveDTO = {
+          gameId: this.game.id,
+          keyChange: -1,
+        };
+        if (event.key === "ArrowUp") {
+          paddleMove.keyChange = GameKey.UpRelease;
+          this.$socket.client.emit("game-update-from-player", paddleMove);
+        } else if (event.key === "ArrowDown") {
+          paddleMove.keyChange = GameKey.DownRelease;
+          this.$socket.client.emit("game-update-from-player", paddleMove);
+        }
       }
     },
 
@@ -122,15 +128,27 @@ export default Vue.extend({
     },
   },
 
+  computed: {
+    role: function() {
+      if (this.game) {
+        if (meStore.me.id === this.game.player1.id) {
+          return Role.player1;
+        } else if (meStore.me.id === this.game.player2.id) {
+          return Role.player2;
+        } else {
+          return Role.spectator;
+        }
+      } else {
+        return undefined;
+      }
+    }
+  },
+
   mounted() {
     this.canvas = <HTMLCanvasElement>document.getElementById("game");
     this.context = this.canvas.getContext("2d");
     this.createScreen();
     this.addWindowListeners();
-
-    const gameStyle: GameStyleDTO = { pongType: GameStyle.multiballs };
-    gameStatusStore.startPlaying(GameStyle.classic); // Update style here
-    this.$socket.client.emit("game-play", gameStyle); //Move this to page where choosing game
 
     this.$socket.$subscribe("game-data-update", (gameData: GameDTO) => {
       this.game = gameData;
@@ -152,7 +170,10 @@ export default Vue.extend({
   beforeDestroy() {
     gameStatusStore.stopPlaying();
     this.removeWindowListeners();
-    this.$socket.client.emit("game-leave");
+    const gameIdDTO: GameIdDTO = {
+      id: this.game.id
+    }
+    this.$socket.client.emit("game-leave", gameIdDTO);
   },
 });
 </script>
