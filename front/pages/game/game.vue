@@ -2,7 +2,8 @@
 <div id="v-app">
 		<canvas
 			id="game"
-			style="border: 4px solid black;"
+			class="game"
+			style="border: none;"
 			overscroll-behavior="none"
 		></canvas>
 
@@ -20,8 +21,10 @@ export default Vue.extend({
 	data() {
 		return {
 			title:'Pong Game',
-			text:'',
-			username:'',
+			// text:'',
+			player1Status: false,
+			player2Status: false,
+			room:'',
 			//socket: null, //ne sert a rien pour l'intant je crois
 			context: null,
 			canvas:  null,
@@ -45,26 +48,26 @@ export default Vue.extend({
 	},
 	methods: {
 		createScreen(){
-					this.width = window.innerWidth,
-					this.height = window.innerHeight;
-					this.canvas.width = this.width //* ratio;
-					this.canvas.height = this.height //* ratio;
-					this.ratio.x = this.width / 1280;
-					this.ratio.y = this.height / 960;
-					this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
+			this.width = window.innerWidth,
+			this.height = window.innerHeight;
+			this.canvas.width = this.width //* ratio;
+			this.canvas.height = this.height //* ratio;
+			this.ratio.x = this.width / 1280;
+			this.ratio.y = this.height / 960;
+			this.ratio.less = (this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x);
+			},
 
-				},
-				initialization() {
-					this.$socket.client.emit('gameInitialization', this.username);
-					//on recupere position de la balle sur le server
-					//attention a priori ce qui uit est inutile
-					this.$socket.$subscribe('ganeReturnInitialPosition', (data: any) => {
-					for(let i = 0; i < data.balls.length; i++)
-						this.drawBall(data.balls[i]);
-					this.drawPlayer(data.p1);
-					this.drawPlayer(data.p2);
-					});
-				},
+		initialization() {
+			this.$socket.client.emit('gameInitialization', this.username);
+			//on recupere position de la balle sur le server
+			//attention a priori ce qui uit est inutile
+			this.$socket.$subscribe('ganeReturnInitialPosition', (data: any) => {
+			for(let i = 0; i < data.balls.length; i++)
+				this.drawBall(data.balls[i]);
+			this.drawPlayer(data.p1);
+			this.drawPlayer(data.p2);
+			});
+		},
 
 				drawBall(ball: any) {
 					this.context.beginPath();
@@ -100,10 +103,15 @@ export default Vue.extend({
         //dessin du cadre
         this.createScreen();
         //position de depart
-        this.initialization();
+		this.initialization(); //mettre en statut player1, 2 ou spectateur
+		//et pour player 1 et 2 leur indiquer le nom de la room ou ils sont
+		//car pour l'instant ce qui relie cette page au game, c'estle socketid
+
+
 
 	  // addeventlistener  d'appui sur touche
         window.addEventListener('keydown', (event) => {
+			//mettre condition playerStatus = true, sinon pas la peine d'envoyer l'info
             if(event.key === 'w') //w
                 this.$socket.client.emit('gameKeyPress', {inputId:'up', state:true});
             else if(event.key === 's') //s
@@ -117,6 +125,8 @@ export default Vue.extend({
 
 	// addeventlistener de relachement d'une touche
         window.addEventListener('keyup', (event) => {
+			//mettre condition playerStatus = true, sinon pas la peine d'envoyer l'info
+
             if(event.key === 'w') //up
                 this.$socket.client.emit('gameKeyPress', {inputId:'up', state:false});
             else if(event.key === 's') //down
@@ -133,6 +143,7 @@ export default Vue.extend({
         })
 
 		  //gameloop
+		  //
         this.$socket.client.emit('gameLoop');
 
 	// on recupere les donnees en provenance du serveur
@@ -172,10 +183,3 @@ export default Vue.extend({
 
 })
 </script>
-<!--
-// this.socket.on('firstPlayerInitialization', (data) => {
-				// 	this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				// 	this.context.font = "30px Arial";
-				// 	this.context.fillText( "WAITIN' FOR PLAYER TWO", 50 * this.ratio.x, 50 * this.ratio.y);
-				// 	});
-	-->

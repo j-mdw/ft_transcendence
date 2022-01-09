@@ -129,7 +129,7 @@ export default Vue.extend({
 			}
 		},
 
-
+////A REVOIR
 		buttonClickWatch(gametype: string): void {
 		console.log (`${this.activeRoom}`);
 		this.$socket.client.emit('gameLeaveRoom', this.activeRoom);//permet sortir de l'ancienne room

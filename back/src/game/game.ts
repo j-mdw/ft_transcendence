@@ -16,6 +16,7 @@ export class Game{
 	player2: PlayerDto;
 	balls: Array <BallDto> = [];
 	intervalId: NodeJS.Timer;
+	playing: boolean;
 
 	constructor(player1: Socket, player2: Socket, player1Name: string, player2Name: string, room: string) {
 		this.player1Socket = player1;
@@ -28,6 +29,7 @@ export class Game{
 		this.player2 = new PlayerDto(1240, 1000, player2Name);
 		for(let i = 0; i < this.gameData.numberOfBalls; i++)
 			this.balls[i] = new BallDto(640, 480);
+		this.playing = false;
 
 	}
 
