@@ -1,15 +1,7 @@
-import colors from 'vuetify/es5/util/colors'
-// import IconComponent from './components/Logo/message.vue'
-import VueChatScroll from 'vue-chat-scroll'
-
 export default {
   components: true,
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
-
-  // router: {
-  //   middleware: 'fetch'
-  // },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -27,7 +19,8 @@ export default {
     link: [
       {
         href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css',
-        rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'
+        rel: 'icon',
+        type: 'image/x-icon',
       }
     ],
   },
@@ -58,9 +51,9 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    //'vuetify-dialog/nuxt',
+    // 'vuetify-dialog/nuxt',
     '@nuxtjs/axios',
-    
+
   ],
 
   axios: {
@@ -87,18 +80,19 @@ export default {
           warning: '#f28482',
           error: '#f28482',
           success: '#f6bd60',
-          our_yellow: "#f6bd60",
-          our_beige: "#f7ede2",
-          our_light_pink: "#f5cac3",
-          our_navy_blue: "#395c6b",
-          our_dark_pink: "#f28482",
-          our_dark_beige: "#ebd9c5"
+          our_yellow: '#f6bd60',
+          our_beige: '#f7ede2',
+          our_light_pink: '#f5cac3',
+          our_navy_blue: '#395c6b',
+          our_dark_pink: '#f28482',
+          our_dark_beige: '#ebd9c5'
         }
       }
-    },icons: {
-      iconfont: 'fa5',// 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
     },
-    defaultAssets: {icons: 'fa'}
+    icons: {
+      iconfont: 'fa5', // 'mdi' || 'mdiSvg' || 'md' || 'fa' || 'fa4' || 'faSvg'
+    },
+    defaultAssets: { icons: 'fa' }
   },
 
   vuetifyDialog: {
@@ -108,10 +102,9 @@ export default {
     // ...
   },
 
-
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
 
-  production_mode: false, //Added for use of random users in development mode
+  production_mode: false, // Added for use of random users in development mode
 }

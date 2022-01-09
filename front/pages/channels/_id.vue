@@ -10,9 +10,7 @@
           <ul id="chat">
             <li v-for="msg in messages" :key="messages[msg]">
               <v-row class="mt-7 mb-7">
-                
-                    <profil-chat :user-id="msg.userId"/>
-            
+                <profil-chat :user-id="msg.userId" />
 
                 <div class="message-background_left">
                   <div class="message_left">
@@ -43,7 +41,7 @@
           Send
         </v-btn>
       </v-col>
-      <settings-chat :channel-id="$route.params.id"/>
+      <settings-chat :channel-id="$route.params.id" />
     </v-row>
   </div>
 </template>
@@ -63,62 +61,61 @@ export default Vue.extend({
     }
   },
   computed: {
-      channelid () {
-          return this.$route.params.id;
-      },
+    channelid () {
+      return this.$route.params.id;
+    },
 
-      channelIdStore() {
-        return messagesStore.currentChannelId;
-      },
+    channelIdStore () {
+      return messagesStore.currentChannelId;
+    },
 
-      thisChannel () {
-        console.log("THIIIIIS CHANNEL")
-        console.log(this.$route.params.id)
-        return  channelsStore.one(this.$route.params.id);
-      },
+    thisChannel () {
+      console.log('THIIIIIS CHANNEL')
+      console.log(this.$route.params.id)
+      return channelsStore.one(this.$route.params.id);
+    },
 
-      thisChannelName: function (): any {
-        return this.thisChannel?.name
-      },
+    thisChannelName (): any {
+      return this.thisChannel?.name
+    },
 
-      messages () {
-        return messagesStore.channelMessages;
-      }
+    messages () {
+      return messagesStore.channelMessages;
+    }
   },
 
-    methods: {
-      sendMessage (): void {
-        this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
-        console.log(this.current_message)
-        console.log(this.messages)
-        this.current_message = '';
-        console.log("EMIIT");
-      },
-      getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+  updated () {
+    this.scrollToEnd()
+  },
+
+  mounted () {
+    this.$socket.client.emit('chat-join-channel', this.$route.params.id);
+  },
+
+  beforeDestroy () {
+    this.$socket.client.emit('chat-leave', this.channelIdStore);
+  },
+
+  methods: {
+    sendMessage (): void {
+      this.$socket.client.emit('chat-channel-message', { channelId: this.$route.params.id, message: this.current_message });
+      console.log(this.current_message)
+      console.log(this.messages)
+      this.current_message = '';
+      console.log('EMIIT');
+    },
+    getAvatar (peerId: string) {
+      return usersStore.oneUser(peerId).avatarPath;
     },
 
-      scrollToEnd() {
-        const element = document.getElementById('message-wrapper_left')
+    scrollToEnd () {
+      const element = document.getElementById('message-wrapper_left')
+      if (element) {
         element.scrollTop = element.scrollHeight
       }
-    },
+    }
+  },
 
-
-    updated() {
-      this.scrollToEnd()
-    },
-
-  
-    mounted() {
-      this.$socket.client.emit('chat-join-channel', this.$route.params.id);
-    },
-
-    beforeDestroy() {
-      this.$socket.client.emit('chat-leave', this.channelIdStore);
-    },
-
-    
 })
 </script>
 
@@ -145,7 +142,7 @@ ul {
     max-width: 30rem;
     border-radius: 10px;
     margin-bottom: 15px;
-		margin: "auto";
+    margin: "auto";
     background-color: #fff;
     /* font-size:200px; */
 }
@@ -164,7 +161,7 @@ ul {
     max-width: 30rem;
     border-radius: 10px;
     margin-bottom: 15px;
-		margin: "auto";
+    margin: "auto";
     background-color: #fff;
     /* font-size:200px; */
 }

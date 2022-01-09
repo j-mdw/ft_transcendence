@@ -16,4 +16,9 @@ export default class FetchStatusModule extends VuexModule {
   complete () {
     this.fetchStatus = true;
   }
+
+  @Mutation
+  reset () {
+    this.fetchStatus = false;
+  }
 }

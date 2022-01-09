@@ -2,7 +2,7 @@
 import Vue from 'vue'
 import { io, Socket } from 'socket.io-client'
 import VueSocketIOExt from 'vue-socket.io-extended'
-import { MessageReceived, Relationship, StatusUpdate } from '~/models';
+import { GameStyleDTO, MessageReceived, Relationship, StatusUpdate } from '~/models';
 // import { getters } from '~/store';
 
 const socket: Socket = io('http://localhost:4000', {
@@ -34,8 +34,6 @@ export default ({ store }: any) => {
     await store.dispatch('messages/fetch');
   });
   socket.on('chat-message-to-client', (message: MessageReceived) => {
-    console.log("we received a message")
-    console.log(message)
     store.commit('messages/add', message);
   });
 
@@ -67,6 +65,12 @@ export default ({ store }: any) => {
     (val: boolean) => {
       if (val) {
         socket.connect();
+        if (store.getters['gameStatus/playing']) {
+          const style: GameStyleDTO = {
+            pongType: store.getters['gameStatus/playing']
+          }
+          socket.emit('play-game', style);
+        }
       }
     });
 }
