@@ -2,6 +2,7 @@ import { Inject } from '@nestjs/common';
 import { Socket } from 'socket.io';
 import { GatewayService } from '../gateway.service';
 import { Game, GameStyle } from './game';
+import { PlayerDTO } from './game.dto';
 import { Player } from './player';
 
 export class GameManager {
@@ -76,6 +77,18 @@ export class GameManager {
       }
       return false;
     });
+  }
+
+  getLiveGame(gameStyle?: GameStyle): Game | undefined {
+    if (gameStyle) {
+      return this.games.find((game) => game.type === gameStyle);
+    } else {
+      if (this.games.length > 0) {
+        return this.games[0];
+      } else {
+        return undefined;
+      }
+    }
   }
 
   leaveGame(userId: string) {

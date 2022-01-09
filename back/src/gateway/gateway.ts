@@ -25,14 +25,21 @@ import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.en
 import { UpdateUserStatus, UserStatus } from 'src/user/user.dto';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
-import { MessageToClientDTO, MessageToServerDTO } from './channel.dto';
+import { MessageToClientDTO, MessageToServerDTO } from './types/channel.dto';
 import { HttpExceptionTransformationFilter } from './gateway.filter';
 import { GatewayService } from './gateway.service';
 // import { Logger } from '@nestjs/common';
 import { GameManager } from './types/gameManager';
 import { MatchMaker } from './types/matchMaker';
-import { GameStyleDTO, PaddleMoveDTO } from './types/game.dto';
+import { PaddleMoveDTO } from './types/game.dto';
+import { IsEnum } from 'class-validator';
+import { GameStyle } from './types/game';
 // import { Server } from 'http';
+
+export class GameStyleDTO {
+  @IsEnum(GameStyle)
+  pongType: GameStyle;
+}
 
 @UseFilters(HttpExceptionTransformationFilter)
 @UsePipes(new ValidationPipe())
@@ -371,6 +378,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     Private Games:
     - Need to find a smart system..
 
+
+    Remove from queue on disconnect
   */
   gameManager = new GameManager(this.gatewayService);
   matchMaker = new MatchMaker(this.gameManager);

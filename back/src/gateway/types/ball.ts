@@ -18,8 +18,8 @@ export class Ball {
 
   init() {
     const angle: number = this.getRandomInt(5, 75);
-    this.xSpeed = (Math.random() + Math.cos((angle * Math.PI) / 180)) * 50;
-    this.ySpeed = (Math.random() + Math.sin((angle * Math.PI) / 180)) * 50;
+    this.xSpeed = (Math.random() + Math.cos((angle * Math.PI) / 180)) * 2;
+    this.ySpeed = (Math.random() + Math.sin((angle * Math.PI) / 180)) * 2;
     // this.xSpeed = Math.random() + Math.cos((angle * Math.PI) / 180);
     // this.ySpeed = Math.random() + Math.sin((angle * Math.PI) / 180);
     this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
@@ -46,12 +46,14 @@ export class Ball {
       this.ySpeed *= -1;
     if (this.x >= 1280 && this.x < 1280 + this.xSpeed) {
       // need to add flexibility here
-      if (gameStyle !== GameStyle.multiballs) this.reinitializeBallPosition();
+      // if (gameStyle !== GameStyle.multiballs) 
+      this.reinitializeBallPosition();
       player1.score++;
     }
     if (this.x <= 0 && this.x > this.xSpeed) {
       //same here
-      if (gameStyle !== GameStyle.multiballs) this.reinitializeBallPosition();
+      // if (gameStyle !== GameStyle.multiballs)
+      this.reinitializeBallPosition();
       player2.score++;
     }
   }

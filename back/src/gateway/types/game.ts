@@ -2,7 +2,7 @@ import { Inject } from '@nestjs/common';
 import { clearInterval } from 'timers';
 import { GatewayService } from '../gateway.service';
 import { Ball } from './ball';
-import { GameDTO } from './game.dto';
+import { BallDTO, GameDTO } from './game.dto';
 import { GameManager } from './gameManager';
 import { GameKey } from './paddle';
 import { Player } from './player';
@@ -60,7 +60,7 @@ export class Game {
     this.player2.socket.join(this.roomId);
     this.intervalId = setInterval(() => {
       this.tick();
-    }, 1000);
+    }, 1000 / 30);
     // }, 1000 / 30);
   }
 
@@ -74,6 +74,8 @@ export class Game {
         this.state = GameState.playing;
         break;
       case GameState.playing:
+        this.player1.updatePosition();
+        this.player2.updatePosition();
         this.balls.forEach((ball) =>
           ball.update(this.player1, this.player2, this.type),
         );
@@ -101,7 +103,8 @@ export class Game {
     const gameData = new GameDTO(
       this.roomId,
       this.type,
-      this.balls,
+      this.state,
+      this.balls.map((ball) => new BallDTO(ball)),
       this.player1,
       this.player2,
     );

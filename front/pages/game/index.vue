@@ -1,3 +1,4 @@
+<!--
 <template>
 <div id="v-app" class="v-app">
 		<canvas
@@ -6,19 +7,12 @@
 			style="border: none;"
 			overscroll-behavior="none"
 		></canvas>
-<!-- A UTILISER SUR AUTRE PAGE POUR SCRIPTER LE TYPE DDE JEU
-		<p>
-			<button @click="gametype('classic')">classic</button>
-			<button @click="gametype('multiballs')">multiballs</button>
-			<button @click="gametype('rookie')">rookie</button>
-		</p> -->
 	</div>
-
-
 </template>
-
+-->
 
 <script lang="ts">
+/*
 import Vue from 'vue'
 export default Vue.extend({
   	layout: 'empty',
@@ -41,16 +35,8 @@ export default Vue.extend({
 
 		}
 	},
-	sockets: {
-		connect() {
-			console.log("we\'re in!!");
-		},
-		disconnect() {
-			this.$socket.$unsubscribe('chat-message') //je ne sais pas si utile
-		}
-	},
 	methods: {
-		createScreen(){
+		createScreen() {
 					this.width = window.innerWidth,
 					this.height = window.innerHeight;
 					this.canvas.width = this.width //* ratio;
@@ -171,6 +157,7 @@ export default Vue.extend({
 
 
 })
+*/
 </script>
 
 <style scoped lang="scss">
@@ -186,6 +173,7 @@ export default Vue.extend({
 	overflow: hidden !important;
 	display:block
 }
+
 </style>
 <!--
 // this.socket.on('firstPlayerInitialization', (data) => {

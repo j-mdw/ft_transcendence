@@ -31,7 +31,7 @@ export class MatchMaker {
         );
         this.queue.splice(index, 1);
         const player2 = new Player(socket, userId, pseudo);
-        this.manager.create(player1, player2, gameStyle, 1);
+        this.manager.create(player1, player2, gameStyle, 5);
       }
     } else {
       this.addToQueue(socket, userId, pseudo, gameStyle);

@@ -65,12 +65,12 @@ export default Vue.extend({
       }
     },
 
-	  mounted () {
+    mounted () {
       console.log(this.$route)
       if ('code' in this.$route.query) {
         console.log(`logging with ${this.provider}`)
       }
-	  },
+    },
   }
 })
 </script>
