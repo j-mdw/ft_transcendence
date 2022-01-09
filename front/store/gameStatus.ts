@@ -20,8 +20,10 @@ export default class GameStatusModule extends VuexModule {
 
   @Mutation
   startPlaying (style: GameStyle) {
-    this.gameStyle = style;
-    this.playing = true;
+    if (style) {
+      this.gameStyle = style;
+      this.playing = true;
+    }
   }
 
   @Mutation

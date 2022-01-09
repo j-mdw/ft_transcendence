@@ -7,6 +7,8 @@ export enum UserStatus {
 export class User {
   id: string = ''
   pseudo: string = ''
+  victories = 0;
+  defeats = 0;
   avatarPath: string = ''
   status: UserStatus = UserStatus.offline
 }

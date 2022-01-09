@@ -36,13 +36,15 @@ export default class ChannelsModule extends VuexModule {
 
   @Mutation
   set (channels: AllChans) {
-    this.myChannels = channels.myChan;
-    this.visibleChannels = channels.visibleChan;
-    for (let i = 0; i < this.myChannels.length; i++) {
-      for (let j = 0; j < this.visibleChannels.length; j++) {
-        if (this.visibleChannels[j].id === this.myChannels[i].id) {
-          this.visibleChannels.splice(j, 1);
-          break;
+    if (channels) {
+      this.myChannels = channels.myChan;
+      this.visibleChannels = channels.visibleChan;
+      for (let i = 0; i < this.myChannels.length; i++) {
+        for (let j = 0; j < this.visibleChannels.length; j++) {
+          if (this.visibleChannels[j].id === this.myChannels[i].id) {
+            this.visibleChannels.splice(j, 1);
+            break;
+          }
         }
       }
     }
@@ -50,10 +52,13 @@ export default class ChannelsModule extends VuexModule {
 
   @Action({ commit: 'set', rawError: true })
   async fetch () {
-    console.log("FEEEETCH !!")
     const channels = {} as AllChans;
-    channels.myChan = (await $axios.get('/user/channels', { withCredentials: true })).data;
-    channels.visibleChan = (await $axios.get('/channel', { withCredentials: true })).data;
-    return channels;
+    const tmp1 = await $axios.get('/user/channels', { withCredentials: true });
+    const tmp2 = await $axios.get('/channel', { withCredentials: true });
+    if (tmp1 && tmp2) {
+      channels.myChan = tmp1.data;
+      channels.visibleChan = tmp2.data;
+      return channels;
+    }
   }
 }

@@ -16,8 +16,10 @@ export default class MeModule extends VuexModule {
 
   @Mutation
   set (user: User) {
-    this.user = user;
-    this.user.status = UserStatus.online;
+    if (user) {
+      this.user = user;
+      this.user.status = UserStatus.online;
+    }
   }
 
   @Mutation

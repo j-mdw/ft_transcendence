@@ -37,10 +37,10 @@
               Classic
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(1)">
-              Rookie
+              Multiballs
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(2)">
-              Multiballs
+              Rookie
             </v-btn>
           </div>
           <!-- <div>
@@ -62,10 +62,10 @@
               Classic
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(1)">
-              Rookie
+              Multiballs
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(2)">
-              Multiballs
+              Rookie
             </v-btn>
           </div>
           <div>
@@ -80,7 +80,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import { GameStyle, GameStyleDTO } from '~/models';
-import { gameStatusStore } from '~/store';
+import { gameStatusStore, usersStore } from '~/store';
 export default Vue.extend({
   layout: 'default',
   data () {
@@ -110,6 +110,9 @@ export default Vue.extend({
         }
       });
     },
+  },
+  mounted () { //DELETE
+    console.log(usersStore.ranking);
   },
 })
 </script>

@@ -22,15 +22,35 @@ export default class UsersModule extends VuexModule {
     }
   }
 
+  get ranking (): User[] {
+    const ranking = Object.values(this.users);
+    ranking.sort((u1, u2) => {
+      if (u2.victories > u1.victories) {
+        return 1;
+      } else if (u2.victories < u1.victories) {
+        return -1;
+      } else if (u2.victories === u1.victories && u2.defeats < u1.defeats) {
+        return 1;
+      } else if (u2.victories === u1.victories && u2.defeats > u1.defeats) {
+        return -1;
+      } else {
+        return 0;
+      }
+    });
+    return ranking;
+  }
+
   @Mutation
   set (users: User[]) {
-    this.users = users.map((x: User) => ({
-      ...x,
-      status: UserStatus.offline,
-    })).reduce((acc, user) => {
-      acc[user.id] = user
-      return acc
-    }, {} as { [key: string]: User })
+    if (users) {
+      this.users = users.map((x: User) => ({
+        ...x,
+        status: UserStatus.offline,
+      })).reduce((acc, user) => {
+        acc[user.id] = user
+        return acc
+      }, {} as { [key: string]: User });
+    }
   }
 
   @Mutation

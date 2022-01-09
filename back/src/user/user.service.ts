@@ -150,11 +150,12 @@ export class UserService {
   async gameOver(
     userId: string,
     peerId: string,
-    userWon: boolean,
+    scoreUser: number,
+    scorePeer: number,
   ): Promise<void> {
     const user = await this.findById(userId);
     const peer = await this.findById(peerId);
-    if (userWon) {
+    if (scoreUser > scorePeer) {
       user.victories++;
       peer.defeats++;
     } else {
@@ -163,6 +164,7 @@ export class UserService {
     }
     await this.userRepository.save(user);
     await this.userRepository.save(peer);
+    await this.matchService.add(user, peer, scoreUser, scorePeer);
   }
 
   async turnOnTwoFactorAuthentication(userId: number) {

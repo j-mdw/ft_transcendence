@@ -1,5 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import { UserService } from 'src/user/user.service';
 import { GatewayService } from '../gateway.service';
 import { Game, GameStyle } from './game';
 import { PlayerDTO } from './game.dto';
@@ -8,12 +9,16 @@ import { Player } from './player';
 export class GameManager {
   games: Array<Game>;
   roomName: string;
+  userService: UserService;
 
   constructor(
     @Inject()
     private gatewayService: GatewayService,
+    @Inject()
+    userService: UserService,
   ) {
     this.games = [];
+    this.userService = userService;
   }
 
   create(
