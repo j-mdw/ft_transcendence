@@ -20,11 +20,17 @@ export class MessageService {
     });
   }
 
-  async addMessage(channel: Channel, user: User, msg: string): Promise<void> {
+  async addMessage(
+    channel: Channel,
+    user: User,
+    msg: string,
+    gameInvite: boolean,
+  ): Promise<void> {
     await this.messageRepository.save({
       message: msg,
       channel: channel,
       user: user,
+      gameInvite: gameInvite,
     });
   }
 }

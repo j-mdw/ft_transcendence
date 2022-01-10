@@ -52,6 +52,12 @@ export default class MessagesModule extends VuexModule {
     this.messages = [];
   }
 
+  @Mutation
+  clearCurrentChannel () {
+    this.currentChannel = '';
+    this.messages = [];
+  }
+
   @Action({ commit: 'set', rawError: true })
   async fetch () {
     if (this.currentChannel && this.currentChannel.length > 0) {

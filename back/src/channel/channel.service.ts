@@ -125,11 +125,22 @@ export class ChannelService {
     return channel;
   }
 
-  async addMessage(userId: string, channelId: string, message: string) {
+  async addMessage(
+    userId: string,
+    channelId: string,
+    message: string,
+    gameInvite?: boolean,
+  ) {
     const channel = await this.findOne(channelId);
     const user = await this.userService.findById(userId);
     await this.participantService.findOne(user, channel); // Check if user is a participant
-    await this.messageService.addMessage(channel, user, message);
+    let invite;
+    if (gameInvite) {
+      invite = gameInvite;
+    } else {
+      invite = false;
+    }
+    await this.messageService.addMessage(channel, user, message, invite);
   }
 
   //Public Channels: a participant adds himself
