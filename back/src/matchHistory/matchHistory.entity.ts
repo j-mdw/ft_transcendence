@@ -1,7 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 import { User } from 'src/user/user.entity';
 
-@Entity('messages')
+@Entity('matchHistory')
 export class MatchHistory {
   @PrimaryGeneratedColumn()
   readonly id: string;
