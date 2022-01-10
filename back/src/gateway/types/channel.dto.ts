@@ -1,5 +1,4 @@
-import { Optional } from '@nestjs/common';
-import { IsBoolean, IsString, IsUUID, Length } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, IsUUID, Length } from 'class-validator';
 import { User } from 'src/user/user.entity';
 
 export class MessageToServerDTO {
@@ -8,7 +7,7 @@ export class MessageToServerDTO {
   @IsString()
   @Length(1)
   message: string;
-  @Optional()
+  @IsOptional()
   @IsBoolean()
   gameInvite?: boolean;
 }
