@@ -46,7 +46,7 @@ export class Ball {
       this.ySpeed *= -1;
     if (this.x >= 1280 && this.x < 1280 + this.xSpeed) {
       // need to add flexibility here
-      // if (gameStyle !== GameStyle.multiballs) 
+      // if (gameStyle !== GameStyle.multiballs)
       this.reinitializeBallPosition();
       player1.score++;
     }
@@ -69,28 +69,51 @@ export class Ball {
       ptop = paddle.y - paddle.h / 2,
       pbottom = paddle.y + paddle.h / 2;
 
-    if (this.x < 640) {
-      if (
-        left <= pright &&
-        left > pright + this.xSpeed &&
-        top < pbottom &&
-        bottom > ptop
-      ) {
-        this.xSpeed *= -1;
+    // if (this.x < 640) {
+    //   if (
+    //     left <= pright &&
+    //     left > pright + this.xSpeed &&
+    //     top < pbottom &&
+    //     bottom > ptop
+    //   ) {
+    //     this.xSpeed *= -1;
+    //     this.xSpeed++;
+    //   }
+    // }
+    // if (this.x > 640) {
+    //   if (
+    //     right >= pleft &&
+    //     right < pleft + this.xSpeed &&
+    //     top < pbottom &&
+    //     bottom > ptop
+    //   ) {
+    //     this.xSpeed *= -1;
+    //     this.xSpeed--;
+    //   }
+	// }
+	if (this.x < 640 &&
+		pright  < 640 && //c'est la raquette du joueur 1
+        left <= pright && //le bord gauche de la balle a depasse le bord de la raquette
+		(this.x > pleft || (left - this.xSpeed) > pright) && //la balle n'a pas depasse la raquette sauf si vitesse elevee
+        top < pbottom && //la balle est comprise dans la raquette
+        bottom > ptop)
+	{
+		if (this.xSpeed < 0 )
+        	this.xSpeed *= -1;
         this.xSpeed++;
-      }
-    }
-    if (this.x > 640) {
-      if (
-        right >= pleft &&
-        right < pleft + this.xSpeed &&
+	}
+
+	if (this.x > 640 &&
+		pleft > 640 &&
+		right >= pleft &&
+		(this.x < pright || (right - this.xSpeed) < pleft) &&
         top < pbottom &&
-        bottom > ptop
-      ) {
-        this.xSpeed *= -1;
+        bottom > ptop)
+    {
+		if (this.xSpeed > 0)
+        	this.xSpeed *= -1;
         this.xSpeed--;
-      }
-    }
+	}
   }
 
   // 	/**
