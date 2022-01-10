@@ -26,7 +26,7 @@
                   </v-list-item-avatar>
                 </router-link>
               </v-badge>
-              <v-list-item :to="`/profile/${user.id}`">
+              <v-list-item :to="`/profile/${user.id}`" >
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item>
               <v-list-item-action>
@@ -34,7 +34,7 @@
                   <messageLogo/>
                 </v-btn>
               </v-list-item-action>
-              <v-list-item-action>
+              <v-list-item-action >
                 <v-btn v-ripple="false" plain icon>
                   <pingpongLogo />
                 </v-btn>
@@ -85,5 +85,11 @@ export default Vue.extend({
 <style scoped lang="scss">
 .v-text {
   color: #fff;
+}
+
+.v-list-item{
+  /* width: 120px; */
+  max-width: 120px;
+  min-width: 119px;
 }
 </style>

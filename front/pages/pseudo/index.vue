@@ -24,6 +24,14 @@
           <img style="height:36px" src="../../assets/svg/arrow_right_grey.svg">
         </v-btn>
     </v-row>
+    <div v-if="alertPseudo == true">
+      <v-alert
+        type="error"
+        class="mt-6"
+      >
+        Sorry this pseudo is used by another user
+      </v-alert>
+    </div>
   </v-container>
 </template>
 
@@ -37,6 +45,7 @@ export default Vue.extend({
     return {
       user: Object(),
       pseudo: '',
+      alertPseudo: false,
     }
   },
 
@@ -47,6 +56,7 @@ export default Vue.extend({
         authenticationStore.setLogin();
         this.$router.push('/home');
       } catch (error) {
+        this.alertPseudo = true;
         console.log('Error:', error); // Should only intercept 409
         this.pseudo = ''; // Here could have a pop-up/message to let user know pseudo is not available
       }

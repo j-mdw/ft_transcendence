@@ -14,6 +14,7 @@
         lazy-validation
         title="Update profile"
     >
+        <h2> Your current Pseudo : {{user.pseudo}} </h2>
         <v-text-field
         v-model="newPseudo"
         :counter="15"
@@ -29,6 +30,14 @@
         Update Pseudo
         </v-btn>
     </v-form>
+    <div v-if="alertPseudo == true">
+      <v-alert
+        type="error"
+        class="mt-6"
+      >
+        Sorry this pseudo is used by another user
+      </v-alert>
+    </div>
       </v-col>
     </v-row>
     <v-row justify="center">
@@ -63,7 +72,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { authenticationStore } from '~/store'
+import { authenticationStore, meStore, usersStore } from '~/store'
 import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 import Fa from '~/components/2FactorAuthentification.vue';
@@ -77,23 +86,34 @@ export default Vue.extend({
 
   data () {
     return {
-      user: Object(),
+      //user: Object(),
       newPseudo:'',
+      alertPseudo: false,
     }
   },
 
+  computed: {
+    user (): User {
+      return meStore.me;
+    },
+
+  },
+
   async mounted () {
-    this.user = await this.$axios.$get('user/me', { withCredentials: true });
+   // this.user = await this.$axios.$get('user/me', { withCredentials: true });
   },
 
   methods: {
     async updateUser () {
-      console.log("PSEUDO")
-      console.log(this.newPseudo)
-      const resp = await this.$axios.$patch('user', {
-        pseudo: this.newPseudo,
-      }, { withCredentials: true });
-      console.log(resp);
+      try {
+        const resp = await this.$axios.$patch('user', {
+          pseudo: this.newPseudo,
+        }, { withCredentials: true });
+        this.alertPseudo = false;
+      } catch (error: Error | any) {
+        this.alertPseudo = true;
+      }
+      meStore.fetch();
     },
     async deleteAccount () {
       const resp = await this.$axios.$delete('user', { withCredentials: true });

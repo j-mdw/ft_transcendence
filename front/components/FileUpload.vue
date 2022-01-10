@@ -49,9 +49,11 @@ export default {
       await axios.post('http://localhost:4000/user/upload/avatar', formData, {
         withCredentials: true,
       });
-      await meStore.fetch();
-      
+      meStore.fetch();
       this.$emit('change');
+      
+      
+      
     },
   },
 };

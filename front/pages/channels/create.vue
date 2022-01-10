@@ -22,6 +22,7 @@
 
     <v-text-field
       v-if="select == 'Protected'"
+      type="password"
       v-model="password"
       label="password"
       required
@@ -82,6 +83,7 @@ export default Vue.extend({
 
 .v-text-field{
       width: 50rem;
+      /* max-width: 30%; */
 }
 
 </style>

@@ -29,10 +29,6 @@
             <img style="height:36px" src="../../assets/logo/anon.png">
           </v-btn>
         </div>
-
-        <p v-if="user">
-          welcome {{ user }}
-        </p>
       </div>
     </v-row>
   </v-container>
@@ -45,7 +41,7 @@ export default Vue.extend({
   layout: 'empty',
   data () {
     return {
-      user: null
+      user: null,
     }
   },
   computed: {
@@ -61,6 +57,7 @@ export default Vue.extend({
         this.user = await this.$axios.$get('random', { withCredentials: true })
         this.$router.push('/pseudo')
       } catch (error) {
+
         console.log('ooops', error);
       }
     },

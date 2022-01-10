@@ -12,10 +12,16 @@
             <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
+          to="/profile"
+        >
+          my profile
+        </v-tab>
+        <v-tab
           to="/"
         >
           home
         </v-tab>
+      
         <v-tab
           to="/channels"
         >

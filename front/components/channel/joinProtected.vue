@@ -33,6 +33,7 @@
         <!-- <v-row align="center" justify="center"> -->
             <v-text-field
             v-model="password"
+            type="password"
             label="password"
             required
             class="ml-4 mr-4"
@@ -48,7 +49,7 @@
             </v-btn>
         </v-row>
         </v-form>
-        <div v-if="alertPassword == true" class="mt-6">
+        <div v-if="goodPassword()" class="mt-6">
       <v-alert
         type="error"
         class=""
@@ -90,6 +91,11 @@ export default Vue.extend({
   },
 
   methods: {
+    goodPassword() {
+      if(!this.password)
+        this.alertPassword = false;
+      return (this.alertPassword);
+    },
     async joinProtected() {
       console.log("channel ID")
       console.log(this.channelId)
@@ -111,6 +117,7 @@ export default Vue.extend({
          this.alertPassword = true
           console.log(error.response.data)
       }
+     
     
       if(this.alertPassword !== true) 
         this.$router.push(`/channels/${this.channelId}`)

@@ -42,6 +42,7 @@ export default Vue.extend({
     onPictureChanged () {
       this.dialog = false;
       this.version = Date.now();
+      meStore.fetch();
     },
   },
 });
