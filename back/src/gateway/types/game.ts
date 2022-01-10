@@ -48,12 +48,12 @@ export class Game {
     this.roomId = this.createRoomId(player1.userId, player2.userId);
     this.player1 = player1;
     this.player2 = player2;
-    this.player1.paddle.init(40);
-    this.player2.paddle.init(1240);
+    // this.player1.paddle.init(40);
+    // this.player2.paddle.init(1240);
     this.manager = manager;
     this.type = style;
     this.balls = [];
-    this.initBalls(style);
+    // this.initBalls(style);
     this.winScore = winScore;
     this.state = GameState.beforeStart;
     this.countdown = countdown;
@@ -78,7 +78,10 @@ export class Game {
       case GameState.beforeStart:
         const secondsElapsed = this.getSecondsElapsed();
         if (secondsElapsed > this.countdown) {
-          this.state = GameState.playing;
+		  this.state = GameState.playing;
+		  this.player1.paddle.init(40);
+		  this.player2.paddle.init(1240);
+		  this.initBalls(this.type);
           break;
         }
       case GameState.playing:
