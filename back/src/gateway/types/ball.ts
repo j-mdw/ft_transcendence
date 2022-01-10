@@ -94,7 +94,8 @@ export class Ball {
       bottom > ptop
     ) {
       if (this.xSpeed < 0) this.xSpeed *= -1;
-      this.xSpeed++;
+	  this.xSpeed++;
+	  this.yDirectionOnPaddleImpact(paddle.y, paddle.h);
     }
 
     if (
@@ -106,8 +107,31 @@ export class Ball {
       bottom > ptop
     ) {
       if (this.xSpeed > 0) this.xSpeed *= -1;
-      this.xSpeed--;
+	  this.xSpeed--;
+	  this.yDirectionOnPaddleImpact(paddle.y, paddle.h);
     }
+  }
+
+
+  private yDirectionOnPaddleImpact(yPaddle: number, paddleLength: number) {
+	if (yPaddle > this.y){
+		if ((yPaddle - this.y) < paddleLength / 6.0)
+			this.ySpeed = - Math.abs(this.xSpeed) * 0.0349 //sin 2 deg
+		else if ((yPaddle - this.y) < paddleLength / 3.0)
+			this.ySpeed = - Math.abs(this.xSpeed) * 0.4848 //sin 29 deg
+		else{
+			this.ySpeed = - Math.abs(this.xSpeed) * 0.6946 //sin 44 deg
+		}
+	}
+	else{
+		if ((this.y - yPaddle) < paddleLength / 6.0)
+			this.ySpeed = Math.abs(this.xSpeed) * 0.0523 //sin 3 deg
+		else if ((this.y - yPaddle) < paddleLength / 3.0)
+			this.ySpeed =  Math.abs(this.xSpeed) * 0.515 //sin 31 deg
+		else {
+			this.ySpeed =  Math.abs(this.xSpeed) * 0.7193 //sin 46 deg
+		}
+	}
   }
 
   // 	/**
