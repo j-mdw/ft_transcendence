@@ -210,8 +210,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-join-channel')
   async joinChannel(
-    @MessageBody('channelId', ParseUUIDPipe) channelId: string,
-    // @MessageBody() channelId: string,
+    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
+    @MessageBody() channelId: string,
     @ConnectedSocket() client: Socket,
   ) {
     if (this.users.has(client.id)) {
@@ -244,8 +244,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-join-DM')
   async joinDM(
-    @MessageBody('peerId', ParseUUIDPipe) peerId: string,
-    // @MessageBody() peerId: string,
+    // @MessageBody('peerId', ParseUUIDPipe) peerId: string,
+    @MessageBody() peerId: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     console.log('Join DM request received');
@@ -355,8 +355,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-leave')
   async leaveChannel(
-    @MessageBody('channelId', ParseUUIDPipe) channelId: string,
-    // @MessageBody() channelId: string,
+    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
+    @MessageBody() channelId: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     const uid = this.users.get(client.id).id;
