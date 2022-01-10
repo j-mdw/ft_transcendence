@@ -11,12 +11,14 @@
         </h1> -->
 
         <v-row justify="center" align="center" class="mt-8">
-          <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">
-            game rules
-            <v-icon color="#395c6b" right>
-              fa fa-align-justify
-            </v-icon>
-          </v-btn>
+          <template #activator="{ on, attrs }">
+            <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">
+              game rules
+              <v-icon color="#395c6b" right>
+                fa fa-align-justify
+              </v-icon>
+            </v-btn>
+          </template>
         </v-row>
       </v-col>
       <v-col
@@ -88,6 +90,9 @@ export default Vue.extend({
       gameUnavailable: '',
     }
   },
+  mounted () { // DELETE
+    console.log(usersStore.ranking);
+  },
 
   methods: {
     buttonClickPlay (gameStyle: GameStyle): void {
@@ -110,9 +115,6 @@ export default Vue.extend({
         }
       });
     },
-  },
-  mounted () { //DELETE
-    console.log(usersStore.ranking);
   },
 })
 </script>
