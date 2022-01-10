@@ -1,4 +1,5 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
+import { fetchStatusStore, messagesStore } from '.'
 import { $axios } from '~/utils/api'
 
 @Module({
@@ -28,6 +29,8 @@ export default class AuthenticationModule extends VuexModule {
   removeLogin () {
     this.isLogin = false
     localStorage.setItem('IS_LOGIN', 'false')
+    fetchStatusStore.reset();
+    messagesStore.clearCurrentChannel();
   }
 
   @Mutation

@@ -7,36 +7,36 @@
             fa fa-cog
           </v-icon>
           </v-btn> -->
-          <v-dialog
-      v-model="dialog"
-      width="50%"
-    >
-      <template v-slot:activator="{ on, attrs }">
-        <v-btn
-          color="our_beige" 
-          small
-          v-bind="attrs"
-          v-on="on"
-        >
-          join
-        </v-btn>
-      </template>
-      <v-card class="our_beige" height="240" >       
-        <v-card-title class="our_dark_beige our_navy_blue--text">
-          channel password
-        </v-card-title>
-        <v-form
-    ref="form"
-    lazy-validation
-    title="Create a channel"
-  >
-        <!-- <v-row align="center" justify="center"> -->
+      <v-dialog
+        v-model="dialog"
+        width="50%"
+      >
+        <template #activator="{ on, attrs }">
+          <v-btn
+            color="our_beige"
+            small
+            v-bind="attrs"
+            v-on="on"
+          >
+            join
+          </v-btn>
+        </template>
+        <v-card class="our_beige" height="240">
+          <v-card-title class="our_dark_beige our_navy_blue--text">
+            channel password
+          </v-card-title>
+          <v-form
+            ref="form"
+            lazy-validation
+            title="Create a channel"
+          >
+            <!-- <v-row align="center" justify="center"> -->
             <v-text-field
-            v-model="password"
-            type="password"
-            label="password"
-            required
-            class="ml-4 mr-4"
+              v-model="password"
+              type="password"
+              label="password"
+              required
+              class="ml-4 mr-4"
             />
             <!-- </v-row> -->
             <v-row align="center" justify="center">
@@ -67,7 +67,6 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { ChannelDTO } from '~/models/channel'
 import { channelsStore, meStore } from '~/store';
 
 export default Vue.extend({
@@ -87,36 +86,33 @@ export default Vue.extend({
   },
 
   methods: {
-    goodPassword() {
-      if(!this.password)
-        this.alertPassword = false;
+    goodPassword () {
+      if (!this.password) { this.alertPassword = false; }
       return (this.alertPassword);
     },
-    async joinProtected() {
-      console.log("channel ID")
+    async joinProtected () {
+      console.log('channel ID')
       console.log(this.channelId)
       console.log(this.me.id)
       try {
-          this.alertPassword = false
-          await this.$axios.$put(
+        this.alertPassword = false
+        await this.$axios.$put(
               `/channel/${this.channelId}/${this.me.id}`,
               {
-                  password: this.password
+                password: this.password
               },
               {
-                 withCredentials: true
+                withCredentials: true
               }
-          );
-          console.log("still good")
+        );
+        console.log('still good')
       } catch (error: Error | any) {
-         // debugger;
-         this.alertPassword = true
-          console.log(error.response.data)
+        // debugger;
+        this.alertPassword = true
+        console.log(error.response.data)
       }
-     
-    
-      if(this.alertPassword !== true) 
-        this.$router.push(`/channels/${this.channelId}`)
+
+      if (this.alertPassword !== true) { this.$router.push(`/channels/${this.channelId}`) }
     }
   }
 })
