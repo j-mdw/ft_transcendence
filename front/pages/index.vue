@@ -16,28 +16,40 @@
         </v-row>
       </v-col>
       <v-col>
-        <v-card color="our_dark_beige" height="400" class="mt-9">
-          <v-card-title class="our_beige our_navy_blue--text">
-            <v-row align="center" justify="center">
-              top players
-            </v-row>
-          </v-card-title>
-        </v-card>
+        <ranking/>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'nuxt-property-decorator'
+import Vue from 'vue'
+import matchHistory from '~/components/stats/matchHistory.vue';
+import achivements from '~/components/stats/achivements.vue';
 import pingpongLogo from '../components/Logo/pingpongLogo_big.vue';
+import ranking from '../components/ranking.vue'
+import { usersStore } from '~/store'
+import { User } from '~/models/user'
 
-@Component({
-  components: { pingpongLogo },
+export default Vue.extend({
+  components: { matchHistory,achivements, pingpongLogo, ranking },
   layout: 'default',
+  data () {
+    return {
+
+    };
+  },
+
+  computed: {     
+
+  },
+
+    methods: {
+
+  },
+
 })
-export default class Index extends Vue {
-}
+
 </script>
 
 <style scoped lang="scss">

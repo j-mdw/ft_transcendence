@@ -36,7 +36,7 @@
         <v-card-title class="our_beige our_navy_blue--text justify-center">
            Achievements
         </v-card-title>
-        <achivements/>
+        <achivements :user-id="this.me.id"/>
         </v-card>
         
         <!-- </v-row> -->
@@ -56,7 +56,7 @@
           max-width="500px"
         >
           <h3>
-            Victories : 0
+            Victories : {{getVictories()}}
           </h3>
         </v-card>
         <v-card
@@ -67,11 +67,11 @@
           max-width="500px"
         >
           <h3>
-            Losses : 0
+            Losses : {{getLosses()}}
           </h3>
         </v-card>
         
-        <match-history/>
+        <match-history :user-id="this.me.id"/>
         
       
         
@@ -84,28 +84,62 @@
 import Vue from 'vue'
 import matchHistory from '~/components/stats/matchHistory.vue';
 import achivements from '~/components/stats/achivements.vue';
-
+import { meStore } from '~/store'
+import { User } from '~/models/user'
 
 export default Vue.extend({
   components: { matchHistory,achivements },
   layout: 'default',
   data () {
     return {
+        matches: Object(),
 
     };
   },
 
   computed: {
+    me (): User {
+      return meStore.me;
+    },
+      
   },
+
     methods: {
+    
+
+    getVictories() {
+      let e = 0;
+      for (let i = 0; i < this.matches.length; i++) {
+        if(this.matches[i].user1Score > this.matches[i].user2Score)
+          e++;
+      }
+      return e;
+    },
+
+    getLosses() {
+      let e = 0;
+      for (let i = 0; i < this.matches.length; i++) {
+        if(this.matches[i].user2Score > this.matches[i].user1Score)
+          e++;
+      }
+      return e;
+    },
+
     getLevel() {
-      let win = 2;
+      let win = this.getVictories();
       if(win == 0)
         return 0
       else
         return (win * 0.40);
-    }
-  }
+    },
+  },
+
+   async mounted () {
+    
+    this.matches = await this.$axios.$get(`user/matches/${this.me.id}`, { withCredentials: true });
+    console.log("MATCHES", this.matches);
+  },
+
 
 })
 

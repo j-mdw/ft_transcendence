@@ -6,49 +6,24 @@
         <v-avatar size="250px">
           <img :src="`http://localhost:4000/${user.avatarPath}`">
         </v-avatar>
-        <v-row justify="center" align="center" class="mt-8">
-          <relationship-buttons :user-id="$route.params.id" />
-        </v-row>
+       
         <h1 v-if="user">
           <br>
           {{ user.pseudo }}
         </h1>
       </v-col>
       <v-col sm="8" align="center" justify="center">
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          align="center"
-          max-width="500px"
-        >
-          <div>
-            victories <br>
-            0
-          </div>
-        </v-card>
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          align="center"
-          max-width="500px"
-        >
-          <div>
-            losses <br>
-            0
-          </div>
-        </v-card>
-        <v-card
-          class="pa-2 mb-7 mt-7"
-          color="#F7C678"
-          outlined
-          height="200px"
-          align="center"
-          max-width="500px"
-        >
-          MATCHES
-        </v-card>
+         <v-row justify="center" align="center" class="mt-8">
+          <relationship-buttons :user-id="$route.params.id" />
+        </v-row>
+        <v-row justify="center" align="center">
+          <v-btn color="#f5cac3" :to="`/stats/${this.$route.params.id}`" class="mt-6">
+            stats
+            <v-icon color="#395c6b" right>
+              fa-chart-line
+            </v-icon>
+          </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>
@@ -78,11 +53,6 @@ export default Vue.extend({
     user () : User {
       return usersStore.oneUser(this.$route.params.id);
     }
-  },
-  // For testing (left here for integration)
-  async mounted () {
-    const gameHist = await this.$axios.$get(`user/matches/${this.$route.params.id}`, { withCredentials: true });
-    console.log(gameHist);
   },
 });
 </script>

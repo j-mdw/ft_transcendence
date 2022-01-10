@@ -12,9 +12,9 @@
         </v-card-title>
     <div v-if="matches.length == 0">
          <v-row justify="center" class="mt-11">
-            <h1>
+            <h3>
               Sorry there is no history<br>
-            </h1>
+            </h3>
           </v-row>
       </div>
       <div v-else>
@@ -22,14 +22,26 @@
     <v-list class="our_dark_beige">
       <div v-for="match in matches" :key="match.user1Id">
         <v-row align="center" justify="center" class="mt-4 mb-4">
-          <v-list-item-avatar class="mr-12">
-              <v-img src="https://randomuser.me/api/portraits/women/85.jpg"></v-img>
-          </v-list-item-avatar>
+          <v-list-item-avatar class="mr-12"  >
+          <router-link :to="`/profile/${match.user1Id}`">
+            <v-avatar >
+              <v-img
+                :src="`http://localhost:4000/${getAvatar(match.user1Id)}`"
+              />
+            </v-avatar>
+          </router-link>
+           </v-list-item-avatar>
           <h4>
             {{match.user1Score}} - {{match.user2Score}} 
           </h4>
-          <v-list-item-avatar class="ml-12">
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-list-item-avatar class="ml-12"  >
+          <router-link :to="`/profile/${match.user2Id}`">
+            <v-avatar >
+              <v-img
+                :src="`http://localhost:4000/${getAvatar(match.user2Id)}`"
+              />
+            </v-avatar>
+          </router-link>
         </v-list-item-avatar>
         </v-row>
         <v-divider/>
@@ -43,39 +55,43 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { meStore, usersStore } from '~/store'
+import { User } from '~/models/user'
+
+
 export default Vue.extend({
   layout: 'default',
+  props: ['userId'],
   data () {
     return {
-     matches: [
-        {
-            user1Id: 'user1',
-            user2Id: 'user2',
-            user1Score: 2,
-            user2Score: 1,
-            date: '10-12-1999',
-        },
-        {
-            user1Id: 'user1',
-            user2Id: 'user2',
-            user1Score: 7,
-            user2Score: 2,
-            date: '11-12-1999',
-        },
-        {
-            user1Id: 'user1',
-            user2Id: 'user2',
-            user1Score: 4,
-            user2Score: 5,
-            date: '12-12-1999',
-        },
-      ],
+      
+     matches: Object(),
     };
 
     
   },
 
   computed: {
+        me (): User {
+        return meStore.me;
+      },
+      
+  },
+
+  methods: {
+    getAvatar(peerId: string) {
+        return usersStore.oneUser(peerId).avatarPath;
+    },
+
+    
+
+
+  },
+
+  async mounted () {
+    
+    this.matches = await this.$axios.$get(`user/matches/${this.userId}`, { withCredentials: true });
+    console.log("MATCHES", this.matches);
   },
 
 
