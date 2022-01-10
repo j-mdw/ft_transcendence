@@ -11,12 +11,14 @@
         </h1> -->
 
         <v-row justify="center" align="center" class="mt-8">
-          <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">
-            game rules
-            <v-icon color="#395c6b" right>
-              fa fa-align-justify
-            </v-icon>
-          </v-btn>
+          <template #activator="{ on, attrs }">
+            <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">
+              game rules
+              <v-icon color="#395c6b" right>
+                fa fa-align-justify
+              </v-icon>
+            </v-btn>
+          </template>
         </v-row>
       </v-col>
       <v-col
@@ -37,10 +39,10 @@
               Classic
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(1)">
-              Rookie
+              Multiballs
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(2)">
-              Multiballs
+              Rookie
             </v-btn>
           </div>
           <!-- <div>
@@ -62,10 +64,10 @@
               Classic
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(1)">
-              Rookie
+              Multiballs
             </v-btn>
             <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(2)">
-              Multiballs
+              Rookie
             </v-btn>
           </div>
           <div>
@@ -80,13 +82,16 @@
 <script lang="ts">
 import Vue from 'vue'
 import { GameStyle, GameStyleDTO } from '~/models';
-import { gameStatusStore } from '~/store';
+import { gameStatusStore, usersStore } from '~/store';
 export default Vue.extend({
   layout: 'default',
   data () {
     return {
       gameUnavailable: '',
     }
+  },
+  mounted () { // DELETE
+    console.log(usersStore.ranking);
   },
 
   methods: {

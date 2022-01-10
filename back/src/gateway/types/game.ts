@@ -68,7 +68,7 @@ export class Game {
     return `game:${user1}:${user2}`;
   }
 
-  private tick() {
+  private async tick() {
     switch (this.state) {
       case GameState.beforeStart:
         this.state = GameState.playing;
@@ -76,12 +76,11 @@ export class Game {
       case GameState.playing:
         this.player1.updatePosition();
         this.player2.updatePosition();
-        this.balls.forEach((ball) =>
-          ball.update(this.player1, this.player2, this.type),
-        );
+        this.balls.forEach((ball) => ball.update(this.player1, this.player2));
         const winner = this.isGameOver();
         if (winner != 0) {
           console.log('Player', winner, 'won!'); //TBU
+
           this.state = GameState.over;
         } else {
           if (this.type == GameStyle.rookie) {
@@ -94,9 +93,19 @@ export class Game {
         this.emitUpdate();
         clearInterval(this.intervalId);
         this.emptyRoom();
+        await this.saveResult();
         this.manager.removeGame(this.roomId);
         break;
     }
+  }
+
+  private async saveResult() {
+    await this.manager.userService.gameOver(
+      this.player1.userId,
+      this.player2.userId,
+      this.player1.score,
+      this.player2.score,
+    );
   }
 
   private emitUpdate() {

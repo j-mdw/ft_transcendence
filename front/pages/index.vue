@@ -1,32 +1,31 @@
 <template>
   <v-container fill-height>
-    <v-row justify="center" align="center">     
+    <v-row justify="center" align="center">
       <!-- <div id="component-auth" class="d-flex flex-column justify-center align-center">
           <h1>INDEX !!!</h1>
-        
-          
+
       </div> -->
       <v-col>
         <v-row align="center" justify="center" class="mb-11">
-        <h1>
-          Welcome to Transcendence
-        </h1>
+          <h1>
+            Welcome to Transcendence
+          </h1>
         </v-row>
         <v-row align="center" justify="center" class="mt-7">
-        <pingpong-logo height/>
+          <pingpong-logo height />
         </v-row>
       </v-col>
-       <v-col>
+      <v-col>
         <v-card color="our_dark_beige" height="400" class="mt-9">
           <v-card-title class="our_beige our_navy_blue--text">
             <v-row align="center" justify="center">
-               top players
+              top players
             </v-row>
-        </v-card-title>
+          </v-card-title>
         </v-card>
       </v-col>
     </v-row>
-</v-container>
+  </v-container>
 </template>
 
 <script lang="ts">

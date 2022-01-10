@@ -113,7 +113,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   /* PONG GAME */
 
-  gameManager = new GameManager(this.gatewayService);
+  gameManager = new GameManager(this.gatewayService, this.userService);
   matchMaker = new MatchMaker(this.gameManager);
 
   @SubscribeMessage('game-play')

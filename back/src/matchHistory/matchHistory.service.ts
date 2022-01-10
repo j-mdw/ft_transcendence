@@ -32,13 +32,13 @@ export class MatchHistoryService {
     return u1Matches.concat(u2Matches);
   }
 
-  async add(user1: User, user2: User, socre1: number, score2: number) {
+  async add(user1: User, user2: User, score1: number, score2: number) {
     await this.matchRepository.save({
-      user1Score: socre1,
+      user1Score: score1,
       user2Score: score2,
+      createdAt: new Date(),
       user1: user1,
       user2: user2,
-      createdAt: new Date(),
     });
   }
 }
