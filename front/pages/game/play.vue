@@ -1,3 +1,5 @@
+
+   
 <template>
 <div v-if="game">
   <div v-if="game.state == 0">
@@ -31,7 +33,6 @@ import {
   Role,
 } from "~/models";
 import { gameStatusStore, meStore } from "~/store";
-
 export default Vue.extend({
   middleware: ['auth', 'fetch'],
   layout: "empty",
@@ -60,7 +61,6 @@ export default Vue.extend({
       this.ratio.less =
         this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x; 
       },
-
     drawBall(ball: Ball) {
       if (this.context) {
         this.context.beginPath();
@@ -74,7 +74,6 @@ export default Vue.extend({
         this.context.fill();
       }
     },
-
     drawPaddle(paddle: Paddle) {
       let top = (paddle.y - paddle.h / 2) * this.ratio.y,
         left = (paddle.x - paddle.w / 2) * this.ratio.x;
@@ -89,13 +88,11 @@ export default Vue.extend({
         // this.context.fillText( paddle.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
       }
     },
-
     addWindowListeners() {
       window.addEventListener("keydown", this.keydownListener);
       window.addEventListener("keyup", this.keyupListener);
       window.addEventListener("resize", this.createScreen);
     },
-
     keydownListener(event: KeyboardEvent) {
       if (this.role !== undefined && this.role !== Role.spectator) {
         const paddleMove: PaddleMoveDTO = {
@@ -111,7 +108,6 @@ export default Vue.extend({
         }
       }
     },
-
     keyupListener(event: KeyboardEvent) {
       if (this.role !== undefined && this.role !== Role.spectator) {
         const paddleMove: PaddleMoveDTO = {
@@ -127,14 +123,12 @@ export default Vue.extend({
         }
       }
     },
-
     removeWindowListeners() {
       window.removeEventListener("keydown", this.keydownListener);
       window.removeEventListener("keyup", this.keyupListener);
       window.removeEventListener("resize", this.createScreen);
     },
   },
-
   computed: {
     role: function() {
       if (this.game) {
@@ -150,13 +144,11 @@ export default Vue.extend({
       }
     }
   },
-
   mounted() {
     this.canvas = <HTMLCanvasElement>document.getElementById("game");
     this.context = this.canvas.getContext("2d");
     this.createScreen();
     this.addWindowListeners();
-
     this.$socket.$subscribe("game-data-update", (gameData: GameDTO) => {
       this.game = gameData;
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -173,7 +165,6 @@ export default Vue.extend({
       }
     });
   },
-
   beforeDestroy() {
     gameStatusStore.stopPlaying();
     this.removeWindowListeners();
@@ -189,7 +180,6 @@ export default Vue.extend({
 .v-app {
   overflow: hidden !important;
 }
-
 .game {
   overflow: hidden !important;
   display: block;

@@ -92,7 +92,7 @@ export default Vue.extend({
     },
       scrollToEnd() {
         const element = document.getElementById('message-wrapper_left')
-        element.scrollTop = element.scrollHeight
+        element!.scrollTop = element!.scrollHeight
       }
     },
     updated() {
