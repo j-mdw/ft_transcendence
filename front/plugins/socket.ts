@@ -52,6 +52,8 @@ export default ({ store }: any) => {
         // socket.connect();
         // store.commit('fetchStatus/complete');
       } else {
+        store.commit('messages/clearCurrentChannel');
+        store.commit('fetchStatus/reset');
         socket.disconnect();
       }
     },
