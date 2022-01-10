@@ -9,8 +9,8 @@
         <div id="message-wrapper_left" class="message-wrapper_left">
           <ul id="chat">
             <li v-for="msg in messages" :key="messages[msg]">
-              <v-row class="mt-7 mb-7">    
-                    <profil-chat :user-id="msg.userId"/>
+              <v-row class="mt-7 mb-7">
+                <profil-chat :user-id="msg.userId" />
                 <div class="message-background_left">
                   <div class="message_left">
                     {{ msg.message }}
@@ -48,7 +48,6 @@
 import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
-
 import { channelsStore, messagesStore, usersStore } from '~/store'
 export default Vue.extend({
   components: { settingsChat, profilChat },
@@ -61,61 +60,49 @@ export default Vue.extend({
     }
   },
   computed: {
-      channelid () {
-          return messagesStore.currentChannelId;
-      },
-
-      thisChannel () {
-        return  channelsStore.one(this.$route.params.id);
-      },
-
-      messages () {
-        return messagesStore.channelMessages;
-      }
-
-      
+    channelid () {
+      return messagesStore.currentChannelId;
+    },
+    thisChannel () {
+      return channelsStore.one(this.$route.params.id);
+    },
+    messages () {
+      return messagesStore.channelMessages;
+    }
   },
-
-    methods: {
-      sendMessage (): void {
-        this.$socket.client.emit('chat-DM-message', {channelId: this.channelid, message: this.current_message});
-        this.thisChannelId = this.channelid
-        this.current_message = '';
-        //this.scrollToEnd();
-      },
-      getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+ 
+  methods: {
+    sendMessage (): void {
+      this.$socket.client.emit('chat-DM-message', { channelId: this.channelid, message: this.current_message });
+      this.thisChannelId = this.channelid
+      this.current_message = '';
     },
-
-      scrollToEnd() {
-        const element = document.getElementById('message-wrapper_left')
+    getAvatar (peerId: string) {
+      return usersStore.oneUser(peerId).avatarPath;
+    },
+    scrollToEnd () {
+      const element = document.getElementById('message-wrapper_left')
+      if (element) {
         element.scrollTop = element.scrollHeight
-      },
-      getChannelName() {
+      }
+    },
+    getChannelName() {
         const str = this.$route.params.id;
-      this.peerId = str.split(':').pop();;
+      this.peerId = str.split(':').pop();
         return usersStore.oneUser(this.peerId).pseudo;
-      },
-
     },
-
-
-    updated() {
-      this.scrollToEnd()
-    },
-
-  
-    mounted() {
-      const str = this.$route.params.id;
-      this.peerId = str.split(':').pop();;
+  },
+  mounted () {
+    const str = this.$route.params.id;
+    this.peerId = str.split(':').pop();
+    if (this.peerId) {
       this.$socket.client.emit('chat-join-DM', this.peerId);
-    },
-
-    beforeDestroy() {
-      this.$socket.client.emit('chat-leave', this.thisChannelId);
-    },
-
-    
+    }
+  },
+  beforeDestroy () {
+    this.$socket.client.emit('chat-leave', this.thisChannelId);
+  },
+ 
 })
 </script>
 

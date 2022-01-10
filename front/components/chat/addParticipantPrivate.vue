@@ -1,12 +1,13 @@
 <template>
-    <div v-if="amIAdmin">
-        <v-dialog
+  <div v-if="amIAdmin">
+    <v-dialog
       v-model="dialog"
       width="600"
     >
-      <template v-slot:activator="{ on, attrs }">
+      <template #activator="{ on, attrs }">
         <v-btn
-          color="#f5cac3" class="mt-6 mb-6 ml-6"
+          color="#f5cac3"
+          class="mt-6 mb-6 ml-6"
           v-bind="attrs"
           v-on="on"
         >
@@ -20,75 +21,71 @@
         </v-card-title>
 
         <v-form
-    ref="form"
-    lazy-validation
-    title="Create a channel"
-  >
-    <v-text-field
-      v-model="name"
-      :counter="20"
-      label="Name"
-      required
-      class="mr-4 ml-4"
-    />
-
-
-        <v-row align="center" justify="center">
-        <v-btn
-            v-if="name"
-          color="success"
-          class="mt-3 mb-5"
-          @click="addUser"
+          ref="form"
+          lazy-validation
+          title="Create a channel"
         >
-          Send
-        </v-btn>
-        <v-btn v-else disabled class="mt-3 mb-5">
-          Send
-        </v-btn>
-        </v-row>
-      </v-form>
-      <div v-if="alertExist == true">
-      <v-alert
-        type="error"
-        class=""
-      >
-         Sorry this user doesn't exist <br/>
-        or he is already in the channel
-      </v-alert>
-      </div>
+          <v-text-field
+            v-model="name"
+            :counter="20"
+            label="Name"
+            required
+            class="mr-4 ml-4"
+          />
+
+          <v-row align="center" justify="center">
+            <v-btn
+              v-if="name"
+              color="success"
+              class="mt-3 mb-5"
+              @click="addUser"
+            >
+              Send
+            </v-btn>
+            <v-btn v-else disabled class="mt-3 mb-5">
+              Send
+            </v-btn>
+          </v-row>
+        </v-form>
+        <div v-if="alertExist == true">
+          <v-alert
+            type="error"
+            class=""
+          >
+            Sorry this user doesn't exist <br>
+            or he is already in the channel
+          </v-alert>
+        </div>
       </v-card>
     </v-dialog>
-    
-    
-</div>
+  </div>
 </template>
-
 
 <script lang="ts">
 
 import Vue from 'vue'
-import {CreateChannelDTO} from '~/models/channel'
+import { CreateChannelDTO } from '~/models/channel'
 
-import {channelsStore, meStore, usersStore} from '~/store';
+import { channelsStore, meStore, usersStore } from '~/store';
 export default Vue.extend({
   props: ['channelId'],
-  data() {
+  data () {
     return {
       participants: Object(),
       counter: this.channelId,
       name: '',
       dialog: false,
       alertExist: false,
-      
+
     };
   },
-  computed : {
+  computed: {
     me () {
-       return meStore.me;
-     },
+      return meStore.me;
+    },
 
-    amIAdmin: function (): any {   
-       channelsStore.fetch()
+    amIAdmin (): any {
+      channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
         if(this.participants[i].userId == this.me.id)
         {
@@ -97,9 +94,8 @@ export default Vue.extend({
           else 
             return false
         }
-        
       }
-      console.log("NOT found")
+      console.log('NOT found')
       return false
     },
 
@@ -112,10 +108,9 @@ export default Vue.extend({
     this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
   },
   methods: {
-    doesHeExist() {
+    doesHeExist () {
       for (let i = 0; i < this.allUsers.length; i++) {
-        if(this.allUsers[i].pseudo === this.name)
-          return this.allUsers[i].id;
+        if (this.allUsers[i].pseudo === this.name) { return this.allUsers[i].id; }
       }
       return null
     },
@@ -142,7 +137,6 @@ export default Vue.extend({
         this.alertExist = true;
       }
       channelsStore.fetch()
-
     }
   }
 })

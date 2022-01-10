@@ -1,4 +1,10 @@
-import { IsBoolean, IsEmail, IsEnum, IsNumber, IsString, IsUUID } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 import { OmitType, PartialType } from '@nestjs/mapped-types';
 import { User } from './user.entity';
 
@@ -51,7 +57,7 @@ export class UserDTO {
 }
 
 export class UpdateUserDTO extends PartialType(
-  OmitType(UserDTO, ['id'] as const),
+  OmitType(UserDTO, ['id', 'victories', 'defeats'] as const),
 ) {}
 
 export enum UserStatus {

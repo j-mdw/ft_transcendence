@@ -21,7 +21,7 @@ import { JwtGuard } from 'src/auth/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { ChannelDTO } from 'src/channel/channel.dto';
-// import { MatchHistoryDTO } from 'src/matchHistory/matchHistory.dto';
+import { MatchHistoryDTO } from 'src/matchHistory/matchHistory.dto';
 
 @Controller('user')
 @UseGuards(JwtGuard)
@@ -48,13 +48,13 @@ export class UserController {
       .map((channel) => new ChannelDTO(channel));
   }
 
-  // @Get('matches/:id')
-  // async findMatchHistory(
-  //   @Param('id', ParseUUIDPipe) userId: string,
-  //   // @Res({ passthrough: true }) response: Response,
-  // ): Promise<MatchHistoryDTO[]> {
-  //   return await this.userService.getMatches(userId);
-  // }
+  @Get('matches/:id')
+  async findMatchHistory(
+    @Param('id', ParseUUIDPipe) userId: string,
+    // @Res({ passthrough: true }) response: Response,
+  ): Promise<MatchHistoryDTO[]> {
+    return await this.userService.getMatches(userId);
+  }
 
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserDTO> {

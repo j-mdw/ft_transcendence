@@ -56,7 +56,6 @@
 import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
-
 import { channelsStore, messagesStore, usersStore } from '~/store'
 export default Vue.extend({
   components: { settingsChat, profilChat },
@@ -70,24 +69,19 @@ export default Vue.extend({
       channelid () {
           return this.$route.params.id;
       },
-
       channelIdStore() {
         return messagesStore.currentChannelId;
       },
-
       thisChannel () {
         return  channelsStore.one(this.$route.params.id);
       },
-
       thisChannelName: function (): any {
         return this.thisChannel?.name
       },
-
       messages () {
         return messagesStore.channelMessages;
       }
   },
-
     methods: {
       sendMessage (): void {
         this.$socket.client.emit('chat-channel-message', {channelId: this.$route.params.id, message: this.current_message});
@@ -96,27 +90,21 @@ export default Vue.extend({
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
     },
-
       scrollToEnd() {
         const element = document.getElementById('message-wrapper_left')
         element.scrollTop = element.scrollHeight
       }
     },
-
-
     updated() {
       this.scrollToEnd()
     },
-
   
     mounted() {
       this.$socket.client.emit('chat-join-channel', this.$route.params.id);
     },
-
     beforeDestroy() {
       this.$socket.client.emit('chat-leave', this.channelIdStore);
     },
-
     
 })
 </script>
@@ -152,7 +140,6 @@ ul {
     margin-left: 10px;
     margin-right: 10px;
 }
-
 .message-wrapper_left{
   height: 500px;
   overflow: scroll;
@@ -165,17 +152,14 @@ ul {
     margin-bottom: 15px;
 		margin: "auto";
     background-color: #fff;
-
     
     /* font-size:200px; */
 }
-
 .pseudo_message_left {
   /* color:"#395c6b"; */
   color: #395c6b;
   margin-left: 10px;
   margin-right: 10px;
-
 }
 .message_left{
     margin-left: 10px;

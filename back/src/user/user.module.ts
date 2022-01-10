@@ -8,6 +8,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { MessageModule } from 'src/message/message.module';
+import { MatchHistoryModule } from 'src/matchHistory/matchHistory.module';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { MessageModule } from 'src/message/message.module';
     forwardRef(() => AuthModule),
     forwardRef(() => ChannelModule),
     forwardRef(() => ChannelParticipantModule),
-    // forwardRef(() => MessageModule),
+    MatchHistoryModule,
   ],
   providers: [UserService],
   controllers: [UserController],

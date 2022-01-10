@@ -1,5 +1,5 @@
-<template>   
-<v-container class="flex-container" fill-height> 
+<template>
+<v-container class="flex-container" fill-height>
     <v-row justify="center" color="#f7ede2" align="center">
       <v-form
     ref="form"

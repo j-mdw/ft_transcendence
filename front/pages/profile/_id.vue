@@ -84,6 +84,11 @@ export default Vue.extend({
       return usersStore.oneUser(this.$route.params.id);
     }
   },
+  // For testing (left here for integration)
+  async mounted () {
+    const gameHist = await this.$axios.$get(`user/matches/${this.$route.params.id}`, { withCredentials: true });
+    console.log(gameHist);
+  },
 });
 </script>
 

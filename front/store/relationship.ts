@@ -31,7 +31,9 @@ export default class RelationshipModule extends VuexModule {
 
   @Mutation
   set (relationships: Relationship[]) {
-    this.relationships = relationships;
+    if (relationships) {
+      this.relationships = relationships;
+    }
   }
 
   @Mutation

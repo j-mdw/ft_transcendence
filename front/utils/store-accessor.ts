@@ -4,6 +4,7 @@ import { getModule } from 'vuex-module-decorators'
 import AuthenticationModule from '~/store/auth'
 import ChannelsModule from '~/store/channels'
 import FetchStatusModule from '~/store/fetchStatus'
+import GameStatusModule from '~/store/gameStatus'
 import MeModule from '~/store/me'
 import MessagesModule from '~/store/messages'
 import RelationshipModule from '~/store/relationship'
@@ -16,6 +17,7 @@ let relationshipStore: RelationshipModule
 let channelsStore: ChannelsModule
 let messagesStore: MessagesModule
 let fetchStatusStore: FetchStatusModule
+let gameStatusStore: GameStatusModule
 
 function initializeStores (store: Store<any>): void {
   authenticationStore = getModule(AuthenticationModule, store)
@@ -25,6 +27,7 @@ function initializeStores (store: Store<any>): void {
   channelsStore = getModule(ChannelsModule, store)
   messagesStore = getModule(MessagesModule, store)
   fetchStatusStore = getModule(FetchStatusModule, store)
+  gameStatusStore = getModule(GameStatusModule, store)
 }
 export {
   initializeStores,
@@ -35,4 +38,5 @@ export {
   channelsStore,
   messagesStore,
   fetchStatusStore,
+  gameStatusStore,
 }

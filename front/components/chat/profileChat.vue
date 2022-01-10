@@ -77,8 +77,8 @@ import { meStore } from '~/store';
 
 export default Vue.extend({
   components: { messageLogo, pingpongLogo },
-    props: ['userId'],
-    data () {
+  props: ['userId'],
+  data () {
     return {
       dialog: false,
       colors: ['#AFE796', '#F7F4E8', '#C596E7'],
@@ -86,8 +86,7 @@ export default Vue.extend({
   },
 
   computed: {
-    user(): User {
-      // usersStore.fetchUsers();
+    user (): User {
       return usersStore.oneUser(this.userId);
     },
     me (): User {
