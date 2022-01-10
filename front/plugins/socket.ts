@@ -41,17 +41,9 @@ export default ({ store }: any) => {
     (_state: any, getters: any) =>
       getters['auth/isLogged'],
     (val: boolean) => {
-      if (val) {
-        // await store.dispatch('me/fetch');
-        // await store.dispatch('users/fetchUsers');
-        // await store.dispatch('relationship/fetch');
-        // await store.dispatch('channels/fetch');
-        // await store.dispatch('messages/fetch');
-        console.log('My channels:', store.getters['channels/mine']);
-        console.log('Visible channels:', store.getters['channels/visible']);
-        // socket.connect();
-        // store.commit('fetchStatus/complete');
-      } else {
+      if (!val) {
+        store.commit('messages/clearCurrentChannel');
+        store.commit('fetchStatus/reset');
         socket.disconnect();
       }
     },
@@ -65,12 +57,12 @@ export default ({ store }: any) => {
     (val: boolean) => {
       if (val) {
         socket.connect();
-        if (store.getters['gameStatus/playing']) {
-          const style: GameStyleDTO = {
-            pongType: store.getters['gameStatus/playing']
-          }
-          socket.emit('play-game', style);
-        }
+        // if (store.getters['gameStatus/playing']) {
+        //   const style: GameStyleDTO = {
+        //     pongType: store.getters['gameStatus/playing']
+        //   }
+        //   socket.emit('play-game', style);
+        // }
       }
     });
 }

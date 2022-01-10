@@ -1,32 +1,32 @@
 <template>
-<v-container class="flex-container" fill-height>
+  <v-container class="flex-container" fill-height>
     <v-row justify="center" color="#f7ede2" align="center">
       <v-form
-    ref="form"
-    lazy-validation
-    title="Create a channel"
-  >
-    <v-text-field
-      v-model="name"
-      :counter="20"
-      label="Name"
-      required
-    />
+        ref="form"
+        lazy-validation
+        title="Create a channel"
+      >
+        <v-text-field
+          v-model="name"
+          :counter="20"
+          label="Name"
+          required
+        />
 
-    <v-select
-      v-model="select"
-      :items="items"
-      label="Type"
-      required
-    />
+        <v-select
+          v-model="select"
+          :items="items"
+          label="Type"
+          required
+        />
 
-    <v-text-field
-      v-if="select == 'Protected'"
-      type="password"
-      v-model="password"
-      label="password"
-      required
-    />
+        <v-text-field
+          v-if="select == 'Protected'"
+          v-model="password"
+          type="password"
+          label="password"
+          required
+        />
 
         <v-btn
           color="success"
@@ -37,7 +37,7 @@
         </v-btn>
       </v-form>
     </v-row>
-</v-container>
+  </v-container>
 </template>
 
 <script lang="ts">

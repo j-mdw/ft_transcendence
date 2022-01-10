@@ -36,7 +36,6 @@
 
 <script lang="ts">
 import Vue from 'vue'
-// import { authenticationStore }  from '@store/index'
 export default Vue.extend({
   layout: 'empty',
   data () {
@@ -57,7 +56,6 @@ export default Vue.extend({
         this.user = await this.$axios.$get('random', { withCredentials: true })
         this.$router.push('/pseudo')
       } catch (error) {
-
         console.log('ooops', error);
       }
     },
