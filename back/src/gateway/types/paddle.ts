@@ -19,7 +19,7 @@ export class Paddle {
   updatePosition(keyPressed: GameKey) {
     if (keyPressed === GameKey.UpPress) this.y -= 30;
     if (keyPressed === GameKey.DownPress) this.y += 30;
-	if (this.y < (this.h / 2 + 50)) this.y = (this.h / 2 + 50)
+    if (this.y < this.h / 2 + 50) this.y = this.h / 2 + 50;
     if (this.y > 960 - 50 - this.h / 2) this.y = 960 - 50 - this.h / 2;
   }
 

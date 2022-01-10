@@ -6,10 +6,6 @@
         align="center"
         justify="center"
       >
-        <!-- <h1 v-if="user">
-          <br>welcome {{ user.pseudo }} <br>wants to play or watch a game ?
-        </h1> -->
-
         <v-row justify="center" align="center" class="mt-8">
           <template #activator="{ on, attrs }">
             <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">

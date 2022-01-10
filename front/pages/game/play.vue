@@ -1,4 +1,10 @@
 <template>
+<div v-if="game">
+  <div v-if="game.state == 0">
+  <h1>
+    {{ game.countdown }}
+  </h1>
+  </div>
   <div id="v-app" class="v-app">
     <canvas
       id="game"
@@ -6,6 +12,7 @@
       style="border: none"
       overscroll-behavior="none"
     ></canvas>
+  </div>
   </div>
 </template>
 

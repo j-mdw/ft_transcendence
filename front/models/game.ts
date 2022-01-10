@@ -62,4 +62,5 @@ export interface GameDTO {
   balls: Array<Ball>;
   player1: Player;
   player2: Player;
+  countdown: number;
 }

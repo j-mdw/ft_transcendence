@@ -56,14 +56,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { meStore, relationshipStore } from '~/store';
-import FileUpload from '~/components/FileUpload.vue';
+import { meStore, usersStore } from '~/store';
 import { User } from '~/models/user'
 import relationshipButtons from '~/components/relationshipButtons.vue';
-import { usersStore } from '~/store';
-// 0 = to add not friends yet
-// 1 = you are fiends
-// 2 = you are blocked
 
 export default Vue.extend({
   components: { relationshipButtons },

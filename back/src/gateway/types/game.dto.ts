@@ -68,6 +68,7 @@ export class GameDTO {
   balls: Array<BallDTO>;
   player1: PlayerDTO;
   player2: PlayerDTO;
+  countdown: number;
 
   constructor(
     id: string,
@@ -76,6 +77,7 @@ export class GameDTO {
     balls: Array<BallDTO>,
     player1: Player,
     player2: Player,
+    countdown: number,
   ) {
     this.id = id;
     this.state = gameState;
@@ -83,5 +85,6 @@ export class GameDTO {
     this.balls = balls;
     this.player1 = new PlayerDTO(player1);
     this.player2 = new PlayerDTO(player2);
+    this.countdown = countdown;
   }
 }
