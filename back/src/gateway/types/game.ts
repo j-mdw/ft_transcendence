@@ -32,15 +32,18 @@ export class Game {
   winScore: number;
   intervalId: NodeJS.Timer;
   state: GameState;
+  startTime: Date;
+  countdown: number;
 
   constructor(
     player1: Player,
     player2: Player,
     manager: GameManager,
-    style: GameStyle = GameStyle.classic,
-    winScore = 5,
     @Inject()
     private gatewayService: GatewayService,
+    style: GameStyle = GameStyle.classic,
+    winScore = 5,
+    countdown = 5,
   ) {
     this.roomId = this.createRoomId(player1.userId, player2.userId);
     this.player1 = player1;
@@ -53,11 +56,13 @@ export class Game {
     this.initBalls(style);
     this.winScore = winScore;
     this.state = GameState.beforeStart;
+    this.countdown = countdown;
   }
 
   start() {
     this.player1.socket.join(this.roomId);
     this.player2.socket.join(this.roomId);
+    this.startTime = new Date();
     this.intervalId = setInterval(() => {
       this.tick();
     }, 1000 / 30);
@@ -71,8 +76,11 @@ export class Game {
   private async tick() {
     switch (this.state) {
       case GameState.beforeStart:
-        this.state = GameState.playing;
-        break;
+        const secondsElapsed = this.getSecondsElapsed();
+        if (secondsElapsed > this.countdown) {
+          this.state = GameState.playing;
+          break;
+        }
       case GameState.playing:
         this.player1.updatePosition();
         this.player2.updatePosition();
@@ -99,6 +107,10 @@ export class Game {
     }
   }
 
+  private getSecondsElapsed(): number {
+    return (new Date().getTime() - this.startTime.getTime()) / 1000;
+  }
+
   private async saveResult() {
     await this.manager.userService.gameOver(
       this.player1.userId,
@@ -116,6 +128,7 @@ export class Game {
       this.balls.map((ball) => new BallDTO(ball)),
       this.player1,
       this.player2,
+      this.countdown - Math.floor(this.getSecondsElapsed()),
     );
     this.gatewayService.server
       .to(this.roomId)

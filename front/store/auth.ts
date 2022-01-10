@@ -1,6 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from 'vuex-module-decorators'
-import { $axios } from '~/utils/api'
 import { fetchStatusStore } from '.'
+import { $axios } from '~/utils/api'
 
 @Module({
   name: 'auth',

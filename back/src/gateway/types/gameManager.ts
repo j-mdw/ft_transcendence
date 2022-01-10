@@ -31,9 +31,9 @@ export class GameManager {
       player1,
       player2,
       this,
+      this.gatewayService,
       gameStyle,
       winScore,
-      this.gatewayService,
     );
     this.games.push(game);
     game.start(); //How do I remove game from array?

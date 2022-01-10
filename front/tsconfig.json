@@ -10,10 +10,9 @@
     ],
     "esModuleInterop": true,
     "allowJs": true,
-	"sourceMap": true,
-	// "strictNullChecks": false, // sinon partie Laurent ne compile pas(game/index.vue)
+  	"sourceMap": true,
     "strict": true,
-	"noEmit": true,
+  	"noEmit": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
