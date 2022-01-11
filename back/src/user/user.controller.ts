@@ -13,9 +13,10 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { UpdateUserDTO, UserDTO } from './user.dto';
+import { BanUserDTO, UpdateUserDTO, UserDTO } from './user.dto';
 import { Response } from 'express';
 import { JwtGuard } from 'src/auth/jwt.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -68,6 +69,15 @@ export class UserController {
   ): Promise<void> {
     console.log('Paths - user id:', response.locals.id);
     await this.userService.update(response.locals.id, data);
+  }
+
+  @Patch('admin/:id')
+  async adminAction(
+    @Res({ passthrough: true }) response: Response,
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() ban: BanUserDTO,
+  ): Promise<void> {
+    await this.userService.adminUpdate(response.locals.id, id, ban.ban);
   }
 
   @Delete()

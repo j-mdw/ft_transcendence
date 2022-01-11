@@ -65,7 +65,7 @@ export class UserDTO {
 }
 
 export class UpdateUserDTO extends PartialType(
-  OmitType(UserDTO, ['id', 'victories', 'defeats'] as const),
+  OmitType(UserDTO, ['id', 'victories', 'defeats', 'admin', 'banned'] as const),
 ) {}
 
 export enum UserStatus {
@@ -82,4 +82,9 @@ export class UpdateUserStatus {
     this.id = id;
     this.status = status;
   }
+}
+
+export class BanUserDTO {
+  @IsBoolean()
+  ban: boolean;
 }
