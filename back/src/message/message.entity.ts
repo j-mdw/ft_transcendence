@@ -12,6 +12,12 @@ export class Message {
   })
   message: string;
 
+  @Column({
+    nullable: false,
+    default: false,
+  })
+  gameInvite: boolean;
+
   @ManyToOne(() => Channel, (channel) => channel.id, {
     eager: true,
     onDelete: 'CASCADE',

@@ -121,7 +121,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() gameStyle: GameStyleDTO,
   ): Promise<void> {
-    console.log('Queue before join:', this.matchMaker.queue);
+    // console.log('Queue before join:', this.matchMaker.queue);
     const user = this.users.get(client.id);
     if (user) {
       const userEntity = await this.userService.findById(user.id);
@@ -134,7 +134,39 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
         user.status = UserStatus.playing;
         this.server.emit('status-update', this.users.get(client.id));
-        console.log('Queue after join:', this.matchMaker.queue);
+        // console.log('Queue after join:', this.matchMaker.queue);
+      }
+    }
+  }
+
+  @SubscribeMessage('game-play-private')
+  async addPrivatePlayer(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() opponentId: string,
+  ): Promise<void> {
+    // console.log('Queue before join:', this.matchMaker.privateQueue);
+    const user = this.users.get(client.id);
+    if (user.id === opponentId) {
+      throw new BadRequestException('wrong opponent id');
+    }
+    if (user) {
+      const userEntity = await this.userService.findById(user.id);
+      try {
+        await this.userService.findById(opponentId);
+      } catch {
+        throw new BadRequestException('wrong opponent id');
+      }
+      if (!this.gameManager.isPlaying(user.id)) {
+        this.matchMaker.joinPrivate(
+          client,
+          userEntity.id,
+          userEntity.pseudo,
+          GameStyle.classic,
+          opponentId,
+        );
+        user.status = UserStatus.playing;
+        this.server.emit('status-update', this.users.get(client.id));
+        // console.log('Queue after join:', this.matchMaker.privateQueue);
       }
     }
   }
@@ -158,7 +190,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() gameId?: GameIdDTO,
   ): void {
-    console.log('Queue before leave:', this.matchMaker.queue);
+    // console.log('Queue before leave:', this.matchMaker.queue);
+    // console.log('Private Queue before leave:', this.matchMaker.privateQueue);
     const user = this.users.get(client.id);
     if (user) {
       this.matchMaker.leave(user.id);
@@ -170,7 +203,8 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
       user.status = UserStatus.online;
       this.server.emit('status-update', this.users.get(client.id));
-      console.log('Queue after leave:', this.matchMaker.queue);
+      // console.log('Queue after leave:', this.matchMaker.queue);
+      // console.log('Private Queue after leave:', this.matchMaker.privateQueue);
     }
   }
 
@@ -220,7 +254,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       let channel: Channel;
       try {
         user = await this.userService.findById(uid);
-        console.log(channelId.toString());
         channel = await this.channelService.findOne(channelId.toString());
       } catch {
         throw new NotFoundException();
@@ -248,7 +281,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() peerId: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
-    console.log('Join DM request received');
     if (this.users.has(client.id)) {
       const uid = this.users.get(client.id).id;
       let user: User;
@@ -343,13 +375,19 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       } catch {
         throw new ForbiddenException('User is not a member');
       }
+      let invite: boolean;
+      if (msg.gameInvite) {
+        invite = msg.gameInvite;
+      } else {
+        invite = false;
+      }
       this.server
         .to(msg.channelId)
         .emit(
           'chat-message-to-client',
-          new MessageToClientDTO(user, chan.id, msg.message),
+          new MessageToClientDTO(user, chan.id, msg.message, invite),
         );
-      await this.channelService.addMessage(uid, chan.id, msg.message);
+      await this.channelService.addMessage(uid, chan.id, msg.message, invite);
     }
   }
 
