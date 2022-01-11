@@ -78,10 +78,10 @@ export class Game {
       case GameState.beforeStart:
         const secondsElapsed = this.getSecondsElapsed();
         if (secondsElapsed > this.countdown) {
-		  this.state = GameState.playing;
-		  this.player1.paddle.init(40);
-		  this.player2.paddle.init(1240);
-		  this.initBalls(this.type);
+          this.state = GameState.playing;
+          this.player1.paddle.init(40);
+          this.player2.paddle.init(1240);
+          this.initBalls(this.type);
           break;
         }
       case GameState.playing:

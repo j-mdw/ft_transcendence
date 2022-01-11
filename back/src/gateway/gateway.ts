@@ -72,7 +72,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
       const decoded = await this.authService.verify(token);
       if (decoded) {
-        if (await this.authService.userExist(decoded['userId'])) {
+        if (await this.authService.userHasAccess(decoded['userId'])) {
           console.log('WS auth successful');
           this.users.set(
             socket.id,

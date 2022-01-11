@@ -38,6 +38,12 @@ export class UserDTO {
   @IsNumber()
   defeats: number;
 
+  @IsBoolean()
+  admin: boolean;
+
+  @IsBoolean()
+  banned: boolean;
+
   @IsString()
   twoFactorAuthenticationSecret?: string;
 
@@ -50,6 +56,8 @@ export class UserDTO {
     this.avatarPath = user.avatarPath;
     this.victories = user.victories;
     this.defeats = user.defeats;
+    this.admin = user.admin;
+    this.banned = user.banned;
     this.isTwoFactorAuthenticationEnabled =
       user.isTwoFactorAuthenticationEnabled;
     this.twoFactorAuthenticationSecret = user.twoFactorAuthenticationSecret;

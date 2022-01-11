@@ -15,7 +15,7 @@ export class JwtTwoFactorGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const decoded = this.authService.verify(request.cookies['token2fa']);
-    if (decoded && (await this.authService.userExist(decoded['userId']))) {
+    if (decoded && (await this.authService.userHasAccess(decoded['userId']))) {
         console.log('huhuhu');
         return true;
     } else {

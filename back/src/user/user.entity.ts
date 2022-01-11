@@ -41,8 +41,17 @@ export class User {
   })
   defeats: number;
 
-  // @Exclude()
-  // public currentHashedRefreshToken?: string;
+  @Column({
+    nullable: false,
+    default: false,
+  })
+  admin: boolean;
+
+  @Column({
+    nullable: false,
+    default: false,
+  })
+  banned: boolean;
 
   @Column({
     nullable: true,

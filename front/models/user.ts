@@ -9,6 +9,8 @@ export class User {
   pseudo: string = ''
   victories = 0;
   defeats = 0;
+  admin = false;
+  banned = false;
   avatarPath: string = ''
   status: UserStatus = UserStatus.offline
 }

@@ -80,9 +80,14 @@ export class UserService {
   Create the user and doesn't return anything
   */
   async create(data: CreateUserDTO): Promise<void> {
+    let admin = false;
+    if ((await this.userRepository.count()) == 0) {
+      admin = true;
+    }
     const now = new Date();
     await this.userRepository.save({
       ...data,
+      admin: admin,
       createdAt: now,
       updatedAt: now,
     });
@@ -120,6 +125,12 @@ export class UserService {
       }
       if (isUsed == true) {
         throw new ConflictException('Pseudo already in use!');
+      }
+    }
+    if (data.admin || data.banned) {
+      const userUpdating = await this.findById(id);
+      if (userUpdating.admin !== true) {
+        throw new ForbiddenException('User is not admin');
       }
     }
     for (const prop in data) {

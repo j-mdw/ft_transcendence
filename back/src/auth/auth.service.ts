@@ -48,10 +48,14 @@ export class AuthService {
     }
   }
 
-  async userExist(id: string): Promise<boolean> {
+  async userHasAccess(id: string): Promise<boolean> {
     try {
-      await this.userService.findById(id);
-      return true;
+      const user = await this.userService.findById(id);
+      if (!user.banned) {
+        return true;
+      } else {
+        return false;
+      }
     } catch {
       return false;
     }
@@ -66,20 +70,4 @@ export class AuthService {
     }
     return result;
   }
-
-  // public getCookieWithJwtAccessToken(
-  //   userId: string,
-  //   isSecondFactorAuthenticated = false,
-  // ) {
-  //   const payload: TokenPayload = { userId, twofa };
-  //   const token = this.jwtService.sign(payload, {
-  //     secret: this.configService.get('JWT_ACCESS_TOKEN_SECRET'),
-  //     expiresIn: `${this.configService.get(
-  //       'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-  //     )}s`,
-  //   });
-  //   return `Authentication=${token}; HttpOnly; Path=/; Max-Age=${this.configService.get(
-  //     'JWT_ACCESS_TOKEN_EXPIRATION_TIME',
-  //   )}`;
-  // }
 }
