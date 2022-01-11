@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   forwardRef,
@@ -127,19 +128,28 @@ export class UserService {
         throw new ConflictException('Pseudo already in use!');
       }
     }
-    if (data.admin || data.banned) {
-      const userUpdating = await this.findById(id);
-      if (userUpdating.admin !== true) {
-        throw new ForbiddenException('User is not admin');
-      }
-    }
     for (const prop in data) {
-      if (data[prop] !== undefined) {
+      if (data[prop] !== undefined && prop !== 'admin' && prop !== 'ban') {
         editedUser[prop] = data[prop];
       }
     }
     editedUser.updatedAt = new Date();
     await this.userRepository.save(editedUser);
+  }
+
+  async adminUpdate(adminId: string, userId: string, ban: boolean) {
+    const admin = await this.findById(adminId);
+    if (!admin.admin) {
+      throw new ForbiddenException('User is not admin');
+    }
+    if (adminId === userId) {
+      throw new BadRequestException();
+    }
+    const user = await this.findById(userId);
+    if (!user.admin) {
+      user.banned = ban;
+    }
+    await this.userRepository.save(user);
   }
 
   async delete(id: string): Promise<DeleteResult> {

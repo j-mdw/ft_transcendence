@@ -19,3 +19,7 @@ export class StatusUpdate {
   id: string = ''
   status: UserStatus = UserStatus.offline
 }
+
+export interface BanUserDTO {
+  ban: boolean;
+}
