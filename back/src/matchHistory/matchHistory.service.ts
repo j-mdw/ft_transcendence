@@ -24,9 +24,12 @@ export class MatchHistoryService {
         },
       })
     ).map((match) => {
-      const tmp = match.user1;
+      const tmpUsr = match.user1;
       match.user1 = match.user2;
-      match.user2 = tmp;
+      match.user2 = tmpUsr;
+      const tmpScore = match.user1Score;
+      match.user1Score = match.user2Score;
+      match.user2Score = tmpScore;
       return match;
     });
     return u1Matches.concat(u2Matches);

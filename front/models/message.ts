@@ -3,6 +3,7 @@ export interface MessageReceived {
   userId: string,
   pseudo: string,
   message: string,
+  gameInvite?: boolean;
 }
 
 export interface MessageToServerDTO {
