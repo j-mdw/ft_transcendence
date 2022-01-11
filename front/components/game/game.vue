@@ -1,7 +1,18 @@
 
    
 <template>
+
 <div v-if="game">
+  <div  v-if="!game.id">
+    <v-alert
+      class="mt-6 our_yellow"
+      height="50"
+    >
+      <v-row justify="center" align="center" >
+        You need to wait for an opponent !
+      </v-row>
+    </v-alert>
+  </div>
   <v-row justify="center" align="center" >
         <v-col v-if="game.player1">
            <h3>{{getPseudo(game.player1.id)}}  </h3>
@@ -199,4 +210,5 @@ export default Vue.extend({
   overflow: hidden !important;
   display: block;
 }
+
 </style>

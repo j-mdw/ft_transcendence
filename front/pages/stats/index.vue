@@ -130,7 +130,7 @@ export default Vue.extend({
       if(win == 0)
         return 0
       else
-        return (win * 0.40);
+        return (win * 0.4);
     },
   },
 

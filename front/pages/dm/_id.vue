@@ -12,7 +12,12 @@
               <v-row class="mt-7 mb-7">    
                     <profil-chat :user-id="msg.userId"/>
                 <div class="message-background_left">
-                  <div class="message_left">
+                  <div v-if="msg.gameInvite">
+                    <v-btn class="our_yellow" @click="joinPrivateGame()">
+                      join the game
+                    </v-btn>
+                  </div>
+                  <div v-else class="message_left">
                     {{ msg.message }}
                   </div>
                 </div>
@@ -40,6 +45,16 @@
           Send
         </v-btn>
       </v-col>
+      <v-col>
+        <v-btn
+          elevation="2"
+          class="mt-6 our_light_pink"
+          @click="sendGameInvite()"
+        >
+          Play pong
+          <pingpong-logo  class="ml-5 mt-2 mb-2"/>
+        </v-btn>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -48,10 +63,14 @@
 import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
+
 import { channelsStore, messagesStore, usersStore } from '~/store'
+import PingpongLogo from '~/components/Logo/pingpongLogo.vue'
+import { MessageReceived, MessageToServerDTO } from "~/models";
 export default Vue.extend({
-  components: { settingsChat, profilChat },
+  components: { settingsChat, profilChat, PingpongLogo },
   layout: 'default',
+    
   data () {
     return {
       current_message: '',
@@ -78,6 +97,29 @@ export default Vue.extend({
         this.current_message = '';
         //this.scrollToEnd();
       },
+
+      sendGameInvite() {
+        const input: MessageToServerDTO = {
+          channelId: this.channelid,
+          message: "join",
+          gameInvite: true,
+        }
+        this.$socket.client.emit('chat-DM-message', input);
+        console.log("sent")
+        console.log(this.messages)
+      },
+
+      joinPrivateGame() {
+        const str = this.$route.params.id;
+        this.peerId = str.split(':').pop() || '';
+        if(this.peerId)
+        {
+          this.$socket.client.emit('game-play-private', this.peerId);
+          this.$router.push("/game/play")
+        }
+          
+      },
+
       getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
     },
