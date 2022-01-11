@@ -1,13 +1,5 @@
 <template>
 <v-container fill-height>
-    <v-row justify="center" align="center" >
-        <v-col>
-           <h3> User 1</h3>
-        </v-col>
-        <v-col align="right" class="mr-3" >
-            <h3> User 2</h3>
-        </v-col>
-    </v-row>
  <game/>
 </v-container>
 </template>

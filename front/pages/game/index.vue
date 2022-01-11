@@ -2,42 +2,26 @@
   <v-container fill-height>
     <v-row justify="center" align="center">
       <v-col
-        sm="3"
-        align="center"
-        justify="center"
-      >
-        <v-row justify="center" align="center" class="mt-8">
-          <template #activator="{ on, attrs }">
-            <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-6" v-on="on">
-              game rules
-              <v-icon color="#395c6b" right>
-                fa fa-align-justify
-              </v-icon>
-            </v-btn>
-          </template>
-        </v-row>
-      </v-col>
-      <v-col
         sm="9"
         align="center"
         justify="center"
       >
         <v-card
-          class="pa-2 mb-7 mt-7"
+          class="pa-2 mb-7 mt-7 our_dark_beige"
           color="#F7C678"
           outlined
           align="center"
           max-width="500px"
         >
-          <div> Play Game </div>
+          <div class="our_navy_blue--text"> <h3> Play Game </h3> </div>
           <div class="tab-row">
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(0)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(0)">
               Classic
             </v-btn>
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(1)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(1)">
               Multiballs
             </v-btn>
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickPlay(2)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(2)">
               Rookie
             </v-btn>
           </div>
@@ -46,23 +30,21 @@
           </div> -->
         </v-card>
         <v-card
-          class="pa-2 mb-7 mt-7"
+          class="pa-2 mb-7 mt-7 our_dark_beige"
           color="#F7C678"
           outlined
           align="center"
           max-width="500px"
         >
-          <div>
-            Watch Game
-          </div>
+          <div class="our_navy_blue--text"> <h3> Watch Game </h3> </div>
           <div class="tab-row">
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(0)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(0)">
               Classic
             </v-btn>
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(1)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(1)">
               Multiballs
             </v-btn>
-            <v-btn class="mt-6 tab-btn" color="#f5cac3" @click="buttonClickWatch(2)">
+            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(2)">
               Rookie
             </v-btn>
           </div>
@@ -70,6 +52,14 @@
             <br> {{ gameUnavailable }} <br>
           </div>
         </v-card>
+        <v-row justify="center" align="center" class="mt-8">
+            <v-btn color="#f5cac3" to="/game/rules" class="mt-6">
+              game rules
+              <v-icon color="#395c6b" right>
+                fa fa-align-justify
+              </v-icon>
+            </v-btn>
+        </v-row>
       </v-col>
     </v-row>
   </v-container>

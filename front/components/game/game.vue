@@ -2,6 +2,17 @@
    
 <template>
 <div v-if="game">
+  <v-row justify="center" align="center" >
+        <v-col v-if="game.player1">
+           <h3>{{getPseudo(game.player1.id)}}  </h3>
+        </v-col>
+        <v-col v-if="game.player1" align="center" class="ml-3">
+          <h3 v-if="game.player2"> {{game.player1.score}} - {{game.player2.score}}</h3>
+        </v-col>
+        <v-col  v-if="game.player2" align="right" class="mr-3" >
+            <h3>{{getPseudo(game.player2.id)}} </h3>
+        </v-col>
+  </v-row>
   <div v-if="game.state == 0">
   <h1>
     {{ game.countdown }}
@@ -32,10 +43,9 @@ import {
   PaddleMoveDTO,
   Role,
 } from "~/models";
-import { gameStatusStore, meStore } from "~/store";
+import { gameStatusStore, meStore, usersStore } from "~/store";
 export default Vue.extend({
   middleware: ['auth', 'fetch'],
-  layout: "empty",
   data() {
     return {
       game: Object() as GameDTO,
@@ -127,6 +137,11 @@ export default Vue.extend({
       window.removeEventListener("keydown", this.keydownListener);
       window.removeEventListener("keyup", this.keyupListener);
       window.removeEventListener("resize", this.createScreen);
+    },
+
+     getPseudo(peerId: string)
+    {
+        return usersStore.oneUser(peerId).pseudo;
     },
   },
   computed: {
