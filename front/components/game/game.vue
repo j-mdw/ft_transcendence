@@ -3,15 +3,46 @@
 <template>
 
 <div v-if="game">
-  <div  v-if="!game.id">
-    <v-alert
-      class="mt-6 our_yellow"
-      height="50"
+  <div v-if="!game.id"  id="v-app" class="v-app">
+    <v-overlay>
+    <v-card
+      class="mt-6 our_beige our_navy_blue--text"
+      height="200"
+      width="400"
     >
-      <v-row justify="center" align="center" >
-        You need to wait for an opponent !
+      <v-row justify="center" align="center" class="mt-8" >
+        <h3>You need to wait for your opponent !</h3>
       </v-row>
-    </v-alert>
+      <v-row align="center" justify="center" class="mt-12">
+      <v-progress-circular
+        :size="70"
+        indeterminate
+        color="primary"
+      ></v-progress-circular>
+      </v-row>
+    </v-card>
+    
+    </v-overlay>
+  </div>
+  <div  v-if="game.state">
+    <div v-if="game.state == 2">
+    <v-overlay>
+      <v-card
+      class="mt-6 our_beige our_navy_blue--text"
+      height="200"
+      width="400"
+    >
+    <v-row justify="center" align="center" class= "our_navy_blue--text mt-10" >
+      <h2> {{getPseudo(getWinner())}} Won !!! </h2>
+    </v-row>
+    <v-row v-if="game.state == 2" justify="center" align="center" >
+      <v-btn to="/game" class="our_dark_pink mt-10" >
+        got back to game page
+      </v-btn>
+    </v-row>
+    </v-card>
+    </v-overlay>
+    </div>
   </div>
   <v-row justify="center" align="center" >
         <v-col v-if="game.player1">
@@ -29,6 +60,7 @@
     {{ game.countdown }}
   </h1>
   </div>
+  
   <div id="v-app" class="v-app">
     <canvas
       id="game"
@@ -152,8 +184,19 @@ export default Vue.extend({
 
      getPseudo(peerId: string)
     {
-        return usersStore.oneUser(peerId).pseudo;
+        if(usersStore.oneUser(peerId))
+          return usersStore.oneUser(peerId).pseudo;
+        else
+          return '';
     },
+
+    getWinner()
+    {
+      if (this.game.player1.score > this.game.player2.score)
+        return this.game.player1.id;
+      else
+        return this.game.player2.id;
+    }
   },
   computed: {
     role: function() {

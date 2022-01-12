@@ -51,7 +51,6 @@ export default Vue.extend({
   },
   methods: {
     async createRandomUser () {
-      console.log('randomeeee')
       try {
         this.user = await this.$axios.$get('random', { withCredentials: true })
         this.$router.push('/pseudo')

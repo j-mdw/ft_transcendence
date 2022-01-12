@@ -26,21 +26,11 @@ export default Vue.extend({
       this.$router.push('/auth/twofa');
     } else if (res.user.pseudo) {
       authenticationStore.setLogin()
-      this.$router.push('/home')
+      this.$router.push('/')
     } else {
       this.$router.push('/pseudo')
     }
   },
-//   methods: {
-//     async goTwoFa () {
-      // this.user = await this.$axios.$get("user/me", {withCredentials: true});
-      // if(this.user.isTwoFactorAuthenticationEnabled)
-      // {
-    //       		console.log('two factor')
-    //   this.$router.push('/auth/twofa');
-      // }
-    // }
-//   }
 })
 </script>
 
