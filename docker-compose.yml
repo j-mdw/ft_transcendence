@@ -1,28 +1,6 @@
 version: "3.7"
 
 services:
-    # mysql:
-    #     image: mysql:8.0.26
-    #     container_name: mysql
-    #     restart: always
-    #     environment:
-    #         MYSQL_DATABASE: transcendence
-    #         MYSQL_ROOT_PASSWORD: user42
-    #     ports:
-    #         - "3306:3306"
-
-    # phpmyadmin:
-    #     image: phpmyadmin/phpmyadmin:5.1.1
-    #     container_name: phpmyadmin
-    #     restart: always
-    #     links:
-    #         - mysql
-    #     environment:
-    #         PMA_HOST: mysql
-    #         PMA_PORT: 3306
-    #     ports:
-    #         - "8080:80"
-    
     db:
         image: postgres:14.1
         container_name: postgres
@@ -31,6 +9,8 @@ services:
             POSTGRES_USER: root
             POSTGRES_PASSWORD: user42
             POSTGRES_DB: transcendence
+        volumes:
+        - ./postgres-data:/var/lib/postgresql/data
         ports:
         - "5432:5432"
         

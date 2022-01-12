@@ -5,7 +5,7 @@ import VueSocketIOExt from 'vue-socket.io-extended'
 import { MessageReceived, Relationship, StatusUpdate } from '~/models';
 // import { getters } from '~/store';
 
-const socket: Socket = io('/api/', {
+const socket: Socket = io({
   autoConnect: false,
   withCredentials: true
 });
