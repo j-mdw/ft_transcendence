@@ -1,0 +1,18 @@
+FROM ubuntu:18.04
+
+RUN apt-get update && apt-get install -y \
+	git \
+	curl
+
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - && \
+    apt-get install -y nodejs
+
+RUN mkdir /app
+
+WORKDIR /app
+
+COPY . .
+
+RUN rm -rf node_modules && npm install
+
+CMD npm run build && npm run start

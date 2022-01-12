@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+    # mysql:
+    #     image: mysql:8.0.26
+    #     container_name: mysql
+    #     restart: always
+    #     environment:
+    #         MYSQL_DATABASE: transcendence
+    #         MYSQL_ROOT_PASSWORD: user42
+    #     ports:
+    #         - "3306:3306"
+
+    # phpmyadmin:
+    #     image: phpmyadmin/phpmyadmin:5.1.1
+    #     container_name: phpmyadmin
+    #     restart: always
+    #     links:
+    #         - mysql
+    #     environment:
+    #         PMA_HOST: mysql
+    #         PMA_PORT: 3306
+    #     ports:
+    #         - "8080:80"
+    
+    db:
+        image: postgres:14.1
+        container_name: postgres
+        restart: always
+        environment:
+            POSTGRES_USER: root
+            POSTGRES_PASSWORD: user42
+            POSTGRES_DB: transcendence
+        ports:
+        - "5432:5432"
+        
+    adminer:
+        image: adminer
+        container_name: adminer
+        restart: always
+        ports:
+        - "8080:8080"
+    
+    reverse-proxy:
+        image: nginx:1.20.2
+        container_name: nginx
+        restart: always
+        volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+        - "80:80"
+
+    front:
+        container_name: frontend
+        build:
+            context: ./front
+            dockerfile: Dockerfile.front
+        ports:
+        - "3000:3000"
+
+    back:
+        container_name: backend
+        build:
+            context: ./back
+            dockerfile: Dockerfile.back
+        ports:
+        - "4000:4000"
