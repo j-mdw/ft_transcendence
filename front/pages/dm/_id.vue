@@ -66,8 +66,7 @@ import profilChat from '~/components/chat/profileChat.vue'
 
 import { channelsStore, messagesStore, usersStore } from '~/store'
 import PingpongLogo from '~/components/Logo/pingpongLogo.vue'
-import { MessageReceived, MessageToServerDTO } from "~/models";
-
+import { MessageReceived, MessageToServerDTO, ChannelDTO } from "~/models";
 export default Vue.extend({
   components: { settingsChat, profilChat, PingpongLogo },
   layout: 'default',
@@ -80,13 +79,13 @@ export default Vue.extend({
     }
   },
   computed: {
-      channelid () {
+      channelid () : string {
           return messagesStore.currentChannelId;
       },
-      thisChannel () {
+      thisChannel () :  ChannelDTO | undefined {
         return  channelsStore.one(this.$route.params.id);
       },
-      messages () {
+      messages () :  MessageReceived[] {
         return messagesStore.channelMessages;
       }
       

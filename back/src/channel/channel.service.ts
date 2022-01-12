@@ -228,7 +228,8 @@ export class ChannelService {
     }
     if (data.type == ChannelType.protected) {
       if (data.password != undefined) {
-        channel.password = data.password;
+        const saltOrRounds = 10;
+        channel.password = await bcrypt.hash(data.password, saltOrRounds);
       } else {
         throw new BadRequestException(
           'No password provided for protected channel',
