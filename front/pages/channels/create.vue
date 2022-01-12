@@ -36,6 +36,15 @@
           Send
         </v-btn>
       </v-form>
+      <div v-if="alertCreation == true">
+          <v-alert
+            type="error"
+            class=""
+          >
+            Sorry an error occured <br>
+            maybe you forgot the password for a protected channel
+          </v-alert>
+        </div>
     </v-row>
   </v-container>
 </template>
@@ -53,19 +62,26 @@ export default Vue.extend({
     name: '',
     select: '',
     password: '',
+    alertCreation: false,
   }),
 
   methods: {
     async createChannel () {
+      this.alertCreation = false;
       const input: CreateChannelDTO = {
         name: this.name,
         type: this.items.indexOf(this.select),
         password: this.password,
       }
-      await this.$axios.$put('channel', input, { withCredentials: true });
-      this.$router.push({
-        path: '/channels'
-      });
+      try {
+        await this.$axios.$put('channel', input, { withCredentials: true });
+      }
+      catch (error: Error | any) {
+        this.alertCreation = true;
+        console.log(error.response.data)
+      }
+      if(!this.alertCreation )
+        this.$router.push({ path: '/channels' });
       channelsStore.fetch();
     }
   }

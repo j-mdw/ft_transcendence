@@ -108,10 +108,11 @@ export default Vue.extend({
 
     getLevel() {
       let win = this.getVictories();
+      console.log(win)
       if(win == 0)
         return 0
       else
-        return (win * 0.40);
+        return (Math.round((win * 0.4) * 100) / 100);
     },
   },
 
