@@ -21,7 +21,7 @@
                 <router-link :to="`/profile/${user.id}`">
                   <v-list-item-avatar class="mt-4 mb-4">
                     <v-img
-                      :src="`http://localhost:4000/${user.avatarPath}`"
+                      :src="`/api/${user.avatarPath}`"
                     />
                   </v-list-item-avatar>
                 </router-link>

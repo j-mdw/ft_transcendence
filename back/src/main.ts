@@ -12,7 +12,7 @@ async function bootstrap() {
       skipNullProperties: false,
     }),
   );
-  app.enableCors({ credentials: true, origin: 'http://localhost:3000' });
+  app.enableCors({ credentials: true, origin: 'http://localhost' });
   app.use(cookieParser());
   app.useGlobalFilters(new DatabaseExceptionFilter());
   await app.listen(4000);

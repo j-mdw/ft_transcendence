@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-avatar size="250px">
-      <v-img :src="`http://localhost:4000/${avatarUrl}`" />
+      <v-img :src="`/api/${avatarUrl}`" />
     </v-avatar>
     <v-dialog
       v-model="dialog"

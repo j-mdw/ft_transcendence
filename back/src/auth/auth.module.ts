@@ -5,7 +5,7 @@ import { GoogleStrategy } from './google.strategy';
 import { UserModule } from 'src/user/user.module';
 import { school42Strategy } from './42.strategy';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtStrategy } from './jwt.Strategy';
+import { JwtStrategy } from './jwt.strategy';
 import { JwtGuard } from './jwt.guard';
 import { TwoFactorAuthenticationService } from './twoFactor/twoFactorAuthentication.service';
 import { TwoFactorAuthenticationController } from './twoFactor/twoFactorAuthentication.controller';

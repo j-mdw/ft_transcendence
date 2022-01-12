@@ -2,10 +2,10 @@
 import Vue from 'vue'
 import { io, Socket } from 'socket.io-client'
 import VueSocketIOExt from 'vue-socket.io-extended'
-import { GameStyleDTO, MessageReceived, Relationship, StatusUpdate } from '~/models';
+import { MessageReceived, Relationship, StatusUpdate } from '~/models';
 // import { getters } from '~/store';
 
-const socket: Socket = io('http://localhost:4000', {
+const socket: Socket = io('/api/', {
   autoConnect: false,
   withCredentials: true
 });

@@ -10,10 +10,9 @@
           size="250px"
         >
           <img
-            :src="`http://localhost:4000/${user.avatarPath}`"
+            :src="`/api/${user.avatarPath}`"
           >
         </v-avatar>
-       
 
         <h1 v-if="user">
           <br>welcome {{ user.pseudo }}
@@ -24,7 +23,7 @@
         align="center"
         justify="center"
       >
-       <v-row justify="center" align="center" class="mt-8">
+        <v-row justify="center" align="center" class="mt-8">
           <v-btn color="#f5cac3" to="/profile/settings" class="mt-6">
             my settings
             <v-icon color="#395c6b" right>
@@ -56,12 +55,12 @@
               offset-x="8"
               :content="friends_request"
             >
-            <v-btn color="#f5cac3" to="/profile/requestList" class="mt-6">
-              see friends request
-              <v-icon color="#395c6b" right>
-                fa-users
-              </v-icon>
-            </v-btn>
+              <v-btn color="#f5cac3" to="/profile/requestList" class="mt-6">
+                see friends request
+                <v-icon color="#395c6b" right>
+                  fa-users
+                </v-icon>
+              </v-btn>
             </v-badge>
           </v-row>
         </div>

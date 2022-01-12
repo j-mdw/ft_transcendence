@@ -42,11 +42,11 @@ export default {
       const formData = new FormData();
       formData.append('file', this.selectedFile); // appending file
       console.log('Uploading file:', formData); // DELETE
-      await axios.delete('http://localhost:4000/user/delete/avatar', {
+      await axios.delete('/api/user/delete/avatar', {
         withCredentials: true,
       });
 
-      await axios.post('http://localhost:4000/user/upload/avatar', formData, {
+      await axios.post('/api/user/upload/avatar', formData, {
         withCredentials: true,
       });
       meStore.fetch();

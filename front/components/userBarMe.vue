@@ -10,7 +10,7 @@
         >
           <router-link to="/profile">
             <v-list-item-avatar>
-              <v-img :src="`http://localhost:4000/${me.avatarPath}`" />
+              <v-img :src="`/api/${me.avatarPath}`" />
             </v-list-item-avatar>
           </router-link>
         </v-badge>
@@ -19,7 +19,7 @@
         >
           <router-link to="/profile">
             <v-list-item-avatar>
-              <v-img :src="`http://localhost:4000/${me.avatarPath}`" />
+              <v-img :src="`/api/${me.avatarPath}`" />
             </v-list-item-avatar>
           </router-link>
         </div>

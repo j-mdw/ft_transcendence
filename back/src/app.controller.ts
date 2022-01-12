@@ -8,11 +8,6 @@ import { JwtGuard } from './auth/jwt.guard';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  // @Get() //DELETE
-  // getHello(): string {
-  //   return this.appService.getHello();
-  // }
-
   @Get('/avatars/ours/:filename')
   async seeUploadedFile(@Param('filename') filename: string, @Res() res) {
     console.log('Avatar path:', filename);

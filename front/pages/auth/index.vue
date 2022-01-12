@@ -8,7 +8,7 @@
             class="mx-8"
             fab
             color="#F6BD60"
-            href="http://localhost:4000/42"
+            href="/api/42"
           >
             <img style="height:36px" src="../../assets/logo/42_white.svg">
           </v-btn>
@@ -16,7 +16,7 @@
             class="mx-8"
             fab
             color="#F6BD60"
-            href="http://localhost:4000/google"
+            href="/api/google"
           >
             <img style="height:36px" src="../../assets/logo/google_white.svg">
           </v-btn>

@@ -1,53 +1,53 @@
 <template>
-<div v-if="doIhaverequest == 0">
-         <v-row justify="center" class="mt-11">
-            <h1>
-              you have no more request<br>
-            </h1>
-          </v-row>
-      </div>
-      <div v-else>
-  <div class="mt-5">
-    <v-list class="our_beige">
-      <div v-for="relationship in relationships" :key="relationship.type">
-        <div v-if="relationship.type == 2">
-          <v-list-item class="ml-n3">
-            <v-badge
-              bottom
-              :color="colors[getStatus(relationship.peerId)]"
-              offset-x="30"
-              offset-y="30"
-            >
-              <router-link :to="`/profile/${relationship.peerId}`">
-                <v-list-item-avatar class="mt-4 mb-4">
-                  <v-img
-                    :src="`http://localhost:4000/${getAvatar(relationship.peerId)}`"
-                  />
-                </v-list-item-avatar>
-              </router-link>
-            </v-badge>
-            <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
-            <v-col>
-              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="becomeFriends(relationship.peerId)">
-                become friend
-                <v-icon color="#395c6b" right>
-                  fas fa-user-check
-                </v-icon>
-              </v-btn>
-            </v-col>
-            <v-col>
-              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="deleteFriends(relationship.peerId)">
-                delete invitation
-                <v-icon color="#395c6b" right>
-                  fas fa-trash-alt
-                </v-icon>
-              </v-btn>
-            </v-col>
-          </v-list-item>
-        </div>
-      </div>
-    </v-list>
+  <div v-if="doIhaverequest == 0">
+    <v-row justify="center" class="mt-11">
+      <h1>
+        you have no more request<br>
+      </h1>
+    </v-row>
   </div>
+  <div v-else>
+    <div class="mt-5">
+      <v-list class="our_beige">
+        <div v-for="relationship in relationships" :key="relationship.type">
+          <div v-if="relationship.type == 2">
+            <v-list-item class="ml-n3">
+              <v-badge
+                bottom
+                :color="colors[getStatus(relationship.peerId)]"
+                offset-x="30"
+                offset-y="30"
+              >
+                <router-link :to="`/profile/${relationship.peerId}`">
+                  <v-list-item-avatar class="mt-4 mb-4">
+                    <v-img
+                      :src="`/api/${getAvatar(relationship.peerId)}`"
+                    />
+                  </v-list-item-avatar>
+                </router-link>
+              </v-badge>
+              <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
+              <v-col>
+                <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="becomeFriends(relationship.peerId)">
+                  become friend
+                  <v-icon color="#395c6b" right>
+                    fas fa-user-check
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col>
+                <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="deleteFriends(relationship.peerId)">
+                  delete invitation
+                  <v-icon color="#395c6b" right>
+                    fas fa-trash-alt
+                  </v-icon>
+                </v-btn>
+              </v-col>
+            </v-list-item>
+          </div>
+        </div>
+      </v-list>
+    </div>
   </div>
 </template>
 
@@ -77,12 +77,11 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
-    doIhaverequest(): number {
+    doIhaverequest (): number {
       let j = 0;
 
       for (let i = 0; this.relationships[i]; i++) {
-        if(this.relationships[i].type == 2)
-          j++
+        if (this.relationships[i].type == 2) { j++ }
       }
       return j;
     }

@@ -4,20 +4,20 @@
     <v-row justify="center" align="center">
       <v-col sm="4" align="center" justify="center">
         <v-avatar size="250px">
-          <img :src="`http://localhost:4000/${user.avatarPath}`">
+          <img :src="`/api/${user.avatarPath}`">
         </v-avatar>
-       
+
         <h1 v-if="user">
           <br>
           {{ user.pseudo }}
         </h1>
       </v-col>
       <v-col sm="8" align="center" justify="center">
-         <v-row justify="center" align="center" class="mt-8">
+        <v-row justify="center" align="center" class="mt-8">
           <relationship-buttons :user-id="$route.params.id" />
         </v-row>
         <v-row justify="center" align="center">
-          <v-btn color="#f5cac3" :to="`/stats/${this.$route.params.id}`" class="mt-6">
+          <v-btn color="#f5cac3" :to="`/stats/${$route.params.id}`" class="mt-6">
             stats
             <v-icon color="#395c6b" right>
               fa-chart-line

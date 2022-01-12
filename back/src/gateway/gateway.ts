@@ -43,7 +43,7 @@ export class GameStyleDTO {
 @UsePipes(new ValidationPipe())
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost',
     credentials: true,
   },
 })

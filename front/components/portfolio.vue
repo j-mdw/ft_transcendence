@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     async loadUsers () {
-      const notes = await this.$axios.$get('https://localhost:4000/notes');
+      const notes = await this.$axios.$get('/api/notes');
       this.notes = notes
     }
   }
