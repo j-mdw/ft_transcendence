@@ -56,7 +56,7 @@
           max-width="500px"
         >
           <h3>
-            Victories : {{getVictories()}} / {{getMatches()}}
+            Victories : {{me.victories}}  / {{getMatches()}}
           </h3>
         </v-card>
         <v-card
@@ -68,7 +68,7 @@
         >
 
           <h3>
-            Losses : {{getLosses()}} / {{getMatches()}}
+            Defeats : {{me.defeats}}  / {{getMatches()}}
           </h3>
         </v-card>
         

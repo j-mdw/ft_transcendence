@@ -41,7 +41,7 @@
           max-width="500px"
         >
           <h3>
-            Victories : {{getVictories()}} / {{getMatches()}}
+            Victories : {{user.victories}} / {{getMatches()}}
           </h3>
         </v-card>
         <v-card
@@ -52,7 +52,7 @@
           max-width="500px"
         >
           <h3>
-            Losses : {{getLosses()}} / {{getMatches()}}
+            Defeats : {{user.defeats}} / {{getMatches()}}
           </h3>
         </v-card>
 
@@ -79,7 +79,10 @@ export default Vue.extend({
     };
   },
 
-  computed: {      
+  computed: {  
+      user (): User {
+      return usersStore.oneUser(this.$route.params.id);
+    },
   },
 
     methods: {
