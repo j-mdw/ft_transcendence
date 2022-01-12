@@ -65,6 +65,16 @@
             </v-badge>
           </v-row>
         </div>
+        <div v-if="user.admin">
+          <v-row justify="center" align="center" class="mt-8">
+            <v-btn color="#f5cac3" to="/profile/admin" class="mt-6">
+              see my admin privilege
+              <v-icon color="#395c6b" right>
+                fa-users
+              </v-icon>
+            </v-btn>
+          </v-row>
+        </div>
       </v-col>
     </v-row>
   </v-container>
