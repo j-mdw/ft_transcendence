@@ -48,7 +48,7 @@
           </div>
         </v-list>
       </div>
-      <div v-else>
+      <!-- <div v-else>
         <div class="mt-5">
           <v-list class="our_dark_beige">
             <div v-for="match in matches" :key="match.user1Id">
@@ -93,7 +93,7 @@
             </div>
           </v-list>
         </div>
-      </div>
+      </div> -->
     </div>
   </v-card>
 </template>
@@ -118,9 +118,9 @@ export default Vue.extend({
       return meStore.me;
     },
 
-    getPseudo (peerId: string) {
-      return usersStore.oneUser(peerId).pseudo;
-    },
+    // getPseudo (peerId: string) {
+    //   return usersStore.oneUser(peerId).pseudo;
+    // },
 
   },
 
