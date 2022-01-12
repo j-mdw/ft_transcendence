@@ -56,7 +56,7 @@
           max-width="500px"
         >
           <h3>
-            Victories : {{getVictories()}}
+            Victories : {{me.victories}}  / {{getMatches()}}
           </h3>
         </v-card>
         <v-card
@@ -66,8 +66,9 @@
           align="center"
           max-width="500px"
         >
+
           <h3>
-            Losses : {{getLosses()}}
+            Defeats : {{me.defeats}}  / {{getMatches()}}
           </h3>
         </v-card>
         
@@ -125,12 +126,16 @@ export default Vue.extend({
       return e;
     },
 
+    getMatches() {
+      return (this.matches.length)
+    },
+
     getLevel() {
       let win = this.getVictories();
       if(win == 0)
         return 0
       else
-        return (win * 0.40);
+        return (win * 0.4);
     },
   },
 
