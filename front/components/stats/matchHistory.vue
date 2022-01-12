@@ -22,7 +22,9 @@
     <v-list class="our_dark_beige">
       <div v-for="match in matches" :key="match.user1Id">
         <v-row align="center" justify="center" class="mt-4 mb-4">
-          <v-list-item-avatar class="mr-12"  >
+          <v-col class="ml-8">
+          <v-row align="center" justify="center">
+          <v-list-item-avatar   >
           <router-link :to="`/profile/${match.user1Id}`">
             <v-avatar >
               <v-img
@@ -31,10 +33,17 @@
             </v-avatar>
           </router-link>
            </v-list-item-avatar>
+           </v-row>
+           <v-row align="center" justify="center" class="mr-1">
+             {{getPseudo(match.user1Id)}}
+           </v-row>
+           </v-col>
           <h4>
             {{match.user1Score}} - {{match.user2Score}} 
           </h4>
-          <v-list-item-avatar class="ml-12"  >
+          <v-col class="ml-8">
+          <v-row align="center" justify="center">
+          <v-list-item-avatar   >
           <router-link :to="`/profile/${match.user2Id}`">
             <v-avatar >
               <v-img
@@ -43,6 +52,11 @@
             </v-avatar>
           </router-link>
         </v-list-item-avatar>
+        </v-row>
+           <v-row align="center" justify="center" class="mr-1">
+             {{getPseudo(match.user2Id)}}
+           </v-row>
+           </v-col>
         </v-row>
         <v-divider/>
       </div>
@@ -81,6 +95,11 @@ export default Vue.extend({
   methods: {
     getAvatar(peerId: string) {
         return usersStore.oneUser(peerId).avatarPath;
+    },
+
+    getPseudo(peerId: string)
+    {
+        return usersStore.oneUser(peerId).pseudo;
     },
 
     
