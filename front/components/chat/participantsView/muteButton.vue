@@ -56,7 +56,7 @@ import { channelsStore } from '~/store';
 export default Vue.extend({
   props: ['userId', 'channelId'],
   data: () => ({
-    items: ['1 hour', '24 hours', 'until I unmute'],
+    items: ['5 minutes', '1 hour', '24 hours', 'until I unmute'],
     select: '',
     dialog: false,
   }),
@@ -68,12 +68,19 @@ export default Vue.extend({
             
             if(time === 0)
             {
+                d.setMinutes(d.getMinutes() + 5)
+                console.log(d)
+                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
+                this.$emit('changeMute');
+            }
+            else if(time === 1)
+            {
                 d.setHours(d.getHours() + 24)
                 console.log(d)
                 await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
                 this.$emit('changeMute');
             }
-            else if (time == 1)
+            else if (time == 2)
             {
                 d.setHours( d.getHours() + 1 );
                 console.log(d)

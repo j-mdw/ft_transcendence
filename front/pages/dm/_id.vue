@@ -67,11 +67,12 @@ import profilChat from '~/components/chat/profileChat.vue'
 import { channelsStore, messagesStore, usersStore } from '~/store'
 import PingpongLogo from '~/components/Logo/pingpongLogo.vue'
 import { MessageReceived, MessageToServerDTO } from "~/models";
+
 export default Vue.extend({
   components: { settingsChat, profilChat, PingpongLogo },
   layout: 'default',
     
-  data () {
+  data () : any {
     return {
       current_message: '',
       peerId: '',
