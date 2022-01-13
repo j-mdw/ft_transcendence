@@ -97,7 +97,7 @@ export default Vue.extend({
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: false}, { withCredentials: true });
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
-    async muteUser(peerId: string)
+    async muteUser()
     {
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },

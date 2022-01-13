@@ -23,7 +23,7 @@
               <div v-if="participant.userId != me.id">
                 <div v-if="participant.userId != thisChannelOwner">
               <v-list-item-action>
-                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)"/>
+                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)" @changeMute="onMuteChanged"/>
                 <v-btn v-else v-ripple="false" plain icon title="unmute" @click="unmuteUser(participant.userId)">
                   <v-icon color="#395c6b">fa-volume-up</v-icon> 
                 </v-btn>
@@ -110,7 +110,7 @@ export default Vue.extend({
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {admin: false}, { withCredentials: true });
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
-    async muteUser(peerId: string)
+    async muteUser()
     {
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
@@ -130,7 +130,11 @@ export default Vue.extend({
     {
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, {banned: false}, { withCredentials: true });
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    }
+    },
+
+    async onMuteChanged() {
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    },
   },
 
 });
