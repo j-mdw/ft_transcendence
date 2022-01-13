@@ -32,7 +32,7 @@ import Vue from 'vue'
 import myChannelsList from '~/components/channel/myChannelsList.vue'
 import VisibleChannels from '~/components/channel/visibleChannels.vue'
 import { channelsStore } from '~/store';
-import { ChannelDTO } from '~/models/channel'
+import { ChannelDTO } from '~/models'
 import { authenticationStore } from '~/store'
 
 export default Vue.extend({
@@ -44,10 +44,10 @@ export default Vue.extend({
   },
 
   computed: {
-    myChannel () {
+    myChannel (): ChannelDTO[] {
       return channelsStore.mine
     },
-    visibleChannel () {
+    visibleChannel (): ChannelDTO[] {
       return channelsStore.visible
     }
   },

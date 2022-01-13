@@ -61,7 +61,7 @@ export default Vue.extend({
 
   computed: {     
     
-    ranking() {
+    ranking(): User[] {
       return usersStore.ranking;
     }
 

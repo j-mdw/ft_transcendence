@@ -43,17 +43,17 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { ChannelDTO } from '~/models/channel'
+import { User, ChannelDTO } from '~/models';
 import { channelsStore, meStore } from '~/store';
 import joinProtected from './joinProtected.vue';
 
 export default Vue.extend({
   components: { joinProtected },
    computed: {
-     me () {
+     me (): User {
        return meStore.me;
      },
-    visibleChannels () {
+    visibleChannels (): ChannelDTO[] {
       return channelsStore.visible
     },
   },

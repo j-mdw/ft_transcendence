@@ -16,10 +16,6 @@ export default Vue.extend({
     return {
     };
   },
-  computed: {
-  },
-  methods: {
-  }
 })
 </script>
 

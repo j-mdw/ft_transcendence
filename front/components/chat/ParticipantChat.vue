@@ -15,11 +15,10 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Relationship, User } from "~/models";
+import { Relationship, User, ChannelDTO } from "~/models";
 import { usersStore, meStore, channelsStore } from "~/store";
 import messageLogo from "../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../components/Logo/pingpongLogo.vue";
-import { ChannelDTO } from '~/models';
 import OwnerView from "./participantsView/ownerView.vue";
 import AdminView from "./participantsView/adminView.vue";
 import UserView from "./participantsView/userView.vue";
@@ -33,14 +32,14 @@ export default Vue.extend({
     };
   },
   computed : {
-    me () {
+    me (): User {
        return meStore.me;
      },
-    thisChannel: function (): any {
+    thisChannel(): ChannelDTO | undefined {
         return  channelsStore.one(this.counter);
     },
 
-    amIAdmin: function (): any {   
+    amIAdmin() : boolean {   
        channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
         if(this.participants[i].userId == this.me.id)

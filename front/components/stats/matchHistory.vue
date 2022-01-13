@@ -78,39 +78,29 @@ export default Vue.extend({
   props: ['userId'],
   data () {
     return {
-      
      matches: Object(),
-    };
-
-    
+    };    
   },
 
   computed: {
         me (): User {
         return meStore.me;
       },
-      
   },
 
   methods: {
     getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+      return usersStore.oneUser(peerId).avatarPath;
     },
 
     getPseudo(peerId: string)
     {
-        return usersStore.oneUser(peerId).pseudo;
+      return usersStore.oneUser(peerId).pseudo;
     },
-
-    
-
-
   },
 
   async mounted () {
-    
     this.matches = await this.$axios.$get(`user/matches/${this.userId}`, { withCredentials: true });
-    console.log("MATCHES", this.matches);
   },
 
 

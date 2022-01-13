@@ -71,7 +71,7 @@ import ParticipantChat from './ParticipantChat.vue'
 import TypeChat from './typeChat.vue'
 import AddParticipantPrivate from './addParticipantPrivate.vue';
 import { meStore, channelsStore } from '~/store';
-import { ChannelDTO } from '~/models/channel'
+import { ChannelDTO, User } from '~/models'
 export default Vue.extend({
   components: { ParticipantChat, TypeChat, AddParticipantPrivate },
   layout: 'default',
@@ -84,13 +84,13 @@ export default Vue.extend({
     }
   },
   computed : {
-     me () {
+     me (): User {
        return meStore.me;
      },
      thisChannel () : ChannelDTO | undefined {
         return  channelsStore.one(this.channelId);
       },
-      thisChannelOwner: function (): any {
+      thisChannelOwner(): string | undefined{
         return this.thisChannel?.owner
       }
      

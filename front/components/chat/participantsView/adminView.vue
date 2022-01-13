@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Relationship, User } from "~/models";
+import { Relationship, User, ChannelDTO } from "~/models";
 import { usersStore, meStore, relationshipStore, channelsStore } from "~/store";
 import messageLogo from "../../../components/Logo/messageLogo.vue";
 import pingpongLogo from "../../../components/Logo/pingpongLogo.vue";
@@ -75,11 +75,11 @@ export default Vue.extend({
       return meStore.me;
     },
 
-    thisChannel: function (): any {
+    thisChannel(): ChannelDTO | undefined {
         return  channelsStore.one(this.counter);
       },
 
-      thisChannelOwner: function (): any {
+      thisChannelOwner(): string | undefined {
         return this.thisChannel?.owner
       }
     

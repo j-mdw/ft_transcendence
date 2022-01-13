@@ -68,6 +68,7 @@
 
 import Vue from 'vue'
 import { channelsStore, meStore } from '~/store';
+import { User, ChannelDTO } from '~/models';
 
 export default Vue.extend({
   props: ['channelId'],
@@ -77,10 +78,10 @@ export default Vue.extend({
     alertPassword: false
   }),
   computed: {
-    me () {
+    me (): User {
       return meStore.me;
     },
-    visibleChannels () {
+    visibleChannels () : ChannelDTO[] {
       return channelsStore.visible
     },
   },

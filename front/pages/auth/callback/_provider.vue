@@ -14,13 +14,11 @@ export default Vue.extend({
     user: Object(),
   }),
   computed: {
-    provider () {
+    provider (): string {
       return this.$route.params.provider;
     }
   },
   async mounted () {
-    console.log(`logging with ${this.provider}`)
-
     const res = await this.$axios.$get(`${this.provider}/redirect`, { params: this.$route.query, withCredentials: true })
     if (res.user.isTwoFactorAuthenticationEnabled) {
       this.$router.push('/auth/twofa');

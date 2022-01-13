@@ -39,7 +39,7 @@ import { channelsStore } from '~/store';
 
 export default Vue.extend({
   computed: {
-    myChannel () {
+    myChannel (): ChannelDTO[] {
       return channelsStore.mine
     },
   }

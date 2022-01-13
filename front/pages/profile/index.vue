@@ -1,6 +1,6 @@
 <template>
   <v-container fill-height>
-    <v-row justify="center" align="center">
+    <v-row justify="center" align="center" class="our_navy_blue--text">
       <v-col
         sm="5"
         align="center"
@@ -15,7 +15,7 @@
         </v-avatar>
        
 
-        <h1 v-if="user">
+        <h1 v-if="user" class="our_navy_blue--text">
           <br>welcome {{ user.pseudo }}
         </h1>
       </v-col>
@@ -50,7 +50,7 @@
         </v-row>
 
         <div v-if="friends_request">
-          <v-row justify="center" align="center" class="mt-8">
+          <v-row justify="center" align="center" class="mt-8 our_navy_blue--text">
             <v-badge
               offset-y="36"
               offset-x="8"
@@ -67,7 +67,7 @@
         </div>
         <div v-if="user.admin">
           <v-row justify="center" align="center" class="mt-8">
-            <v-btn color="#f5cac3" to="/profile/admin" class="mt-6">
+            <v-btn color="#f5cac3" to="/profile/admin" class="mt-6" >
               see my admin privilege
               <v-icon color="#395c6b" right>
                 fa-users
@@ -84,20 +84,16 @@
 import Vue from 'vue'
 import { relationshipStore, meStore } from '~/store'
 import FileUpload from '~/components/FileUpload.vue';
-// import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 
 export default Vue.extend({
-  // components: {
-  //   FileUpload
-  // },
   layout: 'default',
 
   computed: {
     user (): User {
       return meStore.me;
     },
-    friends_request () {
+    friends_request (): number {
       let e = 0;
       for (let i = 0; relationshipStore.relationships[i]; i++) {
         if (relationshipStore.relationships[i].type === 2) {

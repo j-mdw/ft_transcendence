@@ -34,11 +34,11 @@
                   <messageLogo/>
                 </v-btn>
               </v-list-item-action>
-              <v-list-item-action >
+              <!-- <v-list-item-action >
                 <v-btn v-ripple="false" plain icon>
                   <pingpongLogo />
                 </v-btn>
-              </v-list-item-action>
+              </v-list-item-action> -->
             </v-list-item>
           </div>
         </div>

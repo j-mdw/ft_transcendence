@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="our_navy_blue--text">
     <v-row justify="center" align="center" no-gutters class="mt-14 mb-10" dense>
       <v-col sm="3" class="ml-3 mr-3">
             <v-row justify="center" align="center" no-gutters dense class="mb-3">
