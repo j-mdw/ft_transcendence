@@ -20,13 +20,13 @@
       <div v-for="user in ranking" :key="user.title">
         <v-row align="center" justify="center" class="mt-2 mb-2 ml-4">
           <v-col>
-            <router-link :to="`/profile/${user.id}`">
+            <NuxtLink :to="`/profile/${user.id}`">
               <v-list-item-avatar class="mt-4 mb-4">
                 <v-img
                   :src="`/api/${user.avatarPath}`"
                 />
               </v-list-item-avatar>
-            </router-link>
+            </NuxtLink>
             {{ user.pseudo }}
           </v-col>
           <v-col class="ml-11">

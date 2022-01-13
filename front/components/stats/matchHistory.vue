@@ -25,13 +25,13 @@
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
                   <v-list-item-avatar>
-                    <router-link :to="`/profile/${match.user1Id}`">
+                    <NuxtLink :to="`/profile/${match.user1Id}`">
                       <v-avatar>
                         <v-img
                           :src="`/api/${getAvatar(match.user1Id)}`"
                         />
                       </v-avatar>
-                    </router-link>
+                    </NuxtLink>
                   </v-list-item-avatar>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">
@@ -44,13 +44,13 @@
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
                   <v-list-item-avatar>
-                    <router-link :to="`/profile/${match.user2Id}`">
+                    <NuxtLink :to="`/profile/${match.user2Id}`">
                       <v-avatar>
                         <v-img
                           :src="`/api/${getAvatar(match.user2Id)}`"
                         />
                       </v-avatar>
-                    </router-link>
+                    </NuxtLink>
                   </v-list-item-avatar>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">

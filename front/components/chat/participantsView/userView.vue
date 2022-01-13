@@ -9,13 +9,13 @@
             offset-x="30"
             offset-y="30"
           >
-            <router-link :to="`/profile/${participant.userId}`">
+            <NuxtLink :to="`/profile/${participant.userId}`">
               <v-list-item-avatar class="mt-4 mb-4">
                 <v-img
                   :src="`/api/${getAvatar(participant.userId)}`"
                 />
               </v-list-item-avatar>
-            </router-link>
+            </NuxtLink>
           </v-badge>
           <v-list-item-content>
             <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />

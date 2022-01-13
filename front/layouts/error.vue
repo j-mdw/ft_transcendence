@@ -9,9 +9,9 @@
     </h1>
     </v-row>
     <v-row justify="center">
-      <router-link to="/">
+      <NuxtLink to="/">
         <h2> Go back Home </h2>
-      </router-link>
+      </NuxtLink>
       <!-- <NuxtLink to="/">
         Go back Home
       </NuxtLink> -->

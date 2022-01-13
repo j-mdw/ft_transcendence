@@ -23,11 +23,11 @@
               offset-x="15"
               offset-y="15"
             >
-              <router-link :to="`/profile/${userId}`">
+              <NuxtLink :to="`/profile/${userId}`">
                 <v-avatar>
                   <v-img :src="`/api/${getAvatar(userId)}`" />
                 </v-avatar>
-              </router-link>
+              </NuxtLink>
             </v-badge>
             <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(userId)}`">
               <messageLogo />

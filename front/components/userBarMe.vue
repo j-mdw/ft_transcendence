@@ -8,20 +8,20 @@
           offset-y="20"
           :content="friends_request"
         >
-          <router-link to="/profile">
+          <NuxtLink to="/profile">
             <v-list-item-avatar>
               <v-img :src="`/api/${me.avatarPath}`" />
             </v-list-item-avatar>
-          </router-link>
+          </NuxtLink>
         </v-badge>
         <div
           v-if="!friends_request"
         >
-          <router-link to="/profile">
+          <NuxtLink to="/profile">
             <v-list-item-avatar>
               <v-img :src="`/api/${me.avatarPath}`" />
             </v-list-item-avatar>
-          </router-link>
+          </NuxtLink>
         </div>
         <v-list-item to="/profile">
           My Profile

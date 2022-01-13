@@ -12,13 +12,13 @@
         <div v-for="user in users" :key="user.title">
           <div v-if="user.id != me.id">
             <v-list-item class="ml-n3">
-              <router-link :to="`/profile/${user.id}`">
+              <NuxtLink :to="`/profile/${user.id}`">
                 <v-list-item-avatar class="mt-4 mb-4">
                   <v-img
                     :src="`/api/${user.avatarPath}`"
                   />
                 </v-list-item-avatar>
-              </router-link>
+              </NuxtLink>
               <v-list-item :to="`/profile/${user.id}`">
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item>

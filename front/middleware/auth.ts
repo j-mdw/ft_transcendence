@@ -1,10 +1,8 @@
 import { Middleware } from '@nuxt/types'
 
 const authMiddleware: Middleware = async ({ redirect, store, route }) => {
-  console.log('auth mdw!');
-  const unprotected = ['/auth', '/auth/twofa', '/auth/42', '/auth/google', '/pseudo'];
+  const unprotected = ['/auth', '/auth/twofa', '/auth/callback/42', '/auth/callback/google', '/pseudo'];
   if (unprotected.find(path => path === route.path)) {
-    console.log('auth: unprotected path');
     return;
   }
   const getterVal = store.getters['auth/isLogged'];
