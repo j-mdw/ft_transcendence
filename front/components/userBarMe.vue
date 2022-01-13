@@ -53,7 +53,7 @@ export default Vue.extend({
       return meStore.me;
     },
 
-    friends_request () {
+    friends_request (): number {
       let e = 0;
       for (let i = 0; relationshipStore.relationships[i]; i++) {
         if (relationshipStore.relationships[i].type === 2) {

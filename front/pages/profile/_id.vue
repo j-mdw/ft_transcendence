@@ -43,7 +43,7 @@ export default Vue.extend({
   }),
 
   computed: {
-    id () {
+    id (): string {
       return this.$route.params.id;
     },
     me (): User {

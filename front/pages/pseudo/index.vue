@@ -54,7 +54,7 @@ export default Vue.extend({
       try {
         await this.$axios.$patch('/user', { pseudo: this.pseudo }, { withCredentials: true })
         authenticationStore.setLogin();
-        this.$router.push('/home');
+        this.$router.push('/');
       } catch (error) {
         this.alertPseudo = true;
         console.log('Error:', error); // Should only intercept 409

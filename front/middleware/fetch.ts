@@ -1,6 +1,7 @@
 import { Middleware } from '@nuxt/types'
 
 const fetchMiddleware: Middleware = async ({ store }) => {
+  console.log('fetch mdw!');
   if (store.getters['auth/isLogged']) {
     if (!store.getters['fetchStatus/status']) {
       await store.dispatch('me/fetch');

@@ -23,7 +23,7 @@
             <router-link :to="`/profile/${user.id}`">
               <v-list-item-avatar class="mt-4 mb-4">
                 <v-img
-                  :src="`http://localhost:4000/${user.avatarPath}`"
+                  :src="`/api/${user.avatarPath}`"
                 />
               </v-list-item-avatar>
             </router-link>
@@ -44,6 +44,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import { User } from '~/models';
 import { usersStore } from '~/store'
 
 export default Vue.extend({
@@ -55,8 +56,7 @@ export default Vue.extend({
   },
 
   computed: {
-
-    ranking () {
+    ranking (): User[] {
       return usersStore.ranking;
     }
 

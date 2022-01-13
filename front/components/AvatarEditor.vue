@@ -34,7 +34,7 @@ export default Vue.extend({
     dialog: false,
   }),
   computed: {
-    avatarUrl () {
+    avatarUrl () : string {
       return meStore.me.avatarPath;
     },
   },

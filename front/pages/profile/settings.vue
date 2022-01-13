@@ -86,7 +86,6 @@ export default Vue.extend({
 
   data () {
     return {
-      //user: Object(),
       newPseudo:'',
       alertPseudo: false,
     }
@@ -98,11 +97,7 @@ export default Vue.extend({
     },
 
   },
-
-  async mounted () {
-   // this.user = await this.$axios.$get('user/me', { withCredentials: true });
-  },
-
+  
   methods: {
     async updateUser () {
       try {

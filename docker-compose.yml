@@ -35,6 +35,8 @@ services:
         build:
             context: ./front
             dockerfile: Dockerfile.front
+        volumes:
+        - ./front:/app
         ports:
         - "3000:3000"
 
@@ -43,5 +45,7 @@ services:
         build:
             context: ./back
             dockerfile: Dockerfile.back
+        volumes:
+        - ./back:/app
         ports:
         - "4000:4000"

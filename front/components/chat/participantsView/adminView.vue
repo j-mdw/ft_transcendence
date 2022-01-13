@@ -23,7 +23,7 @@
           <div v-if="participant.userId != me.id">
             <div v-if="participant.userId != thisChannelOwner">
               <v-list-item-action>
-                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)" />
+                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser()" />
                 <v-btn
                   v-else
                   v-ripple="false"
@@ -73,13 +73,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import messageLogo from '../../../components/Logo/messageLogo.vue';
-import pingpongLogo from '../../../components/Logo/pingpongLogo.vue';
 import MuteButton from './muteButton.vue';
 import { usersStore, meStore, relationshipStore, channelsStore } from '~/store';
-import { Relationship, User } from '~/models';
+import { Relationship, User, ChannelDTO } from '~/models';
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, MuteButton },
+  components: { MuteButton },
   props: ['channelId'],
   data () {
     return {
@@ -102,11 +100,11 @@ export default Vue.extend({
       return meStore.me;
     },
 
-    thisChannel (): any {
+    thisChannel (): ChannelDTO | undefined {
       return channelsStore.one(this.counter);
     },
 
-    thisChannelOwner (): any {
+    thisChannelOwner (): string | undefined {
       return this.thisChannel?.owner
     }
 
@@ -132,7 +130,7 @@ export default Vue.extend({
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, { admin: false }, { withCredentials: true });
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
-    async muteUser (peerId: string) {
+    async muteUser () {
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
     },
     async unmuteUser (peerId: string) {

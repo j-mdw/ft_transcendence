@@ -50,7 +50,7 @@ import { authenticationStore } from '~/store'
 
 export default Vue.extend({
   components: { UsersBar },
-  middleware: ['auth', 'fetch'],
+  middleware: ['fetch'],
 
   data: () => ({
     activeTab: 2

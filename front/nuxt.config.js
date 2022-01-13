@@ -29,6 +29,10 @@ export default {
     ],
   },
 
+  router: {
+    middleware: 'auth'
+  },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'font-awesome/css/font-awesome.min.css',

@@ -57,6 +57,7 @@ import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
 import { channelsStore, messagesStore, usersStore } from '~/store'
+import { User, ChannelDTO, MessageReceived } from '~/models';
 export default Vue.extend({
   components: { settingsChat, profilChat },
   layout: 'default',
@@ -66,22 +67,23 @@ export default Vue.extend({
     }
   },
   computed: {
-    channelid () {
+    channelid (): string {
       return this.$route.params.id;
     },
-    channelIdStore () {
+    channelIdStore (): string {
       return messagesStore.currentChannelId;
     },
-    thisChannel () {
+    thisChannel (): ChannelDTO | undefined {
       return channelsStore.one(this.$route.params.id);
     },
-    thisChannelName (): any {
+    thisChannelName (): string | undefined {
       return this.thisChannel?.name
     },
-    messages () {
+    messages (): MessageReceived[] {
       return messagesStore.channelMessages;
     }
   },
+  
   updated () {
     this.scrollToEnd()
   },

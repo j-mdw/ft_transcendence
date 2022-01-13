@@ -71,7 +71,7 @@ export default Vue.extend({
   components: { settingsChat, profilChat, PingpongLogo },
   layout: 'default',
     
-  data () {
+  data () : any {
     return {
       current_message: '',
       peerId: '',

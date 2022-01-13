@@ -64,7 +64,7 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { CreateChannelDTO } from '~/models/channel'
+import { User } from '~/models'
 
 import { channelsStore, meStore, usersStore } from '~/store';
 export default Vue.extend({
@@ -80,11 +80,11 @@ export default Vue.extend({
     };
   },
   computed: {
-    me () {
+    me (): User {
       return meStore.me;
     },
 
-    amIAdmin (): any {
+    amIAdmin (): boolean {
       channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
         if(this.participants[i].userId == this.me.id)
@@ -99,7 +99,7 @@ export default Vue.extend({
       return false
     },
 
-    allUsers () {
+    allUsers (): User[] {
       return usersStore.allUsers;
     }
   },

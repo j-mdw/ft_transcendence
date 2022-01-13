@@ -44,7 +44,7 @@ export default Vue.extend({
         await this.$axios.$post('2fa/authenticate', { twoFactorAuthenticationCode: this.twofaCode }, { withCredentials: true }).then((res) => {
           console.log('youpi !');
           authenticationStore.setLogin()
-          this.$router.push('/home')
+          this.$router.push('/')
           // this.whereTogo()
         });
       } catch (err) {
