@@ -22,12 +22,15 @@
         required
         ></v-text-field>
 
-        <v-btn
+        <v-btn v-if="newPseudo"
         color="#F6BD60"
         class="mr-4"
         @click="updateUser"
         >
         Update Pseudo
+        </v-btn>
+        <v-btn v-else disabled>
+          Update Pseudo
         </v-btn>
     </v-form>
     <div v-if="alertPseudo == true">

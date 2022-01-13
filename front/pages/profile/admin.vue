@@ -24,7 +24,7 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="user.pseudo" />
               </v-list-item>
               <div v-if="user.banned">
-                you have banned this user you can still see his profil but he cannot connect
+                you have banned this user, you can still see his profil but he cannot connect
               </div>
               <v-btn v-else color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="banUser(user.id)">
                 ban

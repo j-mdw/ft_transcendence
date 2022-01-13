@@ -20,7 +20,7 @@
       <div v-else>
   <div class="mt-5">
     <v-list class="our_dark_beige">
-      <div v-for="match in matches" :key="match.user1Id">
+      <div v-for="match in matches" :key="match.dates">
         <v-row align="center" justify="center" class="mt-4 mb-4">
           <v-col class="ml-8">
           <v-row align="center" justify="center">
@@ -79,23 +79,25 @@ export default Vue.extend({
   data () {
     return {
      matches: Object(),
-    };    
+    };
+
+    
   },
 
   computed: {
-        me (): User {
+      me (): User {
         return meStore.me;
       },
   },
 
   methods: {
     getAvatar(peerId: string) {
-      return usersStore.oneUser(peerId).avatarPath;
+        return usersStore.oneUser(peerId).avatarPath;
     },
 
     getPseudo(peerId: string)
     {
-      return usersStore.oneUser(peerId).pseudo;
+        return usersStore.oneUser(peerId).pseudo;
     },
   },
 

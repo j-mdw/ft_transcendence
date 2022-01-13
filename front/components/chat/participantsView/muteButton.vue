@@ -19,7 +19,7 @@
         </v-btn>
       </template>
 
-      <v-card>
+      <v-card class="our_beige">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           choose time to mute
         </v-card-title>

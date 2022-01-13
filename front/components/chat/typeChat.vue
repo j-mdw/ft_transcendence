@@ -24,6 +24,7 @@
       v-if="select == 'Protected'"
       v-model="password"
       label="password"
+      type="password"
       required
     />
      

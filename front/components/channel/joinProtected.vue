@@ -40,11 +40,14 @@
             />
             <!-- </v-row> -->
             <v-row align="center" justify="center">
-              <v-btn
+              <v-btn v-if="password"
                 color="success"
                 class="mr-4"
                 @click="joinProtected()"
               >
+                Send
+              </v-btn>
+              <v-btn v-else disabled>
                 Send
               </v-btn>
             </v-row>
@@ -52,7 +55,7 @@
           <div v-if="goodPassword()">
             <v-alert
               type="error"
-              class=""
+              class="mt-6"
             >
               Sorry this user doesn't exist <br>
               or he is already in the channel
