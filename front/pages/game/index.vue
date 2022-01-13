@@ -5,6 +5,7 @@
         sm="9"
         align="center"
         justify="center"
+        class="mr-16 ml-n8"
       >
         <v-card
           class="pa-2 mb-7 mt-7 our_dark_beige"
@@ -13,15 +14,15 @@
           align="center"
           max-width="500px"
         >
-          <div class="our_navy_blue--text"> <h3> Play Game </h3> </div>
+          <div class="our_navy_blue--text"> <h3> Play Game <pingpongLogo class="ml-4"/> </h3> </div>
           <div class="tab-row">
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(0)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" color="#f5cac3" @click="buttonClickPlay(0)">
               Classic
             </v-btn>
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(1)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" color="#f5cac3" @click="buttonClickPlay(1)">
               Multiballs
             </v-btn>
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickPlay(2)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" color="#f5cac3" @click="buttonClickPlay(2)">
               Rookie
             </v-btn>
           </div>
@@ -36,15 +37,17 @@
           align="center"
           max-width="500px"
         >
-          <div class="our_navy_blue--text"> <h3> Watch Game </h3> </div>
+          <div class="our_navy_blue--text"> <h3> Watch Game  <v-icon color="#395c6b" right>
+          fa-eye
+        </v-icon> </h3>  </div>
           <div class="tab-row">
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(0)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1" color="#f5cac3" @click="buttonClickWatch(0)">
               Classic
             </v-btn>
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(1)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1" color="#f5cac3" @click="buttonClickWatch(1)">
               Multiballs
             </v-btn>
-            <v-btn class="mt-6 tab-btn our_beige" color="#f5cac3" @click="buttonClickWatch(2)">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1" color="#f5cac3" @click="buttonClickWatch(2)">
               Rookie
             </v-btn>
           </div>
@@ -69,8 +72,11 @@
 import Vue from 'vue'
 import { GameStyle, GameStyleDTO } from '~/models';
 import { gameStatusStore, usersStore } from '~/store';
+
+import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
 export default Vue.extend({
   layout: 'default',
+  components: { pingpongLogo },
   data () {
     return {
       gameUnavailable: '',
