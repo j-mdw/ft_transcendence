@@ -10,7 +10,7 @@
                     </v-avatar>
                   </template>
       
-    <v-card height="200" width="200">
+    <v-card height="200" width="200" class="our_beige">
       <!-- <div v-if="userId != me.id"> -->
       <div v-if="userId != me.id">
         <v-card-title class="our_dark_beige our_navy_blue--text">
@@ -31,9 +31,6 @@
               </v-badge>
                 <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(userId)}`">
                   <messageLogo />
-                </v-btn>
-                <v-btn v-ripple="false" plain icon>
-                  <pingpongLogo />
                 </v-btn>
 
         </v-row>
