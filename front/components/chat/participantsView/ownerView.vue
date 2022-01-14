@@ -27,7 +27,7 @@
                 </v-btn>
               </v-list-item-action>
               <v-list-item-action v-else>
-                <v-btn v-ripple="false" plain icon title="give admin right" @click="removeAdmin(participant.userId)">
+                <v-btn v-ripple="false" plain icon title="remove admin right" @click="removeAdmin(participant.userId)">
                    <v-icon color="#395c6b">fa-eraser</v-icon>    
                 </v-btn>
               </v-list-item-action>

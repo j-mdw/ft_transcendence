@@ -95,7 +95,6 @@ export default Vue.extend({
     UserExist(peerId: string) {
       if(!usersStore.oneUser(peerId))
       {
-        console.log("loosing my mind");
         return false
       }
       return(true);

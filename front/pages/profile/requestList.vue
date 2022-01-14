@@ -9,8 +9,9 @@
       <div v-else>
   <div class="mt-5">
     <v-list class="our_beige">
-      <div v-for="relationship in relationships" :key="relationship.type">
+      <div v-for="relationship in relationships" :key="relationship.peerId">
         <div v-if="relationship.type == 2">
+          <div v-if="UserExist(relationship.peerId)">
           <v-list-item class="ml-n3">
             <v-badge
               bottom
@@ -44,6 +45,12 @@
               </v-btn>
             </v-col>
           </v-list-item>
+          </div>
+          <div v-else>
+            <v-row justify="center" align="center" class="mt-2">
+            <h3> you will need to reload the page to see this user </h3>
+            </v-row>
+          </div>
         </div>
       </div>
     </v-list>
@@ -89,6 +96,15 @@ export default Vue.extend({
   },
 
   methods: {
+    UserExist(peerId: string) {
+      // usersStore.fetchUsers();
+      if(!usersStore.oneUser(peerId))
+      {
+        return false
+      }
+      return(true);
+    },
+
     getAvatar (peerId: string) {
       return usersStore.oneUser(peerId).avatarPath;
     },
