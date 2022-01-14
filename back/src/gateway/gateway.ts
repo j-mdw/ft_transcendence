@@ -171,19 +171,47 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
+  @SubscribeMessage('game-get-all')
+  allLiveGames() {
+    return this.gameManager.getAllGames();
+  }
+
   @SubscribeMessage('game-watch')
   addSpectator(
     @ConnectedSocket() client: Socket,
-    @MessageBody() gameStyle: GameStyleDTO,
+    @MessageBody() gameId: string,
   ): boolean {
-    const game = this.gameManager.getLiveGame(gameStyle.pongType);
+    const game = this.gameManager.getGame(gameId);
     if (game) {
-      client.join(game.roomId);
+      client.join(gameId);
       return true;
     } else {
       return false;
     }
   }
+
+  //   const game = this.gameManager.getLiveGame(gameStyle.pongType);
+  //   if (game) {
+  //     client.join(game.roomId);
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
+
+  // @SubscribeMessage('game-watch')
+  // addSpectator(
+  //   @ConnectedSocket() client: Socket,
+  //   @MessageBody() gameStyle: GameStyleDTO,
+  // ): boolean {
+  //   const game = this.gameManager.getLiveGame(gameStyle.pongType);
+  //   if (game) {
+  //     client.join(game.roomId);
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
   @SubscribeMessage('game-leave')
   removePlayer(

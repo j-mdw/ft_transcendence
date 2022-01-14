@@ -96,6 +96,10 @@ export class GameManager {
     }
   }
 
+  getAllGames(): Game[] {
+    return this.games;
+  }
+
   leaveGame(userId: string) {
     const game = this.getPlayerGame(userId);
     game.playerLeaving(userId);

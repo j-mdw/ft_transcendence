@@ -70,20 +70,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { GameStyle, GameStyleDTO } from '~/models';
+import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
+import { GameDTO, GameStyle, GameStyleDTO } from '~/models';
 import { gameStatusStore, usersStore } from '~/store';
 
-import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
 export default Vue.extend({
   layout: 'default',
   components: { pingpongLogo },
   data () {
     return {
       gameUnavailable: '',
+      games: [] as GameDTO[],
     }
   },
   mounted () { // DELETE
     console.log(usersStore.ranking);
+    this.getLiveGames();
   },
   methods: {
     buttonClickPlay (gameStyle: GameStyle): void {
@@ -104,6 +106,21 @@ export default Vue.extend({
         } else {
           this.gameUnavailable = 'No games are being played at the moment, try again later';
         }
+      });
+    },
+    buttonClickWatch2 (gameId: string) {
+      this.$socket.client.emit('game-watch', gameId, (response: boolean) => {
+        if (response === true) {
+          this.$router.push('/game/play');
+        } else {
+          this.getLiveGames();
+        }
+      });
+    },
+
+    getLiveGames () {
+      this.$socket.client.emit('game-get-all', (games: GameDTO[]) => {
+        this.games = games;
       });
     },
   },
