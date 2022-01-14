@@ -11,7 +11,7 @@
       width="400"
     >
       <v-row justify="center" align="center" class="mt-8" >
-        <h3>You need to wait for your opponent !</h3>
+        <h3 class="mt-6">You need to wait for your opponent !</h3>
       </v-row>
       <v-row align="center" justify="center" class="mt-12">
       <v-progress-circular
@@ -33,10 +33,10 @@
       width="400"
     >
     <v-row v-if="me.id != getWinner()" justify="center" align="center" class="our_navy_blue--text mt-10" >
-      <h2> {{getPseudo(getWinner())}} Won ! </h2>
+      <h2 class="mt-6"> {{getPseudo(getWinner())}} Won ! </h2>
     </v-row>
     <v-row v-else justify="center" align="center" class="our_navy_blue--text mt-10" >
-      <h2> Congratulation you Won ! </h2>
+      <h2 class="mt-6"> Congratulation you Won ! </h2>
     </v-row>
     <v-row v-if="game.state == 2" justify="center" align="center" >
       <v-btn to="/game" class="our_dark_pink mt-10" >
