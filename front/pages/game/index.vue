@@ -40,7 +40,7 @@
                     <h3>{{getPseudo(game.player1.id)}}  - {{getPseudo(game.player2.id)}}</h3>
                     </v-col>
                     <v-col  v-if="game.player2" align="right" class="mr-8"  sm="3">
-                        <v-btn @click="buttonClickWatch2(game.id)" class="our_beige mt-2 mb-3 ">
+                        <v-btn @click="buttonClickWatch2(game.id)" class="our_light_pink  mt-2 mb-3 ">
                             watch this game
                         </v-btn>
                     </v-col>
@@ -49,8 +49,9 @@
         </div>
           </v-list>
           </div>
+  
           <v-row justify="center" align="center" class="mt-2" >
-          <v-btn @click="getLiveGames()" class="mt-12 our_beige " width="200">
+          <v-btn @click="getLiveGames()" class="mt-8 our_beige " width="200">
               refresh
           </v-btn>
           </v-row>
