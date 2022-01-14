@@ -30,7 +30,7 @@ import { HttpExceptionTransformationFilter } from './gateway.filter';
 import { GatewayService } from './gateway.service';
 import { GameManager } from './types/gameManager';
 import { MatchMaker } from './types/matchMaker';
-import { GameIdDTO, PaddleMoveDTO } from './types/game.dto';
+import {  GameDTO,GameIdDTO, PaddleMoveDTO } from './types/game.dto';
 import { IsEnum } from 'class-validator';
 import { GameStyle } from './types/game';
 
@@ -173,7 +173,20 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('game-get-all')
   allLiveGames() {
-    return this.gameManager.getAllGames();
+    return this.gameManager
+      .getAllGames()
+      .map(
+        (game) =>
+          new GameDTO(
+            game.roomId,
+            game.type,
+            game.state,
+            game.balls,
+            game.player1,
+            game.player2,
+            game.countdown,
+          ),
+      );
   }
 
   @SubscribeMessage('game-watch')
