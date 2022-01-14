@@ -196,10 +196,11 @@ export class UserService {
 
   find_avatar() {
     const avatars: Array<string> = [
-      './avatars/ours/Azur.png',
       './avatars/ours/Claudius.png',
+      './avatars/ours/Azur.png',
       './avatars/ours/Corgi.png',
       './avatars/ours/Selen.png',
+      './avatars/ours/Azur.png',
     ];
 
     const my_avatar = avatars[Math.floor(Math.random() * avatars.length)];
