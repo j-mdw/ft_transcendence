@@ -20,21 +20,12 @@ services:
         restart: always
         ports:
         - "8080:8080"
-    
-    reverse-proxy:
-        image: nginx:1.20.2
-        container_name: nginx
-        restart: always
-        volumes:
-        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-        ports:
-        - "80:80"
 
     front:
         container_name: frontend
         build:
             context: ./front
-            dockerfile: Dockerfile.front
+            dockerfile: Dockerfile.front.dev
         volumes:
         - ./front:/app
         ports:
@@ -44,8 +35,22 @@ services:
         container_name: backend
         build:
             context: ./back
-            dockerfile: Dockerfile.back
+            dockerfile: Dockerfile.back.dev
+        depends_on:
+        - "db"
         volumes:
         - ./back:/app
         ports:
         - "4000:4000"
+
+    reverse-proxy:
+        image: nginx:1.20.2
+        container_name: nginx
+        restart: always
+        depends_on:
+        - "front"
+        - "back"
+        volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+        ports:
+        - "80:80"

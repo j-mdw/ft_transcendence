@@ -11,12 +11,8 @@ RUN mkdir /app
 
 WORKDIR /app
 
-# COPY . .
+COPY . .
 
-# RUN rm -rf node_modules && npm install
+RUN rm -rf node_modules && npm install
 
-# RUN npm install
-
-# CMD npm run build && npm run start
-
-CMD npm run dev
+CMD npm run build && npm run start
