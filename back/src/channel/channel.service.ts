@@ -129,6 +129,7 @@ export class ChannelService {
     userId: string,
     channelId: string,
     message: string,
+    date: Date,
     gameInvite?: boolean,
   ) {
     const channel = await this.findOne(channelId);
@@ -140,7 +141,7 @@ export class ChannelService {
     } else {
       invite = false;
     }
-    await this.messageService.addMessage(channel, user, message, invite);
+    await this.messageService.addMessage(channel, user, message, date, invite);
   }
 
   //Public Channels: a participant adds himself

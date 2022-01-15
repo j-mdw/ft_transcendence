@@ -106,6 +106,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.users.delete(client.id);
   }
 
+  @SubscribeMessage('user-get-all-status')
+  async getAllStatus(@ConnectedSocket() client: Socket) {
+    client.emit('all-users-status', Array.from(this.users.values()));
+  }
+
   /* PONG GAME */
 
   gameManager = new GameManager(this.gatewayService, this.userService);
@@ -348,13 +353,14 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
           return;
         }
       }
+      const now = new Date();
       this.server
         .to(msg.channelId)
         .emit(
           'chat-message-to-client',
-          new MessageToClientDTO(user, chan.id, msg.message),
+          new MessageToClientDTO(user, chan.id, msg.message, now),
         );
-      await this.channelService.addMessage(uid, chan.id, msg.message);
+      await this.channelService.addMessage(uid, chan.id, msg.message, now);
     }
   }
 
@@ -384,13 +390,20 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       } else {
         invite = false;
       }
+      const now = new Date();
       this.server
         .to(msg.channelId)
         .emit(
           'chat-message-to-client',
-          new MessageToClientDTO(user, chan.id, msg.message, invite),
+          new MessageToClientDTO(user, chan.id, msg.message, now, invite),
         );
-      await this.channelService.addMessage(uid, chan.id, msg.message, invite);
+      await this.channelService.addMessage(
+        uid,
+        chan.id,
+        msg.message,
+        now,
+        invite,
+      );
     }
   }
 

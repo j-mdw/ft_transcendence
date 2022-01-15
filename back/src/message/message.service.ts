@@ -13,17 +13,20 @@ export class MessageService {
   ) {}
 
   async findChannelMessages(channel: Channel): Promise<Message[]> {
-    return await this.messageRepository.find({
-      where: {
-        channel: channel,
-      },
-    });
+    return (
+      await this.messageRepository.find({
+        where: {
+          channel: channel,
+        },
+      })
+    ).sort((msg1, msg2) => msg1.date.getTime() - msg2.date.getTime());
   }
 
   async addMessage(
     channel: Channel,
     user: User,
     msg: string,
+    date: Date,
     gameInvite: boolean,
   ): Promise<void> {
     await this.messageRepository.save({
@@ -31,6 +34,7 @@ export class MessageService {
       channel: channel,
       user: user,
       gameInvite: gameInvite,
+      date: date,
     });
   }
 }
