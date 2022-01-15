@@ -8,8 +8,11 @@
     <v-row>
       <v-text-field
         v-model="pseudo"
+        :rules="[rules.counter]"
         label="Pseudo"
         @keydown.enter="submitPseudo"
+        counter
+        maxlength="20"
       />
 
       <v-btn
@@ -46,6 +49,9 @@ export default Vue.extend({
       user: Object(),
       pseudo: '',
       alertPseudo: false,
+      rules: {
+          counter: (value:string) => value.length <= 20 || 'Max 20 characters',
+      },
     }
   },
 
@@ -60,7 +66,7 @@ export default Vue.extend({
         console.log('Error:', error); // Should only intercept 409
         this.pseudo = ''; // Here could have a pop-up/message to let user know pseudo is not available
       }
-    }
+    },
   }
 })
 

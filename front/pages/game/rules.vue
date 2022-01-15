@@ -4,7 +4,7 @@
 
 	<h2>	PONG RULES - HOW TO PLAY IF YOU WERE NOT BORN IN 1972</h2>
 	<h3>Classic game</h3>
-	<p>Each player has a paddle, well…, what should be a paddle, but is only a line. Each player controls his paddle with ‘w’ or 'arrow up' to go up and ’s’ or 'arrow down' to go down.
+	<p>Each player has a paddle, well…, what should be a paddle, but is only a line. Each player controls his paddle with 'arrow up' to go up and 'arrow down' to go down.
 		The game is like a ping pong game, you have to send back the ball with your paddle.
 		You’re the winner when you hit the  <strong>fabulous</strong>  score of <strong> 5</strong> !</p>
 

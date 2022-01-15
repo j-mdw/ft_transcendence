@@ -2,70 +2,72 @@
   <div class="mt-5">
     <v-list class="our_beige">
       <div v-for="participant in participants" :key="participant.userId">
-        <v-list-item class="ml-n3">
-          <v-badge
-            bottom
-            :color="colors[getStatus(participant.userId)]"
-            offset-x="30"
-            offset-y="30"
-          >
-            <NuxtLink :to="`/profile/${participant.userId}`">
-              <v-list-item-avatar class="mt-4 mb-4">
-                <v-img
-                  :src="`/api/${getAvatar(participant.userId)}`"
-                />
-              </v-list-item-avatar>
-            </NuxtLink>
-          </v-badge>
-          <v-list-item-content>
-            <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
-          </v-list-item-content>
-          <div v-if="participant.userId != me.id">
-            <div v-if="participant.userId != thisChannelOwner">
-              <v-list-item-action>
-                <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser()" />
-                <v-btn
-                  v-else
-                  v-ripple="false"
-                  plain
-                  icon
-                  title="unmute"
-                  @click="unmuteUser(participant.userId)"
-                >
-                  <v-icon color="#395c6b">
-                    fa-volume-up
-                  </v-icon>
-                </v-btn>
-              </v-list-item-action>
-              <v-list-item-action>
-                <v-btn
-                  v-if="participant.banned == false"
-                  v-ripple="false"
-                  plain
-                  icon
-                  title="ban"
-                  @click="banUser(participant.userId)"
-                >
-                  <v-icon color="#395c6b">
-                    fa-user-slash
-                  </v-icon>
-                </v-btn>
-                <v-btn
-                  v-else
-                  v-ripple="false"
-                  plain
-                  icon
-                  title="ban"
-                  @click="unbanUser(participant.userId)"
-                >
-                  <v-icon color="#395c6b">
-                    fa-user
-                  </v-icon>
-                </v-btn>
-              </v-list-item-action>
+        <div v-if="UserExist(participant.userId)">
+          <v-list-item class="ml-n3">
+            <v-badge
+              bottom
+              :color="colors[getStatus(participant.userId)]"
+              offset-x="30"
+              offset-y="30"
+            >
+              <NuxtLink :to="`/profile/${participant.userId}`">
+                <v-list-item-avatar class="mt-4 mb-4">
+                  <v-img
+                    :src="`/api/${getAvatar(participant.userId)}`"
+                  />
+                </v-list-item-avatar>
+              </NuxtLink>
+            </v-badge>
+            <v-list-item-content>
+              <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
+            </v-list-item-content>
+            <div v-if="participant.userId != me.id">
+              <div v-if="participant.userId != thisChannelOwner">
+                <v-list-item-action>
+                  <mute-button v-if="participant.muted == false" :user-id="participant.userId" :channel-id="channelId" @click="muteUser(participant.userId)" @changeMute="onMuteChanged" />
+                  <v-btn
+                    v-else
+                    v-ripple="false"
+                    plain
+                    icon
+                    title="unmute"
+                    @click="unmuteUser(participant.userId)"
+                  >
+                    <v-icon color="#395c6b">
+                      fa-volume-up
+                    </v-icon>
+                  </v-btn>
+                </v-list-item-action>
+                <v-list-item-action>
+                  <v-btn
+                    v-if="participant.banned == false"
+                    v-ripple="false"
+                    plain
+                    icon
+                    title="ban"
+                    @click="banUser(participant.userId)"
+                  >
+                    <v-icon color="#395c6b">
+                      fa-user-slash
+                    </v-icon>
+                  </v-btn>
+                  <v-btn
+                    v-else
+                    v-ripple="false"
+                    plain
+                    icon
+                    title="ban"
+                    @click="unbanUser(participant.userId)"
+                  >
+                    <v-icon color="#395c6b">
+                      fa-user
+                    </v-icon>
+                  </v-btn>
+                </v-list-item-action>
+              </div>
             </div>
-          </div>
-        </v-list-item>
+          </v-list-item>
+        </div>
       </div>
     </v-list>
   </div>
@@ -146,7 +148,18 @@ export default Vue.extend({
     async unbanUser (peerId: string) {
       await this.$axios.$patch(`channel/${this.channelId}/${peerId}`, { banned: false }, { withCredentials: true });
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
-    }
+    },
+
+    async onMuteChanged () {
+      this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    },
+
+    UserExist (peerId: string) {
+      if (!usersStore.oneUser(peerId)) {
+        return false
+      }
+      return (true);
+    },
   },
 
 });

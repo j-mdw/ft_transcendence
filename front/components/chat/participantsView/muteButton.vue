@@ -19,7 +19,7 @@
         </v-btn>
       </template>
 
-      <v-card>
+      <v-card class="our_beige">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           choose time to mute
         </v-card-title>
@@ -62,40 +62,29 @@ export default Vue.extend({
   }),
 
   methods: {
-        async muteUser () {
-            const time = this.items.indexOf(this.select)
-            const d = new Date();
-            
-            if(time === 0)
-            {
-                d.setMinutes(d.getMinutes() + 5)
-                console.log(d)
-                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
-                this.$emit('changeMute');
-            }
-            else if(time === 1)
-            {
-                d.setHours(d.getHours() + 24)
-                console.log(d)
-                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
-                this.$emit('changeMute');
-            }
-            else if (time == 2)
-            {
-                d.setHours( d.getHours() + 1 );
-                console.log(d)
-                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
-                this.$emit('changeMute');
-            }
-            else
-            {   d.setFullYear( d.getFullYear() + 300 );
-                await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, {muted: true, muteEnd:d}, { withCredentials: true });
-                this.$emit('changeMute');
-            }
-            
-        
-        this.dialog=false
-        
+    async muteUser () {
+      const time = this.items.indexOf(this.select)
+      const d = new Date();
+
+      if (time === 0) {
+        d.setMinutes(d.getMinutes() + 5)
+        await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
+        this.$emit('changeMute');
+      } else if (time === 1) {
+        d.setHours(d.getHours() + 24)
+        await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
+        this.$emit('changeMute');
+      } else if (time == 2) {
+        d.setHours(d.getHours() + 1);
+        await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
+        this.$emit('changeMute');
+      } else {
+        d.setFullYear(d.getFullYear() + 300);
+        await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
+        this.$emit('changeMute');
+      }
+
+      this.dialog = false
     }
   }
 })

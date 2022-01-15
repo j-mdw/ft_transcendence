@@ -53,6 +53,7 @@ export default Vue.extend({
   },
   async mounted () {
     this.channels = await this.$axios.$get('/channel', { withCredentials: true })
+    channelsStore.fetch();
   },
   methods: {
     async createChannel () {

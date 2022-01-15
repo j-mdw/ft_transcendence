@@ -15,6 +15,7 @@
                   <div v-if="msg.gameInvite">
                     <v-btn class="our_yellow" @click="joinPrivateGame()">
                       join the game
+                      <pingpong-logo  class="ml-3 mt-2 mb-2"/>
                     </v-btn>
                   </div>
                   <div v-else class="message_left">
@@ -36,7 +37,7 @@
           v-if="current_message.length > 0"
           id="chat send"
           elevation="2"
-          class="mt-6"
+          class="mt-6 our_light_pink"
           @click="sendMessage()"
         >
           Send
@@ -45,10 +46,10 @@
           Send
         </v-btn>
       </v-col>
-      <v-col>
+      <v-col class="ml-n16">
         <v-btn
           elevation="2"
-          class="mt-6 our_light_pink"
+          class="mt-6 our_light_yellow ml-n16"
           @click="sendGameInvite()"
         >
           Play pong
@@ -133,6 +134,7 @@ export default Vue.extend({
         if(this.peerId)
           return usersStore.oneUser(this.peerId).pseudo;
       },
+
     },
     updated() {
       this.scrollToEnd()

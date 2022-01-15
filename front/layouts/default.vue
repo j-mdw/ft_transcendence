@@ -37,7 +37,7 @@
     </v-app-bar>
     <users-bar />
 
-    <v-main>
+    <v-main style="background-color: #f7ede2">
       <nuxt />
     </v-main>
   </v-app>

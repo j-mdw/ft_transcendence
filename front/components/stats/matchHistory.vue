@@ -83,13 +83,11 @@ export default Vue.extend({
       return meStore.me;
     },
   },
-  async mounted () {
-    this.matches = await this.$axios.$get(`user/matches/${this.userId}`, { withCredentials: true });
-  },
   methods: {
     getAvatar (peerId: string) {
       return usersStore.oneUser(peerId).avatarPath;
     },
+
     getPseudo (peerId: string) {
       return usersStore.oneUser(peerId).pseudo;
     },

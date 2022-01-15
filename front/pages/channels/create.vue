@@ -1,25 +1,24 @@
 <template>
   <v-container class="flex-container" fill-height>
     <v-row justify="center" color="#f7ede2" align="center">
-      <v-form
-        ref="form"
-        lazy-validation
-        title="Create a channel"
-      >
+    <v-col sm="8">
+    <v-row justify="center" color="#f7ede2" align="center">
         <v-text-field
           v-model="name"
           :counter="20"
           label="Name"
           required
         />
-
+    </v-row>
+    <v-row justify="center" color="#f7ede2" align="center">
         <v-select
           v-model="select"
           :items="items"
           label="Type"
           required
         />
-
+    </v-row>
+    <v-row justify="center" color="#f7ede2" align="center">
         <v-text-field
           v-if="select == 'Protected'"
           v-model="password"
@@ -27,7 +26,8 @@
           label="password"
           required
         />
-
+    </v-row>
+    <v-row justify="center" color="#f7ede2" align="center">
         <v-btn
           color="success"
           class="mr-4"
@@ -35,7 +35,9 @@
         >
           Send
         </v-btn>
-      </v-form>
+    </v-row>
+    </v-col>
+    </v-row>
       <div v-if="alertCreation == true">
           <v-alert
             type="error"
@@ -45,7 +47,7 @@
             maybe you forgot the password for a protected channel
           </v-alert>
         </div>
-    </v-row>
+    
   </v-container>
 </template>
 

@@ -21,6 +21,14 @@
         <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg">
       </v-btn>
     </v-row>
+    <div v-if="alertTwofa">
+            <v-alert
+              type="error"
+              class="mt-6"
+            >
+              Sorry you've entered the wrong code
+            </v-alert>
+          </div>
   </v-container>
 </template>
 
@@ -35,25 +43,24 @@ export default Vue.extend({
       user: Object(),
       twofaCode: '',
       title: null,
+      alertTwofa: false
     }
   },
 
   methods: {
     async submitTwofaCode () {
       try {
-        await this.$axios.$post('2fa/authenticate', { twoFactorAuthenticationCode: this.twofaCode }, { withCredentials: true }).then((res) => {
-          console.log('youpi !');
+        await this.$axios.$post('2fa/authenticate', { twoFactorAuthenticationCode: this.twofaCode }, { withCredentials: true })
+        this.alertTwofa = false
           authenticationStore.setLogin()
           this.$router.push('/')
-          // this.whereTogo()
-        });
       } catch (err) {
-        (this as any).$dialog.error({
-          text: err.response.data.message,
-          title: err.response.status
-        })
-        this.$router.push('/auth');
+        this.alertTwofa = true
+        console.log("error two fa")
+         this.$router.push('/auth');
       }
+        
+          // this.whereTogo()
     },
 
     // async whereTogo () {

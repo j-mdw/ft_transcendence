@@ -49,17 +49,15 @@ import { usersStore } from '~/store'
 
 export default Vue.extend({
   layout: 'default',
-  data () {
-    return {
-
-    };
-  },
-
   computed: {
     ranking (): User[] {
       return usersStore.ranking;
     }
 
+  },
+
+  mounted () {
+    usersStore.fetchUsers()
   },
 
   methods: {

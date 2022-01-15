@@ -1,10 +1,68 @@
 <template>
+<<<<<<< HEAD
   <div v-if="doIhaverequest == 0">
     <v-row justify="center" class="mt-11">
       <h1>
         you have no more request<br>
       </h1>
     </v-row>
+=======
+<div v-if="doIhaverequest == 0">
+         <v-row justify="center" class="mt-11">
+            <h1>
+              you have no more request<br>
+            </h1>
+          </v-row>
+      </div>
+      <div v-else>
+  <div class="mt-5">
+    <v-list class="our_beige">
+      <div v-for="relationship in relationships" :key="relationship.peerId">
+        <div v-if="relationship.type == 2">
+          <div v-if="UserExist(relationship.peerId)">
+          <v-list-item class="ml-n3">
+            <v-badge
+              bottom
+              :color="colors[getStatus(relationship.peerId)]"
+              offset-x="30"
+              offset-y="30"
+            >
+              <NuxtLink :to="`/profile/${relationship.peerId}`">
+                <v-list-item-avatar class="mt-4 mb-4">
+                  <v-img
+                    :src="`/api/${getAvatar(relationship.peerId)}`"
+                  />
+                </v-list-item-avatar>
+              </NuxtLink>
+            </v-badge>
+            <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(relationship.peerId)" />
+            <v-col>
+              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="becomeFriends(relationship.peerId)">
+                become friend
+                <v-icon color="#395c6b" right>
+                  fas fa-user-check
+                </v-icon>
+              </v-btn>
+            </v-col>
+            <v-col>
+              <v-btn color="#f5cac3" class="mb-2 mt-2 ml-2 mr-2" @click="deleteFriends(relationship.peerId)">
+                delete invitation
+                <v-icon color="#395c6b" right>
+                  fas fa-trash-alt
+                </v-icon>
+              </v-btn>
+            </v-col>
+          </v-list-item>
+          </div>
+          <div v-else>
+            <v-row justify="center" align="center" class="mt-2">
+            <h3> you will need to reload the page to see this user </h3>
+            </v-row>
+          </div>
+        </div>
+      </div>
+    </v-list>
+>>>>>>> efb940da1201e1b168f7f4d99ef1c6c33f712046
   </div>
   <div v-else>
     <div class="mt-5">
@@ -88,6 +146,15 @@ export default Vue.extend({
   },
 
   methods: {
+    UserExist(peerId: string) {
+      // usersStore.fetchUsers();
+      if(!usersStore.oneUser(peerId))
+      {
+        return false
+      }
+      return(true);
+    },
+
     getAvatar (peerId: string) {
       return usersStore.oneUser(peerId).avatarPath;
     },

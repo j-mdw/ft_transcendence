@@ -11,7 +11,7 @@
       width="400"
     >
       <v-row justify="center" align="center" class="mt-8" >
-        <h3>You need to wait for your opponent !</h3>
+        <h3 class="mt-6">You need to wait for your opponent !</h3>
       </v-row>
       <v-row align="center" justify="center" class="mt-12">
       <v-progress-circular
@@ -32,12 +32,15 @@
       height="200"
       width="400"
     >
-    <v-row justify="center" align="center" class= "our_navy_blue--text mt-10" >
-      <h2> {{getPseudo(getWinner())}} Won !!! </h2>
+    <v-row v-if="me.id != getWinner()" justify="center" align="center" class="our_navy_blue--text mt-10" >
+      <h2 class="mt-6"> {{getPseudo(getWinner())}} Won ! </h2>
+    </v-row>
+    <v-row v-else justify="center" align="center" class="our_navy_blue--text mt-10" >
+      <h2 class="mt-6"> Congratulation you Won ! </h2>
     </v-row>
     <v-row v-if="game.state == 2" justify="center" align="center" >
       <v-btn to="/game" class="our_dark_pink mt-10" >
-        got back to game page
+        go back to game page
       </v-btn>
     </v-row>
     </v-card>
@@ -85,6 +88,7 @@ import {
   Paddle,
   PaddleMoveDTO,
   Role,
+  User
 } from "~/models";
 import { gameStatusStore, meStore, usersStore } from "~/store";
 export default Vue.extend({
@@ -199,6 +203,10 @@ export default Vue.extend({
     }
   },
   computed: {
+    me (): User {
+      return meStore.me;
+    },
+
     role: function() {
       if (this.game) {
         if (meStore.me.id === this.game.player1.id) {
@@ -233,6 +241,7 @@ export default Vue.extend({
         this.drawPaddle(gameData.player2.paddle);
       }
     });
+    usersStore.fetchUsers()
   },
   beforeDestroy() {
     gameStatusStore.stopPlaying();

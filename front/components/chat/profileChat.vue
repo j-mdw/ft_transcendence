@@ -10,7 +10,7 @@
         </v-avatar>
       </template>
 
-      <v-card height="200" width="200">
+      <v-card height="200" width="200" class="our_beige">
         <!-- <div v-if="userId != me.id"> -->
         <div v-if="userId != me.id">
           <v-card-title class="our_dark_beige our_navy_blue--text">
@@ -32,16 +32,42 @@
             <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(userId)}`">
               <messageLogo />
             </v-btn>
-            <v-btn v-ripple="false" plain icon>
-              <pingpongLogo />
-            </v-btn>
-          </v-row>
-        </div>
-        <div v-else>
-          <v-row align="center" justify="center">
-            <h1 class="mt-11">
-              it's you
-            </h1>
+
+            <v-card height="200" width="200">
+              <!-- <div v-if="userId != me.id"> -->
+              <div v-if="userId != me.id">
+                <v-card-title class="our_dark_beige our_navy_blue--text">
+                  {{ user.pseudo }}
+                </v-card-title>
+                <v-row justify="center" align="center" class="mt-9 mb-9">
+                  <v-badge
+                    bottom
+                    :color="colors[user.status]"
+                    offset-x="15"
+                    offset-y="15"
+                  >
+                    <NuxtLink :to="`/profile/${userId}`">
+                      <v-avatar>
+                        <v-img :src="`/api/${getAvatar(userId)}`" />
+                      </v-avatar>
+                    </NuxtLink>
+                  </v-badge>
+                  <v-btn v-ripple="false" plain :to="`/dm/${getNameChannel(userId)}`">
+                    <messageLogo />
+                  </v-btn>
+                  <v-btn v-ripple="false" plain icon>
+                    <pingpongLogo />
+                  </v-btn>
+                </v-row>
+              </div>
+              <div v-else>
+                <v-row align="center" justify="center">
+                  <h1 class="mt-11">
+                    it's you
+                  </h1>
+                </v-row>
+              </div>
+            </v-card>
           </v-row>
         </div>
       </v-card>
@@ -95,7 +121,6 @@ export default Vue.extend({
   methods: {
     UserExist (peerId: string) {
       if (!usersStore.oneUser(peerId)) {
-        console.log('loosing my mind');
         return false
       }
       return (true);
