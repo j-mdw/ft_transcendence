@@ -1,5 +1,5 @@
 
-   
+
 <template>
 
 <div v-if="game">
@@ -21,7 +21,7 @@
       ></v-progress-circular>
       </v-row>
     </v-card>
-    
+
     </v-overlay>
   </div>
   <div  v-if="game.state">
@@ -36,7 +36,9 @@
       <h2 class="mt-6"> {{getPseudo(getWinner())}} Won ! </h2>
     </v-row>
     <v-row v-else justify="center" align="center" class="our_navy_blue--text mt-10" >
-      <h2 class="mt-6"> Congratulation you Won ! </h2>
+      <h2 class="mt-6"> Congratulation you Won ! <v-icon color="#395c6b">
+            fa-trophy
+          </v-icon> </h2>
     </v-row>
     <v-row v-if="game.state == 2" justify="center" align="center" >
       <v-btn to="/game" class="our_dark_pink mt-10" >
@@ -63,7 +65,7 @@
     {{ game.countdown }}
   </h1>
   </div>
-  
+
   <div id="v-app" class="v-app">
     <canvas
       id="game"
@@ -114,7 +116,7 @@ export default Vue.extend({
       this.ratio.x = this.width / 1280;
       this.ratio.y = this.height / 960;
       this.ratio.less =
-        this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x; 
+        this.ratio.x > this.ratio.y ? this.ratio.y : this.ratio.x;
       },
     drawBall(ball: Ball) {
       if (this.context) {

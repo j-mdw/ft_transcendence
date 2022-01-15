@@ -142,7 +142,7 @@ ul {
     margin-right: 10px;
 }
 .message-wrapper_left{
-  height: 500px;
+  height: 70vh;
   overflow: scroll;
   margin-right: 4rem;
 }

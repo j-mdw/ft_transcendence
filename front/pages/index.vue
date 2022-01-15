@@ -8,7 +8,7 @@
           </h1>
         </v-row>
         <v-row align="center" justify="center" class="mt-7">
-          <pingpong-logo height />
+          <pingpong-logo height class="mb-8" />
         </v-row>
       </v-col>
       <v-col>
