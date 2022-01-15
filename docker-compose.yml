@@ -11,8 +11,8 @@ services:
             POSTGRES_DB: transcendence
         volumes:
         - ./postgres-data:/var/lib/postgresql/data
-        ports:
-        - "5432:5432"
+        expose:
+        - "5432"
         
     adminer:
         image: adminer
@@ -26,8 +26,8 @@ services:
         build:
             context: ./front
             dockerfile: Dockerfile.front
-        ports:
-        - "3000:3000"
+        expose:
+        - "3000"
 
     back:
         container_name: backend
@@ -36,8 +36,8 @@ services:
             dockerfile: Dockerfile.back
         depends_on:
         - "db"
-        ports:
-        - "4000:4000"
+        expose:
+        - "4000"
 
     reverse-proxy:
         image: nginx:1.20.2
