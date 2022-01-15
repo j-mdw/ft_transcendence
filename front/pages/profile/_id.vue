@@ -1,5 +1,12 @@
 <template>
-  <v-container fill-height>
+  <v-container v-if="$route.params.id == me.id" fill-height>
+    <div>
+      <v-btn to="/profile">
+        it's you go back to your profile
+      </v-btn>
+    </div>
+  </v-container>
+  <v-container v-else fill-height>
     <v-row justify="center" align="center">
       <v-col sm="4" align="center" justify="center">
         <v-avatar size="250px">

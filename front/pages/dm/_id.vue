@@ -11,14 +11,14 @@
             <li v-for="msg in messages" :key="messages[msg]">
               <v-row class="mt-7 mb-7">
                 <profil-chat :user-id="msg.userId" />
-                <div class="message-background_left">
-                  <div v-if="msg.gameInvite">
-                    <v-btn class="our_yellow" @click="joinPrivateGame()">
-                      join the game
-                      <pingpong-logo class="ml-3 mt-2 mb-2" />
-                    </v-btn>
-                  </div>
-                  <div v-else class="message_left">
+                <div v-if="msg.gameInvite" class="message-background_left_play">
+                  <v-btn class="our_yellow" @click="joinPrivateGame()">
+                    join the game
+                    <pingpong-logo class="ml-3 mt-2 mb-2" />
+                  </v-btn>
+                </div>
+                <div v-else class="message-background_left">
+                  <div  class="message_left">
                     {{ msg.message }}
                   </div>
                 </div>
@@ -178,6 +178,15 @@ ul {
   overflow: scroll;
   margin-right: 4rem;
 }
+.message-background_left_play{
+    background-color: #f7ede2;
+    max-width: 30rem;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    margin: "auto";
+    background-color: #fff;
+}
+
 .message-background_left{
     background-color: #fff;
     max-width: 30rem;

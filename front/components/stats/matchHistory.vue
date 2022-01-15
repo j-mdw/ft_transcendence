@@ -24,15 +24,26 @@
             <v-row align="center" justify="center" class="mt-4 mb-4">
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
-                  <v-list-item-avatar>
-                    <NuxtLink :to="`/profile/${game.user1Id}`">
+                  <div v-if="game.user1Id == me.id">
+                    <v-list-item-avatar>
                       <v-avatar>
                         <v-img
                           :src="`/api/${getAvatar(game.user1Id)}`"
                         />
                       </v-avatar>
-                    </NuxtLink>
-                  </v-list-item-avatar>
+                    </v-list-item-avatar>
+                  </div>
+                  <div v-else>
+                    <v-list-item-avatar>
+                      <NuxtLink :to="`/profile/${game.user1Id}`">
+                        <v-avatar>
+                          <v-img
+                            :src="`/api/${getAvatar(game.user1Id)}`"
+                          />
+                        </v-avatar>
+                      </NuxtLink>
+                    </v-list-item-avatar>
+                  </div>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">
                   {{ getPseudo(game.user1Id) }}
@@ -43,15 +54,26 @@
               </h4>
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
-                  <v-list-item-avatar>
-                    <NuxtLink :to="`/profile/${game.user2Id}`">
+                  <div v-if="game.user2Id == me.id">
+                    <v-list-item-avatar>
                       <v-avatar>
                         <v-img
                           :src="`/api/${getAvatar(game.user2Id)}`"
                         />
                       </v-avatar>
-                    </NuxtLink>
-                  </v-list-item-avatar>
+                    </v-list-item-avatar>
+                  </div>
+                  <div v-else>
+                    <v-list-item-avatar>
+                      <NuxtLink :to="`/profile/${game.user2Id}`">
+                        <v-avatar>
+                          <v-img
+                            :src="`/api/${getAvatar(game.user2Id)}`"
+                          />
+                        </v-avatar>
+                      </NuxtLink>
+                    </v-list-item-avatar>
+                  </div>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">
                   {{ getPseudo(game.user2Id) }}

@@ -20,14 +20,22 @@
       <div v-for="user in ranking" :key="user.title">
         <v-row align="center" justify="center" class="mt-2 mb-2 ml-4">
           <v-col>
-            <NuxtLink :to="`/profile/${user.id}`">
+            <div v-if="user.id == me.id">
               <v-list-item-avatar class="mt-4 mb-4">
                 <v-img
                   :src="`/api/${user.avatarPath}`"
                 />
               </v-list-item-avatar>
-            </NuxtLink>
-            {{ user.pseudo }}
+            </div>
+            <div v-else>
+              <router-link :to="`/profile/${user.id}`">
+                <v-list-item-avatar class="mt-4 mb-4">
+                  <v-img
+                    :src="`/api/${user.avatarPath}`"
+                  />
+                </v-list-item-avatar>
+              </router-link>
+            </div>
           </v-col>
           <v-col class="ml-11">
             {{ user.victories }}
@@ -45,14 +53,18 @@
 <script lang="ts">
 import Vue from 'vue'
 import { User } from '~/models';
-import { usersStore } from '~/store'
+import { usersStore, meStore } from '~/store'
 
 export default Vue.extend({
   layout: 'default',
   computed: {
     ranking (): User[] {
       return usersStore.ranking;
-    }
+    },
+
+    me (): User { ///
+      return meStore.me; //
+    },
 
   },
 
