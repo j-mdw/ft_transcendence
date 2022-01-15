@@ -59,7 +59,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     srv.use(async (socket, next) => {
       const cookie = socket.handshake.headers.cookie;
       if (!cookie) {
-        next(new UnauthorizedException('authentication failed'));
+        return next(new UnauthorizedException('authentication failed'));
       }
       let token = cookie.substring(cookie.indexOf('access_token'));
       const token_end = token.indexOf(';');
