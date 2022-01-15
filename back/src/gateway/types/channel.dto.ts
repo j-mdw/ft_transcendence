@@ -23,18 +23,21 @@ export class MessageToClientDTO {
   userId: string;
   pseudo: string;
   message: string;
+  date: Date;
   gameInvite?: boolean;
 
   constructor(
     user: User,
     channelId: string,
     msg: string,
+    date: Date,
     gameInvite?: boolean,
   ) {
     this.channelId = channelId;
     this.userId = user.id;
     this.pseudo = user.pseudo;
     this.message = msg;
+    this.date = date;
     if (gameInvite) {
       this.gameInvite = gameInvite;
     }
