@@ -241,6 +241,7 @@ export default Vue.extend({
         this.drawPaddle(gameData.player2.paddle);
       }
     });
+    usersStore.fetchUsers()
   },
   beforeDestroy() {
     gameStatusStore.stopPlaying();

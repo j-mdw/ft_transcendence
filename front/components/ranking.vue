@@ -59,6 +59,10 @@ export default Vue.extend({
     };
   },
 
+  mounted(){
+    usersStore.fetchUsers()
+  },
+
   computed: {     
     
     ranking(): User[] {

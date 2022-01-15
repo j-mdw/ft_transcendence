@@ -2,6 +2,7 @@
   <div class="mt-5">
     <v-list class="our_beige">
       <div v-for="participant in participants" :key="participant.userId">
+        <div v-if="UserExist(participant.userId)">
             <v-list-item class="ml-n3">
               <v-badge
                 bottom
@@ -21,6 +22,7 @@
                 <v-list-item-title class="our_navy_blue--text" v-text="getPseudo(participant.userId)" />
               </v-list-item-content>
             </v-list-item>
+          </div>
       </div>
     </v-list>   
   </div>
@@ -59,7 +61,14 @@ export default Vue.extend({
     getStatus(peerId: string)
     {
         return usersStore.oneUser(peerId).status;
-    }
+    },
+    UserExist(peerId: string) {
+      if(!usersStore.oneUser(peerId))
+      {
+        return false
+      }
+      return(true);
+    },
   },
   computed: {
     relationships(): Relationship[] {
@@ -71,6 +80,7 @@ export default Vue.extend({
     me (): User {
       return meStore.me;
     },
+    
     
   },
 });

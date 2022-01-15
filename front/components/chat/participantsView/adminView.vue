@@ -2,6 +2,7 @@
   <div class="mt-5">
     <v-list class="our_beige">
       <div v-for="participant in participants" :key="participant.userId">
+        <div v-if="UserExist(participant.userId)">
             <v-list-item class="ml-n3">
               <v-badge
                 bottom
@@ -39,6 +40,7 @@
               </div>
               </div>
             </v-list-item>
+          </div>
       </div>
     </v-list>   
   </div>
@@ -134,6 +136,14 @@ export default Vue.extend({
 
     async onMuteChanged() {
       this.participants = await this.$axios.$get(`channel/${this.channelId}`, { withCredentials: true });
+    },
+
+    UserExist(peerId: string) {
+      if(!usersStore.oneUser(peerId))
+      {
+        return false
+      }
+      return(true);
     },
   },
 

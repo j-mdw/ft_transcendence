@@ -86,7 +86,7 @@ export default Vue.extend({
     }
   },
   mounted () { // DELETE
-    console.log(usersStore.ranking);
+    usersStore.fetchUsers()
     this.getLiveGames();
   },
   methods: {

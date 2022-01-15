@@ -90,6 +90,8 @@ export default Vue.extend({
 
   mounted () {
     this.$socket.client.emit('chat-join-channel', this.$route.params.id);
+    usersStore.fetchUsers()
+    channelsStore.fetch()
   },
   beforeDestroy () {
     this.$socket.client.emit('chat-leave', this.channelIdStore);

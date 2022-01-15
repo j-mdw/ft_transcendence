@@ -134,6 +134,7 @@ export default Vue.extend({
         if(this.peerId)
           return usersStore.oneUser(this.peerId).pseudo;
       },
+
     },
     updated() {
       this.scrollToEnd()
