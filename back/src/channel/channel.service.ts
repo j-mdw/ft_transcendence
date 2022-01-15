@@ -263,7 +263,6 @@ export class ChannelService {
         channel,
       );
     } catch {
-      console.log('Cannot update channel member: not found');
       throw new NotFoundException('user not found');
     }
     if (
@@ -295,23 +294,19 @@ export class ChannelService {
   ): boolean {
     // Only admins can update members
     if (!participationUpdating.admin) {
-      console.log('only admin can update');
       return false;
     }
     const isOwner = participationUpdating.user.id == channel.owner.id;
     // Only owner can update admins
     if (participationToUpdate.admin && !isOwner) {
-      console.log('only owner can update admin');
       return false;
     }
     // Only owner can promote to admin
     if (updateData.admin && !isOwner) {
-      console.log('only owner can promote to admin');
       return false;
     }
     // Cannot update MuteEndDate if user is not muted
     if (updateData.muted == false && updateData.muteEnd != undefined) {
-      console.log('user is not muted but date is set');
       return false;
     }
     if (
@@ -319,7 +314,6 @@ export class ChannelService {
       updateData.muted == undefined &&
       updateData.muteEnd != undefined
     ) {
-      console.log('user is not muted but date is set');
       return false;
     }
     return true;

@@ -15,7 +15,6 @@ export class JwtGuard implements CanActivate {
     if (decoded && (await this.authService.userHasAccess(decoded['userId']))) {
       return true;
     } else {
-      console.log('jwt guard verify failure');
       throw new UnauthorizedException();
     }
   }

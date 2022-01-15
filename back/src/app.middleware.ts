@@ -24,16 +24,11 @@ export class AppMiddleware implements NestMiddleware {
         const decoded = this.jwtService.decode(req.cookies['access_token']);
         if (decoded['userId']) {
           res.locals.id = decoded['userId'];
-        } else {
-          console.log('jwt decoded successfully but no userId found');
         }
       } catch {
-        console.log('Middleware failed to decode access_token cookie');
         res.clearCookie('access_token');
         throw new UnauthorizedException();
       }
-    } else {
-      console.log('No cookie provided'); //DELETE
     }
     next();
   }

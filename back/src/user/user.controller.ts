@@ -63,7 +63,6 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
     @Body() data: UpdateUserDTO,
   ): Promise<void> {
-    console.log('Paths - user id:', response.locals.id);
     await this.userService.update(response.locals.id, data);
   }
 
@@ -91,7 +90,6 @@ export class UserController {
       if (fs.existsSync(user.avatarPath)) {
         try {
           fs.unlinkSync(user.avatarPath);
-          console.log('Successfully deleted the file');
         } catch (err) {
           throw err;
         }

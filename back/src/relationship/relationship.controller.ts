@@ -33,8 +33,6 @@ export class RelationshipController {
     @Res({ passthrough: true }) response: Response,
     @Body() relation: RelationshipUpdateDTO,
   ): Promise<void> {
-    console.log('controller userid:', response.locals.id);
-    console.log('controller peerid:', peerId);
     await this.relationshipService.updateRelationship(
       response.locals.id,
       peerId,
