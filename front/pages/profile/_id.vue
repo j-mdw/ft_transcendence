@@ -1,6 +1,5 @@
 <template>
   <v-container fill-height>
-    <!-- <v-row no-gutters> -->
     <v-row justify="center" align="center">
       <v-col sm="4" align="center" justify="center">
         <v-avatar size="250px">

@@ -36,12 +36,9 @@ export default class MessagesModule extends VuexModule {
   @Mutation
   add (message: MessageReceived) {
     if (message.channelId === this.currentChannel) {
-      console.log('we are in the first if')
       const relation = relationshipStore.one(message.userId);
       if (!relation || relation.type !== RelationshipType.blocked) {
         this.messages.push(message);
-        console.log('we are in the second if')
-        console.log(this.messages)
       }
     }
   }

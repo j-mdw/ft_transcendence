@@ -1,12 +1,10 @@
-import { Controller, Get, Param, Req, Res, UseGuards } from '@nestjs/common';
-import path from 'path/posix';
-import { AppService } from './app.service';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { JwtGuard } from './auth/jwt.guard';
 
 @Controller()
 @UseGuards(JwtGuard)
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor() {}
 
   @Get('/avatars/ours/:filename')
   async seeUploadedFile(@Param('filename') filename: string, @Res() res) {

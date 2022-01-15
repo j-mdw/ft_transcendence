@@ -1,29 +1,29 @@
 <template>
-	<span class="go-back">
-		<button @click="goBack">Go Back</button>
-	</span>
-
+  <span class="go-back">
+    <button @click="goBack">Go Back</button>
+  </span>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+
 export default Vue.extend({
-	methods: {
-		goBack(): any {
-			return this.$router.go(-1)
-		}
-	}
+  methods: {
+    goBack (): any {
+      return this.$router.go(-1)
+    }
+  }
 })
 </script>
 
 <style scoped>
 .go-back {
-	display: flex;
-	cursor: pointer;
+  display: flex;
+  cursor: pointer;
 }
 
 button {
-	border: 0;
+  border: 0;
 }
 
 </style>

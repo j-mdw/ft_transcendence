@@ -8,8 +8,6 @@
       app
       class="pt-2"
     >
-      <!-- <NuxtLink to="/channels">Channels</NuxtLink>
-            <NuxtLink to="/chat">Lonly chat</NuxtLink> -->
       <v-tabs v-model="activeTab" color="#395c6b" centered icons-and-text>
         <v-tab
           to="/profile"
@@ -63,7 +61,6 @@ export default Vue.extend({
   },
   methods: {
     async logout () {
-      console.log('LOGOUT')
       await authenticationStore.signOut()
       this.$router.push('/auth')
     }

@@ -10,9 +10,9 @@
         v-model="pseudo"
         :rules="[rules.counter]"
         label="Pseudo"
-        @keydown.enter="submitPseudo"
         counter
         maxlength="20"
+        @keydown.enter="submitPseudo"
       />
 
       <v-btn
@@ -23,9 +23,16 @@
       >
         <img style="height:36px" src="../../assets/svg/arrow_right_blue.svg">
       </v-btn>
-       <v-btn v-else disabled class="mt-3 mb-5" text type="submit" @click="submitPseudo">
-          <img style="height:36px" src="../../assets/svg/arrow_right_grey.svg">
-        </v-btn>
+      <v-btn
+        v-else
+        disabled
+        class="mt-3 mb-5"
+        text
+        type="submit"
+        @click="submitPseudo"
+      >
+        <img style="height:36px" src="../../assets/svg/arrow_right_grey.svg">
+      </v-btn>
     </v-row>
     <div v-if="alertPseudo == true">
       <v-alert
@@ -50,7 +57,7 @@ export default Vue.extend({
       pseudo: '',
       alertPseudo: false,
       rules: {
-          counter: (value:string) => value.length <= 20 || 'Max 20 characters',
+        counter: (value:string) => value.length <= 20 || 'Max 20 characters',
       },
     }
   },
@@ -63,8 +70,7 @@ export default Vue.extend({
         this.$router.push('/');
       } catch (error) {
         this.alertPseudo = true;
-        console.log('Error:', error); // Should only intercept 409
-        this.pseudo = ''; // Here could have a pop-up/message to let user know pseudo is not available
+        this.pseudo = '';
       }
     },
   }

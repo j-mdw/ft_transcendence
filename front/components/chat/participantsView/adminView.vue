@@ -161,7 +161,6 @@ export default Vue.extend({
       return (true);
     },
   },
-
 });
 </script>
 

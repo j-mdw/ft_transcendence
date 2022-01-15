@@ -1,12 +1,6 @@
 <template>
   <div>
     <v-col>
-      <!-- <v-btn color="#f5cac3" class="mt-6">
-          settings
-          <v-icon color="#395c6b" right>
-            fa fa-cog
-          </v-icon>
-          </v-btn> -->
       <v-dialog
         v-model="dialog"
         width="50%"
@@ -30,7 +24,6 @@
             lazy-validation
             title="Create a channel"
           >
-            <!-- <v-row align="center" justify="center"> -->
             <v-text-field
               v-model="password"
               type="password"
@@ -38,9 +31,9 @@
               required
               class="ml-4 mr-4"
             />
-            <!-- </v-row> -->
             <v-row align="center" justify="center">
-              <v-btn v-if="password"
+              <v-btn
+                v-if="password"
                 color="success"
                 class="mr-4"
                 @click="joinProtected()"
@@ -95,9 +88,6 @@ export default Vue.extend({
       return (this.alertPassword);
     },
     async joinProtected () {
-      console.log('channel ID')
-      console.log(this.channelId)
-      console.log(this.me.id)
       try {
         this.alertPassword = false
         await this.$axios.$put(
@@ -109,11 +99,8 @@ export default Vue.extend({
                 withCredentials: true
               }
         );
-        console.log('still good')
       } catch (error: Error | any) {
-        // debugger;
         this.alertPassword = true
-        console.log(error.response.data)
       }
 
       if (this.alertPassword !== true) { this.$router.push(`/channels/${this.channelId}`) }

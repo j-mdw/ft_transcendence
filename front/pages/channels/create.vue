@@ -1,53 +1,52 @@
 <template>
   <v-container class="flex-container" fill-height>
     <v-row justify="center" color="#f7ede2" align="center">
-    <v-col sm="8">
-    <v-row justify="center" color="#f7ede2" align="center">
-        <v-text-field
-          v-model="name"
-          :counter="20"
-          label="Name"
-          required
-        />
-    </v-row>
-    <v-row justify="center" color="#f7ede2" align="center">
-        <v-select
-          v-model="select"
-          :items="items"
-          label="Type"
-          required
-        />
-    </v-row>
-    <v-row justify="center" color="#f7ede2" align="center">
-        <v-text-field
-          v-if="select == 'Protected'"
-          v-model="password"
-          type="password"
-          label="password"
-          required
-        />
-    </v-row>
-    <v-row justify="center" color="#f7ede2" align="center">
-        <v-btn
-          color="success"
-          class="mr-4"
-          @click="createChannel"
-        >
-          Send
-        </v-btn>
-    </v-row>
-    </v-col>
-    </v-row>
-      <div v-if="alertCreation == true">
-          <v-alert
-            type="error"
-            class=""
+      <v-col sm="8">
+        <v-row justify="center" color="#f7ede2" align="center">
+          <v-text-field
+            v-model="name"
+            :counter="20"
+            label="Name"
+            required
+          />
+        </v-row>
+        <v-row justify="center" color="#f7ede2" align="center">
+          <v-select
+            v-model="select"
+            :items="items"
+            label="Type"
+            required
+          />
+        </v-row>
+        <v-row justify="center" color="#f7ede2" align="center">
+          <v-text-field
+            v-if="select == 'Protected'"
+            v-model="password"
+            type="password"
+            label="password"
+            required
+          />
+        </v-row>
+        <v-row justify="center" color="#f7ede2" align="center">
+          <v-btn
+            color="success"
+            class="mr-4"
+            @click="createChannel"
           >
-            Sorry an error occured <br>
-            maybe you forgot the password for a protected channel
-          </v-alert>
-        </div>
-    
+            Send
+          </v-btn>
+        </v-row>
+      </v-col>
+    </v-row>
+    <div v-if="alertCreation == true">
+      <v-alert
+        type="error"
+        class=""
+      >
+        Sorry an error occured <br>
+        maybe you forgot the password for a protected channel
+      </v-alert>
+    </div>
   </v-container>
 </template>
 
@@ -77,13 +76,10 @@ export default Vue.extend({
       }
       try {
         await this.$axios.$put('channel', input, { withCredentials: true });
-      }
-      catch (error: Error | any) {
+      } catch (error: Error | any) {
         this.alertCreation = true;
-        console.log(error.response.data)
       }
-      if(!this.alertCreation )
-        this.$router.push({ path: '/channels' });
+      if (!this.alertCreation) { this.$router.push({ path: '/channels' }); }
       channelsStore.fetch();
     }
   }
@@ -101,7 +97,6 @@ export default Vue.extend({
 
 .v-text-field{
       width: 50rem;
-      /* max-width: 30%; */
 }
 
 </style>

@@ -4,10 +4,8 @@ import { UserController } from './user.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { ChannelModule } from 'src/channel/channel.module';
-import { JwtModule } from '@nestjs/jwt';
 import { ChannelParticipantModule } from 'src/channelParticipant/channelParticipant.module';
 import { AuthModule } from 'src/auth/auth.module';
-import { MessageModule } from 'src/message/message.module';
 import { MatchHistoryModule } from 'src/matchHistory/matchHistory.module';
 
 @Module({

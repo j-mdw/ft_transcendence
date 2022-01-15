@@ -87,13 +87,11 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import messageLogo from '../../../components/Logo/messageLogo.vue';
-import pingpongLogo from '../../../components/Logo/pingpongLogo.vue';
 import MuteButton from './muteButton.vue';
 import { usersStore, meStore, relationshipStore } from '~/store';
 import { Relationship, User } from '~/models';
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, MuteButton },
+  components: { MuteButton },
   props: ['channelId'],
   data () {
     return {

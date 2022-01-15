@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   NotFoundException,
-  ParseUUIDPipe,
   UnauthorizedException,
   UseFilters,
   UsePipes,
@@ -30,7 +29,7 @@ import { HttpExceptionTransformationFilter } from './gateway.filter';
 import { GatewayService } from './gateway.service';
 import { GameManager } from './types/gameManager';
 import { MatchMaker } from './types/matchMaker';
-import {  GameDTO,GameIdDTO, PaddleMoveDTO } from './types/game.dto';
+import { GameDTO, GameIdDTO, PaddleMoveDTO } from './types/game.dto';
 import { IsEnum } from 'class-validator';
 import { GameStyle } from './types/game';
 
@@ -78,7 +77,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
             socket.id,
             new UpdateUserStatus(decoded.userId, UserStatus.online),
           );
-          socket.join(decoded.userId); //Joining a room with named after its own ID
+          socket.join(decoded.userId); //Joining a room named after its own ID
           next();
         } else {
           console.log('Socket verification: unknown user');
@@ -121,7 +120,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() gameStyle: GameStyleDTO,
   ): Promise<void> {
-    // console.log('Queue before join:', this.matchMaker.queue);
     const user = this.users.get(client.id);
     if (user) {
       const userEntity = await this.userService.findById(user.id);
@@ -134,7 +132,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
         user.status = UserStatus.playing;
         this.server.emit('status-update', this.users.get(client.id));
-        // console.log('Queue after join:', this.matchMaker.queue);
       }
     }
   }
@@ -144,7 +141,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @ConnectedSocket() client: Socket,
     @MessageBody() opponentId: string,
   ): Promise<void> {
-    // console.log('Queue before join:', this.matchMaker.privateQueue);
     const user = this.users.get(client.id);
     if (user.id === opponentId) {
       throw new BadRequestException('wrong opponent id');
@@ -166,7 +162,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
         );
         user.status = UserStatus.playing;
         this.server.emit('status-update', this.users.get(client.id));
-        // console.log('Queue after join:', this.matchMaker.privateQueue);
       }
     }
   }
@@ -203,36 +198,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  //   const game = this.gameManager.getLiveGame(gameStyle.pongType);
-  //   if (game) {
-  //     client.join(game.roomId);
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-  // @SubscribeMessage('game-watch')
-  // addSpectator(
-  //   @ConnectedSocket() client: Socket,
-  //   @MessageBody() gameStyle: GameStyleDTO,
-  // ): boolean {
-  //   const game = this.gameManager.getLiveGame(gameStyle.pongType);
-  //   if (game) {
-  //     client.join(game.roomId);
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
   @SubscribeMessage('game-leave')
   removePlayer(
     @ConnectedSocket() client: Socket,
     @MessageBody() gameId?: GameIdDTO,
   ): void {
-    // console.log('Queue before leave:', this.matchMaker.queue);
-    // console.log('Private Queue before leave:', this.matchMaker.privateQueue);
     const user = this.users.get(client.id);
     if (user) {
       this.matchMaker.leave(user.id);
@@ -244,8 +214,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       }
       user.status = UserStatus.online;
       this.server.emit('status-update', this.users.get(client.id));
-      // console.log('Queue after leave:', this.matchMaker.queue);
-      // console.log('Private Queue after leave:', this.matchMaker.privateQueue);
     }
   }
 
@@ -285,7 +253,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-join-channel')
   async joinChannel(
-    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
     @MessageBody() channelId: string,
     @ConnectedSocket() client: Socket,
   ) {
@@ -318,7 +285,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-join-DM')
   async joinDM(
-    // @MessageBody('peerId', ParseUUIDPipe) peerId: string,
     @MessageBody() peerId: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
@@ -434,7 +400,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   @SubscribeMessage('chat-leave')
   async leaveChannel(
-    // @MessageBody('channelId', ParseUUIDPipe) channelId: string,
     @MessageBody() channelId: string,
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
@@ -455,36 +420,3 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     client.leave(channelId);
   }
 }
-
-/*
-    TESTING - CHAT
-
-  - Join channel:
-    - Channel does not exist -> 404
-    - channel member try to join -> receive chat-channel-joined message w/ chan ID
-    - non-member try to join -> 403
-  - Join DM:
-    - Peer exists:
-      - 1st time -> creates channel, receive chat-DM-joined message w/ chan ID
-      - Another time -> receive chat-DM-joined message w/ chan ID
-    - Peer does not exist:
-      - 404
-  - Channel Message:
-    - Empty message -> 400
-    - Unknown channel -> 404
-    - User not a participant -> 403
-    - User is banned -> Do nothing
-    - User is muted (not expired) -> Do nothing
-    - User is muted (expired) -> set muted to false, send and save message
-    - Normal -> save msg, Receive MessageToClientDTO
-  
-  - DM Message:
-    - channel does not exist -> 404
-    - User is not a participant -> 403
-    - Empty message -> 400
-    - Normal -> save msg, Receive MessageToClientDTO
-
-  - Message test:
-    - Deleted on channel delete
-    - Deleted on user delete
-*/

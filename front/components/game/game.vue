@@ -83,8 +83,6 @@ import {
   GameIdDTO,
   GameKey,
   GameState,
-  GameStyle,
-  GameStyleDTO,
   Paddle,
   PaddleMoveDTO,
   Role,
@@ -141,8 +139,7 @@ export default Vue.extend({
           paddle.w * this.ratio.x,
           paddle.h * this.ratio.y
         );
-        this.context.font = "30px Arial"; // Used for fillText only, remove??
-        // this.context.fillText( paddle.userName + " : " + player.score, player.xScore * this.ratio.x, 50 * this.ratio.y);
+        this.context.font = "30px Arial";
       }
     },
     addWindowListeners() {

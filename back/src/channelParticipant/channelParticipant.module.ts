@@ -1,6 +1,5 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ChannelModule } from 'src/channel/channel.module';
 import { UserModule } from 'src/user/user.module';
 import { ChannelParticipant } from './channelParticipant.entity';
 import { ChannelParticipantService } from './channelParticipant.service';

@@ -3,7 +3,6 @@ import { Socket } from 'socket.io';
 import { UserService } from 'src/user/user.service';
 import { GatewayService } from '../gateway.service';
 import { Game, GameStyle } from './game';
-import { PlayerDTO } from './game.dto';
 import { Player } from './player';
 
 export class GameManager {
@@ -36,7 +35,7 @@ export class GameManager {
       winScore,
     );
     this.games.push(game);
-    game.start(); //How do I remove game from array?
+    game.start();
   }
 
   isPlaying(userId: string): boolean {
@@ -62,8 +61,6 @@ export class GameManager {
     }
   }
 
-  //Should only be called by the Game itself once it is complete
-  // /!\ Bad design here
   removeGame(id: string) {
     const index = this.games.findIndex((game) => game.roomId === id);
     if (index >= 0) {
@@ -104,9 +101,4 @@ export class GameManager {
     const game = this.getPlayerGame(userId);
     game.playerLeaving(userId);
   }
-
-  /*
-    add spectator
-    client_disconnected?
-  */
 }

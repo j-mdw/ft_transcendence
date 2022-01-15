@@ -159,7 +159,6 @@ export class ChannelService {
     );
     try {
       await this.participantService.findOne(participantToCreate, channel); // If participant is not found, we can create it, otherwise, we won't create it and will throw
-      console.log('Participant already exists!'); // DEBUG
     } catch {
       if (
         await this.isAdditionAllowed(
@@ -171,8 +170,6 @@ export class ChannelService {
       ) {
         await this.participantService.create(participantToCreate, channel);
         return;
-      } else {
-        console.log('Addition not allowed'); // DEBUG
       }
     }
     throw new BadRequestException('Cannot add participant to channel');
@@ -186,7 +183,7 @@ export class ChannelService {
   ): Promise<boolean> {
     switch (channel.type) {
       case ChannelType.public:
-        return userAdding.id === userToAdd.id; // Users can add themselves but cannot add others (TBC, might be easier this way)
+        return userAdding.id === userToAdd.id;
       case ChannelType.private:
         try {
           return (await this.participantService.findOne(userAdding, channel))

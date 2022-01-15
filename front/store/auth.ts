@@ -22,14 +22,12 @@ export default class AuthenticationModule extends VuexModule {
   @Mutation
   setLogin () {
     this.isLogin = true;
-    console.log('setting is_login to true');
     localStorage.setItem('IS_LOGIN', 'true')
   }
 
   @Mutation
   removeLogin () {
     this.isLogin = false
-    console.log('setting is_login to false');
     localStorage.setItem('IS_LOGIN', 'false')
     fetchStatusStore.reset();
     messagesStore.clearCurrentChannel();

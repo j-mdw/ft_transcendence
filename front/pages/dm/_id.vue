@@ -9,13 +9,13 @@
         <div id="message-wrapper_left" class="message-wrapper_left">
           <ul id="chat">
             <li v-for="msg in messages" :key="messages[msg]">
-              <v-row class="mt-7 mb-7">    
-                    <profil-chat :user-id="msg.userId"/>
+              <v-row class="mt-7 mb-7">
+                <profil-chat :user-id="msg.userId" />
                 <div class="message-background_left">
                   <div v-if="msg.gameInvite">
                     <v-btn class="our_yellow" @click="joinPrivateGame()">
                       join the game
-                      <pingpong-logo  class="ml-3 mt-2 mb-2"/>
+                      <pingpong-logo class="ml-3 mt-2 mb-2" />
                     </v-btn>
                   </div>
                   <div v-else class="message_left">
@@ -53,7 +53,7 @@
           @click="sendGameInvite()"
         >
           Play pong
-          <pingpong-logo  class="ml-5 mt-2 mb-2"/>
+          <pingpong-logo class="ml-5 mt-2 mb-2" />
         </v-btn>
       </v-col>
     </v-row>
@@ -62,16 +62,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
 
 import { channelsStore, messagesStore, usersStore } from '~/store'
 import PingpongLogo from '~/components/Logo/pingpongLogo.vue'
-import { MessageReceived, MessageToServerDTO, ChannelDTO } from "~/models";
+import { MessageReceived, MessageToServerDTO, ChannelDTO } from '~/models';
 export default Vue.extend({
-  components: { settingsChat, profilChat, PingpongLogo },
+  components: { profilChat, PingpongLogo },
   layout: 'default',
-    
+
   data () : any {
     return {
       current_message: '',
@@ -80,76 +79,69 @@ export default Vue.extend({
     }
   },
   computed: {
-      channelid () : string {
-          return messagesStore.currentChannelId;
-      },
-      thisChannel () :  ChannelDTO | undefined {
-        return  channelsStore.one(this.$route.params.id);
-      },
-      messages () :  MessageReceived[] {
-        return messagesStore.channelMessages;
-      }
-      
+    channelid () : string {
+      return messagesStore.currentChannelId;
+    },
+    thisChannel () : ChannelDTO | undefined {
+      return channelsStore.one(this.$route.params.id);
+    },
+    messages () : MessageReceived[] {
+      return messagesStore.channelMessages;
+    }
+
   },
-    methods: {
-      sendMessage (): void {
-        this.$socket.client.emit('chat-DM-message', {channelId: this.channelid, message: this.current_message});
-        this.thisChannelId = this.channelid
-        this.current_message = '';
-        //this.scrollToEnd();
-      },
+  updated () {
+    this.scrollToEnd()
+  },
 
-      sendGameInvite() {
-        const input: MessageToServerDTO = {
-          channelId: this.channelid,
-          message: "join",
-          gameInvite: true,
-        }
-        this.$socket.client.emit('chat-DM-message', input);
-        console.log("sent")
-        console.log(this.messages)
-      },
-
-      joinPrivateGame() {
-        const str = this.$route.params.id;
-        this.peerId = str.split(':').pop() || '';
-        if(this.peerId)
-        {
-          this.$socket.client.emit('game-play-private', this.peerId);
-          this.$router.push("/game/play")
-        }
-          
-      },
-
-      getAvatar(peerId: string) {
-        return usersStore.oneUser(peerId).avatarPath;
+  mounted () {
+    const str = this.$route.params.id;
+    this.peerId = str.split(':').pop() || '';
+    if (this.peerId) { this.$socket.client.emit('chat-join-DM', this.peerId); }
+  },
+  beforeDestroy () {
+    this.$socket.client.emit('chat-leave', this.thisChannelId);
+  },
+  methods: {
+    sendMessage (): void {
+      this.$socket.client.emit('chat-DM-message', { channelId: this.channelid, message: this.current_message });
+      this.thisChannelId = this.channelid
+      this.current_message = '';
     },
-      scrollToEnd() {
-        const element = document.getElementById('message-wrapper_left')
-        element!.scrollTop = element!.scrollHeight
-      },
-      getChannelName() {
-        const str = this.$route.params.id;
-        this.peerId = str.split(':').pop() || '';
-        if(this.peerId)
-          return usersStore.oneUser(this.peerId).pseudo;
-      },
 
+    sendGameInvite () {
+      const input: MessageToServerDTO = {
+        channelId: this.channelid,
+        message: 'join',
+        gameInvite: true,
+      }
+      this.$socket.client.emit('chat-DM-message', input);
     },
-    updated() {
-      this.scrollToEnd()
-    },
-  
-    mounted() {
+
+    joinPrivateGame () {
       const str = this.$route.params.id;
       this.peerId = str.split(':').pop() || '';
-      if(this.peerId)
-        this.$socket.client.emit('chat-join-DM', this.peerId);
+      if (this.peerId) {
+        this.$socket.client.emit('game-play-private', this.peerId);
+        this.$router.push('/game/play')
+      }
     },
-    beforeDestroy() {
-      this.$socket.client.emit('chat-leave', this.thisChannelId);
+
+    getAvatar (peerId: string) {
+      return usersStore.oneUser(peerId).avatarPath;
     },
-    
+    scrollToEnd () {
+      const element = document.getElementById('message-wrapper_left')
+        element!.scrollTop = element!.scrollHeight
+    },
+    getChannelName () {
+      const str = this.$route.params.id;
+      this.peerId = str.split(':').pop() || '';
+      if (this.peerId) { return usersStore.oneUser(this.peerId).pseudo; }
+    },
+
+  },
+
 })
 </script>
 
@@ -162,9 +154,7 @@ export default Vue.extend({
 ul {
     list-style-type: none;
 }
-/* .v-text-field{
-      max-width: rem !important;
-} */
+
 .message-wrapper_righ{
   height: 500px;
   overflow: scroll;
@@ -176,9 +166,8 @@ ul {
     max-width: 30rem;
     border-radius: 10px;
     margin-bottom: 15px;
-		margin: "auto";
+    margin: "auto";
     background-color: #fff;
-    /* font-size:200px; */
 }
 .message_righ{
     margin-left: 10px;
@@ -194,9 +183,8 @@ ul {
     max-width: 30rem;
     border-radius: 10px;
     margin-bottom: 15px;
-		margin: "auto";
+    margin: "auto";
     background-color: #fff;
-    /* font-size:200px; */
 }
 .message_left{
     margin-left: 10px;

@@ -17,16 +17,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { TwoFactorAuthenticationCodeDto } from './dto/twoFactorAuthenticationCode.dto';
 import { AuthService } from '../auth.service';
 import { JwtService } from '@nestjs/jwt';
-import { JwtTwoFactorGuard } from '../jwt-two-factor.guard';
-
 
 @Controller('2fa')
 @UseInterceptors(ClassSerializerInterceptor)
 export class TwoFactorAuthenticationController {
   constructor(
     private readonly twoFactorAuthenticationService: TwoFactorAuthenticationService,
-    private readonly userService: UserService,
-    private readonly authenticationService: AuthService,
     private jwtService: JwtService,
   ) {}
 
@@ -43,26 +39,6 @@ export class TwoFactorAuthenticationController {
     );
   }
 
-  // @Post('turn-on')
-  // @HttpCode(200)
-  // @UseGuards(AuthGuard('jwt'))
-  // async turnOnTwoFactorAuthentication(
-  //   @Req() request,
-  //   @Body() { twoFactorAuthenticationCode }: TwoFactorAuthenticationCodeDto,
-  // ) {
-  //   console.log("PouetPouet");
-  //   console.log(request.user);
-  //   // const isCodeValid =
-  //   //   this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
-  //   //     twoFactorAuthenticationCode,
-  //   //     request.user,
-  //   //   );
-  //   // if (!isCodeValid) {
-  //   //   throw new UnauthorizedException('Wrong authentication code');
-  //   // }
-  //   // await this.userService.turnOnTwoFactorAuthentication(request.user.id);
-  // }
-
   @Post('authenticate')
   @HttpCode(200)
   @UseGuards(AuthGuard('jwt-two-factor'))
@@ -72,10 +48,10 @@ export class TwoFactorAuthenticationController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const isCodeValid =
-    this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
-      twoFactorAuthenticationCode.toString(),
-      req.user.twoFactorAuthenticationSecret,
-    );
+      this.twoFactorAuthenticationService.isTwoFactorAuthenticationCodeValid(
+        twoFactorAuthenticationCode.toString(),
+        req.user.twoFactorAuthenticationSecret,
+      );
     if (!isCodeValid) {
       console.log('time to cry');
       throw new UnauthorizedException('Wrong authentication code');
@@ -86,7 +62,6 @@ export class TwoFactorAuthenticationController {
         httpOnly: true,
       });
     }
-
     return req.user;
   }
 }

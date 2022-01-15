@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ChannelParticipant } from './channelParticipant.entity';
@@ -69,53 +69,3 @@ export class ChannelParticipantService {
     await this.participantRepository.delete(participant);
   }
 }
-
-/* Channel participant testing:
-  - Peer (admin) add participant to public channel => FAIL
-  - Peer (non-admin) add participant to public channel => FAIL
-  - Participant add self to public channel => SUCCESS
-
-  - Peer (admin) add participant to private channel => SUCCESS
-  - Peer (non-admin) add participant to private channel => FAIL
-  - Participant add self to private channel => FAIL
-
-  - Peer (admin) add participant to protected channel with correct PW => FAIL
-  - Peer (admin) add participant to protected channel with bad PW => FAIL
-  - Peer (non-admin) add participant to protected channel => FAIL
-  - Participant add self to private channel with correct PW => SUCCESS
-  - Participant add self to private channel with bad PW => FAIL
-
-  All channel types:
-  - GET channel Participants from channel user is not a participant => FAIL
-  - Participant add self to channel while already in channel => FAIL
-  - Peer (admin or not) delete user from channel => FAIL
-  - Participant delete self from channel => SUCCESS
-  - Participant delete self from channel it's not a part of => FAIL
-
-  Participant update (all channels):
-  Format:
-  - Bad date format for muteEnd
-  - Bad date (prior to current date)
-  - All to null --> Issues when class-validators are combined with PartialType
-  - Set muted to false but provide EndDate
-  Admin:
-  - Owner make participant admin => SUCCESS
-  - Non-owner make participant admin => FAIL
-  - Owner remove admin role => SUCESS
-  - Non-owner remove admin role => FAIL
-  Ban:
-  - Admin make participant ban => SUCCESS
-  - Non-admin make participant ban => FAIL
-  - Admin remove ban => SUCESS
-  - Non-admin remove ban => FAIL 
-  Mute:
-  - Admin make participant mute (no end-date) => SUCCESS
-  - Non-admin mute participant (no end-date) => FAIL
-  - Admin unmute => SUCCESS
-  - Non-admin remove mute => FAIL
-  - Admin mute participant w/ end-date => SUCCESS
-  - Non-admin mute participant w/ end-date => FAIL
-  Combined:
-  - Onwer promote participant to Admin and ban and/or mute at the same time => FAIL
-  Unhandled for now
-*/

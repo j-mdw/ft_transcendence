@@ -2,70 +2,61 @@
   <v-container fill-height>
     <v-row justify="center" align="center">
       <v-col sm="4">
-         <v-card color="our_dark_beige" height="400" class="scrolla">
+        <v-card color="our_dark_beige" height="400" class="scrolla">
           <v-card-title class="our_beige our_navy_blue--text">
             <v-row align="center" justify="center" class="mt-1 mb-1">
-              Play Game <pingpongLogo class="ml-4"/>
+              Play Game <pingpongLogo class="ml-4" />
             </v-row>
           </v-card-title>
-            <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
-                <v-btn class="mt-16 tab-btn our_beige ml-1 mr-1 mb-6 " width="200" color="#F5CAC3" @click="buttonClickPlay(0)">
-                Classic
-                </v-btn>
-            </v-row>
-            <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
-            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" width="200"  color="#F5CAC3" @click="buttonClickPlay(1)">
+          <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
+            <v-btn class="mt-16 tab-btn our_beige ml-1 mr-1 mb-6 " width="200" color="#F5CAC3" @click="buttonClickPlay(0)">
+              Classic
+            </v-btn>
+          </v-row>
+          <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" width="200" color="#F5CAC3" @click="buttonClickPlay(1)">
               Multiballs
             </v-btn>
-            </v-row>
-            <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
-            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" width="200"  color="#F5CAC3" @click="buttonClickPlay(2)">
+          </v-row>
+          <v-row align="center" justify="center" class="mt-2 mb-n8 ml-4">
+            <v-btn class="mt-6 tab-btn our_beige ml-1 mr-1 mb-6" width="200" color="#F5CAC3" @click="buttonClickPlay(2)">
               Rookie
             </v-btn>
           </v-row>
         </v-card>
       </v-col>
       <v-col>
-        <v-card color="our_dark_beige" height="400" class="scrolla" >
+        <v-card color="our_dark_beige" height="400" class="scrolla">
           <v-card-title class="our_beige our_navy_blue--text">
-            <v-row  align="center" justify="center" class="mt-1 mb-1">
-               Watch Game  <v-icon color="#395C6B" right> fa-eye </v-icon>
+            <v-row align="center" justify="center" class="mt-1 mb-1">
+              Watch Game  <v-icon color="#395C6B" right>
+                fa-eye
+              </v-icon>
             </v-row>
           </v-card-title>
           <div v-if="games">
-          <v-list class="our_dark_beige">
-          <div v-for="game in games" :key="game.it" class=" our_navy_blue--text">
-            <v-row justify="center" align="center" >
-                    <v-col v-if="game.player1" class="ml-16" sm="3">
-                    <h3>{{getPseudo(game.player1.id)}}  - {{getPseudo(game.player2.id)}}</h3>
-                    </v-col>
-                    <v-col  v-if="game.player2" align="right" class="mr-8"  sm="3">
-                        <v-btn @click="buttonClickWatch2(game.id)" class="our_light_pink  mt-2 mb-3 ">
-                            watch this game
-                        </v-btn>
-                    </v-col>
-            </v-row>
-            <v-divider/>
-        </div>
-          </v-list>
+            <v-list class="our_dark_beige">
+              <div v-for="game in games" :key="game.it" class=" our_navy_blue--text">
+                <v-row justify="center" align="center">
+                  <v-col v-if="game.player1" class="ml-16" sm="3">
+                    <h3>{{ getPseudo(game.player1.id) }}  - {{ getPseudo(game.player2.id) }}</h3>
+                  </v-col>
+                  <v-col v-if="game.player2" align="right" class="mr-8" sm="3">
+                    <v-btn class="our_light_pink  mt-2 mb-3 " @click="buttonClickWatch2(game.id)">
+                      watch this game
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-divider />
+              </div>
+            </v-list>
           </div>
-  
-          <v-row justify="center" align="center" class="mt-2" >
-          <v-btn @click="getLiveGames()" class="mt-8 our_beige " width="200">
+
+          <v-row justify="center" align="center" class="mt-2">
+            <v-btn class="mt-8 our_beige " width="200" @click="getLiveGames()">
               refresh
-          </v-btn>
+            </v-btn>
           </v-row>
-          <!-- <template v-for="game in games" >
-        <v-col :key="game.id" class="ml-2 mr-2">
-          <v-btn
-            class="pa-2 mt-2 mb-2"
-            width="400"
-            color="#EBD9C5"
-          >
-            tutu
-          </v-btn>
-        </v-col>
-      </template> -->
         </v-card>
       </v-col>
     </v-row>
@@ -77,8 +68,8 @@ import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
 import { GameDTO, GameStyle, GameStyleDTO } from '~/models';
 import { gameStatusStore, usersStore } from '~/store';
 export default Vue.extend({
-  layout: 'default',
   components: { pingpongLogo },
+  layout: 'default',
   data () {
     return {
       gameUnavailable: '',
@@ -122,18 +113,10 @@ export default Vue.extend({
     getLiveGames () {
       this.$socket.client.emit('game-get-all', (games: GameDTO[]) => {
         this.games = games;
-        console.log(games);
       });
-      console.log("LIVE GAMES")
-      console.log(this.games);
-      
     },
-    getPseudo(peerId: string)
-    {
-        if(usersStore.oneUser(peerId))
-          return usersStore.oneUser(peerId).pseudo;
-        else
-          return '';
+    getPseudo (peerId: string) {
+      if (usersStore.oneUser(peerId)) { return usersStore.oneUser(peerId).pseudo; } else { return ''; }
     },
   },
 })

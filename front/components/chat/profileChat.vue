@@ -6,12 +6,10 @@
       <template #activator="{ on, attrs }">
         <v-avatar class="mr-4" v-bind="attrs" v-on="on">
           <v-img :src="`/api/${getAvatar(userId)}`" />
-          <!-- <v-img src=https://cdn.pixabay.com/photo/2020/06/24/19/12/cabbage-5337431_1280.jpg /> -->
         </v-avatar>
       </template>
 
       <v-card height="200" width="200" class="our_beige">
-        <!-- <div v-if="userId != me.id"> -->
         <div v-if="userId != me.id">
           <v-card-title class="our_dark_beige our_navy_blue--text">
             {{ user.pseudo }}
@@ -34,7 +32,6 @@
             </v-btn>
 
             <v-card height="200" width="200">
-              <!-- <div v-if="userId != me.id"> -->
               <div v-if="userId != me.id">
                 <v-card-title class="our_dark_beige our_navy_blue--text">
                   {{ user.pseudo }}

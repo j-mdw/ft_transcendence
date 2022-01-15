@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- none -->
     <div v-if="myrelation.type == 0">
       <v-btn color="#f5cac3" class="mt-6" @click="askFriends()">
         add to my friends
@@ -14,7 +13,6 @@
           fa-user-times
         </v-icon>
       </v-btn>
-
     </div>
     <!-- invitation sent -->
     <div v-if="myrelation.type == 1">
@@ -100,7 +98,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { meStore, relationshipStore, usersStore } from '~/store';
-import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 import { Relationship, RelationshipType } from '~/models';
 
@@ -116,7 +113,6 @@ export default Vue.extend({
     myrelation (): Relationship {
       return relationshipStore.one(this.userId);
     },
-
     users (): User[] {
       return usersStore.allUsers;
     },
@@ -125,54 +121,37 @@ export default Vue.extend({
     },
   },
 
-  async mounted () { // DELETE?
-  },
-
   methods: {
     async askFriends () {
-      await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.sent }, { withCredentials: true })
-        .then((res) => {
-          console.log('ask to become friend');
-        })
-        .catch((err) => {
-          console.log('there is an error');
-          console.log(err);
-          this.alertBlocked = true;
-        });
+      try {
+        await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.sent }, { withCredentials: true })
+      } catch {
+        this.alertBlocked = true;
+      }
     },
     async becomeFriends () {
-      await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.friend }, { withCredentials: true }).then((res) => {
-        console.log('we are friends');
-      })
-        .catch((err) => {
-          console.log('there is an error');
-          console.log(err);
-          this.alertBlocked = true;
-        });
+      try {
+        await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.friend }, { withCredentials: true })
+      } catch {
+        this.alertBlocked = true;
+      }
     },
     async deleteFriends () {
-      await this.$axios.$delete(`relationships/${this.userId}`, { withCredentials: true }).then((res) => {
-        console.log('we nothing');
-      })
-        .catch((err) => {
-          console.log('there is an error');
-          console.log(err);
-          this.alertBlocked = true;
-        });
+      try {
+        await this.$axios.$delete(`relationships/${this.userId}`, { withCredentials: true })
+      } catch {
+        this.alertBlocked = true;
+      }
     },
     async blockFriends () {
-      await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.blocked }, { withCredentials: true }).then((res) => {
-        console.log('i blocked him');
-      })
-        .catch((err) => {
-          console.log('there is an error');
-          console.log(err);
-          this.alertBlocked = true;
-        });
+      try {
+        await this.$axios.$post(`relationships/${this.userId}`, { type: RelationshipType.blocked }, { withCredentials: true })
+      } catch {
+        this.alertBlocked = true;
+      }
     },
-
-    getNameDM() {
-      var name = this.me.id + ':' + this.userId;
+    getNameDM () {
+      const name = this.me.id + ':' + this.userId;
       return name;
     }
   }

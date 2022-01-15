@@ -1,19 +1,19 @@
 <template>
   <v-container>
     <v-row no-gutters class="mt-2">
-      <template v-for="(channel, index) in myChannel" >
+      <template v-for="(channel, index) in myChannel">
         <v-col :key="index" class="ml-2 mr-2">
           <v-btn
-            class="pa-2 mt-2 mb-2" 
+            class="pa-2 mt-2 mb-2"
             width="400"
             color="#ebd9c5"
             :to="`/channels/${channel.id}`"
           >
-            <v-col> 
-                {{ channel.name }}
-            </v-col> 
             <v-col>
-            <div v-if="channel.type == 0" >
+              {{ channel.name }}
+            </v-col>
+            <v-col>
+              <div v-if="channel.type == 0">
                 <h5> public </h5>
               </div>
               <div v-if="channel.type == 1">
@@ -22,10 +22,9 @@
               <div v-if="channel.type == 2">
                 <h5>protected</h5>
               </div>
-            </v-col> 
+            </v-col>
           </v-btn>
         </v-col>
-        
       </template>
     </v-row>
   </v-container>

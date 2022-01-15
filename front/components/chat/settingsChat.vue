@@ -72,33 +72,33 @@ import TypeChat from './typeChat.vue'
 import AddParticipantPrivate from './addParticipantPrivate.vue';
 import { meStore, channelsStore } from '~/store';
 import { ChannelDTO, User } from '~/models'
+
 export default Vue.extend({
   components: { ParticipantChat, TypeChat, AddParticipantPrivate },
   layout: 'default',
   props: ['channelId'],
   data () {
     return {
-      messages: Array<string>(),
+      messages: [] as string[],
       current_message: '',
       dialog: false,
     }
   },
-  computed : {
-     me (): User {
-       return meStore.me;
-     },
-     thisChannel () : ChannelDTO | undefined {
-        return  channelsStore.one(this.channelId);
-      },
-      thisChannelOwner(): string | undefined{
-        return this.thisChannel?.owner
-      }
-     
+  computed: {
+    me (): User {
+      return meStore.me;
+    },
+    thisChannel () : ChannelDTO | undefined {
+      return channelsStore.one(this.channelId);
+    },
+    thisChannelOwner (): string | undefined {
+      return this.thisChannel?.owner
+    }
   },
   mounted () {
   },
   methods: {
-    async deleteChannel (id: string) {
+    async deleteChannel () {
       await this.$axios.$delete(`/channel/${this.channelId}`, { withCredentials: true });
       channelsStore.fetch();
       this.$router.push('/channels')

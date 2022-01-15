@@ -44,13 +44,12 @@
 <script lang="ts">
 import Vue from 'vue';
 import messageLogo from './Logo/messageLogo.vue';
-import pingpongLogo from './Logo/pingpongLogo.vue';
 import UserBarMe from './userBarMe.vue';
 import { User } from '~/models';
 import { usersStore, meStore } from '~/store';
 
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, UserBarMe },
+  components: { messageLogo, UserBarMe },
   data () {
     return {
       drawer: true,

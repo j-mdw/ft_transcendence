@@ -5,7 +5,6 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { JwtTwoFactorGuard } from './jwt-two-factor.guard';
 import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
-import { JwtGuard } from './jwt.guard';
 
 @Controller()
 export class AuthController {
@@ -94,7 +93,7 @@ export class AuthController {
     response.cookie('access_token', token, {
       httpOnly: true,
     });
-    return { user }; //Do we need to return smth here?
+    return { user };
   }
 
   @Get('logout')

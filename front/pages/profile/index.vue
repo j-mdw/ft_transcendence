@@ -66,7 +66,7 @@
         </div>
         <div v-if="user.admin">
           <v-row justify="center" align="center" class="mt-8">
-            <v-btn color="#f5cac3" to="/profile/admin" class="mt-6" >
+            <v-btn color="#f5cac3" to="/profile/admin" class="mt-6">
               see my admin privilege
               <v-icon color="#395c6b" right>
                 fa-users
@@ -82,7 +82,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import { relationshipStore, meStore } from '~/store'
-import FileUpload from '~/components/FileUpload.vue';
 import { User } from '~/models/user'
 
 export default Vue.extend({
@@ -102,7 +101,6 @@ export default Vue.extend({
       return e;
     }
   },
-
 })
 
 </script>

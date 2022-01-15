@@ -11,7 +11,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository } from 'typeorm';
 import { User } from './user.entity';
 import { CreateUserDTO, UpdateUserDTO } from './user.dto';
-import { ChannelService } from 'src/channel/channel.service';
 import { ChannelParticipantService } from 'src/channelParticipant/channelParticipant.service';
 import { Channel } from 'src/channel/channel.entity';
 import { MatchHistoryService } from 'src/matchHistory/matchHistory.service';
@@ -22,8 +21,6 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    // @Inject(forwardRef(() => ChannelService))
-    // private channelService: ChannelService,
     @Inject(forwardRef(() => MatchHistoryService))
     private matchService: MatchHistoryService,
     @Inject(forwardRef(() => ChannelParticipantService))

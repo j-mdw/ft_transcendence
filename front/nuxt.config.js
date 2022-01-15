@@ -28,7 +28,7 @@ export default {
       },
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
     ],
-    
+
   },
 
   router: {
@@ -90,13 +90,13 @@ export default {
           warning: '#f28482',
           error: '#f28482',
           success: '#f6bd60',
-          our_yellow: "#FADFB2",
+          our_yellow: '#FADFB2',
           our_light_yellow: '#F9D79F',
-          our_beige: "#f7ede2",
-          our_light_pink: "#f5cac3",
-          our_navy_blue: "#395c6b",
-          our_dark_pink: "#f28482",
-          our_dark_beige: "#ebd9c5"
+          our_beige: '#f7ede2',
+          our_light_pink: '#f5cac3',
+          our_navy_blue: '#395c6b',
+          our_dark_pink: '#f28482',
+          our_dark_beige: '#ebd9c5'
         }
       }
     },

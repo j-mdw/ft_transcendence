@@ -12,7 +12,6 @@ export default class UsersModule extends VuexModule {
   users = {} as { [key: string]: User };
 
   get allUsers (): User[] {
-    console.log('Users GETTER called');
     return Object.values(this.users)
   }
 
@@ -60,7 +59,6 @@ export default class UsersModule extends VuexModule {
         this.users[updateStatus.id].status = updateStatus.status
       }
     })
-    console.log('users status set:', this.users);
   }
 
   @Mutation

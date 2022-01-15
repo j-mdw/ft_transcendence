@@ -51,7 +51,6 @@
 <script lang="ts">
 
 import Vue from 'vue'
-import { channelsStore } from '~/store';
 
 export default Vue.extend({
   props: ['userId', 'channelId'],
@@ -74,7 +73,7 @@ export default Vue.extend({
         d.setHours(d.getHours() + 24)
         await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
         this.$emit('changeMute');
-      } else if (time == 2) {
+      } else if (time === 2) {
         d.setHours(d.getHours() + 1);
         await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
         this.$emit('changeMute');
@@ -83,7 +82,6 @@ export default Vue.extend({
         await this.$axios.$patch(`channel/${this.channelId}/${this.userId}`, { muted: true, muteEnd: d }, { withCredentials: true });
         this.$emit('changeMute');
       }
-
       this.dialog = false
     }
   }

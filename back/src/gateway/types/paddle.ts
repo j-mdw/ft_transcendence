@@ -20,7 +20,7 @@ export class Paddle {
     if (keyPressed === GameKey.UpPress) this.y -= 30;
     if (keyPressed === GameKey.DownPress) this.y += 30;
     if (this.y < this.h / 2) this.y = this.h / 2;
-    if (this.y > 960  - this.h / 2) this.y = 960 - this.h / 2;
+    if (this.y > 960 - this.h / 2) this.y = 960 - this.h / 2;
   }
 
   updatePaddleSize(multipleFactor: number) {

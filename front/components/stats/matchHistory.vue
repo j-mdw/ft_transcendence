@@ -70,6 +70,7 @@
 import Vue from 'vue'
 import { meStore, usersStore } from '~/store'
 import { User } from '~/models/user'
+
 export default Vue.extend({
   layout: 'default',
   props: ['userId'],

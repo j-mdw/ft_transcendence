@@ -12,7 +12,7 @@
         </v-row>
       </v-col>
       <v-col>
-        <ranking/>
+        <ranking />
       </v-col>
     </v-row>
   </v-container>

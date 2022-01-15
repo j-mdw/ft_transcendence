@@ -1,6 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Channel } from 'src/channel/channel.entity';
-// import { Relationship } from 'src/relationship/relationship.entity';
 import { ChannelParticipant } from 'src/channelParticipant/channelParticipant.entity';
 
 @Entity('users')

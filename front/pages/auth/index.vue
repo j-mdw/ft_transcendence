@@ -45,25 +45,13 @@ export default Vue.extend({
   },
   computed: {
     provider () {
-      console.log(this.$route.query.params)
       return this.$route.params.provider;
     }
   },
   methods: {
     async createRandomUser () {
-      try {
-        this.user = await this.$axios.$get('random', { withCredentials: true })
-        this.$router.push('/pseudo')
-      } catch (error) {
-        console.log('ooops', error);
-      }
-    },
-
-    mounted () {
-      console.log(this.$route)
-      if ('code' in this.$route.query) {
-        console.log(`logging with ${this.provider}`)
-      }
+      this.user = await this.$axios.$get('random', { withCredentials: true })
+      this.$router.push('/pseudo')
     },
   }
 })

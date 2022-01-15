@@ -30,12 +30,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import messageLogo from '../../../components/Logo/messageLogo.vue';
-import pingpongLogo from '../../../components/Logo/pingpongLogo.vue';
 import { Relationship, User } from '~/models';
 import { usersStore, meStore, relationshipStore } from '~/store';
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
   props: ['channelId'],
   data () {
     return {

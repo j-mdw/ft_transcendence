@@ -1,6 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
-import { ConfigService } from '@nestjs/config';
 import { CreateUserDTO, UserDTO } from 'src/user/user.dto';
 import { JwtService } from '@nestjs/jwt';
 
@@ -9,7 +8,6 @@ export class AuthService {
   constructor(
     private userService: UserService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
   ) {}
 
   googleLogin(req) {

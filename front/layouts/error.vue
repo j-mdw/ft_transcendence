@@ -1,25 +1,20 @@
 <template>
   <v-container class="flex-container" fill-height>
-    <v-row justify="center" >
+    <v-row justify="center">
       <h1 v-if="error.statusCode === 404">
-      {{ pageNotFound }}
-    </h1>
-    <h1 v-else>
-      {{ otherError }}
-    </h1>
+        {{ pageNotFound }}
+      </h1>
+      <h1 v-else>
+        {{ otherError }}
+      </h1>
     </v-row>
     <v-row justify="center">
       <NuxtLink to="/">
         <h2> Go back Home </h2>
       </NuxtLink>
-      <!-- <NuxtLink to="/">
-        Go back Home
-      </NuxtLink> -->
     </v-row>
   </v-container>
 </template>
-
-
 
 <script>
 export default {

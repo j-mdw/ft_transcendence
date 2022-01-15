@@ -65,8 +65,8 @@
 
 import Vue from 'vue'
 import { User } from '~/models'
-
 import { channelsStore, meStore, usersStore } from '~/store';
+
 export default Vue.extend({
   props: ['channelId'],
   data () {
@@ -87,12 +87,8 @@ export default Vue.extend({
     amIAdmin (): boolean {
       channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
-        if(this.participants[i].userId == this.me.id)
-        {
-          if(this.participants[i].admin)
-            return(true);
-          else 
-            return false
+        if (this.participants[i].userId == this.me.id) {
+          if (this.participants[i].admin) { return (true); } else { return false }
         }
       }
       console.log('NOT found')
@@ -116,24 +112,16 @@ export default Vue.extend({
     },
 
     async addUser () {
-      //forthis.allUsers.find(this.name)
-      let id = this.doesHeExist()
-      if(id)
-      {
-        await this.$axios.$put(`/channel/${this.channelId}/${id}`, '',{ withCredentials: true})
-        .then((res) => {
+      const id = this.doesHeExist()
+      if (id) {
+        try {
+          await this.$axios.$put(`/channel/${this.channelId}/${id}`, '', { withCredentials: true })
           this.alertExist = true;
-          this.dialog=false
-        })
-        .catch((err) => {
-          console.log('there is an error');
-          console.log(err);
+          this.dialog = false
+        } catch {
           this.alertExist = true;
-        });
-        
-      }
-      else
-      {
+        }
+      } else {
         this.alertExist = true;
       }
       channelsStore.fetch()

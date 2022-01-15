@@ -1,5 +1,5 @@
 <template>
-  <img class=LogoManage src="../../assets/svg/pingpong.svg">
+  <img class="LogoManage" src="../../assets/svg/pingpong.svg">
 </template>
 
 <style scoped lang="scss">

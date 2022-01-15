@@ -20,9 +20,6 @@ export enum GameState {
 }
 
 export class Game {
-  // gameData: string; // multiballs, rookie, classic
-  // numberOfBalls: number;
-  // changingPaddle: boolean;
   roomId: string;
   type: GameStyle;
   balls: Array<Ball>;
@@ -48,12 +45,9 @@ export class Game {
     this.roomId = this.createRoomId(player1.userId, player2.userId);
     this.player1 = player1;
     this.player2 = player2;
-    // this.player1.paddle.init(40);
-    // this.player2.paddle.init(1240);
     this.manager = manager;
     this.type = style;
     this.balls = [];
-    // this.initBalls(style);
     this.winScore = winScore;
     this.state = GameState.beforeStart;
     this.countdown = countdown;
@@ -66,7 +60,6 @@ export class Game {
     this.intervalId = setInterval(() => {
       this.tick();
     }, 1000 / 30);
-    // }, 1000 / 30);
   }
 
   private createRoomId(user1: string, user2: string): string {
@@ -90,8 +83,6 @@ export class Game {
         this.balls.forEach((ball) => ball.update(this.player1, this.player2));
         const winner = this.isGameOver();
         if (winner != 0) {
-          console.log('Player', winner, 'won!'); //TBU
-
           this.state = GameState.over;
         } else {
           if (this.type == GameStyle.rookie) {
@@ -163,7 +154,7 @@ export class Game {
   private initBalls(style: GameStyle): void {
     this.balls.push(new Ball());
     if (style === GameStyle.multiballs) {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 4; i++) {
         this.balls.push(new Ball());
       }
     }

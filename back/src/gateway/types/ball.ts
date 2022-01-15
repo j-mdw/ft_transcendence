@@ -17,8 +17,8 @@ export class Ball {
 
   init() {
     const angle: number = this.getRandomInt(5, 75);
-    this.xSpeed = (Math.random() + Math.cos((angle * Math.PI) / 180)) * 2;
-    this.ySpeed = (Math.random() + Math.sin((angle * Math.PI) / 180)) * 2;
+    this.xSpeed = (Math.random() + Math.cos((angle * Math.PI) / 180)) * 4;
+    this.ySpeed = (Math.random() + Math.sin((angle * Math.PI) / 180)) * 4;
     this.xSpeed = this.getRandomInt(0, 1) ? this.xSpeed : -this.xSpeed;
     this.ySpeed = this.getRandomInt(0, 1) ? this.ySpeed : -this.ySpeed;
   }
@@ -62,28 +62,6 @@ export class Ball {
       ptop = paddle.y - paddle.h / 2,
       pbottom = paddle.y + paddle.h / 2;
 
-    // if (this.x < 640) {
-    //   if (
-    //     left <= pright &&
-    //     left > pright + this.xSpeed &&
-    //     top < pbottom &&
-    //     bottom > ptop
-    //   ) {
-    //     this.xSpeed *= -1;
-    //     this.xSpeed++;
-    //   }
-    // }
-    // if (this.x > 640) {
-    //   if (
-    //     right >= pleft &&
-    //     right < pleft + this.xSpeed &&
-    //     top < pbottom &&
-    //     bottom > ptop
-    //   ) {
-    //     this.xSpeed *= -1;
-    //     this.xSpeed--;
-    //   }
-    // }
     if (
       this.x < 640 &&
       pright < 640 && //c'est la raquette du joueur 1

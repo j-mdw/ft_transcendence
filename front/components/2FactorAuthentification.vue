@@ -18,10 +18,9 @@
 </template>
 
 <script lang="ts">
-// import axios from 'axios'
 import Vue from 'vue'
-// import { config } from 'vuex-module-decorators';
 import { authenticationStore } from '~/store'
+
 export default Vue.extend({
   data: () => ({
     dialog: false,
@@ -44,9 +43,8 @@ export default Vue.extend({
       .then(response => Buffer.from(response, 'binary').toString('base64'))
   },
   methods: {
-
     async activate2fa () {
-      if (authenticationStore.isTwoFa == true) {
+      if (authenticationStore.isTwoFa === true) {
         authenticationStore.removeTwoFa();
         this.switch1 = 'activate'
       } else {
@@ -54,13 +52,10 @@ export default Vue.extend({
         this.switch1 = 'desactivate'
       }
 
-      console.log(authenticationStore.isTwoFa)
       await this.$axios.$patch('user', {
         isTwoFactorAuthenticationEnabled: authenticationStore.isTwoFa,
       }, { withCredentials: true });
     },
-
   }
-
 })
 </script>

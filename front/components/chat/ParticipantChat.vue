@@ -1,57 +1,48 @@
 <template>
   <div v-if="thisChannel.owner == me.id">
-    <owner-view :channel-id="channelId"/>
+    <owner-view :channel-id="channelId" />
   </div>
   <div v-else-if="amIAdmin == true">
-     <admin-view :channel-id="channelId"/> 
-    <!-- COUCOU -->
+    <admin-view :channel-id="channelId" />
   </div>
-  <div v-else >
-    
-    <user-view :channel-id="channelId"/>
-    <!-- POUET -->
+  <div v-else>
+    <user-view :channel-id="channelId" />
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import { Relationship, User, ChannelDTO } from "~/models";
-import { usersStore, meStore, channelsStore } from "~/store";
-import messageLogo from "../../components/Logo/messageLogo.vue";
-import pingpongLogo from "../../components/Logo/pingpongLogo.vue";
-import OwnerView from "./participantsView/ownerView.vue";
-import AdminView from "./participantsView/adminView.vue";
-import UserView from "./participantsView/userView.vue";
+import Vue from 'vue';
+import OwnerView from './participantsView/ownerView.vue';
+import AdminView from './participantsView/adminView.vue';
+import UserView from './participantsView/userView.vue';
+import { ChannelDTO, User } from '~/models';
+import { channelsStore, meStore } from '~/store';
+
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo, OwnerView, AdminView, UserView },
+  components: { OwnerView, AdminView, UserView },
   props: ['channelId'],
-  data() {
+  data () {
     return {
       participants: Object(),
       counter: this.channelId
     };
   },
-  computed : {
+  computed: {
     me (): User {
-       return meStore.me;
-     },
-    thisChannel(): ChannelDTO | undefined {
-        return  channelsStore.one(this.counter);
+      return meStore.me;
+    },
+    thisChannel (): ChannelDTO | undefined {
+      return channelsStore.one(this.counter);
     },
 
-    amIAdmin() : boolean {   
-       channelsStore.fetch()
+    amIAdmin () : boolean {
+      channelsStore.fetch()
       for (let i = 0; i < this.participants.length; i++) {
-        if(this.participants[i].userId == this.me.id)
-        {
-          if(this.participants[i].admin)
-            return(true);
-          else
-            return false
+        if (this.participants[i].userId == this.me.id) {
+          if (this.participants[i].admin) { return (true); } else { return false }
         }
-        
       }
-      console.log("NOT found")
+      console.log('NOT found')
       return false
     }
   },
@@ -61,7 +52,7 @@ export default Vue.extend({
   },
   methods: {
   },
-  
+
 });
 </script>
 

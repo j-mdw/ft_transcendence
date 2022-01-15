@@ -45,12 +45,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import messageLogo from '../../components/Logo/messageLogo.vue';
-import pingpongLogo from '../../components/Logo/pingpongLogo.vue';
 import { Relationship, User } from '~/models';
 import { usersStore, meStore, relationshipStore } from '~/store';
 
 export default Vue.extend({
-  components: { messageLogo, pingpongLogo },
+  components: { messageLogo },
   data () {
     return {
       drawer: true,
@@ -73,7 +72,7 @@ export default Vue.extend({
       let j = 0;
 
       for (let i = 0; this.relationships[i]; i++) {
-        if (this.relationships[i].type == 3) { j++ }
+        if (this.relationships[i].type === 3) { j++ }
       }
       return j;
     }

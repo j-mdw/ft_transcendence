@@ -1,7 +1,7 @@
 <template>
-<v-container fill-height>
- <game/>
-</v-container>
+  <v-container fill-height>
+    <game />
+  </v-container>
 </template>
 
 <script lang="ts">

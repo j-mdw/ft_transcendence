@@ -20,7 +20,7 @@
           Visible Channels
         </v-card-title>
         <v-divider />
-        <visible-channels/>
+        <visible-channels />
       </v-card>
     </v-row>
   </div>
@@ -31,15 +31,14 @@
 import Vue from 'vue'
 import myChannelsList from '~/components/channel/myChannelsList.vue'
 import VisibleChannels from '~/components/channel/visibleChannels.vue'
-import { channelsStore } from '~/store';
+import { channelsStore, authenticationStore } from '~/store';
 import { ChannelDTO } from '~/models'
-import { authenticationStore } from '~/store'
 
 export default Vue.extend({
   components: { myChannelsList, VisibleChannels },
   data () {
     return {
-      channels: Array<ChannelDTO>(),
+      channels: [] as ChannelDTO[],
     }
   },
 

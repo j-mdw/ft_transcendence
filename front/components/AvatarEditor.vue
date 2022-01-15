@@ -13,7 +13,7 @@
           change my picture
         </v-btn>
       </template>
-      <v-card color="#f7ede2">      
+      <v-card color="#f7ede2">
         <v-card-title class="our_dark_beige our_navy_blue--text">
           change my picture
         </v-card-title>
@@ -28,6 +28,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { meStore } from '~/store';
+
 export default Vue.extend({
   data: () => ({
     version: 0,

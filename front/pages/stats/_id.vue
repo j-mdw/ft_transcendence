@@ -1,27 +1,24 @@
 <template>
-<v-container fill-height>
-
-    <!-- <v-row no-gutters> -->
-        <v-row class="mt-4 mb-n7 ml-1">
-           <h1> {{getPseudo()}} Stats : </h1>
-        </v-row>
+  <v-container fill-height>
+    <v-row class="mt-4 mb-n7 ml-1">
+      <h1> {{ getPseudo() }} Stats : </h1>
+    </v-row>
     <v-row class="mt-n8 ">
-        <v-col
-            sm="5"
-            class="ml-10"
-            align="center"
-            justify="center"
-        >
-            <match-history :user-id="$route.params.id"/>
-        </v-col>
-      <v-col 
+      <v-col
+        sm="5"
+        class="ml-10"
+        align="center"
+        justify="center"
+      >
+        <match-history :user-id="$route.params.id" />
+      </v-col>
+      <v-col
         sm="5"
         class="mr-10"
         align="center"
         justify="center"
       >
-          <!-- <v-row justify="center" align="center"> -->
-           <v-card
+        <v-card
           class="pa-2 mb-7 mt-7 our_navy_blue--text"
           color="our_dark_beige"
           outlined
@@ -29,11 +26,11 @@
           max-width="500px"
         >
           <h3>
-            Level : {{getLevel()}}
+            Level : {{ getLevel() }}
           </h3>
         </v-card>
 
-             <v-card
+        <v-card
           class="pa-2 mb-7 mt-7 our_navy_blue--text"
           color="our_dark_beige"
           outlined
@@ -41,7 +38,7 @@
           max-width="500px"
         >
           <h3>
-            Victories : {{user.victories}}  / {{getMatches()}}
+            Victories : {{ user.victories }}  / {{ getMatches() }}
           </h3>
         </v-card>
         <v-card
@@ -52,83 +49,70 @@
           max-width="500px"
         >
           <h3>
-            Defeats : {{user.defeats}}  / {{getMatches()}}
+            Defeats : {{ user.defeats }}  / {{ getMatches() }}
           </h3>
         </v-card>
-
-
       </v-col>
     </v-row>
-</v-container>
+  </v-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
 import matchHistory from '~/components/stats/matchHistory.vue';
-import achivements from '~/components/stats/achivements.vue';
-import { meStore, usersStore } from '~/store'
+import { usersStore } from '~/store'
 import { User } from '~/models/user'
 
 export default Vue.extend({
-  components: { matchHistory,achivements },
+  components: { matchHistory },
   layout: 'default',
   data () {
     return {
-        matches: Object(),
+      matches: Object(),
 
     };
   },
 
-  computed: {  
+  computed: {
     user (): User {
       return usersStore.oneUser(this.$route.params.id);
-    },  
+    },
   },
 
-    methods: {
-    getPseudo()
-    {
-        return usersStore.oneUser(this.$route.params.id).pseudo;
-    },
+  async mounted () {
+    this.matches = await this.$axios.$get(`user/matches/${this.$route.params.id}`, { withCredentials: true });
+  },
 
-    getVictories() {
+  methods: {
+    getPseudo () {
+      return usersStore.oneUser(this.$route.params.id).pseudo;
+    },
+    getVictories () {
       let e = 0;
       for (let i = 0; i < this.matches.length; i++) {
-        if(this.matches[i].user1Score > this.matches[i].user2Score)
-          e++;
+        if (this.matches[i].user1Score > this.matches[i].user2Score) { e++; }
       }
       return e;
     },
-
-    getLosses() {
+    getLosses () {
       let e = 0;
       for (let i = 0; i < this.matches.length; i++) {
-        if(this.matches[i].user2Score > this.matches[i].user1Score)
-          e++;
+        if (this.matches[i].user2Score > this.matches[i].user1Score) { e++; }
       }
       return e;
     },
-
-    getMatches() {
+    getMatches () {
       return (this.matches.length)
     },
-
-    getLevel() {
-      let win = this.getVictories();
-      console.log(win)
-      if(win == 0)
+    getLevel () {
+      const win = this.getVictories();
+      if (win === 0) {
         return 0
-      else
+      } else {
         return (Math.round((win * 0.4) * 100) / 100);
+      }
     },
   },
-
-   async mounted () {
-    
-    this.matches = await this.$axios.$get(`user/matches/${this.$route.params.id}`, { withCredentials: true });
-    console.log("MATCHES", this.matches);
-  },
-
 
 })
 
@@ -139,4 +123,3 @@ export default Vue.extend({
    overflow-y: scroll
 }
 </style>
-

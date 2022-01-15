@@ -1,4 +1,4 @@
-import { IsBase64, IsEnum, IsString, IsUUID } from 'class-validator';
+import { IsEnum, IsUUID } from 'class-validator';
 import { Relationship, RelationshipType } from './relationship.entity';
 
 export class RelationshipDTO {

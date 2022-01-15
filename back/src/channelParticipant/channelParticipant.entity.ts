@@ -4,7 +4,7 @@ import { Channel } from 'src/channel/channel.entity';
 
 @Entity('channelsParticipants')
 export class ChannelParticipant {
-  @PrimaryGeneratedColumn() //Useless but cannot create the table without a primaryColumn (there might be a better solution)
+  @PrimaryGeneratedColumn()
   readonly id: string;
 
   @Column({

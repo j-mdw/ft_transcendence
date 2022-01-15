@@ -5,8 +5,6 @@ const authMiddleware: Middleware = async ({ redirect, store, route }) => {
   if (unprotected.find(path => path === route.path)) {
     return;
   }
-  const getterVal = store.getters['auth/isLogged'];
-  console.log('Is logged?:', getterVal);
   if (!store.getters['auth/isLogged']) {
     await store.dispatch('auth/signOut');
     if (route.path !== '/auth') {

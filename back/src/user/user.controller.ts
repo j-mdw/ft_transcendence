@@ -6,14 +6,11 @@ import {
   Patch,
   Post,
   Res,
-  HttpStatus,
   ParseUUIDPipe,
   UseGuards,
   Delete,
   UseInterceptors,
   UploadedFile,
-  BadRequestException,
-  ParseBoolPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { BanUserDTO, UpdateUserDTO, UserDTO } from './user.dto';
@@ -52,7 +49,6 @@ export class UserController {
   @Get('matches/:id')
   async findMatchHistory(
     @Param('id', ParseUUIDPipe) userId: string,
-    // @Res({ passthrough: true }) response: Response,
   ): Promise<MatchHistoryDTO[]> {
     return await this.userService.getMatches(userId);
   }
@@ -122,11 +118,5 @@ export class UserController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     await this.userService.update_avatar(response.locals.id, file.path);
-  }
-
-  @Get('me/avatar') //Probably don't need this anymore
-  async seeUploadedFile(@Res() res) {
-    const data = await this.userService.findById(res.locals.id);
-    return res.sendFile(data.avatarPath, { root: './' });
   }
 }
