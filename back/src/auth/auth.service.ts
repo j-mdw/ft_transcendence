@@ -27,7 +27,6 @@ export class AuthService {
     try {
       await this.userService.findByEmail(user.email);
     } catch (error) {
-      console.log('User not found in the database: ', user.email);
       user.avatarPath = this.userService.find_avatar();
       await this.userService.create(user);
     } finally {
@@ -40,7 +39,6 @@ export class AuthService {
       const decoded = this.jwtService.verify(token);
       return decoded;
     } catch {
-      console.log('Token verification failed');
       return null;
     }
   }

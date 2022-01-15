@@ -91,7 +91,6 @@ export default Vue.extend({
           if (this.participants[i].admin) { return (true); } else { return false }
         }
       }
-      console.log('NOT found')
       return false
     },
 

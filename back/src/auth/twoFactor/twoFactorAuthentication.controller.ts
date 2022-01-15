@@ -53,10 +53,8 @@ export class TwoFactorAuthenticationController {
         req.user.twoFactorAuthenticationSecret,
       );
     if (!isCodeValid) {
-      console.log('time to cry');
       throw new UnauthorizedException('Wrong authentication code');
     } else {
-      console.log('party time !');
       const token = this.jwtService.sign({ userId: req.user.id });
       response.cookie('access_token', token, {
         httpOnly: true,

@@ -28,8 +28,6 @@ export class TwoFactorAuthenticationService {
     twoFactorAuthenticationCode: string,
     userSecret: string,
   ) {
-    console.log(twoFactorAuthenticationCode);
-    console.log(userSecret);
     return authenticator.verify({
       token: twoFactorAuthenticationCode,
       secret: userSecret,

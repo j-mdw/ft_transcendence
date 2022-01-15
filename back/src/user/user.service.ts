@@ -89,7 +89,6 @@ export class UserService {
       createdAt: now,
       updatedAt: now,
     });
-    console.log('user created: ', data);
   }
 
   async setTwoFactorAuthenticationSecret(secret: string, userId: string) {
@@ -103,12 +102,10 @@ export class UserService {
   Throw if id passed as param is invalid or if trying to use a pseudo already in use
 */
   async update(id: string, data: UpdateUserDTO): Promise<void> {
-    console.log('Data for PATCH update:', data);
     let editedUser = null;
     try {
       editedUser = await this.findById(id);
     } catch (error) {
-      console.log(error);
       throw new ForbiddenException('Cannot update - User not in DB');
     }
     if (data.pseudo) {
@@ -116,10 +113,8 @@ export class UserService {
       try {
         await this.findByPseudo(data.pseudo);
         isUsed = true;
-        console.log('Pseudo already in use!');
       } catch {
         isUsed = false;
-        console.log('Pseudo:', data.pseudo, 'is available');
       }
       if (isUsed == true) {
         throw new ConflictException('Pseudo already in use!');
@@ -155,13 +150,11 @@ export class UserService {
 
   async update_avatar(id: string, path: string) {
     const editedUser = await this.userRepository.findOne(id);
-    console.log(editedUser);
     if (!editedUser) {
       throw new NotFoundException('User is not found');
     }
     editedUser.avatarPath = path;
     await this.userRepository.save(editedUser);
-    console.log(editedUser);
     return editedUser;
   }
 
@@ -201,7 +194,6 @@ export class UserService {
     ];
 
     const my_avatar = avatars[Math.floor(Math.random() * avatars.length)];
-    console.log(my_avatar);
     return my_avatar;
   }
 

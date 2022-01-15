@@ -59,7 +59,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     srv.use(async (socket, next) => {
       const cookie = socket.handshake.headers.cookie;
       if (!cookie) {
-        console.log('Socket verification: no token provided');
         next(new UnauthorizedException('authentication failed'));
       }
       let token = cookie.substring(cookie.indexOf('access_token'));
@@ -72,7 +71,6 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
       const decoded = await this.authService.verify(token);
       if (decoded) {
         if (await this.authService.userHasAccess(decoded['userId'])) {
-          console.log('WS auth successful');
           this.users.set(
             socket.id,
             new UpdateUserStatus(decoded.userId, UserStatus.online),
@@ -80,11 +78,9 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
           socket.join(decoded.userId); //Joining a room named after its own ID
           next();
         } else {
-          console.log('Socket verification: unknown user');
           next(new UnauthorizedException('unknown user'));
         }
       } else {
-        console.log('Socket verification: auth failed');
         next(new UnauthorizedException('auth failed'));
       }
     });
@@ -236,7 +232,7 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
   /*
-  
+
   *** CHAT MESSAGES (Channels + DM) ***
 
   Join:

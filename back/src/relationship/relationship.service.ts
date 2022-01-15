@@ -68,7 +68,7 @@ export class RelationshipService {
       userRelation = relation[0].type;
       peerRelation = relation[1].type;
     } catch {
-      console.log('No relationship exists');
+      console.log('');
     } finally {
       if (this.updateForbidden(userRelation, peerRelation, relationType)) {
         throw new ForbiddenException('Cannot update relation');
@@ -89,7 +89,6 @@ export class RelationshipService {
           break;
         }
         default: {
-          console.log('Relationship update: no case matched');
           throw new BadRequestException('Cannot update relationship type');
         }
       }
@@ -163,7 +162,6 @@ export class RelationshipService {
     const user: User = await this.userService.findById(userId);
     const peer: User = await this.userService.findById(peerId);
     const relation = await this.findRelation(user, peer);
-    console.log('Relation:', relation);
     if (relation[1].type === RelationshipType.blocked) {
       relation[0].type = RelationshipType.none;
       await this.relationshipRepository.save(relation[0]);

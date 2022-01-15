@@ -26,7 +26,6 @@ export class AuthController {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
     const token2fa = this.jwtService.sign({ userId: user.id, twofa: true });
-    console.log('Token signed');
     if (user.isTwoFactorAuthenticationEnabled) {
       response.cookie('token2fa', token2fa, {
         httpOnly: true,
@@ -52,7 +51,6 @@ export class AuthController {
     const user: UserDTO = await this.authService.addUser(req.user);
     const token = this.jwtService.sign({ userId: user.id });
     const token2fa = this.jwtService.sign({ userId: user.id, twofa: true });
-    console.log('Token signed');
 
     if (user.isTwoFactorAuthenticationEnabled) {
       response.cookie('token2fa', token2fa, {
@@ -86,10 +84,7 @@ export class AuthController {
     newUser.email = this.authService.randomName(10) + '@' + '.blabla';
 
     const user = await this.authService.addUser(newUser);
-    console.log('User just created:', user);
     const token = this.jwtService.sign({ userId: user.id });
-    console.log('Signed token: ', token);
-    console.log('Decoded user Id:', this.jwtService.decode(token)['userId']);
     response.cookie('access_token', token, {
       httpOnly: true,
     });
@@ -98,7 +93,6 @@ export class AuthController {
 
   @Get('logout')
   logout(@Res({ passthrough: true }) response: Response) {
-    console.log('USER loging out - Removing Cookie');
     response.clearCookie('access_token');
     return;
   }

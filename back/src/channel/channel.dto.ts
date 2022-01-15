@@ -21,7 +21,6 @@ export class ChannelDTO {
     this.name = channel.name;
     this.type = channel.type;
     this.owner = channel.owner.id;
-    console.log('channel dto owner: ', channel.owner);
   }
 }
 
