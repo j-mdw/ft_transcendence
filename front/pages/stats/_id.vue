@@ -69,7 +69,6 @@ export default Vue.extend({
   data () {
     return {
       matches: Object(),
-
     };
   },
 
@@ -109,7 +108,9 @@ export default Vue.extend({
       if (win === 0) {
         return 0
       } else {
-        return (Math.round((win * 0.4) * 100) / 100);
+        const level = (Math.floor((win * 0.4) * 100))
+        console.log('Level:', level);
+        return level / 100;
       }
     },
   },

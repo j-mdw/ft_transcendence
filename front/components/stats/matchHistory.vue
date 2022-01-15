@@ -10,7 +10,7 @@
     <v-card-title class="our_beige our_navy_blue--text justify-center mb-n6">
       Match History
     </v-card-title>
-    <div v-if="matches.length == 0">
+    <div v-if="gamesPlayed.length == 0">
       <v-row justify="center" class="mt-11">
         <h3>
           Sorry there is no history<br>
@@ -20,41 +20,41 @@
     <div v-else>
       <div class="mt-5">
         <v-list class="our_dark_beige">
-          <div v-for="match in matches" :key="match.user1Id">
+          <div v-for="game in gamesPlayed" :key="game.user2Id">
             <v-row align="center" justify="center" class="mt-4 mb-4">
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
                   <v-list-item-avatar>
-                    <NuxtLink :to="`/profile/${match.user1Id}`">
+                    <NuxtLink :to="`/profile/${game.user1Id}`">
                       <v-avatar>
                         <v-img
-                          :src="`/api/${getAvatar(match.user1Id)}`"
+                          :src="`/api/${getAvatar(game.user1Id)}`"
                         />
                       </v-avatar>
                     </NuxtLink>
                   </v-list-item-avatar>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">
-                  {{ getPseudo(match.user1Id) }}
+                  {{ getPseudo(game.user1Id) }}
                 </v-row>
               </v-col>
               <h4>
-                {{ match.user1Score }} - {{ match.user2Score }}
+                {{ game.user1Score }} - {{ game.user2Score }}
               </h4>
               <v-col class="ml-8">
                 <v-row align="center" justify="center">
                   <v-list-item-avatar>
-                    <NuxtLink :to="`/profile/${match.user2Id}`">
+                    <NuxtLink :to="`/profile/${game.user2Id}`">
                       <v-avatar>
                         <v-img
-                          :src="`/api/${getAvatar(match.user2Id)}`"
+                          :src="`/api/${getAvatar(game.user2Id)}`"
                         />
                       </v-avatar>
                     </NuxtLink>
                   </v-list-item-avatar>
                 </v-row>
                 <v-row align="center" justify="center" class="mr-1">
-                  {{ getPseudo(match.user2Id) }}
+                  {{ getPseudo(game.user2Id) }}
                 </v-row>
               </v-col>
             </v-row>
@@ -67,6 +67,7 @@
 </template>
 
 <script lang="ts">
+
 import Vue from 'vue'
 import { meStore, usersStore } from '~/store'
 import { User } from '~/models/user'
@@ -76,7 +77,7 @@ export default Vue.extend({
   props: ['userId'],
   data () {
     return {
-      matches: Object(),
+      gamesPlayed: Object(),
     };
   },
   computed: {
@@ -84,11 +85,13 @@ export default Vue.extend({
       return meStore.me;
     },
   },
+  async mounted () {
+    this.gamesPlayed = await this.$axios.$get(`/user/matches/${this.userId}`, { withCredentials: true });
+  },
   methods: {
     getAvatar (peerId: string) {
       return usersStore.oneUser(peerId).avatarPath;
     },
-
     getPseudo (peerId: string) {
       return usersStore.oneUser(peerId).pseudo;
     },

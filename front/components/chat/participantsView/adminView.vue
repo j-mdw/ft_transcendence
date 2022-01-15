@@ -56,7 +56,7 @@
                     v-ripple="false"
                     plain
                     icon
-                    title="ban"
+                    title="unban"
                     @click="unbanUser(participant.userId)"
                   >
                     <v-icon color="#395c6b">

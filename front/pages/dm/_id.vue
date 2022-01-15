@@ -182,7 +182,7 @@ ul {
     background-color: #fff;
     max-width: 30rem;
     border-radius: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     margin: "auto";
     background-color: #fff;
 }
