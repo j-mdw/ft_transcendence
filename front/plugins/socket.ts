@@ -58,4 +58,11 @@ export default ({ store }: any) => {
         socket.connect();
       }
     });
+
+  store.watch(
+    (_state: any, getters: any) =>
+      getters['users/allUsers'],
+    () => {
+      socket.emit('user-get-all-status');
+    });
 }

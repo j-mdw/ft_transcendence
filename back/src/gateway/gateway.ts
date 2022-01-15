@@ -110,6 +110,11 @@ export class AppGateway implements OnGatewayConnection, OnGatewayDisconnect {
     this.users.delete(client.id);
   }
 
+  @SubscribeMessage('user-get-all-status')
+  async getAllStatus(@ConnectedSocket() client: Socket) {
+    client.emit('all-users-status', Array.from(this.users.values()));
+  }
+
   /* PONG GAME */
 
   gameManager = new GameManager(this.gatewayService, this.userService);
