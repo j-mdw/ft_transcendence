@@ -69,7 +69,7 @@ export default {
   axios: {
     // extra config e.g
     baseURL: '/api',
-    debug: true
+    debug: false
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify

@@ -22,14 +22,16 @@
       </v-btn>
     </v-row>
     <div v-if="alertTwofa">
-            <v-alert
-              type="error"
-              class="mt-6"
-            >
-              Sorry you've entered the wrong code
-                            <v-btn to="/auth"> go back to authentification page </v-btn>
-            </v-alert>
-          </div>
+      <v-alert
+        type="error"
+        class="mt-6"
+      >
+        Sorry you've entered the wrong code
+        <v-btn to="/auth">
+          go back to authentification page
+        </v-btn>
+      </v-alert>
+    </div>
   </v-container>
 </template>
 
@@ -53,11 +55,10 @@ export default Vue.extend({
       try {
         await this.$axios.$post('2fa/authenticate', { twoFactorAuthenticationCode: this.twofaCode }, { withCredentials: true })
         this.alertTwofa = false
-          authenticationStore.setLogin()
-          this.$router.push('/')
+        authenticationStore.setLogin()
+        this.$router.push('/')
       } catch (err) {
         this.alertTwofa = true
-        console.log("error two fa");
       }
     },
   }

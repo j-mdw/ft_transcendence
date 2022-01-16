@@ -76,21 +76,6 @@ export class AuthController {
     return req.user;
   }
 
-  @Get('random')
-  async getRandomUser(@Res({ passthrough: true }) response: Response) {
-    const newUser = new CreateUserDTO();
-    newUser.firstName = this.authService.randomName(8);
-    newUser.lastName = this.authService.randomName(9);
-    newUser.email = this.authService.randomName(10) + '@' + '.blabla';
-
-    const user = await this.authService.addUser(newUser);
-    const token = this.jwtService.sign({ userId: user.id });
-    response.cookie('access_token', token, {
-      httpOnly: true,
-    });
-    return { user };
-  }
-
   @Get('logout')
   logout(@Res({ passthrough: true }) response: Response) {
     response.clearCookie('access_token');

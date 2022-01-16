@@ -19,15 +19,6 @@
             href="/api/google"
           >
             <img style="height:36px" src="../../assets/logo/google_white.svg">
-          </v-btn>
-          <v-btn
-            class="mx-8"
-            fab
-            color="#F6BD60"
-            @click="createRandomUser"
-          >
-            <img style="height:36px" src="../../assets/logo/anon.png">
-          </v-btn>
         </div>
       </div>
     </v-row>

@@ -79,6 +79,7 @@ export default Vue.extend({
   },
 
   async mounted () {
+    usersStore.fetchUsers();
     this.matches = await this.$axios.$get(`user/matches/${this.$route.params.id}`, { withCredentials: true });
   },
 
@@ -109,7 +110,6 @@ export default Vue.extend({
         return 0
       } else {
         const level = (Math.floor((win * 0.4) * 100))
-        console.log('Level:', level);
         return level / 100;
       }
     },

@@ -42,7 +42,7 @@
                     <h3>{{ getPseudo(game.player1.id) }}  - {{ getPseudo(game.player2.id) }}</h3>
                   </v-col>
                   <v-col v-if="game.player2" align="right" class="mr-8" sm="3">
-                    <v-btn class="our_light_pink  mt-2 mb-3 " @click="buttonClickWatch2(game.id)">
+                    <v-btn class="our_light_pink  mt-2 mb-3 " @click="buttonClickWatch(game.id)">
                       watch this game
                     </v-btn>
                   </v-col>
@@ -60,6 +60,14 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-row justify="center" align="center">
+      <v-btn color="#f5cac3" v-bind="attrs" to="/game/rules" class="mt-n6" v-on="on">
+        game rules
+        <v-icon color="#395c6b" right>
+          fa fa-align-justify
+        </v-icon>
+      </v-btn>
+    </v-row>
   </v-container>
 </template>
 <script lang="ts">
@@ -76,7 +84,7 @@ export default Vue.extend({
       games: [] as GameDTO[],
     }
   },
-  mounted () { // DELETE
+  mounted () {
     usersStore.fetchUsers()
     this.getLiveGames();
   },
@@ -89,19 +97,7 @@ export default Vue.extend({
       gameStatusStore.startPlaying(gameStyle);
       this.$router.push('/game/play');
     },
-    buttonClickWatch (gameStyle: GameStyle): void {
-      const gameStyleDTO: GameStyleDTO = {
-        pongType: gameStyle,
-      }
-      this.$socket.client.emit('game-watch', gameStyleDTO, (response: boolean) => {
-        if (response === true) {
-          this.$router.push('/game/play');
-        } else {
-          this.gameUnavailable = 'No games are being played at the moment, try again later';
-        }
-      });
-    },
-    buttonClickWatch2 (gameId: string) {
+    buttonClickWatch (gameId: string) {
       this.$socket.client.emit('game-watch', gameId, (response: boolean) => {
         if (response === true) {
           this.$router.push('/game/play');

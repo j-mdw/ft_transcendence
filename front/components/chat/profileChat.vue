@@ -32,6 +32,11 @@
             </v-btn>
           </v-row>
         </div>
+        <div v-else>
+          <v-row align="center" justify="center">
+            <h1 class="mt-11">it's you</h1>
+          </v-row>
+        </div>
       </v-card>
     </v-dialog>
   </div>

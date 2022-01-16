@@ -52,6 +52,7 @@ export default Vue.extend({
       colors: ['#AFE796', '#F7F4E8', '#C596E7'],
     };
   },
+  
   computed: {
     users (): User[] {
       return usersStore.allUsers;

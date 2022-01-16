@@ -95,6 +95,7 @@ export default Vue.extend({
   },
 
   async mounted () {
+    meStore.fetch();
     this.matches = await this.$axios.$get(`user/matches/${this.me.id}`, { withCredentials: true });
   },
 
