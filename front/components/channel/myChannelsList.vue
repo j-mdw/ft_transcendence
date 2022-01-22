@@ -5,13 +5,14 @@
         <v-col :key="index" class="ml-2 mr-2">
           <v-btn
             class="pa-2 mt-2 mb-2" 
-            width="400"
+            width="23rem"
             color="#ebd9c5"
             :to="`/channels/${channel.id}`"
           >
-            <v-col> 
+
+               <div class="test">
                 {{ channel.name }}
-            </v-col> 
+                 </div>
             <v-col>
             <div v-if="channel.type == 0" >
                 <h5> public </h5>
@@ -45,3 +46,16 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped lang="scss">
+.test{
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  padding: 5px;
+  margin: 0;
+  //  resize: horizontal;
+}
+</style>

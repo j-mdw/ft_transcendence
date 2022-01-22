@@ -5,7 +5,9 @@
     <v-row justify="center" color="#f7ede2" align="center">
         <v-text-field
           v-model="name"
-          :counter="20"
+          
+          counter
+          maxlength="20"
           label="Name"
           required
         />
@@ -65,6 +67,9 @@ export default Vue.extend({
     select: '',
     password: '',
     alertCreation: false,
+    rules: {
+          counter: (value:string) => value.length <= 20 || 'Max 20 characters',
+      }
   }),
 
   methods: {

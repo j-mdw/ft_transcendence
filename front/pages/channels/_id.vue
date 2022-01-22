@@ -57,7 +57,7 @@ import Vue from 'vue'
 import settingsChat from '~/components/chat/settingsChat.vue'
 import profilChat from '~/components/chat/profileChat.vue'
 import { channelsStore, messagesStore, usersStore } from '~/store'
-import { User, ChannelDTO, MessageReceived } from '~/models';
+import { ChannelDTO, MessageReceived } from '~/models';
 export default Vue.extend({
   components: { settingsChat, profilChat },
   layout: 'default',
@@ -83,11 +83,9 @@ export default Vue.extend({
       return messagesStore.channelMessages;
     }
   },
-  
   updated () {
     this.scrollToEnd()
   },
-
   mounted () {
     this.$socket.client.emit('chat-join-channel', this.$route.params.id);
     usersStore.fetchUsers()
@@ -109,7 +107,6 @@ export default Vue.extend({
         element!.scrollTop = element!.scrollHeight
     }
   },
-
 })
 </script>
 
@@ -122,9 +119,6 @@ export default Vue.extend({
 ul {
     list-style-type: none;
 }
-/* .v-text-field{
-      max-width: rem !important;
-} */
 .message-wrapper_righ{
   height: 500px;
   overflow: scroll;
@@ -138,15 +132,14 @@ ul {
     margin-bottom: 15px;
     margin: "auto";
     background-color: #fff;
-    /* font-size:200px; */
 }
 .message_righ{
     margin-left: 10px;
     margin-right: 10px;
 }
 .message-wrapper_left{
-  height: 500px;
-  overflow: scroll;
+  height: 70vh;
+  overflow: hidden;
   margin-right: 4rem;
 }
 .message-background_left{
@@ -156,11 +149,8 @@ ul {
     margin-bottom: 15px;
     margin: "auto";
     background-color: #fff;
-
-    /* font-size:200px; */
 }
 .pseudo_message_left {
-  /* color:"#395c6b"; */
   color: #395c6b;
   margin-left: 10px;
   margin-right: 10px;
