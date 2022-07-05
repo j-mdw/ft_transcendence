@@ -8,9 +8,9 @@
             width="400"
             color="#ebd9c5"
           >
-            <v-col>
-              {{ channel.name }}
-            </v-col>
+            <div class="channel_name">
+                {{ channel.name }}
+                 </div>
 
             <v-col>
               <div v-if="channel.type == 0">
@@ -65,3 +65,15 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped lang="scss">
+.channel_name{
+  width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  
+  padding: 5px;
+  margin: 0;
+}
+</style>
